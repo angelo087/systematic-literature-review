@@ -7,10 +7,20 @@ class UrlMappings {
             }
         }
 
-        "/"(view:"/index")
-        //"/"(controller:"/index")
+        //"/"(view:"/index")
+        "/"(controller:"index", action: "index")
         "500"(view:'/error')
 		
 		"/menu"(controller: "index", action: "menu")
+		
+		"/user/" {
+			controller="user"
+			action = "index"
+		}
+		
+		"/user/$guid" {
+			controller="user"
+			action = "show"
+		}
 	}
 }

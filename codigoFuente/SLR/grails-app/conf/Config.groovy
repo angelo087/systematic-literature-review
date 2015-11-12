@@ -115,3 +115,45 @@ log4j.main = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'es.uca.pfc.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'es.uca.pfc.UserRole'
+grails.plugin.springsecurity.authority.className = 'es.uca.pfc.Role'
+
+grails.plugin.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.fii.rejectPublicInvocations = true
+
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	'/':                		['permitAll'],
+	'/index':           		['permitAll'],
+	'/index.gsp':       		['permitAll'],
+	'/assets/**':       		['permitAll'],
+	'/**/js/**':        		['permitAll'],
+	'/**/css/**':       		['permitAll'],
+	'/**/images/**':    		['permitAll'],
+	'/**/favicon.ico':  		['permitAll'],
+	'/bower_components':		['permitAll'],
+	'/**/bower_components/**':	['permitAll'],
+	'/less':					['permitAll'],
+	'/**/less/**':				['permitAll'],
+	'/index/**':         		['permitAll'],
+	'/index/menu2':				['permitAll'],
+	'/user/**':					['permitAll']
+]
+
+grails.gorm.failOnError = true
+grails.plugin.springsecurity.logout.postOnly = false //Para permitir realizar el logout sin que lance un trigger
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/menu'
+
+// Para almacenar la ultima fecha login del usuario
+/*grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
+	es.uca.pfc.User.withTransaction {
+		def user = es.uca.pfc.User.get(appCtx.springSecurityService.principal.id)
+		if(!user.isAttached())
+			user.attach()
+		user.profile.ultimaConexion = new Date()
+		user.save(flush: true, failOnError: true)
+	}
+}*/

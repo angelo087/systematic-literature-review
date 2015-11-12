@@ -87,7 +87,7 @@
             <div class="carousel-caption">
               <h1>Systematic Literature Review.</h1>
               <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+              <p><g:link class="btn btn-lg btn-primary" role="button" controller="login">Sign up today</g:link></p>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
             <div class="carousel-caption">
               <h1>Systematic Literature Review.</h1>
               <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+              <p><g:link class="btn btn-lg btn-primary" role="button" controller="login">Sign up today</g:link></p>
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@
             <div class="carousel-caption">
               <h1>Systematic Literature Review.</h1>
               <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+              <p><g:link class="btn btn-lg btn-primary" role="button" controller="login">Sign up today</g:link></p>
             </div>
           </div>
         </div>
