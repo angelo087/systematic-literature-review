@@ -22,5 +22,40 @@ class UrlMappings {
 			controller="user"
 			action = "show"
 		}
+		
+		"/$guid/searchs" {
+			controller="slr"
+			action="searchs"
+		}
+		
+		"/$guid/references" {
+			controller="slr"
+			action="references"
+		}
+		
+		"/$guid/criterions" {
+			controller="slr"
+			action="criterions"
+		}
+		
+		"/$guid/specAttributes" {
+			controller="slr"
+			action="specAttributes"
+		}
+		
+		"/reference/$idmend" {
+			controller="reference"
+			action="show"
+		}
+		
+		"/$guidSlr/search/create" {
+			controller="search"
+			action="create"
+		}
+		
+		"/$guidSlr/show" {
+			controller="slr"
+			action="show"
+		}
 	}
 }

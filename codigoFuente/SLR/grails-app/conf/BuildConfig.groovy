@@ -71,6 +71,9 @@ grails.project.dependency.resolution = {
 		
 		compile ':spring-security-core:2.0-RC5' // seguridad-usuarios
 		
+		//compile ":quartz:1.0.1" // tareas en segundo plano
+		compile "org.grails.plugins:executor:0.3"
+		
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"
         //compile ":less-asset-pipeline:1.10.0"
