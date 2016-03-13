@@ -29,7 +29,6 @@ class SpecificAttributeController {
 		{
 			guidSlr = params.guidSlrAttribute.toString()
 		}
-		println "GUID: " + guidSlr
 		
 		def slrInstance = Slr.findByGuid(guidSlr)
 		
