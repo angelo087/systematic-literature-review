@@ -258,8 +258,8 @@ class BootStrap {
 		slr01.addToCriterions(criterion04)
 		
 		def specAttribute01 = new SpecificAttribute(name: "specAttribute01", tipo: "number")
-		def specAttribute02 = new SpecificAttribute(name: "specAttribute02", tipo: "string", isObligatory: true)
-		def specAttribute03 = new SpecificAttributeMultipleValue(name: "specAttribute03", tipo: "list", options: ['uno','dos','tres'])
+		def specAttribute02 = new SpecificAttribute(name: "specAttribute02", tipo: "string")
+		def specAttribute03 = new SpecificAttributeMultipleValue(name: "specAttribute03", tipo: "list", options: ['uno','dos','tres'], optionDefault: 'uno')
 
 		slr01.addToSpecAttributes(specAttribute01)
 		slr01.addToSpecAttributes(specAttribute02)
@@ -342,7 +342,7 @@ class BootStrap {
 		user05.userProfile.addToFriends(profile01)
 		//user06.userProfile.addToFriends(profile01)
 		
-		user01.save(failOnError: true)
+		user01.save(failOnError: true)		
 		
 		println "Creamos los autores"
 		def author01 = new Author(forename: 'Angel', surname: 'Gonzalez').save(failOnError: true)
@@ -385,10 +385,8 @@ class BootStrap {
 		author04.addToAuthorsRefs(reference: reference18).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference22).save(failOnError: true)
 		
-		println "Insertamos los atributos en las referencias"
-		reference01.addToSpecificAttributes(attribute: specAttribute01).save(failOnError: true)
-		reference01.addToSpecificAttributes(attribute: specAttribute02).save(failOnError: true)
-		reference01.addToSpecificAttributes(attribute: specAttribute03).save(failOnError: true)
+		//reference01.addToSpecificAttributes(attribute: specAttribute02).save(failOnError: true)
+		//reference01.addToSpecificAttributes(attribute: specAttribute03).save(failOnError: true)
     }
     def destroy = {
     }

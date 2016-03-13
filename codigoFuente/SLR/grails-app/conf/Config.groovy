@@ -144,7 +144,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/slr/**':					['permitAll'],
 	'/reference/**':			['permitAll'],
 	'/search/**':				['permitAll'],
-	'/criterion/**':			['permitAll']
+	'/criterion/**':			['permitAll'],
+	'/specificAttribute/**':	['permitAll']
 ]
 
 grails.gorm.failOnError = true
