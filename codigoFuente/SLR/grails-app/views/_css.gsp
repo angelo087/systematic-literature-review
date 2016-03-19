@@ -18,3 +18,4 @@
 <![endif]-->
 
 <link href="${resource(dir: 'css', file: 'jquery.range.css')}" rel="stylesheet" type="text/css">
+

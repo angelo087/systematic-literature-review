@@ -41,105 +41,98 @@ class MendeleyService /*implements IMendeleyService*/ {
 		
 		runAsync {
 			// Proceso en segundo plano
-			procesoSegundoPlano(usuarioInstance.username)
+			//procesoSegundoPlano(usuarioInstance.username)
+			crearBusquedas(usuarioInstance.username, guidSlr, terminos, operator, engines, component, minYear, maxYear, maxTotal)
 		}
 		
 		return true;
 	}
 	
-	void procesoSegundoPlano(String username)
+	void crearBusquedas(String username, String guidSlr, String terminos, String operator, List<EngineSearch> engines, String component, String minYear, String maxYear, String maxTotal)
 	{
-		List<String> titles = getTitlesBooks(username);
+		SearchComponent searchComponent = SearchComponent.findByValueLike(component)
+		SearchOperator searchOperator = SearchOperator.findByValueLike(operator)
+		Slr slrInstance = Slr.findByGuidLike(guidSlr)
+		def langES = Language.findByCodeLike('ES')
+		def langEN = Language.findByCodeLike('EN')
+		def langFR = Language.findByCodeLike('FR')
+		def type01 = TypeDocument.findByNombreLike('Journal')
+		def type02 = TypeDocument.findByNombreLike('Book')
+		def author01 = Author.findByForenameLikeAndSurnameLike('Angel','Gonzalez')
+		def author02 = Author.findByForenameLikeAndSurnameLike('Aradia','Rocha')
 		
-		if(titles.size() > 0)
-		{
-			for(String title : titles)
-			{
-				Book book = new Book(name: title)
-				book.save(flush: true)
-			}
-		}
-	}
-	
-	List<String> getTitlesBooks(String username)
-	{
-		List<String> titles = new ArrayList<String>();
+		Random rnd = new Random()
 		
-		for(int i=0; i<3; i++)
-		{
-			titles.add(UUID.randomUUID().toString())
-			Thread.sleep(10000);
-			println username + ": Insertado Referencia " + (i+1) + " de 3."
-		}
-		
-		return titles;
-	}
-	
-	/*boolean insertSearchsBackground(String guidSlr, String terminos, String operator, List<EngineSearch> engines, String component, String minYear, String maxYear, String maxTotal)
-	{
-		def usuarioInstance = User.get(springSecurityService.currentUser.id)
-		
-		List<TaskEngineSearch> taskEngines = new ArrayList<TaskEngineSearch>();
+		println "TOTAL ENGINES: " + engines.size()
+		println "TOTAL REFS/BUSQ: " + maxTotal
 		
 		for(EngineSearch engine : engines)
 		{
-			TaskEngineSearch eng = new TaskEngineSearch();
-			eng.setName(engine.name);
-			eng.setUrl(engine.url);
-			taskEngines.add(eng);
-		}
+			Search searchInstance = new Search(terminos: terminos, startYear: minYear, endYear: maxYear, maxTotal: maxTotal,
+												engine: engine, component: searchComponent, operator: searchOperator,
+												slr: slrInstance)
+			for(int i = 0; i<maxTotal; i++)
+			{
+				println "Engine " + engine.name + ": Insertando referencia " + (i+1) + " de " + maxTotal + "."
+				String idMend = UUID.randomUUID().toString()
+				def type
+				def lang
+				def author
+				switch ((int)(rnd.nextDouble()*2+1))
+				{
+					case 2:
+						type = type02;
+						author = author02
+						break;
+					default:
+						type = type01;
+						author = author01
+				}
+				switch ((int)(rnd.nextDouble()*3+1))
+				{
+					case 1:
+						lang = langEN;
+						break;
+					case 2:
+						lang = langES;
+						break;
+					default:
+						lang = langFR;
+				}
+				
+				String year = ((int) (rnd.nextDouble()*(Integer.parseInt(maxYear) - Integer.parseInt(minYear) + 1) + Integer.parseInt(minYear))).toString()
+				
+				Reference referenceInstance = new Reference(idmend : idMend, 
+															title : 'Reference ' + idMend, 
+															type : type, 
+															docAbstract : 'Abstract ' + idMend, 
+															source : 'Source ' + idMend, 
+															year : year, 
+															publisher : 'publi'+idMend, 
+															city : 'Cadiz', 
+															institution : 'Institution '+idMend, 
+															series : 'Series '+idMend, 
+															citation_key : 'citationkey'+idMend, 
+															language : lang, 
+															bibtex: 'Bibtex '+idMend)
+				
+				//searchInstance.addToReferences(referenceInstance).save(failOnError: true)
+				searchInstance.addToReferences(referenceInstance)
+				
+				if(author.id == author01.id)
+				{
+					author01.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
+				}
+				else
+				{
+					author02.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
+				}
+			} // for i reference
+			searchInstance.save(failOnError: true)
+		} //for-engines
 		
-		SchedulerFactory schedFact = new StdSchedulerFactory();
-		Scheduler sched = schedFact.getScheduler();
-		
-		String name = UUID.randomUUID().toString();
-		String group = UUID.randomUUID().toString();
-		Gson gson = new Gson();
-		
-		JobKey jobKey = new JobKey("Job-"+name, "JGroup-"+group);
-		JobDetail job = newJob(TaskBackgroundJob.class)
-		.usingJobData("username", usuarioInstance.username.toString())
-		.usingJobData("guidSlr", guidSlr)
-		.usingJobData("terminos", terminos)
-		.usingJobData("operator", operator)
-		.usingJobData("component", component)
-		.usingJobData("minYear", minYear)
-		.usingJobData("maxYear", maxYear)
-		.usingJobData("maxTotal", maxTotal)
-		.usingJobData("engines", gson.toJson(taskEngines))
-		.withIdentity(jobKey)
-		.build();
-		
-		Trigger trigger = newTrigger()
-		.withIdentity("Trigger-"+name, "TGroup-"+group)
-		.startNow()
-		.build();
-		
-		sched.getListenerManager().addJobListener(
-			new TaskBackgroundJobListener(), KeyMatcher.keyEquals(jobKey)
-		);
-	
-		boolean flag = sched.checkExists(trigger.getKey())
-		
-		while(flag)
-		{
-			sched.interrupt(jobKey)
-			name = UUID.randomUUID().toString();
-			group = UUID.randomUUID().toString();
-			trigger = newTrigger()
-			.withIdentity("Trigger-"+name, "TGroup-"+group)
-			.startNow()
-			.build();
-			flag = sched.checkExists(trigger.getKey())
-		}
-		
-		sched.start();
-		sched.scheduleJob(job, trigger);
-		
-		println (new Date()) + ": Sali de MendeleyService()"
-		
-		return true;
-	}*/
+		println "PROCESO DE BUSQUEDAS COMPLETADO"
+	}
 	
 	public static void convertTaskSearchsToSearchs(List<TaskSearch> taskSearchs, String username)
 	{

@@ -250,7 +250,7 @@
 
         <%-- Head --%>
         <g:render template="head" contextPath="/"/>
-        
+                
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -258,7 +258,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-                        
+
             <div class="row">
 		    	<div id="divSuccess" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> SLR creado correctamente.</div>
             	<div id="divSuccessCriterion" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Criterio creado correctamente.</div>

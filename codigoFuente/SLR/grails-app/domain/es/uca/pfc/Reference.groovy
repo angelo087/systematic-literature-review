@@ -59,10 +59,10 @@ class Reference implements Comparator<Reference> {
 		search.slr.totalReferences++;
 		
 		// Insertamos el criterio Included
-		//criterion = Criterion.findByNomenclaturaAndSlr("cr_included", search.slr)
+		criterion = Criterion.findByNomenclaturaAndSlr("cr_included", search.slr)
 		
 		// Quitar esto
-		int numeroAleatorio = (int) (Math.random()*4+1);		
+		/*int numeroAleatorio = (int) (Math.random()*4+1);		
 		switch(numeroAleatorio)
 		{
 			case 1:
@@ -77,7 +77,7 @@ class Reference implements Comparator<Reference> {
 			case 4:
 				criterion = Criterion.findByNomenclaturaAndSlr("cr_metamodel", search.slr)
 				break;
-		}
+		}*/
 		
 		// Insertamos los atributos especificos del Slr
 		for(SpecificAttribute attribute : search.slr.specAttributes)
