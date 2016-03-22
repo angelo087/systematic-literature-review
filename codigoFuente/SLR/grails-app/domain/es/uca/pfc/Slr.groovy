@@ -5,7 +5,7 @@ import java.util.Date;
 class Slr {
 	
 	static belongsTo = [userProfile: UserProfile]
-	static hasMany = [searchs: Search, criterions: Criterion, questions: Question, specAttributes: SpecificAttribute]
+	static hasMany = [searchs: Search, criterions: Criterion, questions: ResearchQuestion, specAttributes: SpecificAttribute]
 	
 	String title
 	String justification

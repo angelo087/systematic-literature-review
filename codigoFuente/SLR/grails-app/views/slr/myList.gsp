@@ -35,6 +35,10 @@
 					document.getElementById("opciones").disabled = false;
 				}
 			}
+			else if(${null != errorQuestion && errorQuestion != ""})
+			{
+				$('#myModalQuestion').modal('show');
+			}
 			else if (${success})
 			{
 				document.getElementById('divSuccess').style.display = "";
@@ -59,12 +63,21 @@
 					document.getElementById('divSuccessAttribute').style.display = "none";
 				}, 5000);
 			}
+			else if (${successQuestion})
+			{
+				document.getElementById('divSuccessQuestion').style.display = "";
+				//setTimeout(hideSuccess, 5000);
+				setTimeout(function(){
+					document.getElementById('divSuccessQuestion').style.display = "none";
+				}, 5000);
+			}
 		}
 		function getIdSlr(id)
 		{
 			document.getElementById("guidSlr").value = id.toString();
 			document.getElementById("guidSlrCriterion").value = id.toString();
 			document.getElementById("guidSlrAttribute").value = id.toString();
+			document.getElementById("guidSlrQuestion").value = id.toString();
 			document.getElementById('divError').style.display = "none";
 		}
 		function typeChange()
@@ -246,8 +259,41 @@
 		</div>
 	</div>
 
-    <div id="wrapper">
 
+	<%--Ventana modal crear question --%>
+	<div class="modal fade" id="myModalQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		<div class="modal-header">
+      				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      				<h4 class="modal-title" id="myModalLabel">Crear Pregunta de Investigación</h4>
+			    </div>
+		    	<g:form controller="researchQuestion" action="save" method="POST" name="myFormQuestion" id="myFormQuestion">
+		    		<g:hiddenField name="guidSlrQuestion" value="${guidSlrError}" />
+		    		<div class="modal-body">
+				    	<g:if test="${null != errorQuestion && !errorQuestion.equals("")}">
+					    	<div id="divErrorQuestion" class="alert alert-danger" role="alert"><i class="fa fa-remove fa-fw"></i> ${errorQuestion}</div>
+				    	</g:if>
+				    	<div class="form-inline">
+				    		<table>
+				    			<tr>
+				    				<td><b>Enunciado:</b></td>
+				    				<td><input id="enunciado" type="text" name="enunciado" class="form-control" value="${enunciadoQuestion}" /></td>
+				    			</tr>
+				    		</table>
+				    	</div>
+				    </div>
+				    <div class="modal-footer">
+						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+						<g:submitButton name="create" class="btn btn-primary" value="Crear Pregunta Investigacion"/>
+					</div>
+				</g:form>
+		    </div>
+		</div>
+    </div>
+
+
+    <div id="wrapper">
         <%-- Head --%>
         <g:render template="head" contextPath="/"/>
                 
@@ -263,6 +309,7 @@
 		    	<div id="divSuccess" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> SLR creado correctamente.</div>
             	<div id="divSuccessCriterion" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Criterio creado correctamente.</div>
             	<div id="divSuccessAttribute" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Atributo creado correctamente.</div>
+            	<div id="divSuccessQuestion" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Pregunta creada correctamente.</div>
             	<div class="col-lg-12">
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>
@@ -315,6 +362,10 @@
                             			<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalAttribute" onclick="getIdSlr('${slrInstance.guid}')">Crear Atrib. Especifico</button></p>
                             			<g:if test="${slrInstance.specAttributes.size()>0}">
                             				<p><g:link class="btn btn-link" controller="slr" action="specAttributes" params="[guid: "${slrInstance.guid}"]">Lista Atributos</g:link></p>
+                            			</g:if>
+                            			<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalQuestion" onclick="getIdSlr('${slrInstance.guid}')">Crear Pregunta</button></p>
+                            			<g:if test="${slrInstance.questions.size()>0}">
+                            				<p><g:link class="btn btn-link" controller="slr" action="researchQuestions" params="[guid: "${slrInstance.guid}"]">Lista Preguntas</g:link></p>
                             			</g:if>
                             			<g:if test="${slrInstance.noDrop == false}">
 											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')">Eliminar SLR</button></p>

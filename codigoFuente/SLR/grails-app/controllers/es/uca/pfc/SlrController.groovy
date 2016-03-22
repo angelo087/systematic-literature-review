@@ -33,17 +33,20 @@ class SlrController {
 			def error = ""
 			def errorCriterion = ""
 			def errorAttribute = ""
+			def errorQuestion = ""
 			def tituloSlr = ""
 			def justificacionSlr = ""
 			def success = false
 			def successCriterion = false
 			def successAttribute = false
+			def successQuestion = false
 			def nombreCriterion = ""
 			def descripcionCriterion = ""
 			def guidSlrError = "0"
 			def nombreAttribute = ""
 			def opcionesAttribute = ""
 			def tipoAttribute = "string"
+			def enunciadoQuestion = ""
 			
 			if(null != params.success)
 			{
@@ -60,6 +63,11 @@ class SlrController {
 				successAttribute = true
 			}
 			
+			if(params.successQuestion.toString().equals("true"))
+			{
+				successQuestion = true
+			}
+			
 			if(!(null == params.error || params.error.equals(null)))
 			{
 				error = params.error.toString()
@@ -73,6 +81,11 @@ class SlrController {
 			if(!(null == params.errorAttribute || params.errorAttribute.equals(null)))
 			{
 				errorAttribute = params.errorAttribute.toString()
+			}
+			
+			if(!(null == params.errorQuestion || params.errorQuestion.equals(null)))
+			{
+				errorQuestion = params.errorQuestion.toString()
 			}
 			
 			if(!(params.tituloSlr == null || params.tituloSlr.equals(null)))
@@ -114,6 +127,11 @@ class SlrController {
 			{
 				tipoAttribute = params.tipoAttribute.toString()
 			}
+			
+			if(!(params.enunciadoQuestion == null || params.enunciadoQuestion.equals(null) || successQuestion))
+			{
+				enunciadoQuestion = params.enunciadoQuestion.toString()
+			}
 						
 			def userInstance = User.get(springSecurityService.principal.id)
 			def slrListInstance = userInstance.userProfile.slrs
@@ -138,7 +156,10 @@ class SlrController {
 			 opcionesAttribute: opcionesAttribute,
 			 tipoAttribute: tipoAttribute,
 			 successAttribute: successAttribute,
-			 errorAttribute: errorAttribute
+			 errorAttribute: errorAttribute,
+			 enunciadoQuestion: enunciadoQuestion,
+			 errorQuestion: errorQuestion,
+			 successQuestion: successQuestion
 			]
 		}
 	}
@@ -489,6 +510,51 @@ class SlrController {
 			 errorAttribute: errorAttribute, successAttribute: successAttribute,
 			 nombreAttribute: nombreAttribute, opcionesAttribute: opcionesAttribute,
 			 tipoAttribute: tipoAttribute]
+		}
+	}
+	
+	def researchQuestions()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		// Si no existe el guid, redirigimos a index
+		if(!isLogin || !params.guid || params.guid.equals(""))
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			// Comprobamos si se va a crear un nuevo SLR.
+			def errorQuestion = ""
+			def successQuestion = false
+			def enunciadoQuestion = ""
+
+			if(params.successQuestion.toString().equals("true"))
+			{
+				successQuestion = true
+			}
+		
+			if(!(null == params.errorQuestion || params.errorQuestion.equals(null)))
+			{
+				errorQuestion = params.errorQuestion.toString()
+			}
+			
+			if(!(params.enunciadoQuestion == null || params.enunciadoQuestion.equals(null) || successQuestion))
+			{
+				enunciadoQuestion = params.enunciadoQuestion.toString()
+			}
+			
+			def slrInstance = Slr.findByGuid(params.guid)
+			
+			def userLogin = User.get(springSecurityService.principal.id)
+			if(userLogin.userProfile != slrInstance.userProfile)
+			{
+				redirect(controller: 'index', action: 'index')
+			}
+			
+			[slrInstance: slrInstance, questionListInstance: slrInstance.questions,
+			 errorQuestion: errorQuestion, successQuestion: successQuestion,
+			 enunciadoQuestion: enunciadoQuestion]
 		}
 	}
 }

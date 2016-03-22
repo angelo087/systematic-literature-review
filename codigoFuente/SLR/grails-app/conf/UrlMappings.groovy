@@ -43,6 +43,11 @@ class UrlMappings {
 			action="specAttributes"
 		}
 		
+		"/$guid/researchQuestions" {
+			controller="slr"
+			action="researchQuestions"
+		}
+		
 		"/reference/$idmend" {
 			controller="reference"
 			action="show"

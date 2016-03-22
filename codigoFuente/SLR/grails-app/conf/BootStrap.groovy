@@ -10,6 +10,7 @@ import es.uca.pfc.EngineSearch
 import es.uca.pfc.Language
 import es.uca.pfc.Notification
 import es.uca.pfc.Reference
+import es.uca.pfc.ResearchQuestion
 import es.uca.pfc.Role
 import es.uca.pfc.Search
 import es.uca.pfc.SearchComponent
@@ -264,6 +265,14 @@ class BootStrap {
 		slr01.addToSpecAttributes(specAttribute01)
 		slr01.addToSpecAttributes(specAttribute02)
 		slr01.addToSpecAttributes(specAttribute03)
+		
+		def question01 = new ResearchQuestion(enunciado: '¿Pregunta 1?')
+		def question02 = new ResearchQuestion(enunciado: '¿Pregunta 2?')
+		def question03 = new ResearchQuestion(enunciado: '¿Pregunta 3?')
+		
+		slr01.addToQuestions(question01)
+		slr01.addToQuestions(question02)
+		slr01.addToQuestions(question03)
 		
 		search01.addToReferences(reference01)
 		search02.addToReferences(reference02)
