@@ -8,6 +8,9 @@ import es.uca.pfc.Criterion
 import es.uca.pfc.Education
 import es.uca.pfc.EngineSearch
 import es.uca.pfc.Language
+import es.uca.pfc.Logger
+import es.uca.pfc.LoggerFriend
+import es.uca.pfc.LoggerSlr
 import es.uca.pfc.Notification
 import es.uca.pfc.Reference
 import es.uca.pfc.ResearchQuestion
@@ -185,27 +188,86 @@ class BootStrap {
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 9', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))		
 		user01.save(failOnError: true)
 		
-		println "Creamos los SLR..."
-		def slr01 = new Slr(title: 'Titulo 1', justification: 'Justificacion 1')
-		def slr02 = new Slr(title: 'Titulo 2', justification: 'Justificacion 2')
-		def slr03 = new Slr(title: 'Titulo 3', justification: 'Justificacion 3')
-		def slr04 = new Slr(title: 'Titulo 4', justification: 'Justificacion 4')
-		def slr05 = new Slr(title: 'Titulo 5', justification: 'Justificacion 5')
-		def slr06 = new Slr(title: 'Titulo 6', justification: 'Justificacion 5')
-		def slr07 = new Slr(title: 'Titulo 7', justification: 'Justificacion 7')
-		def slr08 = new Slr(title: 'Titulo 8', justification: 'Justificacion 8')
-		def slr09 = new Slr(title: 'Titulo 9', justification: 'Justificacion 9')
-		def slr10 = new Slr(title: 'Titulo 10', justification: 'Justificacion 10')
-		def slr11 = new Slr(title: 'Titulo 11', justification: 'Justificacion 11')
-		def slr12 = new Slr(title: 'Titulo 12', justification: 'Justificacion 12')
-		def slr13 = new Slr(title: 'Titulo 13', justification: 'Justificacion 13')
-		def slr14 = new Slr(title: 'Titulo 14', justification: 'Justificacion 14')
-		def slr15 = new Slr(title: 'Titulo 15', justification: 'Justificacion 15')
-		def slr16 = new Slr(title: 'Titulo 16', justification: 'Justificacion 16')
-		def slr17 = new Slr(title: 'Titulo 17', justification: 'Justificacion 17')
-		def slr18 = new Slr(title: 'Titulo 18', justification: 'Justificacion 18')
+		println "Creamos las amistades"
+		user01.userProfile.addToFriends(profile03)
+		user03.userProfile.addToFriends(profile01)
+		user02.userProfile.addToFriends(profile04)
+		user04.userProfile.addToFriends(profile02)
 		
-		println "Creamos las busquedas"
+		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user03.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user04.userProfile.addToLoggers(new LoggerFriend(friendProfile: user02.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user02.userProfile.addToLoggers(new LoggerFriend(friendProfile: user04.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
+		
+		/*user01.userProfile.addToFriends(profile02)
+		user01.userProfile.addToFriends(profile03)
+		user01.userProfile.addToFriends(profile04)
+		user01.userProfile.addToFriends(profile05)
+
+		user02.userProfile.addToFriends(profile01)
+		user03.userProfile.addToFriends(profile01)
+		user04.userProfile.addToFriends(profile01)
+		user05.userProfile.addToFriends(profile01)
+		
+		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user02.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user03.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user04.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user05.userProfile, tipo: 'seguir')).save(failOnError: true)
+		
+		user02.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user04.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
+		user05.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)*/
+		
+		println "Creamos los SLR..."
+		Slr slr01 = new Slr(title: 'Titulo 1', justification: 'Justificacion 1', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr02 = new Slr(title: 'Titulo 2', justification: 'Justificacion 2', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr03 = new Slr(title: 'Titulo 3', justification: 'Justificacion 3', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr04 = new Slr(title: 'Titulo 4', justification: 'Justificacion 4', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr05 = new Slr(title: 'Titulo 5', justification: 'Justificacion 5', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr06 = new Slr(title: 'Titulo 6', justification: 'Justificacion 5', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr07 = new Slr(title: 'Titulo 7', justification: 'Justificacion 7', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr08 = new Slr(title: 'Titulo 8', justification: 'Justificacion 8', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr09 = new Slr(title: 'Titulo 9', justification: 'Justificacion 9', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr10 = new Slr(title: 'Titulo 10', justification: 'Justificacion 10', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr11 = new Slr(title: 'Titulo 11', justification: 'Justificacion 11', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr12 = new Slr(title: 'Titulo 12', justification: 'Justificacion 12', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr13 = new Slr(title: 'Titulo 13', justification: 'Justificacion 13', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr14 = new Slr(title: 'Titulo 14', justification: 'Justificacion 14', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr15 = new Slr(title: 'Titulo 15', justification: 'Justificacion 15', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr16 = new Slr(title: 'Titulo 16', justification: 'Justificacion 16', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr17 = new Slr(title: 'Titulo 17', justification: 'Justificacion 17', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr18 = new Slr(title: 'Titulo 18', justification: 'Justificacion 18', userProfile: user01.userProfile).save(failOnError: true, flush: true)
+		Slr slr19 = new Slr(title: 'Titulo 19', justification: 'Justificacion 19', userProfile: user02.userProfile).save(failOnError: true, flush: true)
+		
+		println "Insertamos los criterios..."
+		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
+		def criterion03 = new Criterion(name: 'version', description: 'Version diferent to 1.3', nomenclatura: 'cr_version')
+		def criterion04 = new Criterion(name: 'metamodel', description: 'Metamodel no present', nomenclatura: 'cr_metamodel')
+		
+		slr01.addToCriterions(criterion02)
+		slr01.addToCriterions(criterion03)
+		slr01.addToCriterions(criterion04)
+		
+		println "Insertamos los atributos especificos..."
+		def specAttribute01 = new SpecificAttribute(name: "specAttribute01", tipo: "number")
+		def specAttribute02 = new SpecificAttribute(name: "specAttribute02", tipo: "string")
+		def specAttribute03 = new SpecificAttributeMultipleValue(name: "specAttribute03", tipo: "list", options: ['uno','dos','tres'], optionDefault: 'uno')
+
+		slr01.addToSpecAttributes(specAttribute01)
+		slr01.addToSpecAttributes(specAttribute02)
+		slr01.addToSpecAttributes(specAttribute03)
+		
+		println "Insertamos las preguntas de investigacion...."
+		def question01 = new ResearchQuestion(enunciado: '¿Pregunta 1?')
+		def question02 = new ResearchQuestion(enunciado: '¿Pregunta 2?')
+		def question03 = new ResearchQuestion(enunciado: '¿Pregunta 3?')
+		
+		slr01.addToQuestions(question01)
+		slr01.addToQuestions(question02)
+		slr01.addToQuestions(question03)
+		
+		println "Creamos las busquedas..."
 		def search01 = new Search(terminos: "terminos 1", engine: engine01, fecha: new Date(), operator: opAND, startYear: "2010", endYear: "2012", component: comp01, maxTotal: 5)
 		def search02 = new Search(terminos: "terminos 2", engine: engine01, fecha: new Date(), operator: opOR, startYear: "2010", endYear: "2012", component: comp02, maxTotal: 10)
 		def search03 = new Search(terminos: "terminos 3", engine: engine01, fecha: new Date(), operator: opOR, startYear: "2010", endYear: "2012", component: comp03, maxTotal: 10)
@@ -220,7 +282,9 @@ class BootStrap {
 		def search12 = new Search(terminos: "terminos 12", engine: engine04, fecha: new Date(), operator: opAND, startYear: "2011", endYear: "2015", component: comp02, maxTotal: 30)
 		def search13 = new Search(terminos: "terminos 13", engine: engine04, fecha: new Date(), operator: opAND, startYear: "2010", endYear: "2012", component: comp03, maxTotal: 10)
 		def search14 = new Search(terminos: "terminos 14", engine: engine04, fecha: new Date(), operator: opAND, startYear: "2009", endYear: "2011", component: comp04, maxTotal: 8)
+		def search15 = new Search(terminos: "terminos 15", engine: engine04, fecha: new Date(), operator: opAND, startYear: "2009", endYear: "2011", component: comp04, maxTotal: 8)
 		
+		println "Creamos las referencias..."
 		def reference01 = new Reference(idmend : 'mend01', title : 'Reference 1', type : type01, created : new Date(), last_modified : new Date(), docAbstract : 'Abstract 1', source : 'Source 1', year : '1987',    keywords: ["key1", "key2", "key3"], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi1', city : 'Cadiz', institution : 'Institution 1', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey1', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 1')
 		def reference02 = new Reference(idmend : 'mend02', title : 'Reference 2', type : type02, created : new Date(), last_modified : new Date(), docAbstract : 'Abstract 2', source : 'Source 2', year : '1987',    keywords: ['key5', 'key3', 'key2'], pages : '1', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi2', city : 'Madrid', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag2', 'tag3'], citation_key : 'citationkey2', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 2')
 		def reference03 = new Reference(idmend : 'mend03', title : 'Reference 3', type : type03, created : new Date(), last_modified : new Date(), docAbstract : 'Abstract 3', source : 'Source 3', year : '1987',    keywords: ['key5', 'key2', 'key3'], pages : '2', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi3', city : 'Teruel', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag3'], citation_key : 'citationkey3', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 3')
@@ -250,30 +314,7 @@ class BootStrap {
 		def reference27 = new Reference(idmend : 'mend27', title : 'Reference 27', type : type02, created : new Date(), last_modified : new Date(), docAbstract : 'Abstract 27', source : 'Source 27', year : '1989', keywords: ['key1', 'key2', 'key7'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey27', source_type : 'Source Type 1', language : langPO, genre : 'Genre 1', country : 'France', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 27')
 		def reference28 = new Reference(idmend : 'mend28', title : 'Reference 28', type : type02, created : new Date(), last_modified : new Date(), docAbstract : 'Abstract 28', source : 'Source 28', year : '1990', keywords: ['key1', 'key2', 'key8'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey28', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 28')
 		
-		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
-		def criterion03 = new Criterion(name: 'version', description: 'Version diferent to 1.3', nomenclatura: 'cr_version')
-		def criterion04 = new Criterion(name: 'metamodel', description: 'Metamodel no present', nomenclatura: 'cr_metamodel')
-		
-		slr01.addToCriterions(criterion02)
-		slr01.addToCriterions(criterion03)
-		slr01.addToCriterions(criterion04)
-		
-		def specAttribute01 = new SpecificAttribute(name: "specAttribute01", tipo: "number")
-		def specAttribute02 = new SpecificAttribute(name: "specAttribute02", tipo: "string")
-		def specAttribute03 = new SpecificAttributeMultipleValue(name: "specAttribute03", tipo: "list", options: ['uno','dos','tres'], optionDefault: 'uno')
-
-		slr01.addToSpecAttributes(specAttribute01)
-		slr01.addToSpecAttributes(specAttribute02)
-		slr01.addToSpecAttributes(specAttribute03)
-		
-		def question01 = new ResearchQuestion(enunciado: '¿Pregunta 1?')
-		def question02 = new ResearchQuestion(enunciado: '¿Pregunta 2?')
-		def question03 = new ResearchQuestion(enunciado: '¿Pregunta 3?')
-		
-		slr01.addToQuestions(question01)
-		slr01.addToQuestions(question02)
-		slr01.addToQuestions(question03)
-		
+		println "Insertamos las referencias en las busquedas..."
 		search01.addToReferences(reference01)
 		search02.addToReferences(reference02)
 		search02.addToReferences(reference03)
@@ -303,6 +344,7 @@ class BootStrap {
 		search13.addToReferences(reference27)
 		search14.addToReferences(reference28)
 		
+		println "Insertamos las busquedas en los slr's"
 		slr01.addToSearchs(search01)
 		slr01.addToSearchs(search02)
 		slr01.addToSearchs(search03)
@@ -316,44 +358,13 @@ class BootStrap {
 		slr01.addToSearchs(search11)
 		slr01.addToSearchs(search12)
 		slr01.addToSearchs(search13)
-		slr01.addToSearchs(search14)		
+		slr01.addToSearchs(search14)
+		slr19.addToSearchs(search15)
 		
-		println "Asignamos los Slr al usuario 01: Paco"
-		user01.userProfile.addToSlrs(slr01)
-		user01.userProfile.addToSlrs(slr02)
-		user01.userProfile.addToSlrs(slr03)
-		user01.userProfile.addToSlrs(slr04)
-		user01.userProfile.addToSlrs(slr05)
-		user01.userProfile.addToSlrs(slr06)
-		user01.userProfile.addToSlrs(slr07)
-		user01.userProfile.addToSlrs(slr08)
-		user01.userProfile.addToSlrs(slr09)
-		user01.userProfile.addToSlrs(slr10)
-		user01.userProfile.addToSlrs(slr11)
-		user01.userProfile.addToSlrs(slr12)
-		user01.userProfile.addToSlrs(slr13)
-		user01.userProfile.addToSlrs(slr14)
-		user01.userProfile.addToSlrs(slr15)
-		user01.userProfile.addToSlrs(slr16)
-		user01.userProfile.addToSlrs(slr17)
-		user01.userProfile.addToSlrs(slr18)
+		user01.userProfile.addToLoggers(new LoggerSlr(slr: slr01, isSearch: true, tipo: 'buscar')).save(failOnError: true)
+		user02.userProfile.addToLoggers(new LoggerSlr(slr: slr19, isSearch: true, tipo: 'buscar')).save(failOnError: true)
 		
-		println "Creamos las amistades"
-		user01.userProfile.addToFriends(profile02)
-		user01.userProfile.addToFriends(profile03)
-		user01.userProfile.addToFriends(profile04)
-		user01.userProfile.addToFriends(profile05)
-		//user01.userProfile.addToRequests(profile06)
-
-		user02.userProfile.addToFriends(profile01)
-		user03.userProfile.addToFriends(profile01)
-		user04.userProfile.addToFriends(profile01)
-		user05.userProfile.addToFriends(profile01)
-		//user06.userProfile.addToFriends(profile01)
-		
-		user01.save(failOnError: true)		
-		
-		println "Creamos los autores"
+		println "Creamos autores para las referencias..."
 		def author01 = new Author(forename: 'Angel', surname: 'Gonzalez').save(failOnError: true)
 		def author02 = new Author(forename: 'Aradia', surname: 'Rocha').save(failOnError: true)
 		def author03 = new Author(forename: 'Will', surname: 'Smith').save(failOnError: true)
@@ -393,9 +404,6 @@ class BootStrap {
 		author04.addToAuthorsRefs(reference: reference14).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference18).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference22).save(failOnError: true)
-		
-		//reference01.addToSpecificAttributes(attribute: specAttribute02).save(failOnError: true)
-		//reference01.addToSpecificAttributes(attribute: specAttribute03).save(failOnError: true)
     }
     def destroy = {
     }

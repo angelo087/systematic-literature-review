@@ -50,5 +50,9 @@ class Slr {
 		addToCriterions(new Criterion(name: "included", description: "Referencia incluida en el estudio.", nomenclatura: "cr_included"))
 		//formatTitle = URLEncoder.encode(title, "UTF-8")
 	}
-
+	
+	def afterInsert = {
+		// Insertamos un logger al usuario
+		userProfile.addToLoggers(new LoggerSlr(slr: this, tipo: 'crear')).save(failOnError: true)
+	}
 }

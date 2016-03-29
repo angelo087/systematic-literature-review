@@ -22,4 +22,8 @@ class Criterion {
 	{
 		return name;
 	}
+	
+	def beforeUpdate = {
+		modifyDate = new Date()
+	}
 }

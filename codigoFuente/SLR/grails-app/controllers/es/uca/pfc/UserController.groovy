@@ -102,6 +102,8 @@ class UserController {
 					userLogin.userProfile.removeFromFriends(friendProfileInstance).save(failOnError: true)
 					friendProfileInstance.removeFromFriends(userLogin.userProfile).save(failOnError: true)
 					
+					// Eliminamos los loggers entre ellos por seguridad
+					
 					redirect(controller: 'index', action: 'menu')
 				}
 				else
@@ -113,6 +115,9 @@ class UserController {
 						friendProfileInstance.removeFromRequests(userLogin.userProfile).save(failOnError: true)
 						userLogin.userProfile.addToFriends(friendProfileInstance).save(failOnError: true)
 						friendProfileInstance.addToFriends(userLogin.userProfile).save(failOnError: true)
+						
+						// Creamos loggers entre ellos
+						toolService.createLoggersBetweenUsers(userLogin.userProfile, friendProfileInstance)
 					}
 					else
 					{

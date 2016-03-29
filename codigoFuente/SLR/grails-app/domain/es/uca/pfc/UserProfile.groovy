@@ -37,11 +37,13 @@ class UserProfile {
     }
 	
 	//static mappedBy = [loggers: 'profile', friends: 'profile']
-	static mappedBy = [loggers: 'profile']
+	//static mappedBy = [loggers: 'profile']
 	
 	def beforeInsert = {
 		display_name = first_name + ' ' + last_name;
 		println display_name + ': ' + guid
+		
+		addToLoggers(new Logger(tipo: 'bienvenida'))
 	}
 	
 	boolean equals(Object obj)

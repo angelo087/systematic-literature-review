@@ -239,7 +239,7 @@ class SlrController {
 					def offset = (page * maxPerPage) - maxPerPage
 					
 					referenceListInstance = toolService.getPaginatedReferences(referenceListInstance, maxPerPage,offset)
-										
+					
 					strSearch = ""
 				
 					[
@@ -362,7 +362,13 @@ class SlrController {
 			{
 				for (Reference reference : search.references)
 				{
+					// Borramos las referencias con los autores
 					AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+					
+					// Borramos las referencias con los atributos especificos
+					SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
+				
+					reference.criterion = null
 				}
 			}
 			

@@ -1,4 +1,4 @@
-<div class="chat-panel panel panel-default">
+<div id="searchloggers" class="chat-panel panel panel-default">
 	<div class="panel-heading">
 		<i class="fa fa-comments fa-fw"></i>
 		Logger
@@ -14,23 +14,17 @@
 				</li>
 				<li>
 					<a href="#">
-						<i class="fa fa-check-circle fa-fw"></i> Todos
+						<i class="fa fa-users fa-fw"></i> Todos
 					</a>
 				</li>
 				<li>
 					<a href="#">
-						<i class="fa fa-times fa-fw"></i> Amigos
+						<i class="fa fa-user fa-fw"></i> Mis Loggers
 					</a>
 				</li>
 				<li>
 					<a href="#">
-						<i class="fa fa-clock-o fa-fw"></i> Away
-					</a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="#">
-						<i class="fa fa-sign-out fa-fw"></i> Sign Out
+						<i class="fa fa-users fa-fw"></i> Loggers de amigos
 					</a>
 				</li>
 			</ul>
@@ -39,67 +33,61 @@
 	<!-- /.panel-heading -->
 	<div class="panel-body" style="min-height: 500px;">
 		<ul class="chat">
-			<li class="left clearfix">
-				<span class="chat-img pull-left">
-					<img src="http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
-				</span>
-				<div class="chat-body clearfix">
-					<div class="header">
-						<strong class="primary-font">Jack Sparrow</strong>
-						<small class="pull-right text-muted">
-							<i class="fa fa-clock-o fa-fw"></i> 12 mins ago
-						</small>
+			<g:each in="${loggerListInstance}" var="loggerInstance">
+				<li class="left clearfix">
+					<span class="chat-img pull-left">
+						<g:if test="${loggerInstance.tipo.contains('fr-')}">
+							<img src="${loggerInstance.friendProfile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+						</g:if>
+						<g:else>
+							<img src="${loggerInstance.profile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+						</g:else>
+					</span>
+					<div class="chat-body clearfix">
+						<div class="header">
+							<%--<g:if test="${userProfileInstance.id != loggerInstance.profile.id}"> --%>
+							<g:if test="${loggerInstance.tipo.contains('fr-')}">
+								<strong class="primary-font">${loggerInstance.friendProfile.display_name}</strong>
+							</g:if>
+							<g:else>
+								<strong class="primary-font">Tú</strong>
+							</g:else>
+							<small class="pull-right text-muted">
+								<i class="fa fa-clock-o fa-fw"></i> ${loggerInstance.timeString}
+							</small>
+						</div>
+						<p>
+							<g:if test="${loggerInstance.tipo == 'bienvenida'}">
+								<img src="${resource(dir:'images/logger',file:'start.png')}" alt="" width="20" height="20" /> ¡Bienvenido a Systematic Literature Review!
+							</g:if>
+							<g:elseif test="${loggerInstance.tipo == 'fr-bienvenida'}">
+								<img src="${resource(dir:'images/logger',file:'start.png')}" alt="" width="20" height="20" /> Se ha registrado en Systematic Literature Review.
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'crear'}">
+								<img src="${resource(dir:'images/logger',file:'libro.jpg')}" alt="" width="20" height="20" /> Has creado un nuevo SLR: <g:link controller="slr" action="myList">${loggerInstance.slr.title}</g:link>
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'fr-crear'}">
+								<img src="${resource(dir:'images/logger',file:'libro.jpg')}" alt="" width="20" height="20" /> Ha creado un nuevo SLR: ${loggerInstance.slr.title}
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'buscar'}">
+								<img src="${resource(dir:'images/logger',file:'lupa.jpg')}" alt="" width="20" height="20" /> Has realizado nuevas busquedas en el SLR: <g:link controller="slr" action="searchs" params="[guid: "${loggerInstance.slr.guid}"]">${loggerInstance.slr.title}</g:link>
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'fr-buscar'}">
+								<img src="${resource(dir:'images/logger',file:'lupa.jpg')}" alt="" width="20" height="20" /> Ha realizado nuevas busquedas en el SLR: ${loggerInstance.slr.title}
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'seguir'}">
+								<img src="${resource(dir:'images/logger',file:'friend.png')}" alt="" width="20" height="20" /> Has seguido a <g:link controller="user" action="show" params="[guid: "${loggerInstance.friendProfile.guid}"]">${loggerInstance.friendProfile.display_name}</g:link>
+							</g:elseif>
+							<g:elseif test="${loggerInstance.tipo == 'fr-seguir'}">
+								<img src="${resource(dir:'images/logger',file:'friend.png')}" alt="" width="20" height="20" /> Ha seguido a ${loggerInstance.friendFriendProfile.display_name}
+							</g:elseif>
+							<g:else>
+								No definido
+							</g:else>
+						</p>
 					</div>
-					<p>
-						Ha creado un nuevo SLR: La vida de las ballenas.
-					</p>
-				</div>
-			</li>
-			<li class="left clearfix">
-				<span class="chat-img pull-left">
-					<img src="http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
-				</span>
-				<div class="chat-body clearfix">
-					<div class="header">
-						<strong class="primary-font">Jack Sparrow</strong>
-						<small class="pull-right text-muted">
-							<i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-					</div>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-					</p>
-				</div>
-			</li>
-			<li class="left clearfix">
-				<span class="chat-img pull-left">
-					<img src="http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
-				</span>
-				<div class="chat-body clearfix">
-					<div class="header">
-						<strong class="primary-font">Jack Sparrow</strong>
-						<small class="pull-right text-muted">
-							<i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-					</div>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-					</p>
-				</div>
-			</li>
-			<li class="left clearfix">
-				<span class="chat-img pull-left">
-					<img src="http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
-				</span>
-				<div class="chat-body clearfix">
-					<div class="header">
-						<strong class="primary-font">Jack Sparrow</strong>
-						<small class="pull-right text-muted">
-							<i class="fa fa-clock-o fa-fw"></i> 14 mins ago</small>
-					</div>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-					</p>
-				</div>
-			</li>
+				</li>
+			</g:each>
 		</ul>
 	</div>
 	

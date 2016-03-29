@@ -1,5 +1,7 @@
 package es.uca.pfc
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Date;
 import grails.transaction.Transactional
 
@@ -175,6 +177,61 @@ class ToolService {
 		}
 		
 		return timeToString;
+	}
+	
+	List<Logger> updateTimeStringLogger(List<Logger> loggers)
+	{
+		List<Logger> updateLoggers = new ArrayList<Logger>()
+		for(Logger loggerInstance : loggers)
+		{
+			Date date = loggerInstance.submitDate
+			String timeToString = "";
+			
+			Calendar cal1 = Calendar.getInstance();
+			Calendar cal2 = Calendar.getInstance();
+			
+			cal1.setTime(date);
+			cal2.setTime(new Date());
+			
+			def milis1 = cal1.getTimeInMillis();
+			def milis2 = cal2.getTimeInMillis();
+			
+			def diff = milis2 - milis1;
+			
+			// Calculamos la diferencia en segundos
+			def diffSeconds = diff / 1000;
+			if(diffSeconds < 60)
+			{
+				timeToString = "Hace " + Math.round(diffSeconds) + " segundos.";
+			}
+			else
+			{
+				def diffMinutes = diff / (60 * 1000);
+				if(diffMinutes < 60)
+				{
+					timeToString = "Hace " + Math.round(diffMinutes) + " minutos.";
+				}
+				else
+				{
+					def diffHours = diff / (60 * 60 * 1000);
+					if(diffHours < 24)
+					{
+						timeToString = "Hace " + Math.round(diffHours) + " horas.";
+					}
+					else
+					{
+						DateFormat df = new SimpleDateFormat("dd/MM/yyyy")
+						timeToString = df.format(date)
+					}
+				}
+			}
+			
+			loggerInstance.timeString = timeToString
+			loggerInstance.save(failOnError: true)
+			updateLoggers.add(loggerInstance)
+		}
+		
+		return updateLoggers
 	}
 	
 	Set<Reference> getReferences(Slr slrInstance)
@@ -493,5 +550,79 @@ class ToolService {
 		}
 		
 		return citation_key;
+	}
+	
+	void createLoggersBetweenUsers(UserProfile userLoginProfile, UserProfile userFriendProfile)
+	{
+		Logger log = null
+		
+		for(Logger loggerFriendInstance : userFriendProfile.loggers)
+		{
+			log = null
+			if(!loggerFriendInstance.tipo.contains("fr-"))
+			{
+				if (loggerFriendInstance.tipo == 'bienvenida')
+				{
+					log = new LoggerFriend(friendProfile: userFriendProfile, tipo: 'fr-bienvenida', submitDate: loggerFriendInstance.submitDate)
+				}
+				else if (loggerFriendInstance.tipo == 'crear')
+				{
+					log = new FriendLoggerSlr(friendProfile: userFriendProfile, tipo: 'fr-crear', submitDate: loggerFriendInstance.submitDate,
+												slr: loggerFriendInstance.slr)
+				}
+				else if (loggerFriendInstance.tipo == 'buscar')
+				{
+					log = new FriendLoggerSlr(friendProfile: userFriendProfile, tipo: 'fr-buscar', submitDate: loggerFriendInstance.submitDate,
+						slr: loggerFriendInstance.slr, isSearch: true)
+				}
+				else if (loggerFriendInstance.tipo == 'seguir')
+				{
+					log = new FriendLoggerFriend(friendProfile: userFriendProfile, tipo: 'fr-seguir',
+												 submitDate: loggerFriendInstance.submitDate,
+												 friendFriendProfile: loggerFriendInstance.friendProfile)
+				}
+				userLoginProfile.addToLoggers(log)
+			}
+		}
+
+		log = new LoggerFriend(friendProfile: userFriendProfile, tipo: 'seguir')
+		userLoginProfile.addToLoggers(log)
+		userLoginProfile.save(failOnError: true)
+		
+		for(Logger loggerInstance : userLoginProfile.loggers)
+		{
+			log = null
+			if (!loggerInstance.tipo.contains("fr-"))
+			{
+				if (loggerInstance.tipo == 'bienvenida')
+				{
+					log = new LoggerFriend(friendProfile: userLoginProfile, tipo: 'fr-bienvenida', submitDate: loggerInstance.submitDate)
+				}
+				else if (loggerInstance.tipo == 'crear')
+				{
+					log = new FriendLoggerSlr(friendProfile: userLoginProfile, tipo: 'fr-crear', submitDate: loggerInstance.submitDate,
+												slr: loggerInstance.slr)
+				}
+				else if (loggerInstance.tipo == 'buscar')
+				{
+					log = new FriendLoggerSlr(friendProfile: userLoginProfile, tipo: 'fr-buscar', submitDate: loggerInstance.submitDate,
+												slr: loggerInstance.slr, isSearch: true)
+				}
+				else if (loggerInstance.tipo == 'seguir' && !loggerInstance.friendProfile.guid.equals(userFriendProfile.guid))
+				{
+					log = new FriendLoggerFriend(friendProfile: userLoginProfile, tipo: 'fr-seguir',
+												 submitDate: loggerInstance.submitDate,
+												 friendFriendProfile: loggerInstance.friendProfile)
+				}
+				
+				if(log != null)
+				{
+					userFriendProfile.addToLoggers(log)
+				}
+			}
+		}
+		log = new LoggerFriend(friendProfile: userLoginProfile, tipo: 'seguir')
+		userFriendProfile.addToLoggers(log)
+		userFriendProfile.save(failOnError: true)
 	}
 }

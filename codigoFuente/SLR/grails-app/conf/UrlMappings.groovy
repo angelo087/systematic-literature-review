@@ -13,6 +13,8 @@ class UrlMappings {
 		
 		"/menu"(controller: "index", action: "menu")
 		
+		"/loggers"(controller: "index", action: "loggers")
+		
 		"/user/" {
 			controller="user"
 			action = "index"

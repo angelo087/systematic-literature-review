@@ -38,8 +38,11 @@
             <div class="row">
                 <div class="col-lg-8">
                     
-                    <%-- Chat --%>
-                    <g:render template="logger" contextPath="/"/>
+                    <%-- Logger 
+                    <g:render template="logger" contextPath="/"/>--%>
+                    <div id="searchloggers" class="chat-panel panel panel-default">
+                    	<g:render template="logger" contextPath="/"/>
+                    </div>
                     
                 </div>
 

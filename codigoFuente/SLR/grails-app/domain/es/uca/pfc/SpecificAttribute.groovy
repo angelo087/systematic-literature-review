@@ -12,4 +12,8 @@ class SpecificAttribute {
 
     static constraints = {
     }
+	
+	def beforeUpdate = {
+		modifyDate = new Date()
+	}
 }
