@@ -15,6 +15,8 @@ class UrlMappings {
 		
 		"/loggers"(controller: "index", action: "loggers")
 		
+		"/faqs"(controller: "index", action: "faqs")
+		
 		"/user/" {
 			controller="user"
 			action = "index"

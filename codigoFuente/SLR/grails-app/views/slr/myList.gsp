@@ -370,6 +370,7 @@
                             			<g:if test="${slrInstance.noDrop == false}">
 											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')">Eliminar SLR</button></p>
 										</g:if>
+										<g:link controller="slr" action="exportToExcel" params="[guid: "${slrInstance.guid}"]">Exportar Excel</g:link>
                             		</td>
                             	</tr>
                             </g:each>

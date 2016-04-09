@@ -10,6 +10,7 @@ class SlrController {
 	
 	def springSecurityService
 	def toolService
+	def exportService
 	def strSearch = ""
 	int maxPerPage = 10
 	
@@ -561,6 +562,29 @@ class SlrController {
 			[slrInstance: slrInstance, questionListInstance: slrInstance.questions,
 			 errorQuestion: errorQuestion, successQuestion: successQuestion,
 			 enunciadoQuestion: enunciadoQuestion]
+		}
+	}
+	
+	def exportToExcel()
+	{
+		def slrInstance = Slr.findByGuidLike(params.guid.toString())
+		
+		if(slrInstance == null)
+		{
+			redirect(controller: 'slr', action: 'myList')
+		}
+		else
+		{
+			def file = exportService.exportToExcel(slrInstance)
+			
+			if (file.exists()) {
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "filename=${file.name}")
+				response.outputStream << file.bytes
+				if(!file.delete())
+					println "No se ha borrado el fichero"
+				return
+			 }
 		}
 	}
 }

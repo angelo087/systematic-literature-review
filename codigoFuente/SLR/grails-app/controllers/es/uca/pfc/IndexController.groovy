@@ -116,4 +116,20 @@ class IndexController {
 		]
 		
 	}
+	
+	def faqs()
+	{
+		def userProfileInstance = null
+		def isLogin = springSecurityService.isLoggedIn()
+		if(isLogin)
+		{
+			userProfileInstance = User.get(springSecurityService.principal.id).userProfile
+		}
+		
+		[
+			faqListInstance: FAQ.list(),
+			userProfileInstance: userProfileInstance,
+			isLogin: isLogin
+		]
+	}
 }

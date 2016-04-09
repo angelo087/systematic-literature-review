@@ -53,6 +53,11 @@ class Reference implements Comparator<Reference> {
 		authorsRefs(cascade: "all-delete-orphan")
 	}*/
 	
+	// Indicamos que la justificacion es un texto
+	static mapping = {
+		bibtex type: 'text'
+	}
+	
 	def beforeInsert = {
 		
 		// Aumentamos el numero de referencias en el Slr
@@ -60,24 +65,6 @@ class Reference implements Comparator<Reference> {
 		
 		// Insertamos el criterio Included
 		criterion = Criterion.findByNomenclaturaAndSlr("cr_included", search.slr)
-		
-		// Quitar esto
-		/*int numeroAleatorio = (int) (Math.random()*4+1);		
-		switch(numeroAleatorio)
-		{
-			case 1:
-				criterion = Criterion.findByNomenclaturaAndSlr("cr_included", search.slr)
-				break;
-			case 2:
-				criterion = Criterion.findByNomenclaturaAndSlr("cr_language", search.slr)
-				break;
-			case 3:
-				criterion = Criterion.findByNomenclaturaAndSlr("cr_version", search.slr)
-				break;
-			case 4:
-				criterion = Criterion.findByNomenclaturaAndSlr("cr_metamodel", search.slr)
-				break;
-		}*/
 		
 		// Insertamos los atributos especificos del Slr
 		for(SpecificAttribute attribute : search.slr.specAttributes)

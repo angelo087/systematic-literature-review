@@ -7,6 +7,7 @@ import es.uca.pfc.AuthorReference
 import es.uca.pfc.Criterion
 import es.uca.pfc.Education
 import es.uca.pfc.EngineSearch
+import es.uca.pfc.FAQ
 import es.uca.pfc.Language
 import es.uca.pfc.Logger
 import es.uca.pfc.LoggerFriend
@@ -84,10 +85,10 @@ class BootStrap {
 		def superRole = Role.findByAuthority('ROLE_SUPER') ?: new Role(authority: 'ROLE_SUPER').save(failOnError: true)
 		
 		println "Creamos los engines"
-		def engine01 = new EngineSearch(name: 'ACM', image: 'acm.jpeg', text: 'ACM').save(failOnError: true)
-		def engine02 = new EngineSearch(name: 'IEEE', image: 'ieee.jpeg', text: 'IEEE').save(failOnError: true)
-		def engine03 = new EngineSearch(name: 'SCIENCE', image: 'science.jpeg', text: 'SCIENCE').save(failOnError: true)
-		def engine04 = new EngineSearch(name: 'SPRINGER', image: 'springer.jpeg', text: 'SPRINGER').save(failOnError: true)
+		def engine01 = new EngineSearch(name: 'ACM', display_name: 'ACM Digital Library', image: 'acm.jpeg', text: 'ACM').save(failOnError: true)
+		def engine02 = new EngineSearch(name: 'IEEE', display_name: 'IEEE Computer Society', image: 'ieee.jpeg', text: 'IEEE').save(failOnError: true)
+		def engine03 = new EngineSearch(name: 'SCIENCE', display_name: 'Science Direct', image: 'science.jpeg', text: 'SCIENCE').save(failOnError: true)
+		def engine04 = new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER').save(failOnError: true)
 		
 		println "Creamos Usuarios de prueba..."
 		
@@ -404,6 +405,11 @@ class BootStrap {
 		author04.addToAuthorsRefs(reference: reference14).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference18).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference22).save(failOnError: true)
+		
+		println "Creamos FAQ's"
+		def faq01 = new FAQ(enunciado: '¿Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
+		def faq02 = new FAQ(enunciado: '¿Esto es una pregunta 2?', respuesta: 'Efectivamente, esto es una respuesta 2').save(failOnError: true)
+		def faq03 = new FAQ(enunciado: '¿Esto es una pregunta 3?', respuesta: 'Efectivamente, esto es una respuesta 3').save(failOnError: true)
     }
     def destroy = {
     }

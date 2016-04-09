@@ -29,6 +29,7 @@ grails.project.dependency.resolution = {
     inherits("global") {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
+		excludes 'xercesImpl'
     }
     log "info" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
@@ -53,6 +54,18 @@ grails.project.dependency.resolution = {
         runtime 'mysql:mysql-connector-java:5.1.29'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+		
+		// Excel
+		runtime 'commons-codec:commons-codec:1.10'
+		runtime 'commons-logging:commons-logging:1.2'
+		runtime 'junit:junit:4.12'
+		runtime 'dom4j:dom4j:1.6.1'
+		runtime 'log4j:log4j:1.2.17'
+		runtime 'org.apache.poi:poi:3.14'
+		runtime 'org.apache.poi:poi-ooxml:3.14'
+		runtime 'org.apache.poi:poi-ooxml-schemas:3.14'
+		runtime 'org.apache.xmlbeans:xmlbeans:2.6.0'
+		runtime 'org.apache.poi:ooxml-schemas:1.1'
     }
 
     plugins {
@@ -74,7 +87,7 @@ grails.project.dependency.resolution = {
 		//compile ":quartz:1.0.1" // tareas en segundo plano
 		compile "org.grails.plugins:executor:0.3"
 		
-        // Uncomment these to enable additional asset-pipeline capabilities
+		// Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"
         //compile ":less-asset-pipeline:1.10.0"
         //compile ":coffee-asset-pipeline:1.8.0"

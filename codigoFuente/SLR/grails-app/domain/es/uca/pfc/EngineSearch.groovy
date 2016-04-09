@@ -5,6 +5,7 @@ class EngineSearch {
 	static hasMany = [searchs: Search]
 	
 	String name = ""			//nombre
+	String display_name = ""	
 	String url = ""				//url
 	String image = ""			//imagen a mostrar
 	String text = ""			//texto a mostrar
