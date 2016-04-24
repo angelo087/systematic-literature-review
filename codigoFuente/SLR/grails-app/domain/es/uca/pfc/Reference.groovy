@@ -53,7 +53,7 @@ class Reference implements Comparator<Reference> {
 		authorsRefs(cascade: "all-delete-orphan")
 	}*/
 	
-	// Indicamos que la justificacion es un texto
+	// Indicamos que bibtex es un texto largo
 	static mapping = {
 		bibtex type: 'text'
 	}

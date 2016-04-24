@@ -12,4 +12,9 @@ class SpecificAttributeMultipleValue extends SpecificAttribute {
 	def beforeInsert = {
 		tipo = "list"
 	}
+	
+	String getStrOptions()
+	{
+		return options.toString();
+	}
 }

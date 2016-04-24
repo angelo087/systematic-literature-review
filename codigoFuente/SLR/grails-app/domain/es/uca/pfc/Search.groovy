@@ -24,4 +24,19 @@ class Search {
 	{
 		return "${terminos}"
 	}
+	
+	String getStrEngineSearch()
+	{
+		return engine.display_name;
+	}
+	
+	String getStSearchComponent()
+	{
+		return component.name;
+	}
+	
+	String getStrSearchOperator()
+	{
+		return operator.name;
+	}
 }

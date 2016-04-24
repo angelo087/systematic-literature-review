@@ -19,8 +19,29 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.openxml4j.opc.OPCPackage
+import org.hibernate.internal.CriteriaImpl.CriterionEntry;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chapter
+import com.itextpdf.text.Chunk
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Section
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import es.uca.pdf.AnnualTrend
+import es.uca.pdf.CriterionStudyHelper;
+import es.uca.pdf.ExportPdf;
+import es.uca.pdf.PrimaryStudyHelper
+import es.uca.pdf.SearchHelper
 
 @Transactional
 class ExportService {
@@ -562,5 +583,193 @@ class ExportService {
 		sheet.setAutoFilter(org.apache.poi.ss.util.CellRangeAddress.valueOf("A1"))
 		
 		return wb;
+	}
+	
+	File exportToPdf(Slr slrInstance)
+	{
+		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String filePdf = "tmp/"+slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".pdf";
+		
+		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
+		List<Reference> referencesIncluded = new ArrayList<Reference>()
+		for(Search search : slrInstance.searchs)
+		{
+			for(Reference reference : search.references)
+			{
+				if (reference.criterion.name.equals(criterionIncluded.name))
+				{
+					referencesIncluded.add(reference)
+				}
+			}
+		}
+		
+		List<ResearchQuestion> questions = new ArrayList<ResearchQuestion>()
+		questions.addAll(slrInstance.questions)
+		List<SpecificAttribute> attributes = new ArrayList<SpecificAttribute>()
+		attributes.addAll(slrInstance.specAttributes)
+		List<SearchHelper> searchs = getSearchsHelper(slrInstance, criterionIncluded)
+		List<CriterionStudyHelper> criterionStudies = getCriterionStudiesHelper(slrInstance)
+		List<PrimaryStudyHelper> primaryStudies = getPrimaryStudiesHelper(referencesIncluded)
+		Map<String, AnnualTrend> annualTrends = getAnnualTrends(referencesIncluded);
+				
+		ExportPdf.createPdf(filePdf,slrInstance, slrInstance.userProfile, questions, attributes, searchs, criterionStudies, primaryStudies, annualTrends)
+		
+		File file = new File(filePdf)
+		
+		return file;
+	}
+	
+	List<CriterionStudyHelper> getCriterionStudiesHelper(Slr slrInstance)
+	{
+		List<CriterionStudyHelper> studies = new ArrayList<CriterionStudyHelper>()
+		Map<String, Integer> mapCriterions = new HashMap<String, Integer>()
+		
+		for(Criterion criterion : slrInstance.criterions)
+		{
+			mapCriterions.put(criterion.name, 0)
+		}
+		
+		int numReferences = 0;
+		for(Search search : slrInstance.searchs)
+		{
+			for(Reference reference : search.references)
+			{
+				if (mapCriterions.containsKey(reference.criterion.name))
+				{
+					int value = mapCriterions.get(reference.criterion.name);
+					mapCriterions.put(reference.criterion.name, value + 1)
+				}
+				numReferences++
+			}
+		}
+		
+		Iterator it = mapCriterions.keySet().iterator();
+		int fila = 1;
+		while(it.hasNext())
+		{
+			String key = it.next();
+			
+			CriterionStudyHelper critStud = new CriterionStudyHelper()
+			
+			critStud.setName(key);
+			critStud.setStudies(mapCriterions.get(key));
+			double porcentaje = (double) (mapCriterions.get(key) * 100) / numReferences;
+			critStud.setFrecuency(porcentaje);
+			
+			def c = Criterion.findBySlrAndName(slrInstance, key)
+			
+			critStud.setDescription(c.description)
+			
+			studies.add(critStud)
+		}
+		
+		return studies;
+	}
+	
+	List<SearchHelper> getSearchsHelper(Slr slrInstance, Criterion criterionIncluded)
+	{
+		List<SearchHelper> searchsHelpers = new ArrayList<SearchHelper>();
+		
+		for(Search search : slrInstance.searchs)
+		{
+			SearchHelper sHelp = new SearchHelper(search.engine.display_name, 
+												  search.terminos, 
+												  search.component.name,
+												  search.operator.name,
+												  search.references.size(), 
+												  0, 
+												  search.fecha)
+			
+			def listReferencesIncludes = Reference.findAllBySearchAndCriterion(search,criterionIncluded)
+			
+			sHelp.setPrimaryStudies(listReferencesIncludes.size())
+			
+			searchsHelpers.add(sHelp)
+		}
+		
+		return searchsHelpers;
+	}
+	
+	List<PrimaryStudyHelper> getPrimaryStudiesHelper(List<Reference> referencesIncluded)
+	{
+		List<PrimaryStudyHelper> studies = new ArrayList<PrimaryStudyHelper>();
+		
+		for(Reference reference : referencesIncluded)
+		{
+			PrimaryStudyHelper study = new PrimaryStudyHelper();
+			
+			study.setTitle(reference.title)
+			study.setType(reference.type.nombre)
+			study.setYear(Integer.parseInt(reference.year))
+			study.setPublisher(reference.publisher)
+			study.setCitationKey(reference.citation_key)
+			
+			Map<String, String> specAttributes = new HashMap<String, String>();
+			
+			for(SpecificAttributeReference attribute : reference.specificAttributes)
+			{
+				specAttributes.put(attribute.attribute.name, attribute.value)
+			}
+			study.setSpecAttributes(specAttributes)
+			
+			studies.add(study)
+		}
+		
+		return studies;
+	}
+	
+	Map<String, AnnualTrend> getAnnualTrends(List<Reference>referencesIncluded)
+	{
+		Map<String, AnnualTrend> trends = new TreeMap<String, AnnualTrend>()
+		
+		int minYear = 9999;
+		int maxYear = 0;
+		
+		for(Reference reference : referencesIncluded)
+		{
+			int year = Integer.parseInt(reference.year)
+			
+			if (year <= minYear)
+			{
+				minYear = year;
+			}
+			
+			if (year >= maxYear)
+			{
+				maxYear = year
+			}
+		}
+		
+		for(int y = minYear; y <= maxYear; y++)
+		{
+			trends.put(Integer.toString(y), new AnnualTrend())
+		}
+		
+		// Contabilizamos las referencias por sus tipos
+		for(Reference reference : referencesIncluded)
+		{
+			if (reference.type.nombre.equals("Book"))
+			{
+				trends.get(reference.year).setTotalBooks(trends.get(reference.year).getTotalBooks()+1)
+			}
+			else if (reference.type.nombre.equals("Conference Proceedings"))
+			{
+				trends.get(reference.year).setTotalConferences(trends.get(reference.year).getTotalConferences()+1)
+			}
+			else if (reference.type.nombre.equals("Generic"))
+			{
+				trends.get(reference.year).setTotalGenerics(trends.get(reference.year).getTotalGenerics()+1)
+			}
+			else if (reference.type.nombre.equals("Journal"))
+			{
+				trends.get(reference.year).setTotalJournals(trends.get(reference.year).getTotalJournals()+1)
+			}
+			else
+			{
+				trends.get(reference.year).setTotalOthers(trends.get(reference.year).getTotalOthers()+1)
+			}
+		}
+		
+		return trends;
 	}
 }
