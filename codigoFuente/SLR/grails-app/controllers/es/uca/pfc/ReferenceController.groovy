@@ -8,6 +8,7 @@ class ReferenceController {
 	
 	def springSecurityService
 	def toolService
+	def exportService
 	
     def index() {
 		redirect(controller: 'slr', action: 'myList')
@@ -325,5 +326,29 @@ class ReferenceController {
 				redirect(controller: 'slr', action: 'references', params: [guid: guidSlr])
 			}
 		}		
+	}
+	
+	def exportReferenceToBibTex()
+	{
+		def idmend = params.idmend.toString();
+		def referenceInstance = Reference.findByIdmendLike(idmend)
+		
+		if(referenceInstance == null)
+		{
+			redirect(controller: 'slr', action: 'myList')
+		}
+		else
+		{
+			def file = exportService.exportToBibTex(referenceInstance)
+			
+			if (file.exists()) {
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "filename=${file.name}")
+				response.outputStream << file.bytes
+				if(!file.delete())
+					println "No se ha borrado el fichero " + file.name
+				return
+			}
+		}
 	}
 }

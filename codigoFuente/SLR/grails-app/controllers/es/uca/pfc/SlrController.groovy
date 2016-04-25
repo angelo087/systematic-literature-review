@@ -610,4 +610,27 @@ class SlrController {
 			 }
 		}
 	}
+	
+	def exportToBibTex()
+	{
+		def slrInstance = Slr.findByGuidLike(params.guid.toString())
+		
+		if(slrInstance == null)
+		{
+			redirect(controller: 'slr', action: 'myList')
+		}
+		else
+		{
+			def file = exportService.exportToBibTex(slrInstance)
+			
+			if (file.exists()) {
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "filename=${file.name}")
+				response.outputStream << file.bytes
+				if(!file.delete())
+					println "No se ha borrado el fichero " + file.name
+				return
+			}
+		}
+	}
 }

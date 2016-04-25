@@ -52,6 +52,11 @@ class UrlMappings {
 			action="researchQuestions"
 		}
 		
+		"/reference/$idmend/exportReferenceToBibTex" {
+			controller="reference"
+			action="exportReferenceToBibTex"
+		}
+		
 		"/reference/$idmend" {
 			controller="reference"
 			action="show"

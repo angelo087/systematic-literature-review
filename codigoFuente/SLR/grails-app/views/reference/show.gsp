@@ -81,6 +81,7 @@
 							<g:else>
 								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" disabled="disabled">Eliminar Referencia</button>
 							</g:else>
+							<g:link type="button" class="btn btn-primary" controller="reference" action="exportReferenceToBibTex" params="[idmend: "${referenceInstance.idmend}"]">Exportar BibTex</g:link>
 							<button type="button" class="btn btn-primary" disabled="disabled">Sincronizar (Mendeley)</button>
 							<p> </p>
 						</g:if>
@@ -354,9 +355,9 @@
 	
 	    </div>
 	    <!-- /#wrapper -->
-    </g:form>
-
-    <%-- JavaScript --%>
+    </g:form>    
+    
+	<%-- JavaScript --%>
     <g:render template="javascript" contextPath="/"/>
 
 </body>

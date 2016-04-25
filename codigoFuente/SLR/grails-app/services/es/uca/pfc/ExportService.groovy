@@ -772,4 +772,58 @@ class ExportService {
 		
 		return trends;
 	}
+	
+	File exportToBibTex(Slr slrInstance)
+	{
+		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
+		List<Reference> referencesIncluded = new ArrayList<Reference>()
+		for(Search search : slrInstance.searchs)
+		{
+			for(Reference reference : search.references)
+			{
+				if (reference.criterion.name.equals(criterionIncluded.name))
+				{
+					referencesIncluded.add(reference)
+				}
+			}
+		}
+		
+		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String fileExcel = "tmp/"+slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".bib";
+		File file = new File(fileExcel)
+
+		try
+		{			
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			String content = "";
+			for(Reference reference : referencesIncluded)
+			{
+				content += reference.bibtex + "\n"
+			}
+			bw.write(content)
+			bw.close()
+		}
+		catch(Exception ex) {}
+		
+		return file;
+	}
+	
+	File exportToBibTex(Reference referenceInstance)
+	{
+		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String fileExcel = "tmp/"+ referenceInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".bib";
+		File file = new File(fileExcel)
+
+		try
+		{
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(referenceInstance.bibtex + "\n")
+			bw.close()
+		}
+		catch(Exception ex) {}
+		
+		return file;
+	}	
 }

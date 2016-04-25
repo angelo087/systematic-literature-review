@@ -371,7 +371,8 @@
 											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')">Eliminar SLR</button></p>
 										</g:if>
 										<p><g:link controller="slr" action="exportToExcel" params="[guid: "${slrInstance.guid}"]">Exportar Excel</g:link></p>
-										<g:link controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]">Exportar PDF</g:link>
+										<p><g:link controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]">Exportar PDF</g:link></p>
+										<g:link controller="slr" action="exportToBibTex" params="[guid: "${slrInstance.guid}"]">Exportar BibTex</g:link>
                             		</td>
                             	</tr>
                             </g:each>
