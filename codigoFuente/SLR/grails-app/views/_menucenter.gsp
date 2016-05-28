@@ -71,7 +71,7 @@
 	           <div class="panel-heading">
 	               <div class="row">
 	                   <div class="col-xs-3">
-	                       <i class="fa fa-thumbs-up fa-5x"></i>
+	                       <i class="fa fa-group fa-5x"></i>
 	                   </div>
 	                   <div class="col-xs-9 text-right">
 	                       <div class="huge">${(User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).userProfile.friends.size() > 100 ? "+100" : User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).userProfile.friends.size().toString())}</div>

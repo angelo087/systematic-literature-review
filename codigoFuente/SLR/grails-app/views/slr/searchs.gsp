@@ -99,8 +99,11 @@
                             		<td><g:link controller="slr" action="references" params="[guid: "${searchInstance.slr.guid}"]">${searchInstance.references.size()}</g:link></td>
                             		<td>
                             			<g:if test="${slrInstance.noDrop == false}">
-											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSearch('${searchInstance.guid}')">Eliminar Búsqueda</button></p>
+											<button title="ELiminar búsqueda" type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSearch('${searchInstance.guid}')"><i class="fa fa-times"></i></button>
 										</g:if>
+										<g:else>
+											<button title="ELiminar búsqueda" type="button" class="btn btn-default btn-circle disabled" data-toggle="modal" data-target="#myModalDrop"><i class="fa fa-times"></i></button>
+										</g:else>
                             		</td>
                             	</tr>
                             </g:each>

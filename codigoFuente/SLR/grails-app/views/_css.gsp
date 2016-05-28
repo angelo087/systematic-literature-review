@@ -19,3 +19,5 @@
 
 <link href="${resource(dir: 'css', file: 'jquery.range.css')}" rel="stylesheet" type="text/css">
 
+<!-- Morris CSS -->
+<link href="${resource(dir: 'bower_components', file: 'morrisjs/morris.css')}" rel="stylesheet" type="text/css">

@@ -209,8 +209,11 @@
                             		</td>
                             		<td>
                             			<g:if test="${slrInstance.noDrop == false}">
-											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdAttribute('${attributeInstance.id.toString()}')">Eliminar Atributo</button></p>
+											<button title="Eliminar Atributo Especifico" type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdAttribute('${attributeInstance.id.toString()}')"><i class="fa fa-times"></i></button>
 										</g:if>
+										<g:else>
+											<button title="Eliminar Atributo Especifico" type="button" class="btn btn-default btn-circle disabled" data-toggle="modal" data-target="#myModalDrop"><i class="fa fa-times"></i></button>
+										</g:else>
                             		</td>
                             	</tr>
                             </g:each>

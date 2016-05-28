@@ -51,6 +51,11 @@ class UrlMappings {
 			controller="slr"
 			action="researchQuestions"
 		}
+				
+		"/$guid/charts" {
+			controller="slr"
+			action="graphs"
+		}
 		
 		"/reference/$idmend/exportReferenceToBibTex" {
 			controller="reference"

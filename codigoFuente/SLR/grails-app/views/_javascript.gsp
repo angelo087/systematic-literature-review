@@ -11,3 +11,7 @@
 <script src="${resource(dir: 'dist', file: 'js/sb-admin-2.js')}"></script>
 
 <script src="${resource(dir: 'js', file: 'jquery.range.js')}"></script>
+
+<script src="${resource(dir: 'bower_components', file: 'raphael/raphael-min.js')}"></script>
+<script src="${resource(dir: 'bower_components', file: 'morrisjs/morris.min.js')}"></script>
+<%--<script src="${resource(dir: 'js', file: 'morris-data.js')}"></script> --%>

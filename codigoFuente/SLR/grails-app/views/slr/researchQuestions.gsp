@@ -139,8 +139,11 @@
                             		<td>${formatDate(format: 'HH:mm - dd/MMM/yyyy', date: questionInstance.submitDate)}</td>
                             		<td>
                             			<g:if test="${slrInstance.noDrop == false}">
-											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdQuestion('${questionInstance.id.toString()}')">Eliminar Pregunta</button></p>
+											<button title="Eliminar Pregunta" type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdQuestion('${questionInstance.id.toString()}')"><i class="fa fa-times"></i></button>
 										</g:if>
+										<g:else>
+											<button title="Eliminar Pregunta" type="button" class="btn btn-default btn-circle disabled" data-toggle="modal" data-target="#myModalDrop"><i class="fa fa-times"></i></button>
+										</g:else>
                             		</td>
                             	</tr>
                             </g:each>

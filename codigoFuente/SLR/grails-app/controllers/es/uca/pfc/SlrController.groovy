@@ -11,6 +11,7 @@ class SlrController {
 	def springSecurityService
 	def toolService
 	def exportService
+	def graphService
 	def strSearch = ""
 	int maxPerPage = 10
 	
@@ -438,7 +439,7 @@ class SlrController {
 				redirect(controller: 'index', action: 'index')
 			}
 			
-			// Calculamos el número de referencias con los criterios
+			// Calculamos el nï¿½mero de referencias con los criterios
 			Map<String, Integer> totalReferences = new HashMap<String,Integer>()
 			for(Search search : slrInstance.searchs)
 			{
@@ -632,5 +633,52 @@ class SlrController {
 				return
 			}
 		}
+	}
+		
+	def graphs()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		
+		def slrInstance = Slr.findByGuidLike(params.guid)
+		
+		if(slrInstance == null)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			List<String> queriesChart = graphService.chartsByTag(slrInstance)
+						
+			[
+				slrInstance: slrInstance, 
+				criterionShowTextEvery: queriesChart.get(0),
+				queryCriterion1: queriesChart.get(1),
+				queryCriterion2: queriesChart.get(2),
+				queryCriterion3: queriesChart.get(3),
+				totalCriterions: Integer.parseInt(queriesChart.get(4)),
+				queryEngine1: queriesChart.get(5),
+				queryEngine2: queriesChart.get(6),
+				queryEngine3: queriesChart.get(7),
+				totalEngines: Integer.parseInt(queriesChart.get(8)),
+				queryDepartment1: queriesChart.get(9),
+				queryDepartment2: queriesChart.get(10),
+				queryDepartment3: queriesChart.get(11),
+				totalDepartments: Integer.parseInt(queriesChart.get(12)),
+				queryType1: queriesChart.get(13),
+				queryType2: queriesChart.get(14),
+				queryType3: queriesChart.get(15),
+				totalTypes: Integer.parseInt(queriesChart.get(16)),
+				queryLanguage1: queriesChart.get(17),
+				queryLanguage2: queriesChart.get(18),
+				queryLanguage3: queriesChart.get(19),
+				totalLanguages: Integer.parseInt(queriesChart.get(20)),
+				querySearch1: queriesChart.get(21)
+			]
+		}			
 	}
 }

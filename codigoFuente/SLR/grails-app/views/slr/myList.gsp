@@ -320,10 +320,10 @@
                             <tr>
                                 <th>Titulo</th>
                                 <th>Estado</th>
-                                <th>Num. Visitas</th>
+                                <th>Nº Visitas</th>
                                 <th>Fecha creación</th>
-                                <th>Total Búsquedas</th>
-                                <th>Total Referencias</th>
+                                <th>Nº Búsquedas</th>
+                                <th>Nº Referencias</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -333,7 +333,7 @@
                             		<td><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrInstance.title}</g:link></td>
                             		<td>${slrInstance.state}</td>
                             		<td>${slrInstance.numVisits}</td>
-                            		<td>${formatDate(format: 'HH:mm - dd/MMM/yyyy', date: slrInstance.submitDate)}</td>
+                            		<td>${formatDate(format: 'MMM/yyyy', date: slrInstance.submitDate)}</td>
                             		<td>
                             			<g:if test="${slrInstance.searchs.size() > 0}">
                             				<g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()}</g:link>
@@ -351,28 +351,18 @@
                             			</g:else>
                             		</td>
                             		<td>
-                            			<g:link class="btn btn-link" controller="search" action="create" params="[guidSlr: "${slrInstance.guid}"]">Crear Búsqueda</g:link>
-                            			<g:if test="${slrInstance.searchs.size()>0}">
-                            				<p><g:link class="btn btn-link" controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">Lista Búsquedas</g:link></p>
-                            			</g:if>
-                            			<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalCriterion" onclick="getIdSlr('${slrInstance.guid}')">Crear Criterio</button></p>
-                            			<g:if test="${slrInstance.criterions.size()>0}">
-                            				<p><g:link class="btn btn-link" controller="slr" action="criterions" params="[guid: "${slrInstance.guid}"]">Lista Criterios</g:link></p>
-                            			</g:if>
-                            			<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalAttribute" onclick="getIdSlr('${slrInstance.guid}')">Crear Atrib. Especifico</button></p>
-                            			<g:if test="${slrInstance.specAttributes.size()>0}">
-                            				<p><g:link class="btn btn-link" controller="slr" action="specAttributes" params="[guid: "${slrInstance.guid}"]">Lista Atributos</g:link></p>
-                            			</g:if>
-                            			<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalQuestion" onclick="getIdSlr('${slrInstance.guid}')">Crear Pregunta</button></p>
-                            			<g:if test="${slrInstance.questions.size()>0}">
-                            				<p><g:link class="btn btn-link" controller="slr" action="researchQuestions" params="[guid: "${slrInstance.guid}"]">Lista Preguntas</g:link></p>
-                            			</g:if>
-                            			<g:if test="${slrInstance.noDrop == false}">
-											<p><button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')">Eliminar SLR</button></p>
+										<g:link title="Búsquedas" type="button" class="btn btn-outline btn-primary btn-circle" controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-search"></i></g:link>
+										<g:link title="Criterios" class="btn btn-outline btn-primary btn-circle" controller="slr" action="criterions" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-bookmark"></i></g:link>
+										<g:link title="Atributos Especificos" class="btn btn-outline btn-primary btn-circle" controller="slr" action="specAttributes" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-tags"></i></g:link>
+										<g:link title="Listar preguntas" type="button" class="btn btn-outline btn-primary btn-circle" controller="slr" action="researchQuestions" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-question"></i></g:link>
+										<g:if test="${slrInstance.noDrop == false}">
+											<button title="Eliminar SLR" type="button" class="btn btn-outline btn-danger btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')"><i class="fa fa-times"></i></button>
 										</g:if>
-										<p><g:link controller="slr" action="exportToExcel" params="[guid: "${slrInstance.guid}"]">Exportar Excel</g:link></p>
-										<p><g:link controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]">Exportar PDF</g:link></p>
-										<g:link controller="slr" action="exportToBibTex" params="[guid: "${slrInstance.guid}"]">Exportar BibTex</g:link>
+										<p> </p>
+										<g:link title="Exportar a Excel" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToExcel" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-excel-o"></i></g:link>
+										<g:link title="Exportar a PDF" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-pdf-o"></i></g:link>
+										<g:link title="Exportar a Bibtex" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToBibTex" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-code-o"></i></g:link>
+										<g:link title="Gráficos" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="graphs" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-stats"></i></g:link>
                             		</td>
                             	</tr>
                             </g:each>

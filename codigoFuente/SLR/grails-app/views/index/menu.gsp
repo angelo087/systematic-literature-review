@@ -43,6 +43,7 @@
                     <div id="searchloggers" class="chat-panel panel panel-default">
                     	<g:render template="logger" contextPath="/"/>
                     </div>
+                    <g:render template="donut" contextPath="/"/>
                     
                 </div>
 
