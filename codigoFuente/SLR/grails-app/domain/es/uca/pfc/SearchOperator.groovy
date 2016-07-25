@@ -7,4 +7,9 @@ class SearchOperator {
 	
     static constraints = {
     }
+	
+	String toString()
+	{
+		return "${name}"
+	}
 }

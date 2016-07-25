@@ -262,13 +262,13 @@ public class ExportPdf {
 		p.setSpacingBefore(10);
 		section.add(p);
 		
-		PdfPTable table = new PdfPTable(8);
+		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100); //Width 100%
         table.setSpacingBefore(10f); //Space before table
         table.setSpacingAfter(10f); //Space after table
         
         //Set Column widths
-        float[] columnWidths = {0.5f, 1.5f, 1.2f, 1f, 1f, 0.8f, 1f, 1f};
+        float[] columnWidths = {0.5f, 1.5f, 1.2f, 1f, 1f, 1f};
         table.setWidths(columnWidths);
         
         PdfPCell cell = getHeaderCell("#");
@@ -277,13 +277,7 @@ public class ExportPdf {
         cell = getHeaderCell("Source");
         table.addCell(cell);
         
-        cell = getHeaderCell("Search Terms");
-        table.addCell(cell);
-        
-        cell = getHeaderCell("Search Scope");
-        table.addCell(cell);
-        
-        cell = getHeaderCell("Search Operator");
+        cell = getHeaderCell("Search Terms & Scope");
         table.addCell(cell);
         
         cell = getHeaderCell("Results");
@@ -301,18 +295,12 @@ public class ExportPdf {
         	cell = getCell(Integer.toString(cont));
             table.addCell(cell);
         	
-            cell = getCell(search.getSource());
+            cell = getCell(search.getEngines());
             table.addCell(cell);
             
         	cell = getCell(search.getTerms());
             table.addCell(cell);
             
-            cell = getCell(search.getScope());
-            table.addCell(cell);
-            
-            cell = getCell(search.getOperator());
-            table.addCell(cell);
-
             cell = getCell(Integer.toString(search.getResults()));
             table.addCell(cell);
             

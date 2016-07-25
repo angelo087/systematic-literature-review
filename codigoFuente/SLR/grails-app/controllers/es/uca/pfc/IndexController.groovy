@@ -8,7 +8,7 @@ class IndexController {
 	
     def index() 
 	{
-		// Si no está logado, redirigimos a la página principal.
+		// Si no estï¿½ logado, redirigimos a la pï¿½gina principal.
 		if(springSecurityService.isLoggedIn())
 		{
 			redirect(controller: "index", action: "menu")
@@ -18,7 +18,7 @@ class IndexController {
 	
 	def menu()
 	{
-		// Si no está logado, redirigimos a la página principal.
+		// Si no estï¿½ logado, redirigimos a la pï¿½gina principal.
 		if(!springSecurityService.isLoggedIn())
 		{
 			redirect(controller: 'index', action: 'index')
@@ -39,7 +39,7 @@ class IndexController {
 	
 	def loggers()
 	{
-		// Si no está logado, redirigimos a la página principal.
+		// Si no estï¿½ logado, redirigimos a la pï¿½gina principal.
 		if(!springSecurityService.isLoggedIn())
 		{
 			redirect(controller: 'index', action: 'index')
@@ -131,5 +131,10 @@ class IndexController {
 			userProfileInstance: userProfileInstance,
 			isLogin: isLogin
 		]
+	}
+	
+	def indexMendeley()
+	{
+		
 	}
 }

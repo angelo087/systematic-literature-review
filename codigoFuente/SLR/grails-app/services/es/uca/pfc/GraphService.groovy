@@ -238,7 +238,7 @@ class GraphService {
 		for(Reference reference : references)
 		{
 			criterions.add(reference.criterion.name)
-			engines.add(reference.search.engine.name)
+			engines.add(reference.engine.name)
 			String depart = reference.department.toString().toLowerCase().trim()
 			departments.add(depart == "" ? "--" : reference.department.toString().toLowerCase().trim())
 			types.add(reference.type.nombre)
@@ -295,7 +295,7 @@ class GraphService {
 			
 			// Engines
 			total = 1;
-			nameLabel = reference.search.engine.name
+			nameLabel = reference.engine.name
 			if(referencesByEngine.containsKey(nameLabel))
 			{
 				total = referencesByEngine.get(nameLabel) + 1

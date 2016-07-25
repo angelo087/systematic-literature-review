@@ -3,6 +3,7 @@ package es.uca.pfc
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date;
+
 import grails.transaction.Transactional
 
 @Transactional
@@ -36,13 +37,13 @@ class ToolService {
 		return ok;
 	}
 	
-	// Método para actualizar el estado de un SLR
+	// Mï¿½todo para actualizar el estado de un SLR
 	String updateStatus(Slr slrInstance)
 	{
 		String estado = slrInstance.state.toString();
 		
-		// Un SLR pasa a estado 2 si tiene como mínimo 2 criterios y 1 pregunta
-		// Un SLR pasa a estado 3 si tiene todo lo del estado 2 y una búsqueda realizada
+		// Un SLR pasa a estado 2 si tiene como mï¿½nimo 2 criterios y 1 pregunta
+		// Un SLR pasa a estado 3 si tiene todo lo del estado 2 y una bï¿½squeda realizada
 		
 		if(slrInstance.state.equals("fase1"))
 		{
@@ -117,7 +118,7 @@ class ToolService {
 		return departaments;
 	}
 	
-	// Método para obtener el último login de un usuario en formato cadena
+	// Mï¿½todo para obtener el ï¿½ltimo login de un usuario en formato cadena
 	String getTimeString(Date date)
 	{
 		String timeToString = "";
@@ -169,7 +170,7 @@ class ToolService {
 						}
 						else
 						{
-							timeToString = "Hace más de 6 meses";
+							timeToString = "Hace mï¿½s de 6 meses";
 						}
 					}
 				}
@@ -282,9 +283,9 @@ class ToolService {
 			}
 			
 			// Engine
-			if (!engines.contains(reference.search.engine.name))
+			if (!engines.contains(reference.engine.name))
 			{
-				engines.add(reference.search.engine.name)
+				engines.add(reference.engine.name)
 			}
 			
 			// Idioma
@@ -382,7 +383,7 @@ class ToolService {
 				{
 					inserted = false;
 				}
-				else if (engines.size() > 0 && !engines.contains(reference.search.engine.name))
+				else if (engines.size() > 0 && !engines.contains(reference.engine.name))
 				{
 					inserted = false;
 				}
@@ -624,5 +625,30 @@ class ToolService {
 		log = new LoggerFriend(friendProfile: userLoginProfile, tipo: 'seguir')
 		userFriendProfile.addToLoggers(log)
 		userFriendProfile.save(failOnError: true)
+	}
+	
+	String converterToStrOptions(List<Object> elements)
+	{
+		String strOptions = "";
+
+		for(Object element : elements)
+		{
+			String value = "";
+			String name = "";
+			if(element instanceof SearchOperator)
+			{
+				value = ((SearchOperator)element).value
+				name = ((SearchOperator)element).name
+			}
+			else if(element instanceof SearchComponent)
+			{
+				value = ((SearchComponent)element).value
+				name = ((SearchComponent)element).name
+			}
+			
+			strOptions += "<option value='" + value + "'>" + name + "</option>"
+		}
+		
+		return strOptions;
 	}
 }

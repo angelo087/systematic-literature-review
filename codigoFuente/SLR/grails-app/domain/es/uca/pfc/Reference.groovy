@@ -8,9 +8,9 @@ import es.uca.pfc.TypeDocument;
 class Reference implements Comparator<Reference> {
 
 	static hasMany = [keywords: String, authorsRefs: AuthorReference, websites: String, tags: String, specificAttributes: SpecificAttributeReference]
-	static belongsTo = [search: Search, type: TypeDocument, language: Language, criterion: Criterion]
+	static belongsTo = [search: Search, type: TypeDocument, language: Language, criterion: Criterion, engine: EngineSearch]
 	
-    String idmend = ""; // Identificador en mendeley
+	String idmend = "";
 	String title = "";
 	Date created = new Date();
 	Date last_modified = new Date();
@@ -42,7 +42,7 @@ class Reference implements Comparator<Reference> {
 	boolean file_attached = false;
 	String bibtex = ""
 	
-	// Metadatos especificos que será una pareja de clave-valor (nombre atributo, valor)
+	// Metadatos especificos que serï¿½ una pareja de clave-valor (nombre atributo, valor)
 	//Map<String, String> specificAttributes = new HashMap<String, String>();
 	
 	static constraints = {

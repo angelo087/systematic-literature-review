@@ -4,17 +4,13 @@ import java.util.Date;
 
 class Search {
 
-	static belongsTo = [slr: Slr, engine: EngineSearch, component: SearchComponent, operator: SearchOperator]
-	static hasMany = [references: Reference]
+	static belongsTo = [slr: Slr]
+	static hasMany = [references: Reference, engines: EngineSearch, termParams: SearchTermParam]
 	
-	String terminos = ""
-	//Engine engine
 	Date fecha = new Date()
-	//String operator = ""
 	String startYear = ""
 	String endYear = ""
-	//String components = ""
-	int maxTotal = 0
+	int maxTotal = 5
 	String guid = UUID.randomUUID().toString();
 	
     static constraints = {
@@ -23,20 +19,5 @@ class Search {
 	String toString()
 	{
 		return "${terminos}"
-	}
-	
-	String getStrEngineSearch()
-	{
-		return engine.display_name;
-	}
-	
-	String getStSearchComponent()
-	{
-		return component.name;
-	}
-	
-	String getStrSearchOperator()
-	{
-		return operator.name;
 	}
 }

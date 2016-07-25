@@ -75,28 +75,30 @@
 					<table class="table table-striped table-bordered table-hover" id="dataTables-mysearchs">
                         <thead>
                             <tr>
-                                <th>Términos</th>
                                 <th>Realizada en:</th>
-                                <th>Operador</th>
                                 <th>Año Compienzo</th>
                                 <th>Año finalización</th>
-                                <th>Buscar en: </th>
                                 <th>Total Máximo</th>
-                                <th>Referencias encontradas:</th>
+                                <th>Encontrados:</th>
+                                <th>Términos</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <g:each in="${searchListInstance}" var="searchInstance">
                             	<tr class="gradeX">
-                            		<td>${searchInstance.terminos}</td>
-                            		<td>${searchInstance.fecha}</td>
-                            		<td>${searchInstance.operator.name}</td>
+                            		<td>${formatDate(format: 'dd/MMM/yyyy', date: searchInstance.fecha)}</td>
                             		<td>${searchInstance.startYear}</td>
                             		<td>${searchInstance.endYear}</td>
-                            		<td>${searchInstance.component.name}</td>
                             		<td>${searchInstance.maxTotal}</td>
                             		<td><g:link controller="slr" action="references" params="[guid: "${searchInstance.slr.guid}"]">${searchInstance.references.size()}</g:link></td>
+                            		<td>
+                            			<ul>
+	                            			<g:each in="${searchInstance.termParams}" var="searchTermParam">
+	                            				<li>${searchTermParam.operator.name} "${searchTermParam.terminos}" <b>en</b> <em>${searchTermParam.component.name}</em></li>
+	                            			</g:each>
+	                            		</ul>
+                            		</td>
                             		<td>
                             			<g:if test="${slrInstance.noDrop == false}">
 											<button title="ELiminar búsqueda" type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSearch('${searchInstance.guid}')"><i class="fa fa-times"></i></button>

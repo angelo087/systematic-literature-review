@@ -1,46 +1,38 @@
 package es.uca.pdf;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SearchHelper {
 
-	private String source;
+	/*private String source;
 	private String terms;
 	private String scope;
 	private String operator;
+	private int results;
+	private int primaryStudies;
+	private Date date;*/
+	private String engines;
+	private String terms;
 	private int results;
 	private int primaryStudies;
 	private Date date;
 	
 	public SearchHelper() {}
 	
-	public SearchHelper(String source, String terms, String scope, String operator, int results,
-			int primaryStudies, Date date) {
-		this.source = source;
+	public SearchHelper(String engines, String terms, int results, int primaryStudies, Date date) {
+		this.engines = engines;
 		this.terms = terms;
-		this.scope = scope;
 		this.results = results;
 		this.primaryStudies = primaryStudies;
 		this.date = date;
-		this.operator = operator;
-	}
-	public String getSource() {
-		return source;
-	}
-	public void setSource(String source) {
-		this.source = source;
 	}
 	public String getTerms() {
 		return terms;
 	}
 	public void setTerms(String terms) {
 		this.terms = terms;
-	}
-	public String getScope() {
-		return scope;
-	}
-	public void setScope(String scope) {
-		this.scope = scope;
 	}
 	public int getResults() {
 		return results;
@@ -61,13 +53,11 @@ public class SearchHelper {
 		this.date = date;
 	}
 
-	public String getOperator() {
-		return operator;
+	public String getEngines() {
+		return engines;
 	}
 
-	public void setOperator(String operator) {
-		this.operator = operator;
+	public void setEngines(String engines) {
+		this.engines = engines;
 	}
-	
-	
 }

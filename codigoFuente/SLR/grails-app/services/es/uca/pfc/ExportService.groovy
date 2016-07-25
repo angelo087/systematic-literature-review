@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Color
+import org.apache.poi.ss.usermodel.Comment
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -18,7 +19,9 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFFont
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.openxml4j.opc.OPCPackage
 import org.hibernate.internal.CriteriaImpl.CriterionEntry;
 
@@ -82,6 +85,7 @@ class ExportService {
 		cellStyleBorder.setBorderTop(XSSFCellStyle.BORDER_THIN)
 		cellStyleBorder.setBorderRight(XSSFCellStyle.BORDER_THIN)
 		cellStyleBorder.setBorderLeft(XSSFCellStyle.BORDER_THIN)
+		cellStyleBorder.setWrapText(true)
 
 		// Rellenamos el Excel
 		wb = fillIndexExcel(wb, slrInstance)
@@ -199,6 +203,7 @@ class ExportService {
 		cellStyleDate.setBorderRight(XSSFCellStyle.BORDER_THIN)
 		
 		int fila = 1;
+		int pos = 0;
 		for(Search search : slrInstance.searchs)
 		{
 			if (null == sheet.getRow(fila))
@@ -207,24 +212,43 @@ class ExportService {
 			}
 			
 			def cell = sheet.getRow(fila).createCell(0)
-			cell.setCellValue(search.engine.display_name)
+			String strEngines = "";
+			for(EngineSearch engine : search.engines)
+			{
+				strEngines += engine.display_name
+				if(pos != search.engines.size()-1)
+				{
+					strEngines += ", "
+				}
+				pos++
+			}
+			cell.setCellValue(strEngines)
 			cell.setCellStyle(cellStyleBorder)
 			cell = sheet.getRow(fila).createCell(1)
-			cell.setCellValue(search.terminos)
+			
+			String strTerminos = ""
+			pos = 0
+			for(SearchTermParam term : search.termParams)
+			{
+				strTerminos += term.operator.name + " '" + term.terminos + "' in " + term.component.name
+				if(pos != search.termParams.size())
+				{
+					strTerminos += "\n"
+				}
+			}
+			
+			cell.setCellValue(strTerminos)
 			cell.setCellStyle(cellStyleBorder)
 			cell = sheet.getRow(fila).createCell(2)
-			cell.setCellValue(search.component.name)
-			cell.setCellStyle(cellStyleBorder)
-			cell = sheet.getRow(fila).createCell(3)
 			cell.setCellValue(search.references.size())
 			cell.setCellStyle(cellStyleBorder)
 			
 			def listReferencesIncludes = Reference.findAllBySearchAndCriterion(search,criterionIncluded)
-			cell = sheet.getRow(fila).createCell(4)
+			cell = sheet.getRow(fila).createCell(3)
 			cell.setCellValue(listReferencesIncludes.size())
 			cell.setCellStyle(cellStyleBorder)
 			
-			cell = sheet.getRow(fila).createCell(5)
+			cell = sheet.getRow(fila).createCell(4)
 			cell.setCellStyle(cellStyleDate)
 			cell.setCellValue(search.fecha)
 			
@@ -462,7 +486,7 @@ class ExportService {
 		Map<String, Integer> mapJournal = new HashMap<Integer, Integer>()
 		Map<String, Integer> mapOther = new HashMap<Integer, Integer>()
 		
-		// Inicializar maps y columnas de años en el excel.
+		// Inicializar maps y columnas de aï¿½os en el excel.
 		int fila = 1;
 		def cell
 		for (int y = minYear; y<=maxYear; y++)
@@ -672,10 +696,26 @@ class ExportService {
 		
 		for(Search search : slrInstance.searchs)
 		{
-			SearchHelper sHelp = new SearchHelper(search.engine.display_name, 
-												  search.terminos, 
-												  search.component.name,
-												  search.operator.name,
+			String strEngines = "";
+			int pos = 0;
+			for(EngineSearch engine : search.engines)
+			{
+				strEngines += engine.display_name
+				if(pos != search.engines.size())
+				{
+					strEngines += ", "
+				}
+				pos++
+			}
+			
+			String strTerminos = "";
+			for(SearchTermParam term : search.termParams)
+			{
+				strTerminos += term.operator.name + " '" + term.terminos + "' in " + term.component.name + "\n"
+			}
+			
+			SearchHelper sHelp = new SearchHelper(strEngines, 
+												  strTerminos,
 												  search.references.size(), 
 												  0, 
 												  search.fecha)

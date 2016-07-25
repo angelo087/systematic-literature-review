@@ -35,7 +35,7 @@
 										<img src="${resource(dir: 'images/flags', file: referenceInstance.language.image)}" class="img-circle" style="width: 25px; height: 25px;" />
 									</div>
 									<div style="clear: both; margin-left: 5px; margin-top: 8px;">
-										<img src="${resource(dir: 'images/logos_engines', file: referenceInstance.search.engine.image)}" alt="${referenceInstance.search.engine.name}" class="img-square" style="width: 25px; height: 25px;" />
+										<img src="${resource(dir: 'images/logos_engines', file: referenceInstance.engine.image)}" alt="${referenceInstance.engine.name}" class="img-square" style="width: 25px; height: 25px;" />
 									</div>
 								</span>
 								<div class="chat-body clearfix">

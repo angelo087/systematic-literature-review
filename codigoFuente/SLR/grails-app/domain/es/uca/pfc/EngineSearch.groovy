@@ -1,8 +1,6 @@
 package es.uca.pfc
 
 class EngineSearch {
-
-	static hasMany = [searchs: Search]
 	
 	String name = ""			//nombre
 	String display_name = ""	

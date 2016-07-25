@@ -1,5 +1,6 @@
 package es.uca.pfc
 
+import grails.converters.JSON
 import grails.transaction.Transactional;
 
 class SearchController {
@@ -35,61 +36,32 @@ class SearchController {
 				redirect(controller: 'index', action: 'index')
 			}
 			else
-			{				
-				def terminosSearch = (null == params.terminosSearch ? "" : params.terminosSearch.toString())
-				def operatorSearch = (null == params.operatorSearch ? "all" : params.operatorSearch.toString())
-				
-				def opACMSearch
-				def opIEEESearch
-				def opSCIENCESearch
-				def opSPRINGERSearch
-				
-				if (null == params.opACMSearch && null == params.opIEEESearch && null == params.opSCIENCESearch 
-					&& null == params.opSPRINGERSearch)
-				{
-					opACMSearch = EngineSearch.findByNameIlike("acm").checkDefault
-					opIEEESearch = EngineSearch.findByNameIlike("ieee").checkDefault
-					opSCIENCESearch = EngineSearch.findByNameIlike("science").checkDefault
-					opSPRINGERSearch = EngineSearch.findByNameIlike("springer").checkDefault
-				}
-				else
-				{
-					opACMSearch = params.opACMSearch
-					opIEEESearch = params.opIEEESearch
-					opSCIENCESearch = params.opSCIENCESearch
-					opSPRINGERSearch = params.opSPRINGERSearch
-				}
-				
-				def componentSearch = params.componentSearch
+			{
 				def minYearSearch = (null == params.minYearSearch ? 1980 : Integer.parseInt(params.minYearSearch.toString()))
 				def maxYearSearch = (null == params.maxYearSearch ? Calendar.getInstance().get(Calendar.YEAR) : Integer.parseInt(params.maxYearSearch.toString()))
 				def maxTotalSearch = params.maxTotalSearch
 				
 				def engineListInstance = EngineSearch.findAllByStatus(true)
-				def operatorListInstance = SearchOperator.list()
-				def componentListInstance = SearchComponent.list()
+				def operatorListInstance = SearchOperator.list(sort:'name', order: 'asc')
+				def componentListInstance = SearchComponent.list(sort:'name', order: 'asc')
 				def minYear = 1980
 				def maxYear = Calendar.getInstance().get(Calendar.YEAR);
+				
+				def strOptionsOperators = toolService.converterToStrOptions(operatorListInstance)
+				def strOptionsComponents = toolService.converterToStrOptions(componentListInstance)
 				
 				[
 					slrInstance: slrInstance, error: error, engineListInstance: engineListInstance,
 					operatorListInstance: operatorListInstance, componentListInstance: componentListInstance,
 					minYear: minYear, maxYear: maxYear,
-					terminosSearch: terminosSearch,
-					operatorSearch: operatorSearch,
-					opACMSearch: opACMSearch,
-					opIEEESearch: opIEEESearch,
-					opSCIENCESearch: opSCIENCESearch,
-					opSPRINGERSearch: opSPRINGERSearch,
-					componentSearch: componentSearch,
 					minYearSearch: minYearSearch,
 					maxYearSearch: maxYearSearch,
-					maxTotalSearch: maxTotalSearch
+					maxTotalSearch: maxTotalSearch,
+					strOptionsOperators: strOptionsOperators,
+					strOptionsComponents: strOptionsComponents
 				]
 			}
-		}
-		
-		
+		}		
 	}
 	
 	@Transactional
@@ -97,79 +69,102 @@ class SearchController {
 	{
 		def isLogin = springSecurityService.loggedIn
 		String guidSlr = (null == params.guidSlr ? "" : params.guidSlr.toString())
-
-		if(!isLogin || guidSlr.equals(""))
+		
+		Slr slrInstance = (guidSlr == "" ? null : Slr.findByGuidLike(guidSlr))
+		
+		if(!isLogin || guidSlr.equals("") || slrInstance == null)
 		{
 			redirect(controller: 'index', action: 'index')
 		}
 		else
 		{
-			String terminos = (null == params.inputTerminos ? "" : params.inputTerminos.toString().trim())
-			String operator = (null == params.inputOperator ? "" : params.inputOperator.toString().trim())
+			def terminos = (null == params.inputTerminos ? "" : params.inputTerminos)
+			def componentes =  (null == params.selectComponent ? "" : params.selectComponent)
+			def operators = (null == params.selectOperator ? "" : params.selectOperator)
 			boolean opACM = (null == params.engineACM ? false : true)
 			boolean opIEEE = (null == params.engineIEEE ? false : true)
 			boolean opSCIENCE = (null == params.engineSCIENCE ? false : true)
 			boolean opSPRINGER = (null == params.engineSPRINGER ? false : true)
-			String component = (null == params.selectComponent ? "" : params.selectComponent.toString())
 			String[] years = params.inputYears.toString().split(",")
 			String minYear = years[0].trim()
 			String maxYear = years[1].trim()
 			String maxTotal = (null == params.inputTotalMax ? "" : params.inputTotalMax.toString().trim())
 			String error = ""
+			int totalTerms = 0
+			List<String> okTerminos = new ArrayList<String>()
+			List<SearchOperator> okOperators = new ArrayList<SearchOperator>()
+			List<SearchComponent> okComponents = new ArrayList<SearchComponent>()
 			
-			if(terminos.equals("") || terminos.length() < 5)
-			{
-				error = "ERROR: Los terminos deben contener mas de 5 caracteres o no puede estar vacio."
-			}
-			else if (!(opACM || opIEEE || opSCIENCE || opSPRINGER))
+			if (!(opACM || opIEEE || opSCIENCE || opSPRINGER))
 			{
 				error = "ERROR: Debes seleccionar al menos un motor de busqueda."
 			}
-			else if(maxTotal.equals("") || !toolService.isDigit(maxTotal))
+			else
 			{
-				error = "ERROR: Debes introducir un numero valido en el maximo total."
+				if(terminos instanceof String && terminos != "") // Un solo termino
+				{
+					okTerminos.add(terminos)
+					okOperators.add(SearchOperator.findByValue(operators))
+					okComponents.add(SearchComponent.findByValue(componentes))
+				}
+				else if (!(terminos instanceof String))
+				{
+					for(int i = 0; i<terminos.size(); i++)
+					{
+						if(terminos[i].toString().trim() != "")
+						{
+							okTerminos.add(terminos[i].toString())
+							okOperators.add(SearchOperator.findByValue(operators[i].toString()))
+							okComponents.add(SearchComponent.findByValue(componentes[i].toString()))
+						}
+					}
+				}
+
+				if(okTerminos.size() == 0)
+				{
+					error = "ERROR: Debes introducir al menos un termino de busqueda."
+				}
 			}
 			
 			if(error != "")
-			{				
+			{
 				redirect(controller: 'search', action: 'create',
 				 params: [
 							 error: error,
-							 guidSlr: guidSlr,
-							 terminosSearch: terminos,
-							 operatorSearch: operator,
-							 opACMSearch: opACM,
-							 opIEEESearch: opIEEE,
-							 opSCIENCESearch: opSCIENCE,
-							 opSPRINGERSearch: opSPRINGER,
-							 componentSearch: component,
-							 minYearSearch: minYear,
-							 maxYearSearch: maxYear,
-							 maxTotalSearch: maxTotal
+							 guidSlr: guidSlr
 						 ])
 			}
 			else
 			{
-				// Creamos las busquedas
-				List<EngineSearch> engines = new ArrayList<EngineSearch>()
+				// Creamos busquedas de prueba
+				Search searchInstance = new Search(startYear: minYear, endYear: maxYear, maxTotal: maxTotal, slr: slrInstance)
+				
 				if (opACM)
 				{
-					engines.add(EngineSearch.findByName("ACM"));
+					searchInstance.addToEngines(EngineSearch.findByName('ACM'))
 				}
 				if (opIEEE)
 				{
-					engines.add(EngineSearch.findByName("IEEE"));
+					searchInstance.addToEngines(EngineSearch.findByName('IEEE'))
 				}
 				if (opSCIENCE)
 				{
-					engines.add(EngineSearch.findByName("SCIENCE"));
+					searchInstance.addToEngines(EngineSearch.findByName('SCIENCE'))
 				}
 				if (opSPRINGER)
 				{
-					engines.add(EngineSearch.findByName("SPRINGER"));
+					searchInstance.addToEngines(EngineSearch.findByName('SPRINGER'))
 				}
 				
-				mendeleyService.insertSearchsBackground(guidSlr, terminos, operator, engines, component, minYear, maxYear, maxTotal)
+				for(int i=0; i<okTerminos.size(); i++)
+				{
+					SearchTermParam term = new SearchTermParam( terminos: okTerminos.get(i), 
+																component: okComponents.get(i), 
+																operator: okOperators.get(i))
+					searchInstance.addToTermParams(term)
+				}
+				
+				searchInstance.save(failOnError: true)
 				
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
 			}

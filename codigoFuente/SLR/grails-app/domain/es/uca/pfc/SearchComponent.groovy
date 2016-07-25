@@ -7,4 +7,9 @@ class SearchComponent {
 	
     static constraints = {
     }
+	
+	String toString()
+	{
+		return "${name}"
+	}
 }

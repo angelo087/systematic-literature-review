@@ -6,6 +6,11 @@ class UrlMappings {
                 // apply constraints here
             }
         }
+		
+		"/indexMendeley"{
+			controller="index"
+			action="indexMendeley"
+		}
 
         //"/"(view:"/index")
         "/"(controller:"index", action: "index")
