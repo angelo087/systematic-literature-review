@@ -15,6 +15,7 @@ class User implements Serializable {
 	
 	// Campos adicionales
 	UserProfile userProfile
+	UserMendeley userMendeley
 
 	User(String username, String password) {
 		this()

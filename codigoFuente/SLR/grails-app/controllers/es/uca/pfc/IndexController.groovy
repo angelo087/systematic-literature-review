@@ -16,9 +16,30 @@ class IndexController {
 		}
 	}
 	
+	def loadNotifications()
+	{
+		def isLogin = springSecurityService.isLoggedIn()
+		
+		if (isLogin)
+		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			
+			def notifications = Notification.findAllByProfileAndLeido(userInstance.userProfile, false, [sort: 'fecha', order: 'desc'])	
+			
+			for(Notification not : notifications)
+			{
+				not.fechaString = toolService.getTimeString(not.fecha)
+				not.save(failOnError: true, flush: true)
+			}
+				
+			Map model = [notificationList: notifications]
+			render(template: 'notificationsUser', model: model)
+		}
+	}
+	
 	def menu()
 	{
-		// Si no est� logado, redirigimos a la p�gina principal.
+		// Si no esta logado, redirigimos a la pagina principal.
 		if(!springSecurityService.isLoggedIn())
 		{
 			redirect(controller: 'index', action: 'index')
@@ -133,6 +154,7 @@ class IndexController {
 		]
 	}
 	
+	// Para Mendeley
 	def indexMendeley()
 	{
 		

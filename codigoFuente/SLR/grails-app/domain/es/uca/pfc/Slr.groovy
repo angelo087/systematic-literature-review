@@ -5,15 +5,16 @@ import java.util.Date;
 class Slr {
 	
 	static belongsTo = [userProfile: UserProfile]
-	static hasMany = [searchs: Search, criterions: Criterion, questions: ResearchQuestion, specAttributes: SpecificAttribute]
+	static hasMany = [searchs: Search, criterions: Criterion, questions: ResearchQuestion, 
+					  specAttributes: SpecificAttribute]
 	
 	String title
 	String justification
 	String state = 'fase1'
 	boolean noDrop = false
 	int numVisits = 0
-	Date submitDate = new Date()	// fecha creación
-	Date lastModified = new Date()	// fecha modificación
+	Date submitDate = new Date()	// fecha creaciï¿½n
+	Date lastModified = new Date()	// fecha modificaciï¿½n
 	String guid = UUID.randomUUID().toString();
 	String idmend = "" 				//id de folder en mendeley
 	int totalReferences = 0
@@ -26,7 +27,7 @@ class Slr {
 		submitDate(display: false)
 	}
 	
-	// Sobrecarga método toString()
+	// Sobrecarga mï¿½todo toString()
 	String toString()
 	{
 		return "${titulo}";

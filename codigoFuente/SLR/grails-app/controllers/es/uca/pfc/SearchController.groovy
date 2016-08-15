@@ -135,37 +135,28 @@ class SearchController {
 						 ])
 			}
 			else
-			{
-				// Creamos busquedas de prueba
-				Search searchInstance = new Search(startYear: minYear, endYear: maxYear, maxTotal: maxTotal, slr: slrInstance)
-				
+			{		
+				List<EngineSearch> engines = new ArrayList<EngineSearch>()
+						
 				if (opACM)
 				{
-					searchInstance.addToEngines(EngineSearch.findByName('ACM'))
+					engines.add(EngineSearch.findByName('ACM'))
 				}
 				if (opIEEE)
 				{
-					searchInstance.addToEngines(EngineSearch.findByName('IEEE'))
+					engines.add(EngineSearch.findByName('IEEE'))
 				}
 				if (opSCIENCE)
 				{
-					searchInstance.addToEngines(EngineSearch.findByName('SCIENCE'))
+					engines.add(EngineSearch.findByName('SCIENCE'))
 				}
 				if (opSPRINGER)
 				{
-					searchInstance.addToEngines(EngineSearch.findByName('SPRINGER'))
+					engines.add(EngineSearch.findByName('SPRINGER'))
 				}
 				
-				for(int i=0; i<okTerminos.size(); i++)
-				{
-					SearchTermParam term = new SearchTermParam( terminos: okTerminos.get(i), 
-																component: okComponents.get(i), 
-																operator: okOperators.get(i))
-					searchInstance.addToTermParams(term)
-				}
-				
-				searchInstance.save(failOnError: true)
-				
+				mendeleyService.insertSearchsBackground(slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
+							
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
 			}
 		}

@@ -34,6 +34,13 @@ class UserController {
 				}
 				else
 				{
+					if(params.guidNotif != null)
+					{
+						def notification = Notification.findByGuidLike(params.guidNotif.toString())
+						notification.leido = true;
+						notification.save(failOnError: true, flush: true)
+					}
+					
 					def userInstance = userProfileInstance.user			
 					def isMyProfile = false
 					def isMyFriend  = 'N' // S: 'Si', N: 'No', P: 'Pendiente'
@@ -81,7 +88,7 @@ class UserController {
 		{
 			def friendProfileInstance = UserProfile.findByGuid(guidFriend)
 			
-			// Si la persona existe o es la misma que está logada
+			// Si la persona existe o es la misma que estï¿½ logada
 			if (friendProfileInstance == null || friendProfileInstance.id == userLogin.userProfile.id)
 			{
 				redirect(controller: 'index', action: 'menu')
@@ -110,7 +117,7 @@ class UserController {
 				{
 					if (request2)
 					{
-						// Ambos serán amigos y se eliminaran de sus request
+						// Ambos seran amigos y se eliminaran de sus request
 						userLogin.userProfile.removeFromRequests(friendProfileInstance).save(failOnError: true)
 						friendProfileInstance.removeFromRequests(userLogin.userProfile).save(failOnError: true)
 						userLogin.userProfile.addToFriends(friendProfileInstance).save(failOnError: true)
@@ -118,11 +125,20 @@ class UserController {
 						
 						// Creamos loggers entre ellos
 						toolService.createLoggersBetweenUsers(userLogin.userProfile, friendProfileInstance)
+						
+						// Enviamos una notificacion de aceptaciÃ³n de amistad
+						String txt = "Ahora " + userLogin.userProfile.display_name + " y tu sois amigos."
+						friendProfileInstance.addToNotifications(new NotificationFriend(friendProfile: userLogin.userProfile,
+							asunto: "Nueva amistad", texto: txt, tipo: "friend"))
 					}
 					else
 					{
-						// Se enviará una solicitud de amistad
+						// Se enviara una solicitud de amistad
 						userLogin.userProfile.addToRequests(friendProfileInstance).save(failOnError: true)
+						String txt = userLogin.userProfile.display_name + " ha enviado una solicitud de amistad."
+						friendProfileInstance.addToNotifications(new NotificationFriend(friendProfile: userLogin.userProfile,
+							asunto: "Solicitud amistad", texto: txt, tipo: "friend"))
+						friendProfileInstance.save(failOnError: true, flush: true)
 					}
 					redirect(controller: 'user', action: 'show', params: [guid: guidFriend])
 				}				
@@ -144,7 +160,7 @@ class UserController {
 		{
 			def friendProfileInstance = UserProfile.findByGuid(guidFriend)
 			
-			// Si la persona existe o es la misma que está logada
+			// Si la persona existe o es la misma que estï¿½ logada
 			if (friendProfileInstance == null || friendProfileInstance.id == userLogin.userProfile.id)
 			{
 				redirect(controller: 'index', action: 'menu')

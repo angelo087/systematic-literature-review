@@ -7,8 +7,8 @@ import org.apache.tools.ant.types.resources.selectors.InstanceOf;
 class UserProfile {
 	
 	static belongsTo = [user: User]
-	//static hasMany = [slrs:Slr, notifications: Notification, loggers: Logger, friends: UserFriend, educations: Education]
-	static hasMany = [slrs:Slr, notifications: Notification, loggers: Logger, friends: UserProfile, requests: UserProfile, educations: Education]
+	static hasMany = [slrs:Slr, notifications: Notification, loggers: Logger, friends: UserProfile, requests: UserProfile, 
+					  educations: Education]
 	
 	String first_name = ""
 	String last_name = ""

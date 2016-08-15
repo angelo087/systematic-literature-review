@@ -31,6 +31,13 @@ class SlrController {
 		}
 		else
 		{
+			if(params.guidNotif != null)
+			{
+				def notification = Notification.findByGuidLike(params.guidNotif.toString())
+				notification.leido = true;
+				notification.save(failOnError: true, flush: true)
+			}
+			
 			// Comprobamos si se va a crear un nuevo SLR.
 			def error = ""
 			def errorCriterion = ""
@@ -183,6 +190,13 @@ class SlrController {
 			if(userLogin.userProfile != slrInstance.userProfile)
 			{
 				redirect(controller: 'index', action: 'index')
+			}
+			
+			if(params.guidNotif != null)
+			{
+				def notification = Notification.findByGuidLike(params.guidNotif.toString())
+				notification.leido = true;
+				notification.save(failOnError: true, flush: true)
 			}
 			
 			[slrInstance: slrInstance, searchListInstance: slrInstance.searchs]
@@ -680,5 +694,26 @@ class SlrController {
 				querySearch1: queriesChart.get(21)
 			]
 		}			
+	}
+	
+	def pruebaBooks() { }
+	
+	def actionTemplate()
+	{
+		Random rnd = new Random()
+		
+		def arrayBooks = Book.list()
+		
+		List<Book> books = new ArrayList<Book>()
+		
+		for(Book book : arrayBooks)
+		{
+			books.add(book)
+		}
+		
+		int numAzar = (int)(rnd.nextDouble()) * books.size()
+		
+		Map model = [myVar: books.getAt(numAzar)]
+		render(template: 'bookTemplate', model: model)
 	}
 }

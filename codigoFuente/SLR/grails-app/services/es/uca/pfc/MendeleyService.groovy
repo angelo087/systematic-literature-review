@@ -28,31 +28,48 @@ import com.google.gson.Gson;
 
 @Transactional
 class MendeleyService /*implements IMendeleyService*/ {
-
-	def springSecurityService
-		
-    /*def serviceMethod() {
-
-    }*/
 	
-	boolean insertSearchsBackground(String guidSlr, String terminos, String operator, List<EngineSearch> engines, String component, String minYear, String maxYear, String maxTotal)
+	def springSecurityService
+	def toolService
+	
+	boolean insertSearchsBackground(Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
+		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, List<EngineSearch> engines)
 	{
-		def usuarioInstance = User.get(springSecurityService.currentUser.id)
+		println "insertSearchsBackground"
+		def userInstance = User.get(springSecurityService.currentUser.id)
 		
 		runAsync {
-			// Proceso en segundo plano
-			//procesoSegundoPlano(usuarioInstance.username)
-			crearBusquedas(usuarioInstance.username, guidSlr, terminos, operator, engines, component, minYear, maxYear, maxTotal)
+			createSearch(userInstance, slrInstance, terminos, operators, components, minYear, maxYear, maxTotal, engines)
 		}
 		
 		return true;
+	}	
+	
+	@Transactional
+	void sendSearchNotification(User userInstance, Slr slrInstance, boolean success)
+	{
+		String asunto = "Nuevas búsquedas"
+		String txt = ""
+		if (!success)
+		{
+			txt = "Ha habido problemas en la realización de búsquedas en el SLR " + slrInstance.title
+		}
+		else
+		{
+			txt = "Se han realizado nuevas búsquedas para el SLR " + slrInstance.title
+		}
+		
+		UserProfile userProfile = UserProfile.lock(1)
+
+		userProfile.addToNotifications(new NotificationSlr(tipo: "search", asunto: asunto, texto: txt, slr: slrInstance))
+		userProfile.save(failOnError: true)
+		println "Notificación enviada"
 	}
 	
-	void crearBusquedas(String username, String guidSlr, String terminos, String operator, List<EngineSearch> engines, String component, String minYear, String maxYear, String maxTotal)
+	void createSearch(User userInstance, Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
+		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, List<EngineSearch> engines)
 	{
-		SearchComponent searchComponent = SearchComponent.findByValueLike(component)
-		SearchOperator searchOperator = SearchOperator.findByValueLike(operator)
-		Slr slrInstance = Slr.findByGuidLike(guidSlr)
+		println "crearBusquedas"
 		def langES = Language.findByCodeLike('ES')
 		def langEN = Language.findByCodeLike('EN')
 		def langFR = Language.findByCodeLike('FR')
@@ -62,18 +79,22 @@ class MendeleyService /*implements IMendeleyService*/ {
 		def author02 = Author.findByForenameLikeAndSurnameLike('Aradia','Rocha')
 		
 		Random rnd = new Random()
+		Search searchInstance = new Search(startYear: minYear, endYear: maxYear, maxTotal: maxTotal, slr: slrInstance)
 		
-		println "TOTAL ENGINES: " + engines.size()
-		println "TOTAL REFS/BUSQ: " + maxTotal
+		for(int i=0; i<terminos.size(); i++)
+		{
+			SearchTermParam term = new SearchTermParam( terminos: terminos.get(i),
+														component: components.get(i),
+														operator: operators.get(i))
+			searchInstance.addToTermParams(term)
+		}
 		
 		for(EngineSearch engine : engines)
 		{
-			Search searchInstance = new Search(terminos: terminos, startYear: minYear, endYear: maxYear, maxTotal: maxTotal,
-												engine: engine, component: searchComponent, operator: searchOperator,
-												slr: slrInstance)
-			for(int i = 0; i<maxTotal; i++)
+			searchInstance.addToEngines(engine)
+			
+			for(int i=0; i < Integer.parseInt(maxTotal); i++)
 			{
-				println "Engine " + engine.name + ": Insertando referencia " + (i+1) + " de " + maxTotal + "."
 				String idMend = UUID.randomUUID().toString()
 				def type
 				def lang
@@ -102,23 +123,22 @@ class MendeleyService /*implements IMendeleyService*/ {
 				
 				String year = ((int) (rnd.nextDouble()*(Integer.parseInt(maxYear) - Integer.parseInt(minYear) + 1) + Integer.parseInt(minYear))).toString()
 				
-				Reference referenceInstance = new Reference(idmend : idMend, 
-															title : 'Reference ' + idMend, 
-															type : type, 
-															docAbstract : 'Abstract ' + idMend, 
-															source : 'Source ' + idMend, 
-															year : year, 
-															publisher : 'publi'+idMend, 
-															city : 'Cadiz', 
-															institution : 'Institution '+idMend, 
-															series : 'Series '+idMend, 
-															citation_key : 'citationkey'+idMend, 
-															language : lang, 
-															bibtex: 'Bibtex '+idMend)
+				Reference referenceInstance = new Reference(idmend : idMend,
+															title : 'Reference ' + idMend,
+															type : type,
+															docAbstract : 'Abstract ' + idMend,
+															source : 'Source ' + idMend,
+															year : year,
+															publisher : 'publi'+idMend,
+															city : 'Cadiz',
+															institution : 'Institution '+idMend,
+															series : 'Series '+idMend,
+															citation_key : 'citationkey'+idMend,
+															language : lang,
+															bibtex: 'Bibtex '+idMend,
+															engine: engine)
 				
-				//searchInstance.addToReferences(referenceInstance).save(failOnError: true)
 				searchInstance.addToReferences(referenceInstance)
-				
 				if(author.id == author01.id)
 				{
 					author01.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
@@ -127,27 +147,16 @@ class MendeleyService /*implements IMendeleyService*/ {
 				{
 					author02.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
 				}
+				searchInstance.save(failOnError: true)
 			} // for i reference
-			searchInstance.save(failOnError: true)
-		} //for-engines
-		
+		} // for engine
+		searchInstance.save(failOnError: true)		
 		println "PROCESO DE BUSQUEDAS COMPLETADO"
+		sendSearchNotification(userInstance, slrInstance, true)
 	}
 	
 	public static void convertTaskSearchsToSearchs(List<TaskSearch> taskSearchs, String username)
 	{
-		println username + ": convertTaskSearchsToSearchs"
-		/*println (new Date()) + "USUARIO: " + username
-		for(TaskSearch taskSearch : taskSearchs)
-		{
-			println "ENGINE: " + taskSearch.getEngine().getName()
-			println "Se han encontrado " + taskSearch.getReferences().size() + " referencias."
-		}*/
-		for(int i=0; i<taskSearchs.size(); i++)
-		{
-			//Book book = new Book(name: UUID.randomUUID().toString())
-			Book book = new Book(name: username+":::"+i)
-			book.save(flush: true)
-		}
+		
 	}
 }

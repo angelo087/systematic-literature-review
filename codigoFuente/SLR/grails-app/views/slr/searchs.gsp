@@ -75,11 +75,12 @@
 					<table class="table table-striped table-bordered table-hover" id="dataTables-mysearchs">
                         <thead>
                             <tr>
-                                <th>Realizada en:</th>
-                                <th>Año Compienzo</th>
-                                <th>Año finalización</th>
-                                <th>Total Máximo</th>
+                                <th>Realizada<br/>en:</th>
+                                <th>Año<br/>Compienzo</th>
+                                <th>Año<br/>finalización</th>
+                                <th>Total<br/>Máximo</th>
                                 <th>Encontrados:</th>
+                                <th>Engines</th>
                                 <th>Términos</th>
                                 <th>Acciones</th>
                             </tr>
@@ -92,6 +93,13 @@
                             		<td>${searchInstance.endYear}</td>
                             		<td>${searchInstance.maxTotal}</td>
                             		<td><g:link controller="slr" action="references" params="[guid: "${searchInstance.slr.guid}"]">${searchInstance.references.size()}</g:link></td>
+                            		<td>
+                            			<ul>
+                            				<g:each in="${searchInstance.engines}" var="engine">
+                            					<li>${engine.name}</li>
+                            				</g:each>
+                            			</ul>
+                            		</td>
                             		<td>
                             			<ul>
 	                            			<g:each in="${searchInstance.termParams}" var="searchTermParam">

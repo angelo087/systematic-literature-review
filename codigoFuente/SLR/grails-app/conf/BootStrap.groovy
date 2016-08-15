@@ -1,9 +1,9 @@
 import java.util.List;
-
 import java.util.Date;
 
 import es.uca.pfc.Author
 import es.uca.pfc.AuthorReference
+import es.uca.pfc.Book
 import es.uca.pfc.Criterion
 import es.uca.pfc.Education
 import es.uca.pfc.EngineSearch
@@ -12,6 +12,7 @@ import es.uca.pfc.Language
 import es.uca.pfc.Logger
 import es.uca.pfc.LoggerFriend
 import es.uca.pfc.LoggerSlr
+import es.uca.pfc.CredentialMendeleyApp
 import es.uca.pfc.Notification
 import es.uca.pfc.Reference
 import es.uca.pfc.ResearchQuestion
@@ -25,6 +26,7 @@ import es.uca.pfc.SpecificAttribute
 import es.uca.pfc.SpecificAttributeMultipleValue
 import es.uca.pfc.TypeDocument
 import es.uca.pfc.User
+import es.uca.pfc.UserMendeley
 import es.uca.pfc.UserRole
 import es.uca.pfc.UserProfile
 
@@ -32,6 +34,12 @@ class BootStrap {
 
     def init = { servletContext ->
 		
+		println "Creamos credenciales Mendeley..."
+		def mendeleyCredential = CredentialMendeleyApp.findByClientId('1044') ?:
+											new CredentialMendeleyApp(clientId: '1044',
+																   clientSecret: '5qQ6zm5iYpvUehj4',
+																   redirectUri: 'http://localhost:8090/SLR/indexMendeley/').save(failOnError: true)
+																   
 		println "Creamos los componentes de busquedas..."
 		def comp01 = SearchComponent.findByValue('full-text') ?: new SearchComponent(name: 'Full-text', value: 'full-text').save(failOnError: true)
 		def comp02 = SearchComponent.findByValue('abstract') ?: new SearchComponent(name: 'Abstract', value: 'abstract').save(failOnError: true)
@@ -105,10 +113,20 @@ class BootStrap {
 			display_name: 'Francisco Jimenez',
 			url_foto: 'http://fotos00.laopiniondemurcia.es/fotos/noticias/318x200/2011-11-02_IMG_2011-11-02_21:57:56_00902murmu.jpg')
 		
+		def mendProfile01 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+		
 		def user01 = User.findByUsername('pacoji@pacoji.com') ?: new User(
 			username: 'pacoji@pacoji.com',
 			password: 'pacoji',
-			userProfile: profile01).save(failOnError: true)
+			userProfile: profile01,
+			userMendeley: mendProfile01).save(failOnError: true)
 
 		if (!user01.authorities.contains(userRole)) {
 			UserRole.create user01, userRole
@@ -119,10 +137,20 @@ class BootStrap {
 			last_name: 'Freeman',
 			url_foto: 'http://www.moviepilot.de/files/images/0486/8182/Morgan_Freeman.jpg')
 		
+		def mendProfile02 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+		
 		def user02 = User.findByUsername('morgan@freeman.com') ?: new User(
 			username: 'morgan@freeman.com',
 			password: 'morgan',
-			userProfile: profile02).save(failOnError: true)
+			userProfile: profile02,
+			userMendeley: mendProfile02).save(failOnError: true)
 
 		if (!user02.authorities.contains(userRole)) {
 			UserRole.create user02, userRole
@@ -133,10 +161,20 @@ class BootStrap {
 			last_name: 'Lincoln',
 			url_foto: 'http://www.biografiasyvidas.com/biografia/l/fotos/lincoln_abraham_2.jpg')
 		
+		def mendProfile03 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+		
 		def user03 = User.findByUsername('abraham@lincoln.com') ?: new User(
 			username: 'abraham@lincoln.com',
 			password: 'abraham',
-			userProfile: profile03).save(failOnError: true)
+			userProfile: profile03,
+			userMendeley: mendProfile03).save(failOnError: true)
 
 		if (!user03.authorities.contains(userRole)) {
 			UserRole.create user03, userRole
@@ -146,12 +184,22 @@ class BootStrap {
 			first_name: 'Susana',
 			last_name: 'Guash',
 			url_foto: 'http://www.telebasura.net/wp-content/2013/11/susana-guasch.jpg')
-		
+
+		def mendProfile04 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+
 		def user04 = User.findByUsername('susana@guash.com') ?: new User(
 			username: 'susana@guash.com',
 			password: 'susana',
-			userProfile: profile04).save(failOnError: true)
-
+			userProfile: profile04,
+			userMendeley: mendProfile04).save(failOnError: true)
+			
 		if (!user04.authorities.contains(userRole)) {
 			UserRole.create user04, userRole
 		}
@@ -161,10 +209,20 @@ class BootStrap {
 			last_name: 'Wayne',
 			url_foto: 'http://vignette3.wikia.nocookie.net/batman/images/4/49/1929848-bruce_wayne.jpg/revision/latest?cb=20140625152104&path-prefix=es')
 		
+		def mendProfile05 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+
 		def user05 = User.findByUsername('bruce@wayne.com') ?: new User(
 			username: 'bruce@wayne.com',
 			password: 'bruce',
-			userProfile: profile05).save(failOnError: true)
+			userProfile: profile05,
+			userMendeley: mendProfile05).save(failOnError: true)
 
 		if (!user05.authorities.contains(userRole)) {
 			UserRole.create user05, userRole
@@ -175,10 +233,20 @@ class BootStrap {
 			last_name: 'Sparrow',
 			url_foto: 'http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg')
 		
+		def mendProfile06 = new UserMendeley(
+			email_mend: 'email',
+			pass_mend: 'pass',
+			access_token: 'accesstoken',
+			token_type: 'tokentype',
+			expires_in: 'expiresin',
+			refresh_token: 'refreshtoken'
+			)
+
 		def user06 = User.findByUsername('jack@sparrow.com') ?: new User(
 			username: 'jack@sparrow.com',
 			password: 'jack',
-			userProfile: profile06).save(failOnError: true)
+			userProfile: profile06,
+			userMendeley: mendProfile06).save(failOnError: true)
 
 		if (!user06.authorities.contains(userRole)) {
 			UserRole.create user06, userRole
@@ -194,8 +262,12 @@ class BootStrap {
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 7', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 8', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 9', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))		
-		user01.save(failOnError: true)
 		
+		println "Creamos las notificaciones..."
+		//user01.userProfile.addToNotifications(new Notification(asunto: "Hola", texto: "hola", tipo: "search"))
+		
+		user01.save(failOnError: true)
+				
 		println "Creamos las amistades"
 		user01.userProfile.addToFriends(profile03)
 		user03.userProfile.addToFriends(profile01)
@@ -247,7 +319,7 @@ class BootStrap {
 		Slr slr17 = new Slr(title: 'Titulo 17', justification: 'Justificacion 17', userProfile: user01.userProfile).save(failOnError: true, flush: true)
 		Slr slr18 = new Slr(title: 'Titulo 18', justification: 'Justificacion 18', userProfile: user01.userProfile).save(failOnError: true, flush: true)
 		Slr slr19 = new Slr(title: 'Titulo 19', justification: 'Justificacion 19', userProfile: user02.userProfile).save(failOnError: true, flush: true)
-		
+				
 		println "Insertamos los criterios..."
 		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
 		def criterion03 = new Criterion(name: 'version', description: 'Version diferent to 1.3', nomenclatura: 'cr_version')
@@ -306,7 +378,7 @@ class BootStrap {
 		def terms28 = new SearchTermParam(terminos: "terminos 28", component: comp08, operator: opNONE)
 		def terms29 = new SearchTermParam(terminos: "terminos 29", component: comp09, operator: opALL)
 		def terms30 = new SearchTermParam(terminos: "terminos 30", component: comp10, operator: opALL)
-		
+				
 		def search01 = new Search(startYear: "2010", endYear: "2012", maxTotal: 5)
 		def search02 = new Search(startYear: "2010", endYear: "2012", maxTotal: 10)
 		def search03 = new Search(startYear: "2010", endYear: "2012", maxTotal: 10)
@@ -480,6 +552,18 @@ class BootStrap {
 		def faq01 = new FAQ(enunciado: '�Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
 		def faq02 = new FAQ(enunciado: '�Esto es una pregunta 2?', respuesta: 'Efectivamente, esto es una respuesta 2').save(failOnError: true)
 		def faq03 = new FAQ(enunciado: '�Esto es una pregunta 3?', respuesta: 'Efectivamente, esto es una respuesta 3').save(failOnError: true)
+																   
+		def book01 = new Book(name: 'Titulo 1').save(failOnError: true)
+		def book02 = new Book(name: 'Titulo 2').save(failOnError: true)
+		def book03 = new Book(name: 'Titulo 3').save(failOnError: true)
+		def book04 = new Book(name: 'Titulo 4').save(failOnError: true)
+		def book05 = new Book(name: 'Titulo 5').save(failOnError: true)
+		def book06 = new Book(name: 'Titulo 6').save(failOnError: true)
+		def book07 = new Book(name: 'Titulo 7').save(failOnError: true)
+		def book08 = new Book(name: 'Titulo 8').save(failOnError: true)
+		def book09 = new Book(name: 'Titulo 9').save(failOnError: true)
+		def book10 = new Book(name: 'Titulo 10').save(failOnError: true)
+		
     }
     def destroy = {
     }

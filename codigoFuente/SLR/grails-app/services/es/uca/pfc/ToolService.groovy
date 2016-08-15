@@ -37,7 +37,7 @@ class ToolService {
 		return ok;
 	}
 	
-	// M�todo para actualizar el estado de un SLR
+	// Método para actualizar el estado de un SLR
 	String updateStatus(Slr slrInstance)
 	{
 		String estado = slrInstance.state.toString();
@@ -118,7 +118,7 @@ class ToolService {
 		return departaments;
 	}
 	
-	// M�todo para obtener el �ltimo login de un usuario en formato cadena
+	// Método para obtener el �ltimo login de un usuario en formato cadena
 	String getTimeString(Date date)
 	{
 		String timeToString = "";
@@ -170,7 +170,7 @@ class ToolService {
 						}
 						else
 						{
-							timeToString = "Hace m�s de 6 meses";
+							timeToString = "Hace más de 6 meses";
 						}
 					}
 				}
