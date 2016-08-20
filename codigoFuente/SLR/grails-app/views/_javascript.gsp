@@ -15,3 +15,19 @@
 <script src="${resource(dir: 'bower_components', file: 'raphael/raphael-min.js')}"></script>
 <script src="${resource(dir: 'bower_components', file: 'morrisjs/morris.min.js')}"></script>
 <%--<script src="${resource(dir: 'js', file: 'morris-data.js')}"></script> --%>
+
+<script src="${resource(dir: 'js', file: 'jquery.blockUI.js')}"></script>
+
+<script type="text/javascript">
+	function loading(sms)
+	{
+		var text = '<h3>';
+	
+		text = text.concat(sms);
+		text = text.concat("</h3>");
+		
+		$.blockUI({ 
+			message: text
+	       });
+	}
+</script>

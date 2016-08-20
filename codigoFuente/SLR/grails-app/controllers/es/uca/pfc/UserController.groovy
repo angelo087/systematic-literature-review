@@ -1,10 +1,13 @@
 package es.uca.pfc
 
+import grails.transaction.Transactional;
+
 class UserController {
 	
 	// Servicios utilizados
 	def springSecurityService
 	def toolService
+	def mendeleyToolService
 	
     def index() { }
 	
@@ -173,6 +176,40 @@ class UserController {
 				friendProfileInstance.removeFromRequests(userLogin.userProfile).save(failOnError: true)
 				
 				redirect(controller: 'user', action: 'show', params: [guid: guidFriend])
+			}
+		}
+	}
+	
+	@Transactional
+	def synchronizeUserProfile()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			// Si no existe el guid, redirigimos a index
+			if(!params.guid || params.guid.equals(""))
+			{
+				redirect(controller: 'index', action: 'index')
+			}
+			else
+			{
+				def userProfileInstance = UserProfile.findByGuid(params.guid)
+				
+				// Si es nulo, redirigimos a index
+				if(userProfileInstance == null)
+				{
+					redirect(controller: 'index', action: 'index')
+				}
+				else
+				{
+					mendeleyToolService.synchronizeProfile(userProfileInstance.user)
+					redirect(controller: 'user', action: 'show', params: [guid: userProfileInstance.guid])
+				}
 			}
 		}
 	}

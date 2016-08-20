@@ -163,3 +163,8 @@ grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/menu'
 		user.save(flush: true, failOnError: true)
 	}
 }*/
+
+// Autenticacion Mendeley App
+clientId = '1044'
+clientSecret = '5qQ6zm5iYpvUehj4'
+redirectUri = 'http://localhost:8090/SLR/indexMendeley/'

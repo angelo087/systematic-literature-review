@@ -1,7 +1,7 @@
 <%@ page import="es.uca.pfc.User" %>
 <%@ page import="es.uca.pfc.UserProfile" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
@@ -82,7 +82,7 @@
                 
                 	<div style="margin-bottom: 10px;"><img src="${profileInstance.url_foto}" alt="" width="220" height="220" style="border: black solid thin;" /></div>
 					<%-- Code Mendeley --%>
-					<p><a target="parent" href="http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg"><img border="0" src="http://www.mendeley.com/embed/icon/1/blue/big" alt=""/></a></p>
+					<p><a target="parent" href="${profileInstance.link}"><img border="0" src="http://www.mendeley.com/embed/icon/1/blue/big" alt=""/></a></p>
 					
 					<g:if test="${!isMyProfile}">
 						<g:if test="${isMyFriend == 'S'}">
@@ -96,6 +96,9 @@
 							<g:link elementId="btn_friend_2" id="btn_friend_2" type="button" class="btn btn-default btn-lg btn-block" onmouseover="changeColourFriend2();" onmouseout="changeColourFriend2();" controller="user" action="addRequestFriends" params="[guid: "${profileInstance.guid}"]"><i class="glyphicon glyphicon-thumbs-up"></i> Agregar a mis amigos</g:link>
 						</g:else>
 					</g:if>
+					<g:else>
+						<g:link type="buton" class="btn btn-primary" controller="user" action="synchronizeUserProfile" onclick="loading('Sincronizando Perfil con Mendeley...');" params="[guid: "${profileInstance.guid}"]">Sincronizar (Mendeley)</g:link>
+					</g:else>
 					
                 </div>
                 
@@ -134,7 +137,7 @@
 									<p><b>Fecha Registro: </b>${formatDate(format: 'dd MMM, yyyy - HH:mm', date: profileInstance.fechaRegistro)}</p>
 									<p><b>Última Conexión: </b>${lastTime}</p>
 								</div>
-								<div style="min-width: 50px; float: left; padding-left: 40px;">
+								<div style="min-width: 50px; float: left;">
 									<p><b>Intereses: </b>${profileInstance.research_interests}</p>
 									<p><b>Estado académico: </b>${profileInstance.academic_status}</p>
 									<p><b>Localización: </b>${profileInstance.locationName}</p>

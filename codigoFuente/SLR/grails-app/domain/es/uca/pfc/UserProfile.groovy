@@ -26,7 +26,6 @@ class UserProfile {
 	String locationLatitude = ""
 	String locationLongitude = ""
 	String discipline = ""
-	String webMendeleyProfile = ""
 	
 	Date ultimaConexion = new Date()
 	Date fechaRegistro  = new Date()
@@ -40,10 +39,29 @@ class UserProfile {
 	//static mappedBy = [loggers: 'profile']
 	
 	def beforeInsert = {
+		applyEncode()
 		display_name = first_name + ' ' + last_name;
 		println display_name + ': ' + guid
 		
 		addToLoggers(new Logger(tipo: 'bienvenida'))
+	}
+	
+	def beforeUpdate = {
+		applyEncode()
+		display_name = first_name + ' ' + last_name
+	}
+	
+	void applyEncode()
+	{
+		first_name = (first_name == null ? '' : new String(first_name.getBytes("ISO-8859-1"), "UTF-8"))
+		last_name = (last_name == null ? '' : new String(last_name.getBytes("ISO-8859-1"), "UTF-8"))
+		research_interests = (research_interests == null ? '' : new String(research_interests.getBytes("ISO-8859-1"), "UTF-8"))
+		academic_status = (academic_status == null ? '' : new String(academic_status.getBytes("ISO-8859-1"), "UTF-8"))
+		biography = (biography == null ? '' : new String(biography.getBytes("ISO-8859-1"), "UTF-8"))
+		locationName = (locationName == null ? '' : new String(locationName.getBytes("ISO-8859-1"), "UTF-8"))
+		locationLatitude = (locationLatitude == null ? '' : new String(locationLatitude.getBytes("ISO-8859-1"), "UTF-8"))
+		locationLongitude = (locationLongitude == null ? '' : new String(locationLongitude.getBytes("ISO-8859-1"), "UTF-8"))
+		discipline = (discipline == null ? '' : new String(discipline.getBytes("ISO-8859-1"), "UTF-8"))
 	}
 	
 	boolean equals(Object obj)

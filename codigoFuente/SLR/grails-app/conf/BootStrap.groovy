@@ -12,7 +12,6 @@ import es.uca.pfc.Language
 import es.uca.pfc.Logger
 import es.uca.pfc.LoggerFriend
 import es.uca.pfc.LoggerSlr
-import es.uca.pfc.CredentialMendeleyApp
 import es.uca.pfc.Notification
 import es.uca.pfc.Reference
 import es.uca.pfc.ResearchQuestion
@@ -34,12 +33,6 @@ class BootStrap {
 
     def init = { servletContext ->
 		
-		println "Creamos credenciales Mendeley..."
-		def mendeleyCredential = CredentialMendeleyApp.findByClientId('1044') ?:
-											new CredentialMendeleyApp(clientId: '1044',
-																   clientSecret: '5qQ6zm5iYpvUehj4',
-																   redirectUri: 'http://localhost:8090/SLR/indexMendeley/').save(failOnError: true)
-																   
 		println "Creamos los componentes de busquedas..."
 		def comp01 = SearchComponent.findByValue('full-text') ?: new SearchComponent(name: 'Full-text', value: 'full-text').save(failOnError: true)
 		def comp02 = SearchComponent.findByValue('abstract') ?: new SearchComponent(name: 'Abstract', value: 'abstract').save(failOnError: true)
@@ -247,9 +240,29 @@ class BootStrap {
 			password: 'jack',
 			userProfile: profile06,
 			userMendeley: mendProfile06).save(failOnError: true)
+			
+		def profile07 = new UserProfile(
+			first_name: 'Monkey',
+			last_name: 'D. Luffy',
+			url_foto: 'http://vignette2.wikia.nocookie.net/onepiece/images/6/61/Estatua_de_cera_de_Luffy.png/revision/latest?cb=20121231203632&path-prefix=es')
+		
+		def mendProfile07 = new UserMendeley(
+			email_mend: 'angel.gonzatoro@gmail.com',
+			pass_mend: 'angel.gonzatoro',
+			access_token: 'sad76sa7d7sa8d6',
+			token_type: 'sad908sd980vfsd',
+			expires_in: '3600',
+			refresh_token: 'sdasñdusd9aod'
+			)
 
-		if (!user06.authorities.contains(userRole)) {
-			UserRole.create user06, userRole
+		def user07 = User.findByUsername('angel.gonzatoro@gmail.com') ?: new User(
+			username: 'angel.gonzatoro@gmail.com',
+			password: 'angel.gonzatoro',
+			userProfile: profile07,
+			userMendeley: mendProfile07).save(failOnError: true)
+
+		if (!user07.authorities.contains(userRole)) {
+			UserRole.create user07, userRole
 		}
 		
 		println "Creamos las Estudios..."

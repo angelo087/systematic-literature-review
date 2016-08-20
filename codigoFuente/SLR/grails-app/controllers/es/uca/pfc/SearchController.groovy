@@ -9,7 +9,7 @@ class SearchController {
 	
 	def springSecurityService
 	def toolService
-	def mendeleyService
+	def mendeleyToolService
     
 	def index() 
 	{
@@ -155,7 +155,7 @@ class SearchController {
 					engines.add(EngineSearch.findByName('SPRINGER'))
 				}
 				
-				mendeleyService.insertSearchsBackground(slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
+				mendeleyToolService.insertSearchsBackground(slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
 							
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
 			}
