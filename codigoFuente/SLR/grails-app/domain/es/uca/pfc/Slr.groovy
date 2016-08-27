@@ -25,6 +25,7 @@ class Slr {
 		noDrop(display: false)
 		numVisits(display: false)
 		submitDate(display: false)
+		userProfile(nullable: true)
 	}
 	
 	// Sobrecarga m�todo toString()

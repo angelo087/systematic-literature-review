@@ -37,6 +37,11 @@ class UrlMappings {
 			action="synchronizeUserProfile"
 		}
 		
+		"/slr/syncronizeSlrMendeley" {
+			controller="slr"
+			action="syncronizeSlrMendeley"
+		}
+		
 		"/$guid/searchs" {
 			controller="slr"
 			action="searchs"

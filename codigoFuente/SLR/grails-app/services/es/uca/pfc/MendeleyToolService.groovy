@@ -1,8 +1,14 @@
 package es.uca.pfc
 
+import java.lang.annotation.Documented;
 import java.util.Date;
 
+import mendeley.pfc.schemas.Document
+import mendeley.pfc.schemas.Folder
+import mendeley.pfc.schemas.Person
 import mendeley.pfc.schemas.Profile
+import mendeley.pfc.services.DocumentService
+import mendeley.pfc.services.FolderService
 import mendeley.pfc.services.MendeleyService
 import mendeley.pfc.services.ProfileService;
 import mendeley.pfc.commons.MendeleyException;
@@ -189,7 +195,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		catch(MendeleyException ex)
 		{
-			println "Hubo un problema de sincronizacion."
+			println "EXCEPTION MendeleyToolService.synchronizeProfile() => Hubo un problema de sincronizacion."
 		}
 	}
 	
@@ -232,5 +238,240 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 				end_date: (educationMend.getEndDate() == null ? new Date() : educationMend.getEndDate())
 				)
 		return education;
+	}
+	
+	boolean createSlrMendeley(User userInstance, String titleSlr)
+	{
+		boolean isCreated = false
+		try
+		{
+			String clientId = Holders.getGrailsApplication().config.clientId
+			String clientSecret = Holders.getGrailsApplication().config.clientSecret
+			String redirectUri = Holders.getGrailsApplication().config.redirectUri
+			
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
+			
+			// Actualizamos los tokens del usuario
+			userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken();
+			userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken();
+			userInstance.save(failOnError: true, flush: true)
+			
+			FolderService folderService = new FolderService(mendeleyService)
+			Folder folder = folderService.getFolderByName(titleSlr)
+			
+			// Creamos la carpeta si no existe
+			if (folder == null)
+			{
+				folder = folderService.createFolder(titleSlr)
+			}
+			
+			// Comprobamos que las subcarpetas (por engine) se encuentran
+			for(EngineSearch engine : EngineSearch.list())
+			{
+				if(folderService.getSubFolder(folder.getId(), engine.name.toString().toLowerCase().trim()) == null)
+				{
+					folderService.createSubFolder(engine.name.toString().toLowerCase().trim(), folder)
+				}
+			}
+			isCreated = true
+		}
+		catch(Exception ex)
+		{
+			println "EXCEPTION MendeleyToolService.createSlrMendeley() => " + ex.getMessage()
+		}
+		
+		return isCreated
+	}
+	
+	void synchronizeSlrList(User userInstance)
+	{
+		try
+		{
+			String clientId = Holders.getGrailsApplication().config.clientId
+			String clientSecret = Holders.getGrailsApplication().config.clientSecret
+			String redirectUri = Holders.getGrailsApplication().config.redirectUri
+			
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
+			
+			// Actualizamos los tokens del usuario
+			userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken();
+			userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken();
+			userInstance.save(failOnError: true, flush: true)
+			
+			FolderService folderService = new FolderService(mendeleyService)
+			DocumentService documentService = new DocumentService(mendeleyService)
+			List<Folder> folders = folderService.getAllFolders()
+			List<Long> idsSlrDrop = new ArrayList<Long>()
+			List<Long> idsSlrUpdate = new ArrayList<Long>()
+			
+			// Comprobamos cuáles deberán eliminarse y cuáles actualizarse
+			for(Slr slr : userInstance.userProfile.slrs)
+			{
+				Folder folder = folderService.getFolderById(slr.idmend)
+				
+				if (folder == null)
+				{
+					idsSlrDrop.add(slr.id)
+				}
+				else
+				{
+					idsSlrUpdate.add(slr.id)
+				}
+			}
+			
+			// Eliminamos Slrs
+			if (idsSlrDrop.size() > 0)
+			{
+				for(Long idSlr : idsSlrDrop)
+				{
+					Slr slrInstance = Slr.get(idSlr)
+					userInstance.userProfile.removeFromSlrs(slrInstance)
+					toolService.deleteSlr(slrInstance)
+				}
+			}
+			
+			// Actualizamos Slrs
+			if (idsSlrUpdate.size() > 0)
+			{
+				def engines = EngineSearch.list()
+				List<Reference> referencesDrop = new ArrayList<Reference>()
+				List<Reference> referencesUpdate = new ArrayList<Reference>()
+
+				for(Long idSlr : idsSlrUpdate)
+				{
+					Slr slrInstance = Slr.get(idSlr)
+					Folder folder = folderService.getFolderById(slrInstance.idmend)
+					
+					// Verificamos que tiene todos las subcarpetas correspondientes
+					for(EngineSearch engine : engines)
+					{
+						if (folderService.getSubFolder(folder.getId(), engine.name.toString().toLowerCase().trim()) == null)
+						{
+							folderService.createSubFolder(engine.name.toString().toLowerCase().trim(), folder)
+						}
+					}
+					
+					// Obtenemos las referencias del slr y comprobamos si existen dichas referencias
+					for(Search search : slrInstance.searchs)
+					{
+						for(Reference reference : search.references)
+						{
+							Document document = documentService.getDocument(reference.idmend)
+							
+							if(document == null)
+							{
+								referencesDrop.add(reference.id)
+							}
+							else
+							{
+								referencesUpdate.add(reference.id)
+							}
+						}
+					}
+				} // fin-for idsSlrUpdate
+				
+				// Eliminamos referencias no incluidas
+				for(Long idRef : referencesDrop)
+				{
+					Reference reference = Reference.get(idRef)
+					
+					// Borramos las referencias con los autores
+					AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+					
+					// Borramos las referencias con los atributos especificos
+					SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
+					
+					reference.delete flush: true
+				}
+				
+				// Actualizamos referencias
+				for(Long idRef : referencesUpdate)
+				{
+					Reference reference = Reference.get(idRef)
+					
+					// Actualizamos
+					updateReferenceFromMendeley(reference, documentService)
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			println "EXCEPCION MendeleyToolService.synchronizeSlrList() => " + ex.getMessage()
+		}
+	}
+	
+	void updateReferenceFromMendeley(Reference reference, DocumentService documentService)
+	{
+		Document document = documentService.getDocument(reference.idmend.toString())
+		
+		reference.idmend = document.getId()
+		reference.title = (document.getTitle() == null ? "" : document.getTitle());
+		reference.docAbstract = (document.getAbstract() == null ? "" : document.getAbstract())
+		reference.source = (document.getSource() == null ? "" : document.getSource())
+		reference.year = (document.getYear() == null ? "" : document.getYear())
+		reference.pages = (document.getPages() == null ? "" : document.getPages())
+		reference.volume = (document.getVolume() == null ? "" : document.getVolume())
+		reference.issue = (document.getIssue() == null ? "" : document.getIssue())
+		reference.publisher = (document.getPublisher() == null ? "" : document.getPublisher())
+		reference.city = (document.getCity() == null ? "" : document.getCity())
+		reference.institution = (document.getInstitution() == null ? "" : document.getInstitution())
+		reference.series = (document.getSeries() == null ? "" : document.getSeries())
+		reference.chapter = (document.getChapter() == null ? "" : document.getChapter())
+		reference.citation_key = (document.getCitationKey() == null ? "" : document.getCitationKey())
+		reference.source_type = (document.getSourceType() == null ? "" : document.getSourceType())
+		reference.genre = (document.getGenre() == null ? "" : document.getGenre())
+		reference.country = (document.getCountry() == null ? "" : document.getCountry())
+		reference.department = (document.getDepartment() == null ? "" : document.getDepartment())
+		reference.arxiv = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getArxiv() == null ? "" : document.getIdentifiers().getArxiv()))
+		reference.doi = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getDoi() == null ? "" : document.getIdentifiers().getDoi()))
+		reference.isbn = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getIsbn() == null ? "" : document.getIdentifiers().getIsbn()))
+		reference.issn = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getIssn() == null ? "" : document.getIdentifiers().getIssn()))
+		reference.pmid = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getPmid() == null ? "" : document.getIdentifiers().getPmid()))
+		reference.scopus = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getScopus() == null ? "" : document.getIdentifiers().getScopus()))
+		reference.month = (document.getMonthName("") == null ? "" : document.getMonthName(""))
+		reference.day = (document.getDay() == null ? "" : document.getDay())
+		reference.file_attached = (document.getFileAttached() == null ? false : document.getFileAttached())
+		reference.bibtex = documentService.getBibtex(document)
+		
+		reference.keywords.clear();
+		if(document.getKeywords() > 0)
+		{
+			for(String k : document.getKeywords())
+			{
+				reference.addToKeywords(k)
+			}
+		}
+		
+		reference.websites.clear();
+		if(document.getWebsites() > 0)
+		{
+			for(String w : document.getWebsites())
+			{
+				reference.addToWebsites(w)
+			}
+		}
+		
+		reference.tags.clear();
+		if(document.getTags() > 0)
+		{
+			for(String w : document.getTags())
+			{
+				reference.addToTags(w)
+			}
+		}
+		
+		def typeRef = TypeDocument.findByNomenclaturaLike(document.getType().getKey().toLowerCase())
+		reference.type = (typeRef == null ? TypeDocument.get(0) : typeRef)
+		
+		def langRef = Language.findByNameLike(document.getLanguage().toLowerCase())
+		reference.language = (langRef == null ? Language.findByName('english') : langRef)
+		
+		// Actualizar engineSearch y autores
+		
+		reference.save(failOnError: true, flush: true)
 	}
 }

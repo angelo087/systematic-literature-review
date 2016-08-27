@@ -651,4 +651,31 @@ class ToolService {
 		
 		return strOptions;
 	}
+	
+	void deleteSlr(Slr slrInstance)
+	{
+		if(slrInstance != null)
+		{
+			// Borramos rreferencias con autores y atributos especificos
+			for(Search search : slrInstance.searchs)
+			{
+				for (Reference reference : search.references)
+				{
+					// Borramos las referencias con los autores
+					AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+					
+					// Borramos las referencias con los atributos especificos
+					SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
+				
+					reference.criterion = null // criterio a nulo
+				}
+			}
+			
+			// Borramos loggers
+			LoggerSlr.deleteAll(LoggerSlr.findAllBySlr(slrInstance))
+			FriendLoggerSlr.deleteAll(FriendLoggerSlr.findAllBySlr(slrInstance))
+			
+			slrInstance.delete flush: true
+		}
+	}
 }

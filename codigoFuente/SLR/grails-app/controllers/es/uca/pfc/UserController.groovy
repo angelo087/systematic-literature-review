@@ -163,7 +163,7 @@ class UserController {
 		{
 			def friendProfileInstance = UserProfile.findByGuid(guidFriend)
 			
-			// Si la persona existe o es la misma que est� logada
+			// Si la persona existe o es la misma que está logada
 			if (friendProfileInstance == null || friendProfileInstance.id == userLogin.userProfile.id)
 			{
 				redirect(controller: 'index', action: 'menu')

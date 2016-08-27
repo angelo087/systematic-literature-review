@@ -80,8 +80,13 @@
             <div class="row">
                 <div class="col-lg-3">
                 
-                	<div style="margin-bottom: 10px;"><img src="${profileInstance.url_foto}" alt="" width="220" height="220" style="border: black solid thin;" /></div>
-					<%-- Code Mendeley --%>
+                	<g:if test="${profileInstance.url_foto.toString().contains('unknown_user.png')}">
+                		<div style="margin-bottom: 10px;"><img src="${resource(dir:'images/user', file: 'unknown_user.png')}" alt="" width="220" height="220" style="border: black solid thin;" /></div>
+                	</g:if>
+                	<g:else>
+                		<div style="margin-bottom: 10px;"><img src="${profileInstance.url_foto}" alt="" width="220" height="220" style="border: black solid thin;" /></div>
+					</g:else>
+                	<%-- Code Mendeley --%>
 					<p><a target="parent" href="${profileInstance.link}"><img border="0" src="http://www.mendeley.com/embed/icon/1/blue/big" alt=""/></a></p>
 					
 					<g:if test="${!isMyProfile}">

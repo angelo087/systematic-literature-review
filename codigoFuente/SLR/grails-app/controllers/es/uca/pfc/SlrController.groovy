@@ -10,6 +10,7 @@ class SlrController {
 	
 	def springSecurityService
 	def toolService
+	def mendeleyToolService
 	def exportService
 	def graphService
 	def strSearch = ""
@@ -361,6 +362,7 @@ class SlrController {
 				newSlrInstance.save flush: true
 				
 				// Creamos el Slr en Mendeley
+				mendeleyToolService.createSlrMendeley(userInstance, tituloSlr)
 				
 				redirect(controller: 'slr', action: 'myList', params: [success: true])
 			}
@@ -372,24 +374,7 @@ class SlrController {
 	{
 		def slrInstance = Slr.findByGuid(params.guidSlr.toString())
 		
-		if(slrInstance != null)
-		{
-			for(Search search : slrInstance.searchs)
-			{
-				for (Reference reference : search.references)
-				{
-					// Borramos las referencias con los autores
-					AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
-					
-					// Borramos las referencias con los atributos especificos
-					SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
-				
-					reference.criterion = null
-				}
-			}
-			
-			slrInstance.delete flush: true
-		}
+		toolService.deleteSlr(slrInstance)
 		
 		redirect(controller: 'slr', action: 'myList')
 	}
@@ -715,5 +700,25 @@ class SlrController {
 		
 		Map model = [myVar: books.getAt(numAzar)]
 		render(template: 'bookTemplate', model: model)
+	}
+	
+	@Transactional
+	def syncronizeSlrMendeley()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			// Si no existe el guid, redirigimos a index
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			mendeleyToolService.synchronizeSlrList(userLogin)
+			
+			redirect(controller: 'slr', action: 'myList')
+		}
 	}
 }

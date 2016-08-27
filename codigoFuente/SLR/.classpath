@@ -157,6 +157,6 @@
 	<classpathentry kind="lib" path="lib/poi-ooxml-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="lib/itextpdf-5.5.9.jar"/>
-	<classpathentry kind="lib" path="lib/mendeley-pfc-2.jar"/>
+	<classpathentry kind="lib" path="lib/mendeley-pfc.jar"/>
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

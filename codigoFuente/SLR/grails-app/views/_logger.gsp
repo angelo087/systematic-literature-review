@@ -37,10 +37,20 @@
 				<li class="left clearfix">
 					<span class="chat-img pull-left">
 						<g:if test="${loggerInstance.tipo.contains('fr-')}">
-							<img src="${loggerInstance.friendProfile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+							<g:if test="${loggerInstance.friendProfile.url_foto.toString().contains('unknown_user.png')}">
+								<img src="${resource(dir:'images/user', file: 'unknown_user.png')}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+		                	</g:if>
+		                	<g:else>
+		                		<img src="${loggerInstance.friendProfile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+		                	</g:else>
 						</g:if>
 						<g:else>
-							<img src="${loggerInstance.profile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+							<g:if test="${loggerInstance.profile.url_foto.toString().contains('unknown_user.png')}">
+								<img src="${resource(dir:'images/user', file: 'unknown_user.png')}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+		                	</g:if>
+		                	<g:else>
+		                		<img src="${loggerInstance.profile.url_foto}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;" />
+		                	</g:else>
 						</g:else>
 					</span>
 					<div class="chat-body clearfix">
