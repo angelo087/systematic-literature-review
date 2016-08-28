@@ -355,6 +355,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 						}
 					}
 					
+					// Actualizamos el nombre
+					slrInstance.title = folder.getName().toString()
+					slrInstance.save(failOnError: true, flush: true)
+					
 					// Obtenemos las referencias del slr y comprobamos si existen dichas referencias
 					for(Search search : slrInstance.searchs)
 					{
@@ -412,7 +416,6 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		reference.title = (document.getTitle() == null ? "" : document.getTitle());
 		reference.docAbstract = (document.getAbstract() == null ? "" : document.getAbstract())
 		reference.source = (document.getSource() == null ? "" : document.getSource())
-		reference.year = (document.getYear() == null ? "" : document.getYear())
 		reference.pages = (document.getPages() == null ? "" : document.getPages())
 		reference.volume = (document.getVolume() == null ? "" : document.getVolume())
 		reference.issue = (document.getIssue() == null ? "" : document.getIssue())
@@ -437,17 +440,36 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		reference.file_attached = (document.getFileAttached() == null ? false : document.getFileAttached())
 		reference.bibtex = documentService.getBibtex(document)
 		
+		Calendar now = Calendar.getInstance();
+		int currentYear = now.get(Calendar.YEAR);
+		int numYear = currentYear
+				
+		try
+		{
+			numYear = document.getYear()
+			
+			if (numYear < 1980 || numYear > currentYear)
+			{
+				numYear = currentYear
+			}
+		}
+		catch(NumberFormatException ex)
+		{
+			numYear = currentYear
+		}
+		reference.year = Integer.toString(numYear)
+		
 		reference.keywords.clear();
-		if(document.getKeywords() > 0)
+		if(document.getKeywords().size() > 0)
 		{
 			for(String k : document.getKeywords())
 			{
 				reference.addToKeywords(k)
 			}
 		}
-		
+				
 		reference.websites.clear();
-		if(document.getWebsites() > 0)
+		if(document.getWebsites().size() > 0)
 		{
 			for(String w : document.getWebsites())
 			{
@@ -456,22 +478,36 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		
 		reference.tags.clear();
-		if(document.getTags() > 0)
+		if(document.getTags().size() > 0)
 		{
 			for(String w : document.getTags())
 			{
 				reference.addToTags(w)
 			}
 		}
+				
+		if (document.getType() == null)
+		{
+			reference.type = TypeDocument.findByNomenclatura('journal')
+		}
+		else
+		{
+			def typeRef = TypeDocument.findByNomenclaturaLike(document.getType().getKey().toLowerCase())
+			reference.type = (typeRef == null ? TypeDocument.findByNomenclatura('journal') : typeRef)
+		}
 		
-		def typeRef = TypeDocument.findByNomenclaturaLike(document.getType().getKey().toLowerCase())
-		reference.type = (typeRef == null ? TypeDocument.get(0) : typeRef)
-		
-		def langRef = Language.findByNameLike(document.getLanguage().toLowerCase())
-		reference.language = (langRef == null ? Language.findByName('english') : langRef)
+		if (document.getLanguage() == null)
+		{
+			reference.language = Language.findByName('english')
+		}
+		else
+		{
+			def langRef = Language.findByNameLike(document.getLanguage().toLowerCase())
+			reference.language = (langRef == null ? Language.findByName('english') : langRef)
+		}
 		
 		// Actualizar engineSearch y autores
-		
+
 		reference.save(failOnError: true, flush: true)
 	}
 }

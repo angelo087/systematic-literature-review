@@ -332,7 +332,7 @@ class BootStrap {
 		Slr slr17 = new Slr(title: 'Titulo 17', justification: 'Justificacion 17', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr18 = new Slr(title: 'Titulo 18', justification: 'Justificacion 18', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr19 = new Slr(title: 'Titulo 19', justification: 'Justificacion 19', userProfile: user02.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
-		Slr slr20 = new Slr(title: 'Titulo 20', justification: 'Justificacion 20', userProfile: user07.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
+		Slr slr20 = new Slr(title: 'SLR1: spem study', justification: 'Justificacion 20', userProfile: user07.userProfile, idmend: '1aacc5c4-ee2b-4292-9b26-95fe2744542e').save(failOnError: true, flush: true)
 				
 		println "Insertamos los criterios..."
 		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
@@ -392,7 +392,8 @@ class BootStrap {
 		def terms28 = new SearchTermParam(terminos: "terminos 28", component: comp08, operator: opNONE)
 		def terms29 = new SearchTermParam(terminos: "terminos 29", component: comp09, operator: opALL)
 		def terms30 = new SearchTermParam(terminos: "terminos 30", component: comp10, operator: opALL)
-				
+		def terms31 = new SearchTermParam(terminos: "terminos 31", component: comp10, operator: opALL)
+		
 		def search01 = new Search(startYear: "2010", endYear: "2012", maxTotal: 5)
 		def search02 = new Search(startYear: "2010", endYear: "2012", maxTotal: 10)
 		def search03 = new Search(startYear: "2010", endYear: "2012", maxTotal: 10)
@@ -439,7 +440,7 @@ class BootStrap {
 		search14.addToEngines(engine01); search14.addToTermParams(terms28)
 		search15.addToEngines(engine01); search15.addToTermParams(terms29)
 		search15.addToEngines(engine02); search15.addToTermParams(terms30)
-		search15.addToEngines(engine03); 
+		search15.addToEngines(engine03); search15.addToTermParams(terms31)
 	
 		println "Creamos las referencias..."
 		def reference01 = new Reference(idmend : 'mend01', engine: engine01, title : 'Reference 1', type : type01, docAbstract : 'Abstract 1', source : 'Source 1', year : '1987',    keywords: ["key1", "key2", "key3"], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi1', city : 'Cadiz', institution : 'Institution 1', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey1', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 1')
@@ -470,6 +471,20 @@ class BootStrap {
 		def reference26 = new Reference(idmend : 'mend26', engine: engine02, title : 'Reference 26', type : type04, docAbstract : 'Abstract 26', source : 'Source 26', year : '1987', keywords: ['key1', 'key4', 'key6'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi4', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1'], citation_key : 'citationkey26', source_type : 'Source Type 1', language : langPO, genre : 'Genre 1', country : 'France', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 26')
 		def reference27 = new Reference(idmend : 'mend27', engine: engine02, title : 'Reference 27', type : type02, docAbstract : 'Abstract 27', source : 'Source 27', year : '1989', keywords: ['key1', 'key2', 'key7'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey27', source_type : 'Source Type 1', language : langPO, genre : 'Genre 1', country : 'France', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 27')
 		def reference28 = new Reference(idmend : 'mend28', engine: engine02, title : 'Reference 28', type : type02, docAbstract : 'Abstract 28', source : 'Source 28', year : '1990', keywords: ['key1', 'key2', 'key8'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey28', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 28')
+		def reference29 = new Reference(idmend : '23be5f27-ede6-3447-bcbc-c34774005963', 
+										engine: engine01, title : 'Reference 28', 
+										type : type02, 
+										docAbstract : 'Abstract 28', source : 'Source 28', year : '1990', 
+										keywords: ['key1', 'key2', 'key8'], pages : '12', volume : '2', 
+										issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', 
+										city : 'Cadiz', institution : 'Institution 2', 
+										series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], 
+										citation_key : 'citationkey28', source_type : 'Source Type 1', 
+										language : langEN, genre : 'Genre 1', 
+										country : 'England', department : 'Science', 
+										arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', 
+										pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', 
+										bibtex: 'Bibtex 28')
 		
 		println "Insertamos las referencias en las busquedas..."
 		search01.addToReferences(reference01)
@@ -500,6 +515,7 @@ class BootStrap {
 		search13.addToReferences(reference27)
 		search14.addToReferences(reference25)
 		search14.addToReferences(reference28)
+		search15.addToReferences(reference29)
 		
 		println "Insertamos las busquedas en los slr's"
 		slr01.addToSearchs(search01)
@@ -516,7 +532,7 @@ class BootStrap {
 		slr01.addToSearchs(search12)
 		slr01.addToSearchs(search13)
 		slr01.addToSearchs(search14)
-		slr19.addToSearchs(search15)
+		slr20.addToSearchs(search15)
 		
 		user01.userProfile.addToLoggers(new LoggerSlr(slr: slr01, isSearch: true, tipo: 'buscar')).save(failOnError: true)
 		user02.userProfile.addToLoggers(new LoggerSlr(slr: slr19, isSearch: true, tipo: 'buscar')).save(failOnError: true)

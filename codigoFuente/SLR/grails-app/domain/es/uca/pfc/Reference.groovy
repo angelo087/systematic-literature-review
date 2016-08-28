@@ -78,16 +78,48 @@ class Reference implements Comparator<Reference> {
 				addToSpecificAttributes(attribute: attribute)
 			}
 		}
+		
+		applyEncode();
 	}
 	
 	def beforeUpdate = {
 		last_modified = new Date()
+		applyEncode();
 	}
 	
 	def beforeDelete = {
 		if(search.slr.totalReferences > 0) {
 			search.slr.totalReferences--;
 		}
+	}
+	
+	void applyEncode()
+	{
+		title = (title == null ? '' : new String(title.getBytes("ISO-8859-1"), "UTF-8"))
+		docAbstract = (docAbstract == null ? '' : new String(docAbstract.getBytes("ISO-8859-1"), "UTF-8"))
+		source = (source == null ? '' : new String(source.getBytes("ISO-8859-1"), "UTF-8"))
+		year = (year == null ? '' : new String(year.getBytes("ISO-8859-1"), "UTF-8"))
+		pages = (pages == null ? '' : new String(pages.getBytes("ISO-8859-1"), "UTF-8"))
+		volume = (volume == null ? '' : new String(volume.getBytes("ISO-8859-1"), "UTF-8"))
+		issue = (issue == null ? '' : new String(issue.getBytes("ISO-8859-1"), "UTF-8"))
+		publisher = (publisher == null ? '' : new String(publisher.getBytes("ISO-8859-1"), "UTF-8"))
+		city = (city == null ? '' : new String(city.getBytes("ISO-8859-1"), "UTF-8"))
+		institution = (institution == null ? '' : new String(institution.getBytes("ISO-8859-1"), "UTF-8"))
+		series = (series == null ? '' : new String(series.getBytes("ISO-8859-1"), "UTF-8"))
+		chapter = (chapter == null ? '' : new String(chapter.getBytes("ISO-8859-1"), "UTF-8"))
+		source_type = (source_type == null ? '' : new String(source_type.getBytes("ISO-8859-1"), "UTF-8"))
+		genre = (genre == null ? '' : new String(genre.getBytes("ISO-8859-1"), "UTF-8"))
+		country = (country == null ? '' : new String(country.getBytes("ISO-8859-1"), "UTF-8"))
+		department = (department == null ? '' : new String(department.getBytes("ISO-8859-1"), "UTF-8"))
+		arxiv = (arxiv == null ? '' : new String(arxiv.getBytes("ISO-8859-1"), "UTF-8"))
+		doi = (doi == null ? '' : new String(doi.getBytes("ISO-8859-1"), "UTF-8"))
+		isbn = (isbn == null ? '' : new String(isbn.getBytes("ISO-8859-1"), "UTF-8"))
+		issn = (issn == null ? '' : new String(issn.getBytes("ISO-8859-1"), "UTF-8"))
+		pmid = (pmid == null ? '' : new String(pmid.getBytes("ISO-8859-1"), "UTF-8"))
+		scopus = (scopus == null ? '' : new String(scopus.getBytes("ISO-8859-1"), "UTF-8"))
+		notes = (notes == null ? '' : new String(notes.getBytes("ISO-8859-1"), "UTF-8"))
+		month = (month == null ? '' : new String(month.getBytes("ISO-8859-1"), "UTF-8"))
+		day = (day == null ? '' : new String(day.getBytes("ISO-8859-1"), "UTF-8"))
 	}
 	
 	@Override
