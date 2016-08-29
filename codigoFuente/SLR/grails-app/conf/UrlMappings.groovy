@@ -37,7 +37,12 @@ class UrlMappings {
 			action="synchronizeUserProfile"
 		}
 		
-		"/slr/syncronizeSlrMendeley" {
+		"/slr/syncronizeListSlrMendeley" {
+			controller="slr"
+			action="syncronizeListSlrMendeley"
+		}
+		
+		"/slr/syncronizeSlrMendeley/$guidSlr" {
 			controller="slr"
 			action="syncronizeSlrMendeley"
 		}
@@ -80,6 +85,11 @@ class UrlMappings {
 		"/reference/$idmend" {
 			controller="reference"
 			action="show"
+		}
+		
+		"/reference/$idmend/sychronizeReferenceMend" {
+			controller="reference"
+			action="sychronizeReferenceMend"
 		}
 		
 		"/$guidSlr/search/create" {

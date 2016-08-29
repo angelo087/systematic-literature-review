@@ -9,6 +9,7 @@ class ReferenceController {
 	def springSecurityService
 	def toolService
 	def exportService
+	def mendeleyToolService
 	
     def index() {
 		redirect(controller: 'slr', action: 'myList')
@@ -133,7 +134,7 @@ class ReferenceController {
 					redirect(controller: 'reference', action: 'show',
 							params: [
 										idmend: idmend,
-										error: 'ERROR: El título debe contener mas de cinco caracteres.'
+										error: 'ERROR: El tï¿½tulo debe contener mas de cinco caracteres.'
 									])
 				}
 				else if(params.inputAuthors.toString().equals("") || !toolService.validateAuthorString(params.inputAuthors.toString()))
@@ -275,7 +276,7 @@ class ReferenceController {
 						// Citation Key
 						referenceInstance.citation_key = toolService.getCitationKey(referenceInstance, authors)
 						
-						// Atributos específicos
+						// Atributos especï¿½ficos
 						def slrInstance = referenceInstance.search.slr
 						for(SpecificAttribute attribute : slrInstance.specAttributes)
 						{
@@ -348,6 +349,34 @@ class ReferenceController {
 				if(!file.delete())
 					println "No se ha borrado el fichero " + file.name
 				return
+			}
+		}
+	}
+	
+	@Transactional
+	def sychronizeReferenceMend()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin || !params.idmend || params.idmend.equals(""))
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			def referenceInstance = Reference.findByIdmend(params.idmend.toString())
+			
+			if(referenceInstance == null)
+			{
+				redirect(controller: 'index', action: 'index')
+			}
+			else
+			{
+				def userLogin = User.get(springSecurityService.principal.id)
+				mendeleyToolService.updateReferenceFromMendeley(referenceInstance, userLogin)
+				
+				redirect(controller: 'reference', action: 'show',
+					params: [idmend: referenceInstance.idmend])
 			}
 		}
 	}

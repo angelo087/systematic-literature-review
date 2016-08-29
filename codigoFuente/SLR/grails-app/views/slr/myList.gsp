@@ -313,7 +313,7 @@
             	<div class="col-lg-12">
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>
-	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeSlrMendeley" onclick="loading('Sincronizando Slr's con Mendeley...');">Sincronizar (Mendeley)</g:link>
+	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="loading('Sincronizando Slr's con Mendeley...');">Sincronizar (Mendeley)</g:link>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-myslrs">
                         <thead>

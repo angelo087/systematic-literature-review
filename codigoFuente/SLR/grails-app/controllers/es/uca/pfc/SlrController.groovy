@@ -703,7 +703,7 @@ class SlrController {
 	}
 	
 	@Transactional
-	def syncronizeSlrMendeley()
+	def syncronizeListSlrMendeley()
 	{
 		def isLogin = springSecurityService.loggedIn
 		
@@ -719,6 +719,35 @@ class SlrController {
 			mendeleyToolService.synchronizeSlrList(userLogin)
 			
 			redirect(controller: 'slr', action: 'myList')
+		}
+	}
+	
+	@Transactional
+	def syncronizeSlrMendeley()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin || !params.guidSlr || params.guidSlr.equals(""))
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			def slrInstance = Slr.findByGuidIlike(params.guidSlr.toString())
+			
+			if (slrInstance == null)
+			{
+				redirect(controller: 'index', action: 'index')
+			}
+			else
+			{
+				// Si no existe el guid, redirigimos a index
+				def userLogin = User.get(springSecurityService.principal.id)
+				
+				mendeleyToolService.synchronizeSlr(userLogin, slrInstance)
+				
+				redirect(controller: 'slr', action: 'searchs', params: [guid: slrInstance.guid])
+			}
 		}
 	}
 }

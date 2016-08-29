@@ -287,6 +287,22 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	
 	void synchronizeSlrList(User userInstance)
 	{
+		List<Slr> listSlrs = new ArrayList<Slr>()
+		listSlrs.addAll(userInstance.userProfile.slrs)
+		synchronizeSlrList(userInstance, listSlrs)
+	}
+	
+	void synchronizeSlr(User userInstance, Slr slrInstance)
+	{
+		List<Slr> listSlrs = new ArrayList<Slr>()
+		
+		listSlrs.add(slrInstance)
+		
+		synchronizeSlrList(userInstance, listSlrs)
+	}
+	
+	void synchronizeSlrList(User userInstance, List<Slr> listSlrs)
+	{
 		try
 		{
 			String clientId = Holders.getGrailsApplication().config.clientId
@@ -309,7 +325,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			List<Long> idsSlrUpdate = new ArrayList<Long>()
 			
 			// Comprobamos cuáles deberán eliminarse y cuáles actualizarse
-			for(Slr slr : userInstance.userProfile.slrs)
+			for(Slr slr : listSlrs)
 			{
 				Folder folder = folderService.getFolderById(slr.idmend)
 				
@@ -408,6 +424,26 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 	}
 	
+	void updateReferenceFromMendeley(Reference reference, User userInstance)
+	{
+		String clientId = Holders.getGrailsApplication().config.clientId
+		String clientSecret = Holders.getGrailsApplication().config.clientSecret
+		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		
+		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+			userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+			userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
+		
+		// Actualizamos los tokens del usuario
+		userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken();
+		userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken();
+		userInstance.save(failOnError: true, flush: true)
+		
+		DocumentService documentService = new DocumentService(mendeleyService)
+		
+		updateReferenceFromMendeley(reference, documentService)
+	}
+	
 	void updateReferenceFromMendeley(Reference reference, DocumentService documentService)
 	{
 		Document document = documentService.getDocument(reference.idmend.toString())
@@ -440,6 +476,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		reference.file_attached = (document.getFileAttached() == null ? false : document.getFileAttached())
 		reference.bibtex = documentService.getBibtex(document)
 		
+		// Actualizamos año y dia
 		Calendar now = Calendar.getInstance();
 		int currentYear = now.get(Calendar.YEAR);
 		int numYear = currentYear
@@ -459,6 +496,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		reference.year = Integer.toString(numYear)
 		
+		// keywords
 		reference.keywords.clear();
 		if(document.getKeywords().size() > 0)
 		{
@@ -467,7 +505,8 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 				reference.addToKeywords(k)
 			}
 		}
-				
+		
+		// websites
 		reference.websites.clear();
 		if(document.getWebsites().size() > 0)
 		{
@@ -477,6 +516,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			}
 		}
 		
+		// tags
 		reference.tags.clear();
 		if(document.getTags().size() > 0)
 		{
@@ -486,6 +526,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			}
 		}
 				
+		// type
 		if (document.getType() == null)
 		{
 			reference.type = TypeDocument.findByNomenclatura('journal')
@@ -496,6 +537,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			reference.type = (typeRef == null ? TypeDocument.findByNomenclatura('journal') : typeRef)
 		}
 		
+		// language
 		if (document.getLanguage() == null)
 		{
 			reference.language = Language.findByName('english')
@@ -506,7 +548,37 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			reference.language = (langRef == null ? Language.findByName('english') : langRef)
 		}
 		
-		// Actualizar engineSearch y autores
+		// Engine
+		Folder folEngine = documentService.getFolder(document);
+		if(folEngine == null)
+		{
+			reference.engine = EngineSearch.findByName('ACM')
+		}
+		else
+		{
+			def engSearch = EngineSearch.findByNameIlike(folEngine.getName())
+			reference.engine = (engSearch == null ? EngineSearch.findByName('ACM') : engSearch)
+		}
+		
+		// Autores
+		AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+		
+		if (document.getAuthors().size() > 0 || document.getEditors().size() > 0)
+		{
+			List<Person> authorsMend = (document.getAuthors().size() > 0 ? document.getAuthors() : document.getEditors());
+			
+			for(Person person : authorsMend)
+			{
+				def author = Author.findByForenameIlikeAndSurnameIlike(person.getForename(), person.getSurname())
+				
+				if (author == null) // Lo creamos
+				{
+					author = new Author(forename: person.getForename(), surname: person.getSurname()).save(failOnError: true)
+				}
+				
+				author.addToAuthorsRefs(reference: reference).save(failOnError: true)
+			}
+		}
 
 		reference.save(failOnError: true, flush: true)
 	}

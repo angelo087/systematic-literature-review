@@ -70,7 +70,7 @@
                 <div class="col-lg-12">
                   	<div style="margin-top: 5px; margin-bottom: 20px;">
                   		<g:link controller="search" action="create" class="btn btn-success" params="[guidSlr:"${slrInstance.guid}"]">Crear búsqueda</g:link>
-	                	<button type="button" class="btn btn-primary" disabled="disabled">Sincronizar (Mendeley)</button>
+	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeSlrMendeley" params="[guidSlr:"${slrInstance.guid}"]">Sincronizar (Mendeley)</g:link>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-mysearchs">
                         <thead>

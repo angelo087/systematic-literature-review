@@ -472,7 +472,7 @@ class BootStrap {
 		def reference27 = new Reference(idmend : 'mend27', engine: engine02, title : 'Reference 27', type : type02, docAbstract : 'Abstract 27', source : 'Source 27', year : '1989', keywords: ['key1', 'key2', 'key7'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey27', source_type : 'Source Type 1', language : langPO, genre : 'Genre 1', country : 'France', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 27')
 		def reference28 = new Reference(idmend : 'mend28', engine: engine02, title : 'Reference 28', type : type02, docAbstract : 'Abstract 28', source : 'Source 28', year : '1990', keywords: ['key1', 'key2', 'key8'], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi5', city : 'Cadiz', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey28', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 28')
 		def reference29 = new Reference(idmend : '23be5f27-ede6-3447-bcbc-c34774005963', 
-										engine: engine01, title : 'Reference 28', 
+										engine: engine01, title : 'Reference 29', 
 										type : type02, 
 										docAbstract : 'Abstract 28', source : 'Source 28', year : '1990', 
 										keywords: ['key1', 'key2', 'key8'], pages : '12', volume : '2', 
@@ -577,6 +577,7 @@ class BootStrap {
 		author04.addToAuthorsRefs(reference: reference14).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference18).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference22).save(failOnError: true)
+		author04.addToAuthorsRefs(reference: reference29).save(failOnError: true)
 		
 		println "Creamos FAQ's"
 		def faq01 = new FAQ(enunciado: '�Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
@@ -594,6 +595,7 @@ class BootStrap {
 		def book09 = new Book(name: 'Titulo 9').save(failOnError: true)
 		def book10 = new Book(name: 'Titulo 10').save(failOnError: true)
 		
+		println "FIN BOOTSRAP"
     }
     def destroy = {
     }
