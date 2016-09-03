@@ -33,6 +33,21 @@ class UserProfile {
 	String lastGuidTaskSearch = "";
 
     static constraints = {
+		first_name(nullable: true)
+		last_name(nullable: true)
+		display_name(nullable: true)
+		url_foto(nullable: true)
+		idmend(nullable: true)
+		research_interests(nullable: true)
+		academic_status(nullable: true)
+		link(nullable: true)
+		created(nullable: true)
+		biography(nullable: true)
+		codeBotonEnlace(nullable: true)
+		locationName(nullable: true)
+		locationLatitude(nullable: true)
+		locationLongitude(nullable: true)
+		discipline(nullable: true)
     }
 	
 	//static mappedBy = [loggers: 'profile', friends: 'profile']

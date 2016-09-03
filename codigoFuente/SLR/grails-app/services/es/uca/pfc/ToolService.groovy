@@ -3,6 +3,7 @@ package es.uca.pfc
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date;
+import org.apache.commons.validator.routines.EmailValidator
 
 import grails.transaction.Transactional
 
@@ -677,5 +678,10 @@ class ToolService {
 			
 			slrInstance.delete flush: true
 		}
+	}
+	
+	boolean isValidEmail(String email)
+	{
+		return EmailValidator.getInstance(true).isValid(email);
 	}
 }

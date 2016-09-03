@@ -6,14 +6,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Login</title>
+        <title>Register</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-        <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
-		<link rel="stylesheet" href="../css/form-elements.css">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/form-elements.css">
+        <link rel="stylesheet" href="css/style.css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,7 +27,7 @@
 
     </head>
 
-    <body style="background-color: aqua;">
+    <body>
 
         <!-- Top content -->
         <div class="top-content">
@@ -40,7 +40,7 @@
                             <h1><strong>Systematic Literature Review</strong></h1>
                             <div class="description">
                             	<p>
-	                            	Login to our site
+	                            	Sign up now
                             	</p>
                             </div>
                         </div>
@@ -53,8 +53,8 @@
                         	<div class="form-box">
 	                        	<div class="form-top">
 	                        		<div class="form-top-left">
-	                        			<h3>Login to our site</h3>
-	                            		<p>Enter email and password to log on:</p>
+	                        			<h3>Sign up now</h3>
+	                            		<p>Fill in the form below to get instant access:</p>
 	                        		</div>	                        		
 	                        		<div class="form-top-right">
 	                        			<i class="fa fa-key"></i>
@@ -62,19 +62,23 @@
 	                        		<g:if test='${flash.message}'>
 	                        			<div id="divError" style="clear: both;" class="alert alert-danger" role="alert"><i class="fa fa-remove fa-fw"></i> ${flash.message}</div>
 									</g:if>
-	                            </div>                            
+	                            </div>
 	                            <div class="form-bottom">
-				                    <form role="form" action="${postUrl}" id='loginForm' method="post" class="login-form">
+	                            	<g:form role="form" controller="register" action="registerUser" method="post" class="login-form">
 				                    	<div class="form-group">
-				                    		<label class="sr-only" for="j_username">Email</label>
-				                        	<input type="text" name="j_username" placeholder="Email..." class="form-username form-control" id="j_username" required="required">
+				                    		<label class="sr-only" for="j_email_mend">Email Mendeley</label>
+				                        	<input type="text" name="j_email_mend" placeholder="Email Mendeley..." class="form-username form-control" id="j_email_mend" required="required" value="${emailMend}">
 				                        </div>
 				                        <div class="form-group">
-				                        	<label class="sr-only" for="j_password">Password</label>
-				                        	<input type="password" name="j_password" placeholder="Password..." class="form-password form-control" id="j_password">
+				                        	<label class="sr-only" for="j_pass_mend">Password Mendeley</label>
+				                        	<input type="password" name="j_pass_mend" placeholder="Password Mendeley..." class="form-password form-control" id="j_pass_mend">
 				                        </div>
-				                        <button type="submit" class="btn">Sign in!</button>
-				                    </form>
+  				                        <div class="form-group">
+				                        	<label class="sr-only" for="j_pass_mend_rep">Repeat Password Mendeley</label>
+				                        	<input type="password" name="j_pass_mend_rep" placeholder="Repeat Password Mendeley..." class="form-password form-control" id="j_pass_mend_rep">
+				                        </div>
+				                        <button type="submit" class="btn">Sign me now!</button>
+				                    </g:form>
 			                    </div>
 		                    </div>
 		                	                        
@@ -106,7 +110,7 @@
         <!-- <script src="assets/js/jquery-1.11.1.min.js"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js"></script> -->
         <script src="${resource(dir: 'js', file: 'jquery.backstretch.min.js')}"></script>
-        <script src="${resource(dir: 'js', file: 'scripts.js')}"></script>
+        <script src="${resource(dir: 'js', file: 'scriptsRegister.js')}"></script>
         
         <!--[if lt IE 10]>
             <script src="../js/placeholder.js"></script>

@@ -582,4 +582,96 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 
 		reference.save(failOnError: true, flush: true)
 	}
+	
+	boolean isRegisteredMendeley(String emailMend, String passMend)
+	{
+		boolean isRegistered = true;
+
+		String clientId = Holders.getGrailsApplication().config.clientId
+		String clientSecret = Holders.getGrailsApplication().config.clientSecret
+		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		
+		try
+		{
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				emailMend, passMend);
+		}
+		catch(Exception ex)
+		{
+			isRegistered = false;
+		}
+		
+		return isRegistered;
+	}
+	
+	User getUserFromMendeley(String emailMend, String passMend)
+	{
+		User userInstance = null;
+		
+		String clientId = Holders.getGrailsApplication().config.clientId
+		String clientSecret = Holders.getGrailsApplication().config.clientSecret
+		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		
+		try
+		{
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				emailMend, passMend);
+			ProfileService profileService = new ProfileService(mendeleyService)			
+			Profile profile = profileService.getCurrentProfile();
+			
+			UserProfile userProfileInstance = getUserProfileFromMendeley(profile)
+			UserMendeley userMendeleyInstance = new UserMendeley(
+																	email_mend: emailMend,
+																	pass_mend: passMend,
+																	access_token: mendeleyService.getTokenResponse().getAccessToken(),
+																	token_type: mendeleyService.getTokenResponse().getTokenType(),
+																	expires_in: mendeleyService.getTokenResponse().getExpiresIn(),
+																	refresh_token: mendeleyService.getTokenResponse().getRefreshToken())
+			userInstance = new User(
+									username: emailMend,
+									password: passMend,
+									enabled: true,
+									userProfile: userProfileInstance,
+									userMendeley: userMendeleyInstance
+									)
+		}
+		catch(Exception ex)
+		{
+			println "ERROR: MendeleyToolService.getUserProfileFromMendeley() -> " + ex.getMessage()
+		}
+		
+		return userInstance;
+	}
+	
+	UserProfile getUserProfileFromMendeley(Profile profile)
+	{
+		UserProfile userProfile = new UserProfile(
+			first_name: (profile.getFirstName() == null ? "" : profile.getFirstName().toString()),
+			last_name: (profile.getLastName() == null ? "" : profile.getLastName().toString()),
+			display_name: (profile.getDisplayName() == null ? "" : profile.getDisplayName().toString()),
+			url_foto: (profile.getPhoto() == null ? "unknown_user.png" : (profile.getPhoto().getUrl() == null ? "unknown_user.png" : profile.getPhoto().getUrl().toString())),
+			idmend: (profile.getId() == null ? "" : profile.getId().toString()),
+			research_interests: (profile.getResearchInterests() == null ? "" : profile.getResearchInterests().toString()),
+			academic_status: (profile.getAcademicStatus() == null ? "" : profile.getAcademicStatus().toString()),
+			link: (profile.getLink() == null ? "" : profile.getLink().toString()),
+			created: (profile.getCreated() == null ? "" : profile.getCreated().toString()),
+			biography: (profile.getBiography() == null ? "" : profile.getBiography().toString()),
+			codeBotonEnlace: "",
+			locationName: (profile.getLocation() == null ? "" : profile.getLocation().getName() == null ? "" : profile.getLocation().getName().toString()),
+			locationLatitude: (profile.getLocation() == null ? "" : profile.getLocation().getLatitude() == null ? "" : profile.getLocation().getLatitude().toString()),
+			locationLongitude: (profile.getLocation() == null ? "" : profile.getLocation().getLongitude()== null ? "" : profile.getLocation().getLongitude().toString()),
+			discipline: (profile.getDiscipline() == null ? "" : profile.getDiscipline().toString())
+			)
+		
+		if(profile.getEducation() != null && profile.getEducation().size() > 0)
+		{
+			for(mendeley.pfc.schemas.Education ed : profile.getEducation())
+			{
+				es.uca.pfc.Education education = convertEducationMendeleyToEducationSlr(ed)
+				userProfile.addToEducations(education)
+			}
+		}
+		
+		return userProfile
+	}
 }

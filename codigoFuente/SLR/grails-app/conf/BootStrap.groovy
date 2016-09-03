@@ -247,7 +247,7 @@ class BootStrap {
 			url_foto: 'http://vignette2.wikia.nocookie.net/onepiece/images/6/61/Estatua_de_cera_de_Luffy.png/revision/latest?cb=20121231203632&path-prefix=es')
 		
 		def mendProfile07 = new UserMendeley(
-			email_mend: 'angel.gonzatoro@gmail.com',
+			email_mend: 'angel.gonzatoro2@gmail.com',
 			pass_mend: 'angel.gonzatoro',
 			access_token: 'sad76sa7d7sa8d6',
 			token_type: 'sad908sd980vfsd',
@@ -255,8 +255,8 @@ class BootStrap {
 			refresh_token: 'sdasñdusd9aod'
 			)
 
-		def user07 = User.findByUsername('angel.gonzatoro@gmail.com') ?: new User(
-			username: 'angel.gonzatoro@gmail.com',
+		def user07 = User.findByUsername('angel.gonzatoro2@gmail.com') ?: new User(
+			username: 'angel.gonzatoro2@gmail.com',
 			password: 'angel.gonzatoro',
 			userProfile: profile07,
 			userMendeley: mendProfile07).save(failOnError: true)

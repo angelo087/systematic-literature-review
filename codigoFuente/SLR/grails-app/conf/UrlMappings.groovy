@@ -7,6 +7,16 @@ class UrlMappings {
             }
         }
 		
+		"/register" {
+			controller="register"
+			action="index"
+		}
+		
+		"/register/registerUser" {
+			controller="register"
+			action="registerUser"
+		}
+		
 		"/indexMendeley"{
 			controller="index"
 			action="indexMendeley"
