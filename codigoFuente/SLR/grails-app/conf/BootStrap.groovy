@@ -3,7 +3,6 @@ import java.util.Date;
 
 import es.uca.pfc.Author
 import es.uca.pfc.AuthorReference
-import es.uca.pfc.Book
 import es.uca.pfc.Criterion
 import es.uca.pfc.Education
 import es.uca.pfc.EngineSearch
@@ -101,9 +100,9 @@ class BootStrap {
 		println "Creamos Usuarios de prueba..."
 		
 		def profile01 = new UserProfile(
-			first_name: 'Francisco',
+			first_name: 'Paco',
 			last_name: 'Jimenez',
-			display_name: 'Francisco Jimenez',
+			display_name: 'Paco Jimenez',
 			url_foto: 'http://fotos00.laopiniondemurcia.es/fotos/noticias/318x200/2011-11-02_IMG_2011-11-02_21:57:56_00902murmu.jpg')
 		
 		def mendProfile01 = new UserMendeley(
@@ -115,139 +114,23 @@ class BootStrap {
 			refresh_token: 'refreshtoken'
 			)
 		
-		def user01 = User.findByUsername('pacoji@pacoji.com') ?: new User(
-			username: 'pacoji@pacoji.com',
-			password: 'pacoji',
+		def user01 = User.findByUsername('alpha_snake087@hotmail.com') ?: new User(
+			username: 'alpha_snake087@hotmail.com',
+			password: 'alpha_snake087',
 			userProfile: profile01,
 			userMendeley: mendProfile01).save(failOnError: true)
 
 		if (!user01.authorities.contains(userRole)) {
 			UserRole.create user01, userRole
 		}
-		
+				
 		def profile02 = new UserProfile(
-			first_name: 'Morgan',
-			last_name: 'Freeman',
-			url_foto: 'http://www.moviepilot.de/files/images/0486/8182/Morgan_Freeman.jpg')
-		
-		def mendProfile02 = new UserMendeley(
-			email_mend: 'email',
-			pass_mend: 'pass',
-			access_token: 'accesstoken',
-			token_type: 'tokentype',
-			expires_in: 'expiresin',
-			refresh_token: 'refreshtoken'
-			)
-		
-		def user02 = User.findByUsername('morgan@freeman.com') ?: new User(
-			username: 'morgan@freeman.com',
-			password: 'morgan',
-			userProfile: profile02,
-			userMendeley: mendProfile02).save(failOnError: true)
-
-		if (!user02.authorities.contains(userRole)) {
-			UserRole.create user02, userRole
-		}
-		
-		def profile03 = new UserProfile(
-			first_name: 'Abraham',
-			last_name: 'Lincoln',
-			url_foto: 'http://www.biografiasyvidas.com/biografia/l/fotos/lincoln_abraham_2.jpg')
-		
-		def mendProfile03 = new UserMendeley(
-			email_mend: 'email',
-			pass_mend: 'pass',
-			access_token: 'accesstoken',
-			token_type: 'tokentype',
-			expires_in: 'expiresin',
-			refresh_token: 'refreshtoken'
-			)
-		
-		def user03 = User.findByUsername('abraham@lincoln.com') ?: new User(
-			username: 'abraham@lincoln.com',
-			password: 'abraham',
-			userProfile: profile03,
-			userMendeley: mendProfile03).save(failOnError: true)
-
-		if (!user03.authorities.contains(userRole)) {
-			UserRole.create user03, userRole
-		}
-		
-		def profile04 = new UserProfile(
-			first_name: 'Susana',
-			last_name: 'Guash',
-			url_foto: 'http://www.telebasura.net/wp-content/2013/11/susana-guasch.jpg')
-
-		def mendProfile04 = new UserMendeley(
-			email_mend: 'email',
-			pass_mend: 'pass',
-			access_token: 'accesstoken',
-			token_type: 'tokentype',
-			expires_in: 'expiresin',
-			refresh_token: 'refreshtoken'
-			)
-
-		def user04 = User.findByUsername('susana@guash.com') ?: new User(
-			username: 'susana@guash.com',
-			password: 'susana',
-			userProfile: profile04,
-			userMendeley: mendProfile04).save(failOnError: true)
-			
-		if (!user04.authorities.contains(userRole)) {
-			UserRole.create user04, userRole
-		}
-		
-		def profile05 = new UserProfile(
-			first_name: 'Bruce',
-			last_name: 'Wayne',
-			url_foto: 'http://vignette3.wikia.nocookie.net/batman/images/4/49/1929848-bruce_wayne.jpg/revision/latest?cb=20140625152104&path-prefix=es')
-		
-		def mendProfile05 = new UserMendeley(
-			email_mend: 'email',
-			pass_mend: 'pass',
-			access_token: 'accesstoken',
-			token_type: 'tokentype',
-			expires_in: 'expiresin',
-			refresh_token: 'refreshtoken'
-			)
-
-		def user05 = User.findByUsername('bruce@wayne.com') ?: new User(
-			username: 'bruce@wayne.com',
-			password: 'bruce',
-			userProfile: profile05,
-			userMendeley: mendProfile05).save(failOnError: true)
-
-		if (!user05.authorities.contains(userRole)) {
-			UserRole.create user05, userRole
-		}
-		
-		def profile06 = new UserProfile(
-			first_name: 'Jack',
-			last_name: 'Sparrow',
-			url_foto: 'http://www.electric949.com/wp-content/uploads/2015/07/Captain-Jack-captain-jack-sparrow-14117613-1242-900.jpg')
-		
-		def mendProfile06 = new UserMendeley(
-			email_mend: 'email',
-			pass_mend: 'pass',
-			access_token: 'accesstoken',
-			token_type: 'tokentype',
-			expires_in: 'expiresin',
-			refresh_token: 'refreshtoken'
-			)
-
-		def user06 = User.findByUsername('jack@sparrow.com') ?: new User(
-			username: 'jack@sparrow.com',
-			password: 'jack',
-			userProfile: profile06,
-			userMendeley: mendProfile06).save(failOnError: true)
-			
-		def profile07 = new UserProfile(
 			first_name: 'Monkey',
 			last_name: 'D. Luffy',
 			url_foto: 'http://vignette2.wikia.nocookie.net/onepiece/images/6/61/Estatua_de_cera_de_Luffy.png/revision/latest?cb=20121231203632&path-prefix=es')
 		
-		def mendProfile07 = new UserMendeley(
-			email_mend: 'angel.gonzatoro2@gmail.com',
+		def mendProfile02 = new UserMendeley(
+			email_mend: 'angel.gonzatoro@gmail.com',
 			pass_mend: 'angel.gonzatoro',
 			access_token: 'sad76sa7d7sa8d6',
 			token_type: 'sad908sd980vfsd',
@@ -255,14 +138,14 @@ class BootStrap {
 			refresh_token: 'sdasñdusd9aod'
 			)
 
-		def user07 = User.findByUsername('angel.gonzatoro2@gmail.com') ?: new User(
-			username: 'angel.gonzatoro2@gmail.com',
+		def user02 = User.findByUsername('angel.gonzatoro@gmail.com') ?: new User(
+			username: 'angel.gonzatoro@gmail.com',
 			password: 'angel.gonzatoro',
-			userProfile: profile07,
-			userMendeley: mendProfile07).save(failOnError: true)
+			userProfile: profile02,
+			userMendeley: mendProfile02).save(failOnError: true)
 
-		if (!user07.authorities.contains(userRole)) {
-			UserRole.create user07, userRole
+		if (!user02.authorities.contains(userRole)) {
+			UserRole.create user02, userRole
 		}
 		
 		println "Creamos las Estudios..."
@@ -282,7 +165,7 @@ class BootStrap {
 		user01.save(failOnError: true)
 				
 		println "Creamos las amistades"
-		user01.userProfile.addToFriends(profile03)
+		/*user01.userProfile.addToFriends(profile03)
 		user03.userProfile.addToFriends(profile01)
 		user02.userProfile.addToFriends(profile04)
 		user04.userProfile.addToFriends(profile02)
@@ -290,30 +173,10 @@ class BootStrap {
 		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user03.userProfile, tipo: 'seguir')).save(failOnError: true)
 		user04.userProfile.addToLoggers(new LoggerFriend(friendProfile: user02.userProfile, tipo: 'seguir')).save(failOnError: true)
 		user02.userProfile.addToLoggers(new LoggerFriend(friendProfile: user04.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
-		
-		/*user01.userProfile.addToFriends(profile02)
-		user01.userProfile.addToFriends(profile03)
-		user01.userProfile.addToFriends(profile04)
-		user01.userProfile.addToFriends(profile05)
-
-		user02.userProfile.addToFriends(profile01)
-		user03.userProfile.addToFriends(profile01)
-		user04.userProfile.addToFriends(profile01)
-		user05.userProfile.addToFriends(profile01)
-		
-		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user02.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user03.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user04.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user01.userProfile.addToLoggers(new LoggerFriend(friendProfile: user05.userProfile, tipo: 'seguir')).save(failOnError: true)
-		
-		user02.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user04.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)
-		user05.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)*/
+		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)*/
 		
 		println "Creamos los SLR..."
-		Slr slr01 = new Slr(title: 'Titulo 1', justification: 'Justificacion 1', userProfile: user07.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
+		Slr slr01 = new Slr(title: 'Titulo 1', justification: 'Justificacion 1', userProfile: user02.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr02 = new Slr(title: 'Titulo 2', justification: 'Justificacion 2', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr03 = new Slr(title: 'Titulo 3', justification: 'Justificacion 3', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr04 = new Slr(title: 'Titulo 4', justification: 'Justificacion 4', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
@@ -332,7 +195,7 @@ class BootStrap {
 		Slr slr17 = new Slr(title: 'Titulo 17', justification: 'Justificacion 17', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr18 = new Slr(title: 'Titulo 18', justification: 'Justificacion 18', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr19 = new Slr(title: 'Titulo 19', justification: 'Justificacion 19', userProfile: user02.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
-		Slr slr20 = new Slr(title: 'SLR1: spem study', justification: 'Justificacion 20', userProfile: user07.userProfile, idmend: '1aacc5c4-ee2b-4292-9b26-95fe2744542e').save(failOnError: true, flush: true)
+		Slr slr20 = new Slr(title: 'SLR1: spem study', justification: 'Justificacion 20', userProfile: user02.userProfile, idmend: '1aacc5c4-ee2b-4292-9b26-95fe2744542e').save(failOnError: true, flush: true)
 				
 		println "Insertamos los criterios..."
 		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
@@ -583,17 +446,6 @@ class BootStrap {
 		def faq01 = new FAQ(enunciado: '�Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
 		def faq02 = new FAQ(enunciado: '�Esto es una pregunta 2?', respuesta: 'Efectivamente, esto es una respuesta 2').save(failOnError: true)
 		def faq03 = new FAQ(enunciado: '�Esto es una pregunta 3?', respuesta: 'Efectivamente, esto es una respuesta 3').save(failOnError: true)
-																   
-		def book01 = new Book(name: 'Titulo 1').save(failOnError: true)
-		def book02 = new Book(name: 'Titulo 2').save(failOnError: true)
-		def book03 = new Book(name: 'Titulo 3').save(failOnError: true)
-		def book04 = new Book(name: 'Titulo 4').save(failOnError: true)
-		def book05 = new Book(name: 'Titulo 5').save(failOnError: true)
-		def book06 = new Book(name: 'Titulo 6').save(failOnError: true)
-		def book07 = new Book(name: 'Titulo 7').save(failOnError: true)
-		def book08 = new Book(name: 'Titulo 8').save(failOnError: true)
-		def book09 = new Book(name: 'Titulo 9').save(failOnError: true)
-		def book10 = new Book(name: 'Titulo 10').save(failOnError: true)
 		
 		println "FIN BOOTSRAP"
     }

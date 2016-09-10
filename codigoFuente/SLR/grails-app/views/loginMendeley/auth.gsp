@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Login</title>
+        <title>Login for Mendeley</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -40,7 +40,7 @@
                             <h1><strong>Systematic Literature Review</strong></h1>
                             <div class="description">
                             	<p>
-	                            	Login to our site
+	                            	Login Mendeley to our site
                             	</p>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         	<div class="form-box">
 	                        	<div class="form-top">
 	                        		<div class="form-top-left">
-	                        			<h3>Login to our site</h3>
+	                        			<h3>Login Mendeley to our site</h3>
 	                            		<p>Enter email and password to log on:</p>
 	                        		</div>	                        		
 	                        		<div class="form-top-right">
@@ -62,9 +62,9 @@
 	                        		<g:if test='${flash.message}'>
 	                        			<div id="divError" style="clear: both;" class="alert alert-danger" role="alert"><i class="fa fa-remove fa-fw"></i> ${flash.message}</div>
 									</g:if>
-	                            </div>                            
+	                            </div>
 	                            <div class="form-bottom">
-				                    <form role="form" action="${postUrl}" id='loginForm' method="post" class="login-form">
+	                            	<g:form role="form" controller="loginMendeley" action="loginMendeley" id="loginForm" method="post" class="login-form">
 				                    	<div class="form-group">
 				                    		<label class="sr-only" for="j_username">Email</label>
 				                        	<input type="text" name="j_username" placeholder="Email..." class="form-username form-control" id="j_username" required="required">
@@ -74,7 +74,7 @@
 				                        	<input type="password" name="j_password" placeholder="Password..." class="form-password form-control" id="j_password">
 				                        </div>
 				                        <button type="submit" class="btn">Sign in!</button>
-				                    </form>
+				                    </g:form>
 			                    </div>
 		                    </div>
 		                	                        

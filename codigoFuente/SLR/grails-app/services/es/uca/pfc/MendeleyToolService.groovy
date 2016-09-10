@@ -177,8 +177,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, 
 				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend, 
 				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
-			
-			
+
 			// Actualizamos los tokens del usuario
 			userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken();
 			userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken();
@@ -673,5 +672,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		
 		return userProfile
+	}
+	
+	boolean isChangePasswordMendeley(String email, String password)
+	{
+		return isRegisteredMendeley(email, password)
 	}
 }

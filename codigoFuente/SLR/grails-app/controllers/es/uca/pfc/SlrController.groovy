@@ -680,28 +680,7 @@ class SlrController {
 			]
 		}			
 	}
-	
-	def pruebaBooks() { }
-	
-	def actionTemplate()
-	{
-		Random rnd = new Random()
 		
-		def arrayBooks = Book.list()
-		
-		List<Book> books = new ArrayList<Book>()
-		
-		for(Book book : arrayBooks)
-		{
-			books.add(book)
-		}
-		
-		int numAzar = (int)(rnd.nextDouble()) * books.size()
-		
-		Map model = [myVar: books.getAt(numAzar)]
-		render(template: 'bookTemplate', model: model)
-	}
-	
 	@Transactional
 	def syncronizeListSlrMendeley()
 	{
