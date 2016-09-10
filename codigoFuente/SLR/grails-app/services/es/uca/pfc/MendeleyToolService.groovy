@@ -166,8 +166,9 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		sendSearchNotification(userInstance, slrInstance, true)
 	}
 	
-	void synchronizeProfile(User userInstance)
+	boolean synchronizeProfile(User userInstance)
 	{
+		boolean isSynchro = true;
 		try
 		{
 			String clientId = Holders.getGrailsApplication().config.clientId
@@ -194,8 +195,11 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		catch(MendeleyException ex)
 		{
+			isSynchro = false
 			println "EXCEPTION MendeleyToolService.synchronizeProfile() => Hubo un problema de sincronizacion."
 		}
+		
+		return isSynchro
 	}
 	
 	void convertProfileMendeleyToProfileSlr(Profile profile, UserProfile userProfile)
@@ -216,7 +220,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		userProfile.locationLongitude = (profile.getLocation() == null ? "" : profile.getLocation().getLongitude()== null ? "" : profile.getLocation().getLongitude().toString())
 		userProfile.discipline = (profile.getDiscipline() == null ? "" : profile.getDiscipline().toString())
 		
-		userProfile.educations.clear()
+		Education.deleteAll(Education.findAllByProfile(userProfile))
 		if (profile.getEducation().size() > 0)
 		{
 			for(mendeley.pfc.schemas.Education ed : profile.getEducation())
@@ -337,7 +341,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 					idsSlrUpdate.add(slr.id)
 				}
 			}
-			
+
 			// Eliminamos Slrs
 			if (idsSlrDrop.size() > 0)
 			{
@@ -348,7 +352,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 					toolService.deleteSlr(slrInstance)
 				}
 			}
-			
+
 			// Actualizamos Slrs
 			if (idsSlrUpdate.size() > 0)
 			{
@@ -392,7 +396,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 						}
 					}
 				} // fin-for idsSlrUpdate
-				
+
 				// Eliminamos referencias no incluidas
 				for(Long idRef : referencesDrop)
 				{
@@ -406,7 +410,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 					
 					reference.delete flush: true
 				}
-				
+
 				// Actualizamos referencias
 				for(Long idRef : referencesUpdate)
 				{
@@ -504,7 +508,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 				reference.addToKeywords(k)
 			}
 		}
-		
+
 		// websites
 		reference.websites.clear();
 		if(document.getWebsites().size() > 0)
@@ -561,11 +565,12 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		
 		// Autores
 		AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+		reference.save(failOnError: true, flush: true)
 		
 		if (document.getAuthors().size() > 0 || document.getEditors().size() > 0)
 		{
 			List<Person> authorsMend = (document.getAuthors().size() > 0 ? document.getAuthors() : document.getEditors());
-			
+
 			for(Person person : authorsMend)
 			{
 				def author = Author.findByForenameIlikeAndSurnameIlike(person.getForename(), person.getSurname())

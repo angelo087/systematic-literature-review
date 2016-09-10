@@ -29,6 +29,7 @@ class UserController {
 			else
 			{
 				def userProfileInstance = UserProfile.findByGuid(params.guid)
+				def isSynchro = params.isSynchro
 				
 				// Si es nulo, redirigimos a index
 				if(userProfileInstance == null)
@@ -71,7 +72,7 @@ class UserController {
 					
 					def lastTime = toolService.getTimeString(userProfileInstance.ultimaConexion)
 					
-					respond userInstance, model:[isMyProfile: isMyProfile, profileInstance: userProfileInstance, lastTime: lastTime, isMyFriend: isMyFriend]
+					respond userInstance, model:[isMyProfile: isMyProfile, profileInstance: userProfileInstance, lastTime: lastTime, isMyFriend: isMyFriend, isSynchro: isSynchro]
 				}
 			}
 		}
@@ -207,8 +208,8 @@ class UserController {
 				}
 				else
 				{
-					mendeleyToolService.synchronizeProfile(userProfileInstance.user)
-					redirect(controller: 'user', action: 'show', params: [guid: userProfileInstance.guid])
+					boolean isSynchro = mendeleyToolService.synchronizeProfile(userProfileInstance.user)
+					redirect(controller: 'user', action: 'show', params: [guid: userProfileInstance.guid, isSynchro: isSynchro])
 				}
 			}
 		}

@@ -73,7 +73,7 @@
 				                        	<label class="sr-only" for="j_password">Password</label>
 				                        	<input type="password" name="j_password" placeholder="Password..." class="form-password form-control" id="j_password">
 				                        </div>
-				                        <button type="submit" class="btn">Sign in!</button>
+				                        <button type="submit" class="btn" onclick="loading('Realizando el login...');">Sign in!</button>
 				                    </g:form>
 			                    </div>
 		                    </div>

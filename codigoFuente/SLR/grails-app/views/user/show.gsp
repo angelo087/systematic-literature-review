@@ -53,11 +53,29 @@
     		document.getElementById('btn_friend_2').innerHTML = "<i class='glyphicon glyphicon-thumbs-up'></i> Agregar a mis amigos";
 		}
 	}
+
+	function showMsgSynchro()
+	{
+		if(${isSynchro != null && isSynchro})
+		{
+			document.getElementById('divSuccess').style.display = "";
+			setTimeout(function(){
+				document.getElementById('divSuccess').style.display = "none";
+			}, 5000);
+		}
+		else if(${isSynchro != null && !isSynchro})
+		{
+			document.getElementById('divError').style.display = "";
+			setTimeout(function(){
+				document.getElementById('divError').style.display = "none";
+			}, 5000);
+		}
+	}
     </script>
     
 </head>
 
-<body>
+<body onload="showMsgSynchro();">
 
     <div id="wrapper">
 
@@ -76,6 +94,11 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            
+     		<div class="row">
+				<div id="divSuccess" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Sincronización realizada correctamente.</div>
+				<div id="divError" class="alert alert-danger" role="alert" style="display: none;"><i class="fa fa-remove fa-fw"></i> Hubo problemas al sincronizar.</div>
+			</div>
             
             <div class="row">
                 <div class="col-lg-3">
@@ -146,8 +169,7 @@
 									<p><b>Intereses: </b>${profileInstance.research_interests}</p>
 									<p><b>Estado académico: </b>${profileInstance.academic_status}</p>
 									<p><b>Localización: </b>${profileInstance.locationName}</p>
-									<p><b>Localización: </b>${profileInstance.discipline}</p>
-									
+									<p><b>Disciplina: </b>${profileInstance.discipline}</p>									
 								</div>
 								<div style="float: left; margin-top:10px; clear: both;">
 									<p><b>Información Biográfica: </b></p>

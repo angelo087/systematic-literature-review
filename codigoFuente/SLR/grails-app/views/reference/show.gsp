@@ -74,15 +74,15 @@
 					<div class="col-lg-12">
 						<h1 class="page-header">${referenceInstance.title}</h1>
 						<g:if test="${userOwnerInstance.id == User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).id}">
-							<g:submitButton class="btn btn-success" name="create" value="Guardar cambios"/>
+							<g:submitButton class="btn btn-success" name="create" value="Guardar cambios" onclick="loading('Aplicando cambios...');" />
 							<g:if test="${!noDrop}">
-								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar Referencia</button>
+								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" onclick="loading('Eliminando...');">Eliminar Referencia</button>
 							</g:if>
 							<g:else>
 								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" disabled="disabled">Eliminar Referencia</button>
 							</g:else>
 							<g:link type="button" class="btn btn-primary" controller="reference" action="exportReferenceToBibTex" params="[idmend: "${referenceInstance.idmend}"]">Exportar BibTex</g:link>
-							<g:link type="button" class="btn btn-primary" controller="reference" action="sychronizeReferenceMend" params="[idmend: "${referenceInstance.idmend}"]">Sincronizar (Mendeley)</g:link>
+							<g:link type="button" class="btn btn-primary" controller="reference" action="sychronizeReferenceMend" onclick="loading('Sincronizando con Mendeley...');" params="[idmend: "${referenceInstance.idmend}"]">Sincronizar (Mendeley)</g:link>
 							<p> </p>
 						</g:if>
 					</div>
