@@ -221,6 +221,8 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		userProfile.discipline = (profile.getDiscipline() == null ? "" : profile.getDiscipline().toString())
 		
 		Education.deleteAll(Education.findAllByProfile(userProfile))
+		
+		userProfile.save(failOnError: true, flush: true)
 		if (profile.getEducation().size() > 0)
 		{
 			for(mendeley.pfc.schemas.Education ed : profile.getEducation())
