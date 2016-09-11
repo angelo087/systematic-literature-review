@@ -243,8 +243,9 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		return education;
 	}
 	
-	boolean createSlrMendeley(User userInstance, String titleSlr)
+	boolean createSlrMendeley(User userInstance, Slr slrInstance)
 	{
+		String titleSlr = slrInstance.title
 		boolean isCreated = false
 		try
 		{
@@ -268,6 +269,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			if (folder == null)
 			{
 				folder = folderService.createFolder(titleSlr)
+				slrInstance.idmend = folder.getId()
 			}
 			
 			// Comprobamos que las subcarpetas (por engine) se encuentran

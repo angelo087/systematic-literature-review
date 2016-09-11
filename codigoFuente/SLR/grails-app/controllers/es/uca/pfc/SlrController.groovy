@@ -323,6 +323,7 @@ class SlrController {
 		String tituloSlr = params.titulo.toString()
 		String justificacionSlr = params.justificacion.toString()
 		User userInstance = User.get(Long.parseLong(springSecurityService.principal.id.toString()))
+		String error = ""
 		
 		if(userInstance == null)
 		{
@@ -330,42 +331,41 @@ class SlrController {
 		}
 		else if (tituloSlr.equals("null") || tituloSlr.length() <= 5 )
 		{
-			redirect(controller: 'slr', action: 'myList',
-				params: [error: 'ERROR: El nombre debe contener mas de cinco caracteres.',
-						 tituloSlr: params.titulo,
-						 justificacionSlr: params.justificacion])
+			error = "ERROR: El nombre debe contener mas de cinco caracteres."
 		}
 		else if (justificacionSlr.equals("null") || justificacionSlr.length() <= 2 )
 		{
+			error = "ERROR: La justificacion debe contener mas de dos caracteres."
+		}
+		else
+		{
+			tituloSlr = "SLR: " + params.titulo.toString().trim()
+			
+			def mySlrs = Slr.findAllByUserProfileAndTitleLike(userInstance.userProfile, tituloSlr)
+			
+			if(mySlrs.size() > 0) // Hay repetidos con ese nombre
+			{
+				error = "ERROR: Ya existe otro SLR con ese nombre."
+			}
+		}
+		
+		if(!error.equals(""))
+		{
 			redirect(controller: 'slr', action: 'myList',
-				params: [error: 'ERROR: La justificacion debe contener mas de dos caracteres.',
+				params: [error: error,
 						 tituloSlr: params.titulo,
 						 justificacionSlr: params.justificacion])
 		}
 		else
 		{
-			tituloSlr = params.titulo.toString().trim()
-				
-			def mySlrs = Slr.findAllByUserProfileAndTitleLike(userInstance.userProfile, tituloSlr)
-				
-			if(mySlrs.size() > 0) // Hay repetidos con ese nombre
-			{
-				redirect(controller: 'slr', action: 'myList',
-					params: [error: 'ERROR: Ya existe otro SLR con ese nombre.',
-							 tituloSlr: params.titulo,
-							 justificacionSlr: params.justificacion])
-			}
-			else
-			{
-				// Creamos el Slr en BD
-				Slr newSlrInstance = new Slr(title: tituloSlr, justification: justificacionSlr, userProfile: userInstance.userProfile, idmend: tituloSlr)
-				newSlrInstance.save flush: true
-				
-				// Creamos el Slr en Mendeley
-				mendeleyToolService.createSlrMendeley(userInstance, tituloSlr)
-				
-				redirect(controller: 'slr', action: 'myList', params: [success: true])
-			}
+			// Creamos el Slr en BD
+			Slr newSlrInstance = new Slr(title: tituloSlr, justification: justificacionSlr, userProfile: userInstance.userProfile, idmend: tituloSlr)
+			newSlrInstance.save flush: true
+			
+			// Creamos el Slr en Mendeley
+			mendeleyToolService.createSlrMendeley(userInstance, newSlrInstance)
+			
+			redirect(controller: 'slr', action: 'myList', params: [success: true])
 		}
 	}
 	

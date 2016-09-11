@@ -114,7 +114,7 @@
 				    		<table>
 				    			<tr>
 				    				<td><b>Titulo:</b></td>
-				    				<td><input id="titulo" type="text" name="titulo" class="form-control" value="${tituloSlr}" /></td>
+				    				<td><div class="input-group" id="in-tit-slr"><span class="input-group-addon" id="basic-addon1">SLR</span><input id="titulo" type="text" name="titulo" class="form-control" value="${tituloSlr}" aria-describedby="in-tit-slr" /></div></td>
 				    			</tr>
 				    			<tr>
 				    				<td><b>Justificación:</b></td>
@@ -313,7 +313,7 @@
             	<div class="col-lg-12">
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>
-	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley"  onclick="loading('Sincronizando con Mendeley...');">Sincronizar (Mendeley)</g:link>
+	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="loading('Sincronizando con Mendeley...');">Sincronizar (Mendeley)</g:link>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-myslrs">
                         <thead>
