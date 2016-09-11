@@ -41,7 +41,7 @@ class SearchController {
 				def maxYearSearch = (null == params.maxYearSearch ? Calendar.getInstance().get(Calendar.YEAR) : Integer.parseInt(params.maxYearSearch.toString()))
 				def maxTotalSearch = params.maxTotalSearch
 				
-				def engineListInstance = EngineSearch.findAllByStatus(true)
+				def engineListInstance = EngineSearch.findAllByStatusAndNameNotEqual(true, "other")
 				def operatorListInstance = SearchOperator.list(sort:'name', order: 'asc')
 				def componentListInstance = SearchComponent.list(sort:'name', order: 'asc')
 				def minYear = 1980

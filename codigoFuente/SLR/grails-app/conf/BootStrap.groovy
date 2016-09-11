@@ -96,6 +96,7 @@ class BootStrap {
 		def engine02 = EngineSearch.findByName('IEEE') ?: new EngineSearch(name: 'IEEE', display_name: 'IEEE Computer Society', image: 'ieee.jpeg', text: 'IEEE').save(failOnError: true)
 		def engine03 = EngineSearch.findByName('SCIENCE') ?: new EngineSearch(name: 'SCIENCE', display_name: 'Science Direct', image: 'science.jpeg', text: 'SCIENCE').save(failOnError: true)
 		def engine04 = EngineSearch.findByName('SPRINGER') ?: new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER').save(failOnError: true)
+		def engine05 = EngineSearch.findByName('OTHER') ?: new EngineSearch(name: 'OTHER', display_name: 'Other engines', image: 'other.png', text: 'OTHER').save(failOnError: true)
 		
 		println "Creamos Usuarios de prueba..."
 		
@@ -274,6 +275,7 @@ class BootStrap {
 		def search15 = new Search(startYear: "2009", endYear: "2011", maxTotal: 8)
 		
 		search01.addToEngines(engine01); search01.addToTermParams(terms01)
+		search01.addToEngines(engine05); search01.addToTermParams(terms01)
 		search01.addToEngines(engine04); search01.addToTermParams(terms02)
 		search02.addToEngines(engine02); search02.addToTermParams(terms03)
 		search02.addToEngines(engine03); search02.addToTermParams(terms04)
@@ -306,7 +308,7 @@ class BootStrap {
 		search15.addToEngines(engine03); search15.addToTermParams(terms31)
 	
 		println "Creamos las referencias..."
-		def reference01 = new Reference(idmend : 'mend01', engine: engine01, title : 'Reference 1', type : type01, docAbstract : 'Abstract 1', source : 'Source 1', year : '1987',    keywords: ["key1", "key2", "key3"], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi1', city : 'Cadiz', institution : 'Institution 1', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey1', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 1')
+		def reference01 = new Reference(idmend : 'mend01', engine: engine05, title : 'Reference 1', type : type01, docAbstract : 'Abstract 1', source : 'Source 1', year : '1987',    keywords: ["key1", "key2", "key3"], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi1', city : 'Cadiz', institution : 'Institution 1', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey1', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 1')
 		def reference02 = new Reference(idmend : 'mend02', engine: engine02, title : 'Reference 2', type : type02, docAbstract : 'Abstract 2', source : 'Source 2', year : '1987',    keywords: ['key5', 'key3', 'key2'], pages : '1', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi2', city : 'Madrid', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag2', 'tag3'], citation_key : 'citationkey2', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 2')
 		def reference03 = new Reference(idmend : 'mend03', engine: engine03, title : 'Reference 3', type : type03, docAbstract : 'Abstract 3', source : 'Source 3', year : '1987',    keywords: ['key5', 'key2', 'key3'], pages : '2', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi3', city : 'Teruel', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag3'], citation_key : 'citationkey3', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 3')
 		def reference04 = new Reference(idmend : 'mend04', engine: engine04, title : 'Reference 4', type : type04, docAbstract : 'Abstract 4', source : 'Source 4', year : '1987',    keywords: ['key6', 'key2', 'key3'], pages : '3', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi4', city : 'Avila', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag1'], citation_key : 'citationkey4', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Literature', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 4')
