@@ -40,7 +40,7 @@ public class ProfileService {
 	    
 	    int status = httpclient.executeMethod(get);
 	    
-	    String responseBody = get.getResponseBodyAsString();
+	    String responseBody = new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -60,11 +60,11 @@ public class ProfileService {
 		
 		get.addRequestHeader("access_token", mendeleyService.getTokenResponse().getAccessToken());
 	    get.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
-	    get.addRequestHeader("Accept", "application/vnd.mendeley-profiles.1+json");
+	    get.addRequestHeader("Accept", "application/vnd.mendeley-profiles.1+json;");
 	    
 	    int status = httpclient.executeMethod(get);
 	    
-	    String responseBody = get.getResponseBodyAsString();
+	    String responseBody = new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -104,14 +104,12 @@ public class ProfileService {
 	    jsonstring = jsonstring.replaceAll("\"disciplines\":\\[\\],", "");
 	    jsonstring = jsonstring.replaceAll("\"discipline\":\\{\"subdisciplines\":\\[\\]\\},", "");
 	    
-	    System.out.println("JSON: " + jsonstring);
-	    
 	    StringRequestEntity requestEntity = new StringRequestEntity(jsonstring, "application/json", "UTF-8");
 	    patch.setRequestEntity(requestEntity);
 	    
 	    int status = httpclient.executeMethod(patch);
 	    
-	    String responseBody = patch.getResponseBodyAsString();
+	    String responseBody = new String(patch.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);

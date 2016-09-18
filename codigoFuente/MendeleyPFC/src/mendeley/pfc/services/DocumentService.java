@@ -60,7 +60,7 @@ public class DocumentService {
 	    
 	    int status = httpclient.executeMethod(get);
 	    
-	    String responseBody = get.getResponseBodyAsString();
+	    String responseBody = new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    responseBody = responseBody.replace("\"abstract\":", "\"docAbstract\":");
 		JsonParser parser = new JsonParser();
@@ -116,7 +116,7 @@ public class DocumentService {
 		gsonBuilder.registerTypeAdapter(TypeDocument.class, new TypeDocumentDeserializer());
 		Gson gson = gsonBuilder.create();
 		Type typeListDocument = new TypeToken<List<Document>>(){}.getType();
-		List<Document> documents = gson.fromJson(get.getResponseBodyAsString(), typeListDocument);
+		List<Document> documents = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListDocument);
 	    		
 		return documents;
 	}
@@ -144,7 +144,7 @@ public class DocumentService {
 		gsonBuilder.registerTypeAdapter(TypeDocument.class, new TypeDocumentDeserializer());
 		Gson gson = gsonBuilder.create();
 		Type typeListDocument = new TypeToken<List<Document>>(){}.getType();
-		List<Document> documents = gson.fromJson(get.getResponseBodyAsString(), typeListDocument);
+		List<Document> documents = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListDocument);
 	    		
 		return documents;
 	}
@@ -198,7 +198,7 @@ public class DocumentService {
 	    
 	    int status = httpclient.executeMethod(post);
 	    
-	    String responseBody = post.getResponseBodyAsString();
+	    String responseBody = new String(post.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    responseBody = responseBody.replaceAll("\"abstract\"", "\"docAbstract\"");
 		
 	    JsonParser parser = new JsonParser();
@@ -261,7 +261,7 @@ public class DocumentService {
 	    
 	    int status = httpclient.executeMethod(patch);
 	    
-	    String responseBody = patch.getResponseBodyAsString();
+	    String responseBody = new String(patch.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    responseBody = responseBody.replaceAll("\"abstract\"", "\"docAbstract\"");
 		
 	    JsonParser parser = new JsonParser();
@@ -286,7 +286,7 @@ public class DocumentService {
 	    
 	    int status = httpclient.executeMethod(delete);
 	    
-	    String responseBody = delete.getResponseBodyAsString();
+	    String responseBody = new String(delete.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	}
 	
 	public void deleteDocument(Document document) throws HttpException, IOException, MendeleyException

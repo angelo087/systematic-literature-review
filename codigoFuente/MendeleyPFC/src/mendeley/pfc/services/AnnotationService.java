@@ -44,7 +44,7 @@ public class AnnotationService {
 	    
 	    Gson gson = new Gson();
 		Type typeListAnnotation = new TypeToken<List<Annotation>>(){}.getType();
-		List<Annotation> annotations = gson.fromJson(get.getResponseBodyAsString(), typeListAnnotation);
+		List<Annotation> annotations = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListAnnotation);
 		
 		return annotations;
 	}
@@ -72,7 +72,7 @@ public class AnnotationService {
 	    
 	    System.out.println("STATUS CREATED: " + status);
 	    
-	    String responseBody = post.getResponseBodyAsString();
+	    String responseBody = new String(post.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -105,7 +105,7 @@ public class AnnotationService {
 	    
 	    int status = httpclient.executeMethod(patch);
 	    
-	    String responseBody = patch.getResponseBodyAsString();
+	    String responseBody = new String(patch.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -163,6 +163,6 @@ public class AnnotationService {
 	    
 	    int status = httpclient.executeMethod(delete);
 	    
-	    String responseBody = delete.getResponseBodyAsString();
+	    String responseBody = new String(delete.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	}
 }

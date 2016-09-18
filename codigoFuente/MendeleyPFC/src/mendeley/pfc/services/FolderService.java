@@ -81,7 +81,7 @@ public class FolderService
 	    
 	    Gson gson = new Gson();
 		Type typeListFolder = new TypeToken<List<Folder>>(){}.getType();
-		folders = gson.fromJson(get.getResponseBodyAsString(), typeListFolder);
+		folders = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListFolder);
 	    	    
 		return folders;
 	}
@@ -241,7 +241,7 @@ public class FolderService
 	    	throw new MendeleyException("FolderService.createFolder(String name) -> status = ." + status);
 	    }
 	    
-	    String responseBody = post.getResponseBodyAsString();
+	    String responseBody = new String(post.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -364,7 +364,7 @@ public class FolderService
 	    patch.setRequestEntity(requestEntity);
 
 	    int status = httpclient.executeMethod(patch);
-	    String responseBody = patch.getResponseBodyAsString();
+	    String responseBody = new String(patch.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
@@ -487,7 +487,7 @@ public class FolderService
 
 	    int status = httpclient.executeMethod(get);
 
-	    Library libreria = new Library(get.getResponseBodyAsString());
+	    Library libreria = new Library(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"));
 		
 		return libreria.getDocumentsIds();
 	}
