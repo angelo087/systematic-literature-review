@@ -30,58 +30,33 @@ public class FolderServiceTest {
 			FolderService folderService = new FolderService(mendeleyService);
 			DocumentService documentService = new DocumentService(mendeleyService);
 			
-			List<Folder> folders = folderService.getAllFolders();
+			/*folderService.createFolder("Carpeta Creada");
 			
-			for(Folder folder : folders)
+			for(Folder folder : folderService.getAllFolders())
 			{
-				if(folder.getParent() == null || folder.getParent() == "")
+				if(folder.getParent() == null || folder.getParent().equals(""))
 				{
-					System.out.println(folder.getId() + " -> " + folder.getName());
+					System.out.println(folder.getName());
 				}
 				else
 				{
-					System.out.println("\t" + folder.getId() + " -> " + folder.getName());
+					System.out.println("- " + folder.getName());
 				}
+			}*/
+			
+			//folderService.createSubFolderByIdParent("other", "1aacc5c4-ee2b-4292-9b26-95fe2744542e");
+			
+			Folder folder = folderService.getFolderById("1aacc5c4-ee2b-4292-9b26-95fe2744542e");
+			
+			System.out.println(folder.getName());
+			
+			List<Folder> subfolders = folderService.getSubFolders(folder);
+			
+			for(Folder subfolder : subfolders)
+			{
+				System.out.println("- "+subfolder.getName());
 			}
 			
-			//fa1c3ae3-82ea-4ed7-aedc-4ac7d01f0760 -> acm
-			//23be5f27-ede6-3447-bcbc-c34774005963 -> document
-
-			Document document = documentService.getDocument("23be5f27-ede6-3447-bcbc-c34774005963");
-			
-			System.out.println("ID -> " + document.getId());
-			System.out.println("TITLE -> " + document.getTitle());
-			System.out.println("ABSTRACT -> " + document.getAbstract());
-			System.out.println("SOURCE -> " + document.getSource());
-			System.out.println("YEAR -> " + document.getYear());
-			System.out.println("PAGES -> " + document.getPages());
-			System.out.println("VOLUME -> " + document.getVolume());
-			System.out.println("ISSUE -> " + document.getIssue());
-			System.out.println("PUBLISHER -> " + document.getPublisher());
-			System.out.println("CITY -> " + document.getCity());
-			System.out.println("INSTITUTION -> " + document.getInstitution());
-			System.out.println("SERIES -> " + document.getSeries());
-			System.out.println("CHAPTER -> " + document.getChapter());
-			System.out.println("CITATION KEY-> " + document.getCitationKey());
-			System.out.println("SOURCE TYPE -> " + document.getSourceType());
-			System.out.println("GENRE -> " + document.getGenre());
-			System.out.println("COUNTRY -> " + document.getCountry());
-			System.out.println("DEPARTMENT -> " + document.getDepartment());
-			System.out.println("ARXIV -> " + document.getIdentifiers().getArxiv());
-			System.out.println("DOI -> " + document.getIdentifiers().getDoi());
-			System.out.println("ISBN -> " + document.getIdentifiers().getIsbn());
-			System.out.println("ISSN -> " + document.getIdentifiers().getIssn());
-			System.out.println("PMID -> " + document.getIdentifiers().getPmid());
-			System.out.println("SCOPUS -> " + document.getIdentifiers().getScopus());
-			System.out.println("MONTH -> " + document.getMonth());
-			System.out.println("DAY -> " + document.getDay());
-			System.out.println("FILE ATTACHED -> " + document.getFileAttached());
-			System.out.println("BIBTEX -> " + documentService.getBibtex(document));
-			System.out.println("KEYWORDS -> " + document.getKeywords());
-			System.out.println("WEBSITES -> " + document.getWebsites());
-			System.out.println("TAGS -> " + document.getTags());
-			System.out.println("TYPE -> " + document.getType());
-			System.out.println("LANGUAGE -> " + document.getLanguage());
 		}
 		catch(Exception ex)
 		{

@@ -3,7 +3,7 @@ package mendeley.pfc.commons;
 public class MendeleyUrl 
 {
 	// FOLDERS
-	public static final String FOLDER_LIST_ALL = "https://api.mendeley.com/folders";
+	public static final String FOLDER_LIST_ALL = "https://api.mendeley.com/folders?limit={limit}";
 	public static final String FOLDER_CREATE   = "https://api.mendeley.com/folders/";
 	public static final String FOLDER_DELETE   = "https://api.mendeley.com/folders/{id}";
 	public static final String FOLDER_LIST_DOCUMENTS = "https://api.mendeley.com/folders/{id}/documents?limit={limit}";

@@ -30,6 +30,7 @@ public class FolderService
 	private MendeleyService mendeleyService;
 	
 	public static final int LIMIT_DOCUMENTS_BY_FOLDER = 500;
+	public static final int LIMIT_FOLDERS = 500;
 	
 	/**
 	 * Constructor clase FolderService
@@ -50,15 +51,7 @@ public class FolderService
 	 */
 	public MendeleyService getMendeleyService() { return mendeleyService; }
 	
-	/**
-	 * Listado de todas las carpetas de un usuario.
-	 * 
-	 * @return Carpetas del usuario.
-	 * @throws HttpException
-	 * @throws IOException
-	 * @throws MendeleyException
-	 */
-	public List<Folder> getAllFolders() throws HttpException, IOException, MendeleyException
+	public List<Folder> getAllFolders(int limit) throws HttpException, IOException, MendeleyException
 	{
 		MendeleyUtils.validateIsNotNull(mendeleyService, "mendeleyService");
 		
@@ -66,7 +59,7 @@ public class FolderService
 		
 		HttpClient httpclient = new HttpClient();
 		
-		GetMethod get = new GetMethod(MendeleyUrl.FOLDER_LIST_ALL);
+		GetMethod get = new GetMethod(MendeleyUrl.FOLDER_LIST_ALL.replaceAll("\\{limit\\}", Integer.toString(limit)));
 		
 		get.addRequestHeader("access_token", mendeleyService.getTokenResponse().getAccessToken());
 	    get.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
@@ -78,12 +71,25 @@ public class FolderService
 	    {
 	    	throw new MendeleyException("FolderService.getAllFolders() -> status = ." + status);
 	    }
-	    
+
 	    Gson gson = new Gson();
 		Type typeListFolder = new TypeToken<List<Folder>>(){}.getType();
 		folders = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListFolder);
-	    	    
+	    
 		return folders;
+	}
+	
+	/**
+	 * Listado de todas las carpetas de un usuario.
+	 * 
+	 * @return Carpetas del usuario.
+	 * @throws HttpException
+	 * @throws IOException
+	 * @throws MendeleyException
+	 */
+	public List<Folder> getAllFolders() throws HttpException, IOException, MendeleyException
+	{
+		return getAllFolders(LIMIT_FOLDERS);
 	}
 	
 	/**
@@ -238,7 +244,7 @@ public class FolderService
 	    
 	    if(status != 201)
 	    {
-	    	throw new MendeleyException("FolderService.createFolder(String name) -> status = ." + status);
+	    	throw new MendeleyException("FolderService.createFolder(String name) -> status = " + status);
 	    }
 	    
 	    String responseBody = new String(post.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
