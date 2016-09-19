@@ -1,5 +1,7 @@
 package es.uca.pfc
 
+import mendeley.pfc.services.MendeleyService
+
 class LoginMendeleyController {
 	
 	def springSecurityService
@@ -44,7 +46,9 @@ class LoginMendeleyController {
 		}
 		else
 		{
-			if(!mendeleyToolService.isRegisteredMendeley(jUsername, jPassword))
+			MendeleyService mendeleyService = mendeleyToolService.getTokenResponseMendeley(jUsername, jPassword)
+			
+			if(mendeleyService == null)
 			{
 				error = "Username/Password no correctos."
 				redirect(controller: "loginMendeley", action: "auth", params: [j_username: jUsername, error: error])
@@ -53,10 +57,15 @@ class LoginMendeleyController {
 			{
 				/*if(!passwordEncoder.isPasswordValid(userInstance.password, jPassword, null))
 				{*/
+					def jPasswordEnc = mendeleyToolService.encodePasswordMendeley(jPassword)				
 					userInstance.password = jPassword
 					userInstance.save(failOnError: true, flush: true)
 					userInstance.userMendeley.email_mend = jUsername
-					userInstance.userMendeley.pass_mend = jPassword
+					userInstance.userMendeley.pass_mend = jPasswordEnc
+					userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken()
+					userInstance.userMendeley.token_type = mendeleyService.getTokenResponse().getTokenType()
+					userInstance.userMendeley.expires_in = mendeleyService.getTokenResponse().getExpiresIn()
+					userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken()
 					userInstance.userMendeley.save(failOnError: true, flush: true)
 				/*}*/
 
