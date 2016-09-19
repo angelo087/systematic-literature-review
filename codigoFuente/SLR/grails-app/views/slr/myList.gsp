@@ -71,6 +71,14 @@
 					document.getElementById('divSuccessQuestion').style.display = "none";
 				}, 5000);
 			}
+			else if (${null != errorSynchro && errorSynchro != ""})
+			{
+				document.getElementById('divErrorSynchro').style.display = "";
+				//setTimeout(hideSuccess, 5000);
+				setTimeout(function(){
+					document.getElementById('divErrorSynchro').style.display = "none";
+				}, 5000);
+			}
 		}
 		function getIdSlr(id)
 		{
@@ -310,6 +318,7 @@
             	<div id="divSuccessCriterion" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Criterio creado correctamente.</div>
             	<div id="divSuccessAttribute" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Atributo creado correctamente.</div>
             	<div id="divSuccessQuestion" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Pregunta creada correctamente.</div>
+            	<div id="divErrorSynchro" class="alert alert-danger" role="alert" style="display: none;"><i class="fa fa-remove fa-fw"></i> Problemas de sincronización. Inténtelo más tarde.</div>
             	<div class="col-lg-12">
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>

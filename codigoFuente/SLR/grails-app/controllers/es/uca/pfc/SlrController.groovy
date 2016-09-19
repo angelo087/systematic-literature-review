@@ -142,6 +142,13 @@ class SlrController {
 			{
 				enunciadoQuestion = params.enunciadoQuestion.toString()
 			}
+			
+			def errorSynchro = ""
+
+			if(params.isSynchro != null && params.isSynchro.toString().equals("false"))
+			{
+				errorSynchro = "Ha habido problemas de sincronización. Inténtelo más tarde."
+			}
 						
 			def userInstance = User.get(springSecurityService.principal.id)
 			def slrListInstance = userInstance.userProfile.slrs
@@ -169,7 +176,8 @@ class SlrController {
 			 errorAttribute: errorAttribute,
 			 enunciadoQuestion: enunciadoQuestion,
 			 errorQuestion: errorQuestion,
-			 successQuestion: successQuestion
+			 successQuestion: successQuestion,
+			 errorSynchro: errorSynchro
 			]
 		}
 	}
@@ -695,9 +703,9 @@ class SlrController {
 			// Si no existe el guid, redirigimos a index
 			def userLogin = User.get(springSecurityService.principal.id)
 			
-			mendeleyToolService.synchronizeSlrList(userLogin)
-			
-			redirect(controller: 'slr', action: 'myList')
+			boolean isSynchro = mendeleyToolService.synchronizeSlrList(userLogin)
+
+			redirect(controller: 'slr', action: 'myList', params: [isSynchro: isSynchro])
 		}
 	}
 	

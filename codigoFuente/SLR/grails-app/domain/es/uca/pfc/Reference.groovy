@@ -79,12 +79,12 @@ class Reference implements Comparator<Reference> {
 			}
 		}
 		
-		applyEncode();
+		//applyEncode();
 	}
 	
 	def beforeUpdate = {
 		last_modified = new Date()
-		applyEncode();
+		//applyEncode();
 	}
 	
 	def beforeDelete = {

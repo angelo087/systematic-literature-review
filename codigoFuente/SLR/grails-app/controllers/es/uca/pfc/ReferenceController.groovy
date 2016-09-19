@@ -34,11 +34,20 @@ class ReferenceController {
 			}
 			else
 			{
+				def error = (params.error != null ? params.error : "")
+				def isSynchro = (params.isSynchro != null ? params.isSynchro : "")
 				def success = false
 				if (null != params.success)
 				{
-					success = true
+					//success = true
+					success = params.success
 				}
+				
+				if(error == "" && isSynchro.toString().equals("false"))
+				{
+					error = "ERROR: Cambios guardados pero no sincronizados con Mendeley. Inténtelo más tarde."
+				}
+				
 				// Listamos los autores en una sola cadena de texto
 				String listAuthorsString = ""
 				int cont = 0
@@ -102,7 +111,7 @@ class ReferenceController {
 					listWebsString: listWebsString,
 					listTagsString: listTagsString,
 					userOwnerInstance: userOwnerInstance,
-					error: (params.error != null ? params.error : ""),
+					error: error,
 					success: success,
 					noDrop: noDrop
 				]
@@ -121,175 +130,190 @@ class ReferenceController {
 		}
 		else
 		{
-			def referenceInstance = Reference.findByIdmend(idmend)
+			User userInstance = User.get(springSecurityService.principal.id)
 			
-			if (null == referenceInstance)
+			if(userInstance == null)
 			{
 				redirect(controller: 'index', action: 'index')
 			}
 			else
 			{
-				if (params.inputTitle.toString().equals("") || params.inputTitle.toString().size() < 5)
+				
+				def referenceInstance = Reference.findByIdmend(idmend)
+				
+				if (null == referenceInstance)
 				{
-					redirect(controller: 'reference', action: 'show',
-							params: [
-										idmend: idmend,
-										error: 'ERROR: El t�tulo debe contener mas de cinco caracteres.'
-									])
-				}
-				else if(params.inputAuthors.toString().equals("") || !toolService.validateAuthorString(params.inputAuthors.toString()))
-				{
-					redirect(controller: 'reference', action: 'show',
-							params: [
-										idmend: idmend,
-										error: 'ERROR: Debe haber al menos un autor o el formato para un autor no es correcto.'
-									])
+					redirect(controller: 'index', action: 'index')
 				}
 				else
 				{
-					referenceInstance.title = (null != params.inputTitle ? params.inputTitle : "")
-					referenceInstance.source = (null != params.inputSource ? params.inputSource : "")
-					referenceInstance.source_type = (null != params.inputSourceType ? params.inputSourceType : "")
-					referenceInstance.pages = (null != params.inputPages ? params.inputPages : "")
-					referenceInstance.volume = (null != params.inputVolume ? params.inputVolume : "")
-					referenceInstance.issue = (null != params.inputIssue ? params.inputIssue : "")
-					referenceInstance.country = (null != params.inputCountry ? params.inputCountry : "")
-					referenceInstance.department = (null != params.inputDepartment ? params.inputDepartment : "")
-					referenceInstance.docAbstract = (null != params.inputAbstract ? params.inputAbstract : "")
-					referenceInstance.publisher = (null != params.inputPublisher ? params.inputPublisher : "")
-					referenceInstance.city = (null != params.inputCity ? params.inputCity : "")
-					referenceInstance.institution = (null != params.inputInstitution ? params.inputInstitution : "")
-					referenceInstance.series = (null != params.inputSeries ? params.inputSeries : "")
-					referenceInstance.chapter = (null != params.inputChapter ? params.inputChapter : "")
-					referenceInstance.genre = (null != params.inputGenre ? params.inputGenre : "")
-					referenceInstance.notes = (null != params.inputNotes ? params.inputNotes : "")
-					
-					referenceInstance.type = TypeDocument.findByNomenclatura(params.selectType.toString())
-					referenceInstance.criterion = Criterion.findByNomenclatura(params.selectCriterion.toString())
-					referenceInstance.language = Language.findByCode(params.selectLanguage.toString())
-					
-					// Keywords
-					referenceInstance.keywords.clear()
-					if (!params.inputKeys.toString().equals(""))
+					def error = ""
+					if (params.inputTitle.toString().equals("") || params.inputTitle.toString().size() < 5)
 					{
-						String[] arrayElements = params.inputKeys.toString().trim().toLowerCase().split(";")
-						for(String e : arrayElements)
-						{
-							if (!(e.trim().equals("") || e.trim().equals(" ")))
-							{
-								referenceInstance.addToKeywords(e.trim())
-							}
-						}
+						error = "ERROR: El título debe contener mas de cinco caracteres"
+					}
+					else if(params.inputAuthors.toString().equals("") || !toolService.validateAuthorString(params.inputAuthors.toString()))
+					{
+						error = "ERROR: Debe haber al menos un autor o el formato para un autor no es correcto."
 					}
 					
-					// Websites
-					referenceInstance.websites.clear()
-					if (!params.inputWebs.toString().equals(""))
+					if(!error.equals(""))
 					{
-						String[] arrayElements = params.inputWebs.toString().trim().toLowerCase().split(";")
-						for(String e : arrayElements)
-						{
-							if (!(e.trim().equals("") || e.trim().equals(" ")))
-							{
-								referenceInstance.addToWebsites(e.trim())
-							}
-						}
+						redirect(controller: 'reference', action: 'show',
+							params: [
+										idmend: idmend,
+										error: error
+									])
 					}
-					
-					// Tags
-					referenceInstance.tags.clear()
-					if (!params.inputTags.toString().equals(""))
+					else
 					{
-						String[] arrayElements = params.inputTags.toString().trim().toLowerCase().split(";")
-						for(String e : arrayElements)
-						{
-							if (!(e.trim().equals("") || e.trim().equals(" ")))
-							{
-								referenceInstance.addToTags(e.trim())
-							}
-						}
-					}
-					
-					referenceInstance.save(failOnError: true)
-					
-					// Authors
-					Set<Long> ids = new HashSet<Long>()
-					
-					for(AuthorReference ar : referenceInstance.authorsRefs)
-					{
-						ids.add(ar.id)
-					}
-					
-					for(Long i : ids)
-					{
-						AuthorReference.executeUpdate("delete AuthorReference ar where ar.id = :arid", [arid:i])
-					}
-					
-					referenceInstance.authorsRefs.clear()
-					referenceInstance.save(failOnError: true)
-
-					if (!params.inputAuthors.toString().equals(""))
-					{
-						Set<Author> authors = new HashSet<Author>()
-						String[] arrayElements = params.inputAuthors.toString().trim().split(";")
+						referenceInstance.title = (null != params.inputTitle ? params.inputTitle : "")
+						referenceInstance.source = (null != params.inputSource ? params.inputSource : "")
+						referenceInstance.source_type = (null != params.inputSourceType ? params.inputSourceType : "")
+						referenceInstance.pages = (null != params.inputPages ? params.inputPages : "")
+						referenceInstance.volume = (null != params.inputVolume ? params.inputVolume : "")
+						referenceInstance.issue = (null != params.inputIssue ? params.inputIssue : "")
+						referenceInstance.country = (null != params.inputCountry ? params.inputCountry : "")
+						referenceInstance.department = (null != params.inputDepartment ? params.inputDepartment : "")
+						referenceInstance.docAbstract = (null != params.inputAbstract ? params.inputAbstract : "")
+						referenceInstance.publisher = (null != params.inputPublisher ? params.inputPublisher : "")
+						referenceInstance.city = (null != params.inputCity ? params.inputCity : "")
+						referenceInstance.institution = (null != params.inputInstitution ? params.inputInstitution : "")
+						referenceInstance.series = (null != params.inputSeries ? params.inputSeries : "")
+						referenceInstance.chapter = (null != params.inputChapter ? params.inputChapter : "")
+						referenceInstance.genre = (null != params.inputGenre ? params.inputGenre : "")
+						referenceInstance.notes = (null != params.inputNotes ? params.inputNotes : "")
 						
-						for(String e : arrayElements)
+						referenceInstance.type = TypeDocument.findByNomenclatura(params.selectType.toString())
+						referenceInstance.criterion = Criterion.findByNomenclatura(params.selectCriterion.toString())
+						referenceInstance.language = Language.findByCode(params.selectLanguage.toString())
+						
+						// Keywords
+						referenceInstance.keywords.clear()
+						if (!params.inputKeys.toString().equals(""))
 						{
-							if (!(e.trim().equals("") || e.trim().equals(" ")))
+							String[] arrayElements = params.inputKeys.toString().trim().toLowerCase().split(";")
+							for(String e : arrayElements)
 							{
-								def author = Author.findByDisplay_nameIlike(e.trim())
-								
-								// Si no existe, lo creamos
-								if(null == author)
+								if (!(e.trim().equals("") || e.trim().equals(" ")))
 								{
-									String[] arrayDisplayName = e.trim().split(" ")
-									if(arrayDisplayName.size() < 2)
-									{
-										// error
-									}
-									else
-									{
-										String nombre = ""
-										String apellidos = ""
-										
-										nombre = arrayDisplayName[0].toString().trim().substring(0,1).toUpperCase() + arrayDisplayName[0].toString().trim().substring(1).toLowerCase()
-										
-										for(int i=1; i<arrayDisplayName.size(); i++)
-										{
-											apellidos += arrayDisplayName[i].toString().trim().substring(0,1).toUpperCase() + arrayDisplayName[i].toString().trim().substring(1).toLowerCase() + " "
-										}
-										
-										author = new Author(forename: nombre, surname: apellidos)
-										author.save(failOnError: true)
-									}
+									referenceInstance.addToKeywords(e.trim())
 								}
-								
-								authors.add(author)
 							}
 						}
 						
-						for(Author author : authors)
+						// Websites
+						referenceInstance.websites.clear()
+						if (!params.inputWebs.toString().equals(""))
 						{
-							author.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
+							String[] arrayElements = params.inputWebs.toString().trim().toLowerCase().split(";")
+							for(String e : arrayElements)
+							{
+								if (!(e.trim().equals("") || e.trim().equals(" ")))
+								{
+									referenceInstance.addToWebsites(e.trim())
+								}
+							}
 						}
 						
-						// Citation Key
-						referenceInstance.citation_key = toolService.getCitationKey(referenceInstance, authors)
-						
-						// Atributos espec�ficos
-						def slrInstance = referenceInstance.search.slr
-						for(SpecificAttribute attribute : slrInstance.specAttributes)
+						// Tags
+						referenceInstance.tags.clear()
+						if (!params.inputTags.toString().equals(""))
 						{
-							def attributeReference = SpecificAttributeReference.findByReferenceAndAttribute(referenceInstance,attribute)
-							def value = (params["att"+attribute.id.toString()] == null ? "" : params["att"+attribute.id.toString()].toString())
-							attributeReference.value = value;
-							attributeReference.save(failOnError: true)
+							String[] arrayElements = params.inputTags.toString().trim().toLowerCase().split(";")
+							for(String e : arrayElements)
+							{
+								if (!(e.trim().equals("") || e.trim().equals(" ")))
+								{
+									referenceInstance.addToTags(e.trim())
+								}
+							}
 						}
+						
+						referenceInstance.save(failOnError: true)
+						
+						// Authors
+						Set<Long> ids = new HashSet<Long>()
+						
+						for(AuthorReference ar : referenceInstance.authorsRefs)
+						{
+							ids.add(ar.id)
+						}
+						
+						for(Long i : ids)
+						{
+							AuthorReference.executeUpdate("delete AuthorReference ar where ar.id = :arid", [arid:i])
+						}
+						
+						referenceInstance.authorsRefs.clear()
+						referenceInstance.save(failOnError: true)
+	
+						if (!params.inputAuthors.toString().equals(""))
+						{
+							Set<Author> authors = new HashSet<Author>()
+							String[] arrayElements = params.inputAuthors.toString().trim().split(";")
+							
+							for(String e : arrayElements)
+							{
+								if (!(e.trim().equals("") || e.trim().equals(" ")))
+								{
+									def author = Author.findByDisplay_nameIlike(e.trim())
+									
+									// Si no existe, lo creamos
+									if(null == author)
+									{
+										String[] arrayDisplayName = e.trim().split(" ")
+										if(arrayDisplayName.size() < 2)
+										{
+											// error
+										}
+										else
+										{
+											String nombre = ""
+											String apellidos = ""
+											
+											nombre = arrayDisplayName[0].toString().trim().substring(0,1).toUpperCase() + arrayDisplayName[0].toString().trim().substring(1).toLowerCase()
+											
+											for(int i=1; i<arrayDisplayName.size(); i++)
+											{
+												apellidos += arrayDisplayName[i].toString().trim().substring(0,1).toUpperCase() + arrayDisplayName[i].toString().trim().substring(1).toLowerCase() + " "
+											}
+											
+											author = new Author(forename: nombre, surname: apellidos)
+											author.save(failOnError: true)
+										}
+									}
+									
+									authors.add(author)
+								}
+							}
+							
+							for(Author author : authors)
+							{
+								author.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
+							}
+							
+							// Citation Key
+							referenceInstance.citation_key = toolService.getCitationKey(referenceInstance, authors)
+							
+							// Atributos específicos
+							def slrInstance = referenceInstance.search.slr
+							for(SpecificAttribute attribute : slrInstance.specAttributes)
+							{
+								def attributeReference = SpecificAttributeReference.findByReferenceAndAttribute(referenceInstance,attribute)
+								def value = (params["att"+attribute.id.toString()] == null ? "" : params["att"+attribute.id.toString()].toString())
+								attributeReference.value = value;
+								attributeReference.save(failOnError: true)
+							}
+						}
+						
+						referenceInstance.save(failOnError: true)					
+						
+						// Guardar cambios en mendeley
+						boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
+						
+						redirect(controller: 'reference', action: 'show', params: [idmend: idmend, success: true, isSynchro: isSynchro])
 					}
-					
-					referenceInstance.save(failOnError: true)					
-					
-					redirect(controller: 'reference', action: 'show', params: [idmend: idmend, success: true])
 				}
 			}
 		}
