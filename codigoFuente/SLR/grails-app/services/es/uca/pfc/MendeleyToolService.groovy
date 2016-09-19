@@ -2,9 +2,11 @@ package es.uca.pfc
 
 import java.lang.annotation.Documented;
 import java.util.Date;
+import java.util.UUID;
 
 import mendeley.pfc.schemas.Document
 import mendeley.pfc.schemas.Folder
+import mendeley.pfc.schemas.Identifier
 import mendeley.pfc.schemas.Person
 import mendeley.pfc.schemas.Profile
 import mendeley.pfc.services.DocumentService
@@ -27,6 +29,7 @@ import static org.quartz.CronScheduleBuilder.*;
 import static org.quartz.CalendarIntervalScheduleBuilder.*;
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.DateBuilder.*;
+import es.uca.pfc.encode.EncodeDecodeMendeley;
 import es.uca.pfc.task.TaskEngineSearch
 import es.uca.pfc.task.TaskSearch
 import grails.transaction.Transactional;
@@ -42,6 +45,16 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	
 	def springSecurityService
 	def toolService
+		
+	String encodePasswordMendeley(String password)
+	{
+		return EncodeDecodeMendeley.encodePasswordMendeley(password);
+	}
+	
+	String decodePasswordMendeley(String password)
+	{
+		return EncodeDecodeMendeley.decodePasswordMendeley(password);
+	}
 	
 	boolean insertSearchsBackground(Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
 		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, List<EngineSearch> engines)
@@ -168,7 +181,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	
 	boolean synchronizeProfile(User userInstance)
 	{
-		boolean isSynchro = true;
+		boolean isSynchro = false;
 		try
 		{
 			String clientId = Holders.getGrailsApplication().config.clientId
@@ -176,7 +189,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			String redirectUri = Holders.getGrailsApplication().config.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, 
-				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend, 
+				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend), 
 				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
 
 			// Actualizamos los tokens del usuario
@@ -192,10 +205,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			convertProfileMendeleyToProfileSlr(profile,currentProfile)
 			
 			userInstance.save(failOnError: true, flush: true)
+			isSynchro = true
 		}
 		catch(MendeleyException ex)
 		{
-			isSynchro = false
 			println "EXCEPTION MendeleyToolService.synchronizeProfile() => Hubo un problema de sincronizacion."
 		}
 		
@@ -256,7 +269,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			String redirectUri = Holders.getGrailsApplication().config.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
-				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
 				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
 			
 			// Actualizamos los tokens del usuario
@@ -292,24 +305,25 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		return isCreated
 	}
 	
-	void synchronizeSlrList(User userInstance)
+	boolean synchronizeSlrList(User userInstance)
 	{
 		List<Slr> listSlrs = new ArrayList<Slr>()
 		listSlrs.addAll(userInstance.userProfile.slrs)
-		synchronizeSlrList(userInstance, listSlrs)
+		return synchronizeSlrList(userInstance, listSlrs)
 	}
 	
-	void synchronizeSlr(User userInstance, Slr slrInstance)
+	boolean synchronizeSlr(User userInstance, Slr slrInstance)
 	{
 		List<Slr> listSlrs = new ArrayList<Slr>()
 		
 		listSlrs.add(slrInstance)
 		
-		synchronizeSlrList(userInstance, listSlrs)
+		return synchronizeSlrList(userInstance, listSlrs)
 	}
 	
-	void synchronizeSlrList(User userInstance, List<Slr> listSlrs)
+	boolean synchronizeSlrList(User userInstance, List<Slr> listSlrs)
 	{
+		boolean isSynchro = false;
 		try
 		{
 			String clientId = Holders.getGrailsApplication().config.clientId
@@ -317,7 +331,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			String redirectUri = Holders.getGrailsApplication().config.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
-				userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
 				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
 			
 			// Actualizamos los tokens del usuario
@@ -374,6 +388,8 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 					{
 						if (folderService.getSubFolder(folder.getId(), engine.name.toString().toLowerCase().trim()) == null)
 						{
+							println slrInstance.idmend
+							println folder.getId() + " => Creamos el folder " + engine.name.toString().toLowerCase().trim() + " para el folder " + folder.getName()
 							folderService.createSubFolder(engine.name.toString().toLowerCase().trim(), folder)
 						}
 					}
@@ -424,11 +440,15 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 					updateReferenceFromMendeley(reference, documentService)
 				}
 			}
+			isSynchro = true;
 		}
 		catch(Exception ex)
 		{
+			isSynchro = false;
 			println "EXCEPCION MendeleyToolService.synchronizeSlrList() => " + ex.getMessage()
 		}
+
+		return isSynchro;
 	}
 	
 	void updateReferenceFromMendeley(Reference reference, User userInstance)
@@ -438,7 +458,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		String redirectUri = Holders.getGrailsApplication().config.redirectUri
 		
 		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
-			userInstance.userMendeley.email_mend, userInstance.userMendeley.pass_mend,
+			userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
 			userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
 		
 		// Actualizamos los tokens del usuario
@@ -593,23 +613,28 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	
 	boolean isRegisteredMendeley(String emailMend, String passMend)
 	{
-		boolean isRegistered = true;
-
+		return getTokenResponseMendeley(emailMend, passMend) != null;
+	}
+	
+	MendeleyService getTokenResponseMendeley(String emailMend, String passMend)
+	{
+		MendeleyService mendeleyService = null;
+		
 		String clientId = Holders.getGrailsApplication().config.clientId
 		String clientSecret = Holders.getGrailsApplication().config.clientSecret
 		String redirectUri = Holders.getGrailsApplication().config.redirectUri
 		
 		try
 		{
-			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+			mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
 				emailMend, passMend);
 		}
 		catch(Exception ex)
 		{
-			isRegistered = false;
+			mendeleyService = null;
 		}
 		
-		return isRegistered;
+		return mendeleyService;
 	}
 	
 	User getUserFromMendeley(String emailMend, String passMend)
@@ -630,7 +655,7 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 			UserProfile userProfileInstance = getUserProfileFromMendeley(profile)
 			UserMendeley userMendeleyInstance = new UserMendeley(
 																	email_mend: emailMend,
-																	pass_mend: passMend,
+																	pass_mend: encodePasswordMendeley(passMend),
 																	access_token: mendeleyService.getTokenResponse().getAccessToken(),
 																	token_type: mendeleyService.getTokenResponse().getTokenType(),
 																	expires_in: mendeleyService.getTokenResponse().getExpiresIn(),
@@ -686,5 +711,97 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	boolean isChangePasswordMendeley(String email, String password)
 	{
 		return isRegisteredMendeley(email, password)
+	}
+	
+	boolean saveReferenceMendeley(Reference reference, User userInstance)
+	{
+		boolean isSaved = false;
+		String clientId = Holders.getGrailsApplication().config.clientId
+		String clientSecret = Holders.getGrailsApplication().config.clientSecret
+		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		
+		try
+		{
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend));
+			
+			// Actualizamos los tokens del usuario
+			userInstance.userMendeley.access_token = mendeleyService.getTokenResponse().getAccessToken();
+			userInstance.userMendeley.refresh_token = mendeleyService.getTokenResponse().getRefreshToken();
+			userInstance.save(failOnError: true, flush: true)
+			
+			DocumentService documentService = new DocumentService(mendeleyService)
+			
+			Document docOld = documentService.getDocument(reference.idmend.toString())
+			Document document = new Document()
+			
+			document.setTitle(reference.title == null ? "" : reference.title)
+			document.setAbstract(reference.docAbstract)
+			document.setSource(reference.source)
+			document.setPages(reference.pages)
+			document.setVolume(reference.volume)
+			document.setIssue(reference.issue)
+			document.setPublisher(reference.publisher)
+			document.setCity(reference.city)
+			document.setInstitution(reference.institution)
+			document.setSeries(reference.series)
+			document.setChapter(reference.chapter)
+			document.setCitationKey(reference.citation_key)
+			document.setSourceType(reference.source_type)
+			document.setGenre(reference.genre)
+			document.setCountry(reference.country)
+			document.setDepartment(reference.department)
+			
+			Identifier identifier = new Identifier()
+			identifier.setArxiv(reference.arxiv)
+			identifier.setDoi(reference.doi)
+			identifier.setIsbn(reference.isbn)
+			identifier.setIssn(reference.issn)
+			identifier.setPmid(reference.pmid)
+			identifier.setScopus(reference.scopus)
+			document.setIdentifiers(identifier)
+			
+			//document.setMonth(Integer.parseInt(reference.month))
+			document.setDay(Integer.parseInt(reference.day))
+			document.setFileAttached(reference.file_attached)
+			document.setYear(reference.year)
+			
+			//Keywords
+			document.setKeywords(reference.keywords.toList())
+			
+			//Websites
+			document.setWebsites(reference.websites.toList())
+			
+			//Tags
+			document.setTags(reference.tags.toList())
+			
+			//Type
+			document.setType(mendeley.pfc.commons.TypeDocument.fromKey(reference.type.nomenclatura))
+			
+			//Language
+			document.setLanguage(reference.language.name)
+			
+			//Engine
+			// ...
+			
+			//Autores
+			List<Person> authors = new ArrayList<Person>()
+			for(AuthorReference ar : reference.authorsRefs)
+			{
+				Person person = new Person(ar.author.forename, ar.author.surname)
+				authors.add(person)
+			}
+			document.setAuthors(authors)
+			
+			documentService.updateDocument(docOld, document)
+			
+			isSaved = true;
+		}
+		catch(Exception ex)
+		{
+			println "ERROR: MendeleyToolService.saveReferenceMendeley() -> " + ex.getMessage()
+		}
+		
+		return isSaved;
 	}
 }
