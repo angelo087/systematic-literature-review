@@ -42,6 +42,11 @@ class UrlMappings {
 			action = "show"
 		}
 		
+		"/user/list" {
+			controller="user"
+			action="list"
+		}
+		
 		"/user/$guid/synchronizeUserProfile" {
 			controller="user"
 			action="synchronizeUserProfile"

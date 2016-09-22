@@ -684,4 +684,22 @@ class ToolService {
 	{
 		return EmailValidator.getInstance(true).isValid(email);
 	}
+	
+	boolean canEnabledDisabled(User userLogin, User userInstance)
+	{
+		boolean success = false;
+		
+		if((userLogin.authorities.any { it.authority == "ROLE_SUPER" } && userInstance.authorities.any { it.authority != "ROLE_SUPER" }) || 
+		   (userLogin.authorities.any { it.authority == "ROLE_ADMIN" } && userInstance.authorities.any { it.authority == "ROLE_USER" }))
+		{
+			success = true;
+		}
+		
+		return success;
+	}
+	
+	boolean canChangeRole(User userLogin, User userInstance)
+	{
+		return canEnabledDisabled(userLogin, userInstance)
+	}
 }

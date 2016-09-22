@@ -122,7 +122,7 @@ class BootStrap {
 			userMendeley: mendProfile01).save(failOnError: true)
 
 		if (!user01.authorities.contains(userRole)) {
-			UserRole.create user01, userRole
+			UserRole.create user01, adminRole
 		}
 				
 		def profile02 = new UserProfile(
@@ -146,7 +146,8 @@ class BootStrap {
 			userMendeley: mendProfile02).save(failOnError: true)
 
 		if (!user02.authorities.contains(userRole)) {
-			UserRole.create user02, userRole
+			//UserRole.create user02, userRole
+			UserRole.create user02, superRole
 		}
 		
 		println "Creamos las Estudios..."

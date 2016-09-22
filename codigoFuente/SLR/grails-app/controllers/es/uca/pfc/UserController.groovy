@@ -214,4 +214,147 @@ class UserController {
 			}
 		}
 	}
+	
+	def list()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userLogin = User.get(springSecurityService.principal.id)					
+			def userListInstance = User.list()
+			String roleUserLogin = (userLogin.authorities.any { it.authority == "ROLE_SUPER" } ? "S" : (userLogin.authorities.any { it.authority == "ROLE_ADMIN" } ? "A" : "U"))
+			
+			[userListInstance: userListInstance, userLogin: userLogin, roleUserLogin: roleUserLogin]
+		}
+	}
+	
+	def enabledUser()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userProfileInstance = UserProfile.findByGuidLike(params.guidUserEnabled.toString())
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			if(userProfileInstance == null)
+			{
+				redirect(controller: "index", action: "index")
+			}
+			else
+			{
+				def userInstance = userProfileInstance.user
+				if(toolService.canEnabledDisabled(userLogin, userInstance))
+				{
+					userInstance.enabled = true;
+					userInstance.save(failOnError: true, flush: true)
+				}
+				redirect(controller: "user", action: "list")
+			}
+		}
+	}
+	
+	def disabledUser()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userProfileInstance = UserProfile.findByGuidLike(params.guidUserDisabled.toString())
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			if(userProfileInstance == null)
+			{
+				redirect(controller: "index", action: "index")
+			}
+			else
+			{
+				def userInstance = userProfileInstance.user
+				
+				if(toolService.canEnabledDisabled(userLogin, userInstance))
+				{
+					userInstance.enabled = false;
+					userInstance.save(failOnError: true, flush: true)
+				}
+				redirect(controller: "user", action: "list")
+			}
+		}
+	}
+	
+	def changeToAdminRole()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userProfileInstance = UserProfile.findByGuidLike(params.guidUserRoleAdmin.toString())
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			if(userProfileInstance == null)
+			{
+				redirect(controller: "index", action: "index")
+			}
+			else
+			{
+				def userInstance = userProfileInstance.user
+				
+				if(userInstance.authorities.any { it.authority != "ROLE_ADMIN" } && toolService.canChangeRole(userLogin, userInstance))
+				{
+					UserRole.remove userInstance, Role.findByAuthority('ROLE_USER')
+					UserRole.create userInstance, Role.findByAuthority('ROLE_ADMIN')
+					userInstance.save(failOnError: true, flush: true)
+				}
+				redirect(controller: "user", action: "list")
+			}
+		}
+	}
+	
+	def changeToUserRole()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userProfileInstance = UserProfile.findByGuidLike(params.guidUserRoleUser.toString())
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			if(userProfileInstance == null)
+			{
+				redirect(controller: "index", action: "index")
+			}
+			else
+			{
+				def userInstance = userProfileInstance.user
+				
+				if(userInstance.authorities.any { it.authority != "ROLE_USER" } && toolService.canChangeRole(userLogin, userInstance))
+				{
+					UserRole.remove userInstance, Role.findByAuthority('ROLE_ADMIN')
+					UserRole.create userInstance, Role.findByAuthority('ROLE_USER')
+					userInstance.save(failOnError: true, flush: true)
+				}
+				redirect(controller: "user", action: "list")
+			}
+		}
+	}
 }

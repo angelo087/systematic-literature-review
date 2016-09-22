@@ -44,6 +44,11 @@ class LoginMendeleyController {
 			error = "Username/Password no correctos."
 			redirect(controller: "loginMendeley", action: "auth", params: [j_username: jUsername, error: error])
 		}
+		else if(!userInstance.enabled)
+		{
+			error = "No tienes permiso para conectar. Por favor contacte con el administrador."
+			redirect(controller: "loginMendeley", action: "auth", params: [j_username: jUsername, error: error])
+		}
 		else
 		{
 			MendeleyService mendeleyService = mendeleyToolService.getTokenResponseMendeley(jUsername, jPassword)
