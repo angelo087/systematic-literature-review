@@ -19,13 +19,22 @@
 				<g:link controller="index" action="menu"><i class="fa fa-dashboard fa-fw"></i> Menu Principal</g:link>
 			</li>
 			<li>
-				<g:link controller="slr" action="myList"><i class="fa fa-dashboard fa-fw"></i> SLR's</g:link>
+			    <g:link controller="user" action="show" params="[guid: "${User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).userProfile.guid.toString()}"]"><i class="fa fa-user fa-fw"></i> Perfil</g:link>
+			</li>
+			<li>
+		    	<g:link controller="user" action="list"><i class="fa fa-group fa-fw"></i> Usuarios</g:link>
+			</li>
+			<li>
+				<g:link controller="slr" action="myList"><i class="fa fa-folder-open"></i> SLR's</g:link>
+			</li>
+			<li>
+			    <g:link controller="index" action="loggers"><i class="fa fa-history fa-fw"></i> Logger</g:link>
+			</li>
+			<li>
+			    <g:link controller="index" action="faqs"><i class="fa fa-question fa-fw"></i> FAQS</g:link>
 			</li>
 			<li>
 			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Notificaciones</a>
-			</li>
-			<li>
-			    <g:link controller="user" action="show" params="[guid: "${User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).userProfile.guid.toString()}"]"><i class="fa fa-user fa-fw"></i> Perfil</g:link>
 			</li>
 			<li>
 			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> FAQ's</a>
@@ -33,9 +42,7 @@
 			<li>
 			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Amigos</a>
 			</li>
-			<li>
-			    <g:link controller="index" action="faqs"><i class="fa fa-question fa-fw"></i> FAQS</g:link>
-			</li>
+
 			<li>
 			    <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
 			    <ul class="nav nav-second-level">
