@@ -191,13 +191,13 @@
 						<div class="form-group">
 							<label for="inputKeys" class="col-sm-3 control-label">Keywords:<br /><small>(separados por ';')</small></label>
 							<div class="col-sm-8">
-								<textarea rows="5" cols="10" class="form-control" id="inputKeys" name="inputKeys" style="resize: none;" ${isEditable}>${listKeywordsString}</textarea>
+								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputKeys" name="inputKeys" style="resize: none;" ${isEditable}>${listKeywordsString}</textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="inputWebs" class="col-sm-3 control-label">Websites:<br /><small>(separados por ';')</small></label>
 							<div class="col-sm-8">
-								<textarea rows="5" cols="10" class="form-control" id="inputWebs" name="inputWebs" style="resize: none;" ${isEditable}>${listWebsString}</textarea>
+								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputWebs" name="inputWebs" style="resize: none;" ${isEditable}>${listWebsString}</textarea>
 							</div>
 						</div>
 					</div>
@@ -293,15 +293,15 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputAuthors" class="col-sm-3 control-label">Authors:<br /><small>('Nombre Apellido' separados por ';')</small></label>
+							<label for="inputAuthors" class="col-sm-3 control-label">Authors:<br /><small>('Nombre Apellido' y después intro)</small></label>
 							<div class="col-sm-8">
-								<textarea rows="5" cols="10" class="form-control" id="inputAuthors" name="inputAuthors" style="resize: none;" ${isEditableSelect}>${listAuthorsString}</textarea>
+								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputAuthors" name="inputAuthors" style="resize: none;" ${isEditableSelect}>${listAuthorsString}</textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="inputTags" class="col-sm-3 control-label">Tags:<br /><small>(separados por ';')</small></label>
 							<div class="col-sm-8">
-								<textarea rows="5" cols="10" class="form-control" id="inputTags" name="inputTags" style="resize: none;" ${isEditableSelect}>${listTagsString}</textarea>
+								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputTags" name="inputTags" style="resize: none;" ${isEditableSelect}>${listTagsString}</textarea>
 							</div>
 						</div>
 					</div>

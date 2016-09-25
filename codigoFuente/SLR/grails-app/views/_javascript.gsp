@@ -31,3 +31,10 @@
 	       });
 	}
 </script>
+
+<!-- Tokenizer -->
+<script src="${resource(dir: 'dist', file: 'js/bootstrap-tokenfield.js')}"></script>
+<script src="${resource(dir: 'dist', file: 'js/scrollspy.js')}"></script>
+<script src="${resource(dir: 'dist', file: 'js/affix.js')}"></script>
+<script src="${resource(dir: 'dist', file: 'js/typeahead.bundle.min.js')}"></script>
+<script src="${resource(dir: 'dist', file: 'js/docs.min.js')}"></script>

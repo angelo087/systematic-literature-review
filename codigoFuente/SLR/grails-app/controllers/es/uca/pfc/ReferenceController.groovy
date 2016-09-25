@@ -56,7 +56,7 @@ class ReferenceController {
 					listAuthorsString += ar.author.display_name
 					if(cont != referenceInstance.authorsRefs.size()-1)
 					{
-						listAuthorsString += "; "
+						listAuthorsString += ", "
 					}
 				}
 				
@@ -68,7 +68,7 @@ class ReferenceController {
 					listKeywordsString += key
 					if (cont != referenceInstance.keywords.size()-1)
 					{
-						listKeywordsString += "; "
+						listKeywordsString += ", "
 					}
 				}
 				
@@ -80,7 +80,7 @@ class ReferenceController {
 					listWebsString += web
 					if (cont != referenceInstance.websites.size()-1)
 					{
-						listWebsString += "; "
+						listWebsString += ", "
 					}
 				}
 				
@@ -95,7 +95,7 @@ class ReferenceController {
 					listTagsString += tag
 					if (cont != referenceInstance.tags.size()-1)
 					{
-						listTagsString += "; "
+						listTagsString += ", "
 					}
 				}
 				
@@ -192,7 +192,7 @@ class ReferenceController {
 						referenceInstance.keywords.clear()
 						if (!params.inputKeys.toString().equals(""))
 						{
-							String[] arrayElements = params.inputKeys.toString().trim().toLowerCase().split(";")
+							String[] arrayElements = params.inputKeys.toString().trim().toLowerCase().split(",")
 							for(String e : arrayElements)
 							{
 								if (!(e.trim().equals("") || e.trim().equals(" ")))
@@ -206,7 +206,7 @@ class ReferenceController {
 						referenceInstance.websites.clear()
 						if (!params.inputWebs.toString().equals(""))
 						{
-							String[] arrayElements = params.inputWebs.toString().trim().toLowerCase().split(";")
+							String[] arrayElements = params.inputWebs.toString().trim().toLowerCase().split(",")
 							for(String e : arrayElements)
 							{
 								if (!(e.trim().equals("") || e.trim().equals(" ")))
@@ -220,12 +220,14 @@ class ReferenceController {
 						referenceInstance.tags.clear()
 						if (!params.inputTags.toString().equals(""))
 						{
-							String[] arrayElements = params.inputTags.toString().trim().toLowerCase().split(";")
+							int total = 0
+							String[] arrayElements = params.inputTags.toString().trim().toLowerCase().split(",")
 							for(String e : arrayElements)
 							{
 								if (!(e.trim().equals("") || e.trim().equals(" ")))
 								{
 									referenceInstance.addToTags(e.trim())
+									total++
 								}
 							}
 						}
@@ -251,7 +253,7 @@ class ReferenceController {
 						if (!params.inputAuthors.toString().equals(""))
 						{
 							Set<Author> authors = new HashSet<Author>()
-							String[] arrayElements = params.inputAuthors.toString().trim().split(";")
+							String[] arrayElements = params.inputAuthors.toString().trim().split(",")
 							
 							for(String e : arrayElements)
 							{
@@ -310,8 +312,8 @@ class ReferenceController {
 						referenceInstance.save(failOnError: true)					
 						
 						// Guardar cambios en mendeley
-						boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
-						
+						//boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
+						boolean isSynchro = true
 						redirect(controller: 'reference', action: 'show', params: [idmend: idmend, success: true, isSynchro: isSynchro])
 					}
 				}

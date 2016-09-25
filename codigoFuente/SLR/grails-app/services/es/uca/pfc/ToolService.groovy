@@ -486,7 +486,7 @@ class ToolService {
 	{
 		boolean ok = true;
 		
-		String[] authors = strAuthors.toLowerCase().trim().split(";")
+		String[] authors = strAuthors.toLowerCase().trim().split(",")
 		
 		if(authors.size() == 0)
 		{

@@ -21,3 +21,9 @@
 
 <!-- Morris CSS -->
 <link href="${resource(dir: 'bower_components', file: 'morrisjs/morris.css')}" rel="stylesheet" type="text/css">
+
+<!-- Tokenfield -->
+<link href="${resource(dir: 'dist', file: 'css/tokenfield-typeahead.css')}" type="text/css" rel="stylesheet">
+<link href="${resource(dir: 'dist', file: 'css/bootstrap-tokenfield.css')}" type="text/css" rel="stylesheet">
+<link href="${resource(dir: 'dist', file: 'css/pygments-manni.css')}" type="text/css" rel="stylesheet">
+<link href="${resource(dir: 'dist', file: 'css/docs.css')}" type="text/css" rel="stylesheet">
