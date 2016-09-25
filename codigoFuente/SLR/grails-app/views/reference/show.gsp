@@ -189,13 +189,13 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputKeys" class="col-sm-3 control-label">Keywords:<br /><small>(separados por ';')</small></label>
+							<label for="inputKeys" class="col-sm-3 control-label">Keywords:<br /><small>(separados por 'intro')</small></label>
 							<div class="col-sm-8">
 								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputKeys" name="inputKeys" style="resize: none;" ${isEditable}>${listKeywordsString}</textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputWebs" class="col-sm-3 control-label">Websites:<br /><small>(separados por ';')</small></label>
+							<label for="inputWebs" class="col-sm-3 control-label">Websites:<br /><small>(separados por 'intro')</small></label>
 							<div class="col-sm-8">
 								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputWebs" name="inputWebs" style="resize: none;" ${isEditable}>${listWebsString}</textarea>
 							</div>
@@ -299,7 +299,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputTags" class="col-sm-3 control-label">Tags:<br /><small>(separados por ';')</small></label>
+							<label for="inputTags" class="col-sm-3 control-label">Tags:<br /><small>(separados por 'intro')</small></label>
 							<div class="col-sm-8">
 								<textarea rows="5" cols="10" class="form-control token-example-field" id="inputTags" name="inputTags" style="resize: none;" ${isEditableSelect}>${listTagsString}</textarea>
 							</div>
