@@ -312,8 +312,8 @@ class ReferenceController {
 						referenceInstance.save(failOnError: true)					
 						
 						// Guardar cambios en mendeley
-						//boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
-						boolean isSynchro = true
+						boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
+
 						redirect(controller: 'reference', action: 'show', params: [idmend: idmend, success: true, isSynchro: isSynchro])
 					}
 				}
