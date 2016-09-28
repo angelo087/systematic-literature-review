@@ -132,7 +132,7 @@
                 
                 <div class="col-lg-9">
                 
-                	<div class="bs-example bs-example-tabs" style="width: 100%;">
+                	<div style="width: 100%;">
 						<ul id="myTab" class="nav nav-tabs">
 							<li class="active"><a href="#datospersonales" data-toggle="tab">Datos Personales</a></li>								
 							<g:if test="${profileInstance.user.id != User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).id}">

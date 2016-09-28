@@ -13,8 +13,9 @@ class Slr {
 	String state = 'fase1'
 	boolean noDrop = false
 	int numVisits = 0
-	Date submitDate = new Date()	// fecha creaci�n
-	Date lastModified = new Date()	// fecha modificaci�n
+	Date submitDate = new Date()	// fecha creacion
+	Date lastModified = new Date()	// fecha modificacion
+	String timeString = ""
 	String guid = UUID.randomUUID().toString();
 	String idmend = "" 				//id de folder en mendeley
 	int totalReferences = 0

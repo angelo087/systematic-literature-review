@@ -1,10 +1,11 @@
 package es.uca.pfc
 
+import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.tools.ant.types.resources.selectors.InstanceOf;
 
-class UserProfile {
+class UserProfile implements Comparator<UserProfile> {
 	
 	static belongsTo = [user: User]
 	static hasMany = [slrs:Slr, notifications: Notification, loggers: Logger, friends: UserProfile, requests: UserProfile, 
@@ -29,9 +30,12 @@ class UserProfile {
 	
 	Date ultimaConexion = new Date()
 	Date fechaRegistro  = new Date()
+	String timeString = ""
 	
 	String lastGuidTaskSearch = "";
 
+	boolean isOnline = false
+	
     static constraints = {
 		first_name(nullable: true)
 		last_name(nullable: true)
@@ -81,6 +85,20 @@ class UserProfile {
 	
 	boolean equals(Object obj)
 	{
-		return (this.id == ((UserProfile)obj).id);
+		if (null == obj) { return false; }
+		if(getClass() != obj.getClass()) { return false; }
+		
+		final UserProfile other = (UserProfile) obj;
+		
+		if (this.id != other.id) { return false; }
+		
+		if (!Objects.equals(this.guid, obj.guid)) { return false; }
+		
+		return true;
+	}
+
+	@Override
+	public int compare(UserProfile up1, UserProfile up2) {
+		return up1.display_name.compareTo(up2.display_name)
 	}
 }

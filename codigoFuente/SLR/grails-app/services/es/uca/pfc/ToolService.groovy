@@ -181,52 +181,29 @@ class ToolService {
 		return timeToString;
 	}
 	
+	List<UserProfile> updateTimeStringUser(List<UserProfile> profiles)
+	{
+		List<UserProfile> updateProfiles = new ArrayList<UserProfile>()
+		for(UserProfile userProfileInstance : profiles)
+		{
+			Date date = userProfileInstance.ultimaConexion
+			String timeToString = getTimeStringFromNow(date);
+			
+			userProfileInstance.timeString = timeToString
+			userProfileInstance.save(failOnError: true)
+			updateProfiles.add(userProfileInstance)
+		}
+		
+		return updateProfiles
+	}
+	
 	List<Logger> updateTimeStringLogger(List<Logger> loggers)
 	{
 		List<Logger> updateLoggers = new ArrayList<Logger>()
 		for(Logger loggerInstance : loggers)
 		{
 			Date date = loggerInstance.submitDate
-			String timeToString = "";
-			
-			Calendar cal1 = Calendar.getInstance();
-			Calendar cal2 = Calendar.getInstance();
-			
-			cal1.setTime(date);
-			cal2.setTime(new Date());
-			
-			def milis1 = cal1.getTimeInMillis();
-			def milis2 = cal2.getTimeInMillis();
-			
-			def diff = milis2 - milis1;
-			
-			// Calculamos la diferencia en segundos
-			def diffSeconds = diff / 1000;
-			if(diffSeconds < 60)
-			{
-				timeToString = "Hace " + Math.round(diffSeconds) + " segundos.";
-			}
-			else
-			{
-				def diffMinutes = diff / (60 * 1000);
-				if(diffMinutes < 60)
-				{
-					timeToString = "Hace " + Math.round(diffMinutes) + " minutos.";
-				}
-				else
-				{
-					def diffHours = diff / (60 * 60 * 1000);
-					if(diffHours < 24)
-					{
-						timeToString = "Hace " + Math.round(diffHours) + " horas.";
-					}
-					else
-					{
-						DateFormat df = new SimpleDateFormat("dd/MM/yyyy")
-						timeToString = df.format(date)
-					}
-				}
-			}
+			String timeToString = getTimeStringFromNow(date);
 			
 			loggerInstance.timeString = timeToString
 			loggerInstance.save(failOnError: true)
@@ -234,6 +211,67 @@ class ToolService {
 		}
 		
 		return updateLoggers
+	}
+	
+	List<Slr> updateTimeStringSlr(List<Slr> slrs)
+	{
+		List<Slr> updateSlrs = new ArrayList<Slr>()
+		for(Slr slrInstance : slrs)
+		{
+			Date date = slrInstance.submitDate
+			String timeToString = getTimeStringFromNow(date);
+			
+			slrInstance.timeString = timeToString
+			slrInstance.save(failOnError: true)
+			updateSlrs.add(slrInstance)
+		}
+		
+		return updateSlrs
+	}
+	
+	String getTimeStringFromNow(Date date)
+	{
+		String timeToString = "";
+		Calendar cal1 = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
+			
+		cal1.setTime(date);
+		cal2.setTime(new Date());
+			
+		def milis1 = cal1.getTimeInMillis();
+		def milis2 = cal2.getTimeInMillis();
+			
+		def diff = milis2 - milis1;
+			
+		// Calculamos la diferencia en segundos
+		def diffSeconds = diff / 1000;
+		if(diffSeconds < 60)
+		{
+			timeToString = "Hace " + Math.round(diffSeconds) + " segundos.";
+		}
+		else
+		{
+			def diffMinutes = diff / (60 * 1000);
+			if(diffMinutes < 60)
+			{
+				timeToString = "Hace " + Math.round(diffMinutes) + " minutos.";
+			}
+			else
+			{
+				def diffHours = diff / (60 * 60 * 1000);
+				if(diffHours < 24)
+				{
+					timeToString = "Hace " + Math.round(diffHours) + " horas.";
+				}
+				else
+				{
+					DateFormat df = new SimpleDateFormat("dd/MM/yyyy")
+					timeToString = df.format(date)
+				}
+			}
+		}
+		
+		return timeToString
 	}
 	
 	Set<Reference> getReferences(Slr slrInstance)
@@ -701,5 +739,29 @@ class ToolService {
 	boolean canChangeRole(User userLogin, User userInstance)
 	{
 		return canEnabledDisabled(userLogin, userInstance)
+	}
+	
+	List<UserProfile> checkStatusOnline(List<UserProfile> usersProfiles, List<User> usersOnline)
+	{		
+		if(usersProfiles.size() > 0)
+		{		
+			List<UserProfile> userProfilesOnline = new ArrayList<UserProfile>()
+
+			for(User user : usersOnline)
+			{
+				userProfilesOnline.add(user.userProfile)
+			}
+			
+			for(UserProfile userProfile : usersProfiles)
+			{
+				if(userProfilesOnline.contains(userProfile))
+				{
+					userProfile.isOnline = true;
+					userProfile.save(failOnError: true, flush: true)
+				}
+			}
+		}
+		
+		return usersProfiles
 	}
 }
