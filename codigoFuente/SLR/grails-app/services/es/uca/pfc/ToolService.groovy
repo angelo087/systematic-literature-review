@@ -20,6 +20,8 @@ class ToolService {
 	String minYear = ""
 	String maxYear = ""
 	
+	def sessionRegistry
+	
     def serviceMethod() {
 
     }
@@ -763,5 +765,19 @@ class ToolService {
 		}
 		
 		return usersProfiles
+	}
+	
+	List<User> getUsersOnline()
+	{
+		// Obtenemos los usuarios que se encuentran conectados y posteriormente hacemos una 'conversion' para
+		// poder obtener toda su informacion
+		def usersOnlineAux = new ArrayList<User>(sessionRegistry.getAllPrincipals())
+		List<User> usersOnline = new ArrayList<User>()
+		for(int i = 0; i<usersOnlineAux.size(); i++)
+		{
+			usersOnline.add(User.get(Long.parseLong(usersOnlineAux.get(i).id.toString())))
+		}
+		
+		return usersOnline
 	}
 }

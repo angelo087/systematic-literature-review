@@ -170,3 +170,8 @@ grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/menu'
 clientId = '1044'
 clientSecret = '5qQ6zm5iYpvUehj4'
 redirectUri = 'http://localhost:8090/SLR/indexMendeley/'
+
+// Customize authentication
+grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider','anonymousAuthenticationProvider','rememberMeAuthenticationProvider']
+//grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider','daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+//grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider']

@@ -8,7 +8,7 @@ class IndexController {
 	
     def index() 
 	{
-		// Si no est� logado, redirigimos a la p�gina principal.
+		// Si no esta logado, redirigimos a la pagina principal
 		if(springSecurityService.isLoggedIn())
 		{
 			redirect(controller: "index", action: "menu")
@@ -51,7 +51,17 @@ class IndexController {
 		
 		loggerListInstance = toolService.updateTimeStringLogger(loggerListInstance)
 		
-		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance]
+		// Usuarios conectados
+		List<User> usersOnline = toolService.getUsersOnline()
+		
+		def lastUsersRegistered = UserProfile.list(max: 10, sort: 'fechaRegistro', order: 'desc')
+		for(UserProfile profile : lastUsersRegistered)
+		{
+			profile.isOnline = usersOnline.contains(profile.user)
+			profile.save(failOnError: true, flush: true)
+		}
+		
+		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered]
 	}
 	
 	def menu2() { }
@@ -60,7 +70,7 @@ class IndexController {
 	
 	def loggers()
 	{
-		// Si no est� logado, redirigimos a la p�gina principal.
+		// Si no est� logado, redirigimos a la pagina principal.
 		if(!springSecurityService.isLoggedIn())
 		{
 			redirect(controller: 'index', action: 'index')
