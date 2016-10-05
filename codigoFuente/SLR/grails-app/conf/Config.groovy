@@ -156,15 +156,15 @@ grails.plugin.springsecurity.logout.postOnly = false //Para permitir realizar el
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/menu'
 
 // Para almacenar la ultima fecha login del usuario
-/*grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
+grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
 	es.uca.pfc.User.withTransaction {
 		def user = es.uca.pfc.User.get(appCtx.springSecurityService.principal.id)
 		if(!user.isAttached())
 			user.attach()
-		user.profile.ultimaConexion = new Date()
+		user.userProfile.ultimaConexion = new Date()
 		user.save(flush: true, failOnError: true)
 	}
-}*/
+}
 
 // Autenticacion Mendeley App
 clientId = '1044'
@@ -173,5 +173,3 @@ redirectUri = 'http://localhost:8090/SLR/indexMendeley/'
 
 // Customize authentication
 grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider','anonymousAuthenticationProvider','rememberMeAuthenticationProvider']
-//grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider','daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-//grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider']
