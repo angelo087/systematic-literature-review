@@ -22,7 +22,7 @@
 			</a>--%>
 		</div>
 		<g:each in="${lastUsersRegistered}" var="profileInstance">
-			<a href="#" class="list-group-item">
+			<g:link class="list-group-item" controller="user" action="show" params="[guid: "${profileInstance.guid}"]">
 				<i class="fa fa-user fa-fw" style="color: green;"></i> ${profileInstance.display_name}
 				<g:if test="${profileInstance.isOnline}">
 					<span class="pull-right text-muted small" style="color: green;"><em>conectado</em>
@@ -32,7 +32,7 @@
 					<span class="pull-right text-muted small" style="color: blue;"><em>desconectado</em>
 					</span>
 				</g:else>
-			</a>
+			</g:link>
 		</g:each>
 		<!-- /.list-group -->
 		<%--<a href="#" class="btn btn-default btn-block">View All Alerts</a>--%>

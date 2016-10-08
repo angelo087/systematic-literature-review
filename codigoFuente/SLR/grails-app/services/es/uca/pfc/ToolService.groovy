@@ -594,6 +594,39 @@ class ToolService {
 		return citation_key;
 	}
 	
+	void removeLoggersBetweenUsers(UserProfile userLoginProfile, UserProfile userFriendProfile)
+	{
+		Logger log = null;
+		List<Logger> loggersToRemove = new ArrayList<Logger>()
+		
+		for (Logger loggerInstance : userLoginProfile.loggers)
+		{
+			log = null;
+			if(loggerInstance instanceof LoggerFriend)
+			{
+				LoggerFriend loggerFriend = (LoggerFriend)loggerInstance;
+				if(loggerInstance.friendProfile == userFriendProfile)
+				{
+					log = loggerFriend
+				}
+			}
+			
+			if(log != null)
+			{
+				loggersToRemove.add(log)
+			}
+		}
+		
+		for(Logger loggerInstance : loggersToRemove)
+		{
+			userLoginProfile.removeFromLoggers(loggerInstance)
+		}
+		
+		Logger.deleteAll(loggersToRemove)
+		
+		userLoginProfile.save(failOnError: true)
+	}
+	
 	void createLoggersBetweenUsers(UserProfile userLoginProfile, UserProfile userFriendProfile)
 	{
 		Logger log = null
@@ -630,42 +663,6 @@ class ToolService {
 		log = new LoggerFriend(friendProfile: userFriendProfile, tipo: 'seguir')
 		userLoginProfile.addToLoggers(log)
 		userLoginProfile.save(failOnError: true)
-		
-		for(Logger loggerInstance : userLoginProfile.loggers)
-		{
-			log = null
-			if (!loggerInstance.tipo.contains("fr-"))
-			{
-				if (loggerInstance.tipo == 'bienvenida')
-				{
-					log = new LoggerFriend(friendProfile: userLoginProfile, tipo: 'fr-bienvenida', submitDate: loggerInstance.submitDate)
-				}
-				else if (loggerInstance.tipo == 'crear')
-				{
-					log = new FriendLoggerSlr(friendProfile: userLoginProfile, tipo: 'fr-crear', submitDate: loggerInstance.submitDate,
-												slr: loggerInstance.slr)
-				}
-				else if (loggerInstance.tipo == 'buscar')
-				{
-					log = new FriendLoggerSlr(friendProfile: userLoginProfile, tipo: 'fr-buscar', submitDate: loggerInstance.submitDate,
-												slr: loggerInstance.slr, isSearch: true)
-				}
-				else if (loggerInstance.tipo == 'seguir' && !loggerInstance.friendProfile.guid.equals(userFriendProfile.guid))
-				{
-					log = new FriendLoggerFriend(friendProfile: userLoginProfile, tipo: 'fr-seguir',
-												 submitDate: loggerInstance.submitDate,
-												 friendFriendProfile: loggerInstance.friendProfile)
-				}
-				
-				if(log != null)
-				{
-					userFriendProfile.addToLoggers(log)
-				}
-			}
-		}
-		log = new LoggerFriend(friendProfile: userLoginProfile, tipo: 'seguir')
-		userFriendProfile.addToLoggers(log)
-		userFriendProfile.save(failOnError: true)
 	}
 	
 	String converterToStrOptions(List<Object> elements)

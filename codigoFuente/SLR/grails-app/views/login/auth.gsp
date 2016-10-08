@@ -27,7 +27,7 @@
 
     </head>
 
-    <body style="background-color: aqua;">
+    <body>
 
         <!-- Top content -->
         <div class="top-content">

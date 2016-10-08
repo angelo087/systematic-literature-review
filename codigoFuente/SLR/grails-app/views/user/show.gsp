@@ -31,12 +31,12 @@
     	if(document.getElementById('btn_friend').className == "btn btn-success btn-lg btn-block")
 		{
     		document.getElementById('btn_friend').className = "btn btn-danger btn-lg btn-block";
-    		document.getElementById('btn_friend').innerHTML = "<i class='glyphicon glyphicon-remove'></i> Eliminar amigo</button>";
+    		document.getElementById('btn_friend').innerHTML = "<i class='glyphicon glyphicon-remove'></i> Dejar de seguir</button>";
 		}
     	else
     	{
     		document.getElementById('btn_friend').className = "btn btn-success btn-lg btn-block";
-    		document.getElementById('btn_friend').innerHTML = "<i class='glyphicon glyphicon-ok'></i> Sois amigos";
+    		document.getElementById('btn_friend').innerHTML = "<i class='glyphicon glyphicon-ok'></i> Siguiendo";
     	}
 	}
 
@@ -45,12 +45,12 @@
     	if(document.getElementById('btn_friend_2').className == "btn btn-default btn-lg btn-block")
     	{
     		document.getElementById('btn_friend_2').className = "btn btn-success btn-lg btn-block";
-    		document.getElementById('btn_friend_2').innerHTML = "<i class='glyphicon glyphicon-ok'></i> Agregar a mis amigos";
+    		document.getElementById('btn_friend_2').innerHTML = "<i class='glyphicon glyphicon-ok'></i> Seguir";
     	}
     	else
 	    {
     		document.getElementById('btn_friend_2').className = "btn btn-default btn-lg btn-block";
-    		document.getElementById('btn_friend_2').innerHTML = "<i class='glyphicon glyphicon-thumbs-up'></i> Agregar a mis amigos";
+    		document.getElementById('btn_friend_2').innerHTML = "<i class='glyphicon glyphicon-thumbs-up'></i> Seguir";
 		}
 	}
 
@@ -115,13 +115,13 @@
 					<g:if test="${!isMyProfile}">
 						<g:if test="${isMyFriend == 'S'}">
 							<%--<button id="btn_friend" type="button" class="btn btn-success btn-lg btn-block" onmouseover="changeColourFriend();" onmouseout="changeColourFriend();"><i class="glyphicon glyphicon-ok"></i> Sois amigos</button>--%>
-							<g:link elementId="btn_friend" id="btn_friend" type="button" class="btn btn-success btn-lg btn-block" onmouseover="changeColourFriend();" onmouseout="changeColourFriend();" controller="user" action="removeRequestFriends" params="[guid: "${profileInstance.guid}"]"><i class="glyphicon glyphicon-ok"></i> Sois amigos</g:link>
+							<g:link elementId="btn_friend" id="btn_friend" type="button" class="btn btn-success btn-lg btn-block" onmouseover="changeColourFriend();" onmouseout="changeColourFriend();" controller="user" action="removeFollower" params="[guid: "${profileInstance.guid}"]"><i class="glyphicon glyphicon-ok"></i> Siguiendo</g:link>
 						</g:if>
 						<g:elseif test="${isMyFriend == 'P'}">
 							<button type="button" class="btn btn-primary btn-lg btn-block disabled"><i class="glyphicon glyphicon-time"></i> Esperando respuesta</button>
 						</g:elseif>
 						<g:else>
-							<g:link elementId="btn_friend_2" id="btn_friend_2" type="button" class="btn btn-default btn-lg btn-block" onmouseover="changeColourFriend2();" onmouseout="changeColourFriend2();" controller="user" action="addRequestFriends" params="[guid: "${profileInstance.guid}"]"><i class="glyphicon glyphicon-thumbs-up"></i> Agregar a mis amigos</g:link>
+							<g:link elementId="btn_friend_2" id="btn_friend_2" type="button" class="btn btn-default btn-lg btn-block" onmouseover="changeColourFriend2();" onmouseout="changeColourFriend2();" controller="user" action="addFollower" params="[guid: "${profileInstance.guid}"]"><i class="glyphicon glyphicon-thumbs-up"></i> Seguir</g:link>
 						</g:else>
 					</g:if>
 					<g:else>

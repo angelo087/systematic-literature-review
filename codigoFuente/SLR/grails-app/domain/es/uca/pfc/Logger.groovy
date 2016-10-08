@@ -14,6 +14,7 @@ class Logger {
 	
     static constraints = {
 		tipo(inList:['bienvenida','crear','buscar','seguir','fr-bienvenida','fr-crear','fr-buscar','fr-seguir'],display:false,blank:false)
+		profile(nullable: true)
     }
 	
 	@Override
