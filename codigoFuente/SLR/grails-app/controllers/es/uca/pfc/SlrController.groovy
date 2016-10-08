@@ -397,7 +397,9 @@ class SlrController {
 		}
 		else
 		{
-			[slrInstance: slrInstance]
+			List<String> queriesChart = graphService.chartsByTag(slrInstance)
+			
+			[slrInstance: slrInstance, queryCriterion1: queriesChart.get(1)]
 		}
 	}
 	

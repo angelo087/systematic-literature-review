@@ -33,6 +33,52 @@
 						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar Referencia</button>
 					</div>
 				</div>
+
+				<h4><u>Datos principales</u></h4>
+				<div class="row">
+					<div class="col-lg-1">
+
+					</div>
+					<div class="col-lg-5">
+						<p><b>Título: </b>${slrInstance.title}</p>
+						<p><b>Creado por: </b><g:link controller="user" action="show" params="[guid: "${slrInstance.userProfile.guid}"]">${slrInstance.userProfile.display_name}</g:link></p>
+						<p><b>Total Búsquedas: </b><g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()} búsqueda(s)</g:link></p>
+						<p><b>Total Referencias: </b><g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">${slrInstance.totalReferences} referencia(s)</g:link></p>
+						<p><b>Total visitas: </b>${slrInstance.numVisits} visita(s)</p>
+						<p><b>Justificación:</b></p>${slrInstance.justification}
+					</div>
+					<div class="col-lg-5">
+						<p><b>Preguntas Investigación</b></p>
+						<ul>
+							<g:each in="${slrInstance.questions}" var="questionInstance">
+								<li>${questionInstance.enunciado}</li>
+							</g:each>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-lg-6">
+						<div class="panel panel-default">
+	                        <div class="panel-heading">
+	                            <b>Criterios</b>
+	                        </div>
+	                        <div class="panel-body" style="overflow: hidden;">
+	                            <div id="chart_div" align="center"></div>
+	                        </div>
+	                    </div>
+					</div>
+					<div class="col-lg-6">
+						<div class="panel panel-default">
+	                        <div class="panel-heading">
+	                            <b>Criterios</b>
+	                        </div>
+	                        <div class="panel-body" style="overflow: hidden;">
+	                            <div id="chart_div_4" align="center"></div>
+	                        </div>
+	                    </div>
+					</div>
+				</div>
 			</div>
 			<!-- /#page-wrapper -->
 	
@@ -42,7 +88,7 @@
 
     <%-- JavaScript --%>
     <g:render template="javascript" contextPath="/"/>
-
+	<g:render template="graphsGoogleSlrView" contextPath="/graphs"/>
 </body>
 
 </html>

@@ -39,14 +39,14 @@
                 
                 <div class="col-lg-12">
                 
-                	<div class="bs-example bs-example-tabs" style="width: 100%;">
+                	<div style="width: 100%;">
 						<ul id="myTab" class="nav nav-tabs">
 							<li class="${(currentOnglet == 'all' ? 'active' : '')}"><a href="#allLoggers" data-toggle="tab">Todos</a></li>
 							<li class="${(currentOnglet == 'my' ? 'active' : '')}"><a href="#myLoggers" data-toggle="tab">Mis Loggers</a></li>
 							<li class="${(currentOnglet == 'friend' ? 'active' : '')}"><a href="#friendLoggers" data-toggle="tab">Loggers Amigos</a></li>
 						</ul>
-					</div>
-					<div id="myTabContent" class="tab-content">
+
+						<div id="myTabContent" class="tab-content" style="margin-top: 20px;">
 					
 						<%-- TODOS LOS LOGGERS --%>
 						<div class="tab-pane fade in active" id="allLoggers">
@@ -281,7 +281,7 @@
 						</div>
 						
 					</div>
-                
+    				</div>            
                 </div>
             </div>
                         
