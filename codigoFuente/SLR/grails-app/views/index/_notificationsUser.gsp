@@ -32,7 +32,7 @@
 			                </small>
 			            </div>
 			            <div>${notificationInstance.texto}</div>
-			         </g:link>
+			        </g:link>
 				</g:elseif>
 				<g:elseif test="${notificationInstance.tipo == 'friend'}">
 					<g:link controller="user" action="show" params="[guid: "${notificationInstance.friendProfile.guid}", guidNotif: "${notificationInstance.guid}"]">
