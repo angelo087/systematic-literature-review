@@ -2,6 +2,7 @@ package mendeley.pfc.services;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import mendeley.pfc.commons.MendeleyUrl;
@@ -150,6 +151,52 @@ public class AnnotationService {
 		}
 		
 		return annotation;
+	}
+	
+	public Annotation getAnnotationByText(String text) throws HttpException, IOException
+	{
+		return getAnnotationByText(text, false);
+	}
+	
+	public Annotation getAnnotationByText(String text, boolean ignoreUpCase) throws HttpException, IOException
+	{
+		Annotation annotation = null;
+		String textAux = (ignoreUpCase ? text.toLowerCase() : text);
+		
+		for(Annotation a : getAllAnnotations())
+		{
+			String strA = (ignoreUpCase ? a.getText().toLowerCase() : a.getText());
+			if(strA.equals(textAux))
+			{
+				annotation = a;
+				break;
+			}
+		}
+		
+		return annotation;
+	}
+	
+	public List<Annotation> getAllAnnotationsContainsText(String text) throws HttpException, IOException
+	{
+		return getAllAnnotationsContainsText(text, false);
+	}
+	
+	public List<Annotation> getAllAnnotationsContainsText(String text, boolean ignoreUpCase) throws HttpException, IOException
+	{
+		List<Annotation> annotations = new ArrayList<Annotation>();
+		String textAux = (ignoreUpCase ? text.toLowerCase() : text);
+		
+		for(Annotation a : getAllAnnotations())
+		{
+			String strA = (ignoreUpCase ? a.getText().toLowerCase() : a.getText());
+
+			if(strA.contains(textAux))
+			{
+				annotations.add(a);
+			}
+		}
+		
+		return annotations;
 	}
 	
 	public void deleteAnnotation(Annotation annotation) throws HttpException, IOException
