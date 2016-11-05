@@ -20,21 +20,14 @@ public class AnnotationServiceTest {
 		MendeleyService mendeleyService = new MendeleyService(APP_ID, APP_CODE_SECRET, APP_URL, email, pass);
 		AnnotationService annotationService = new AnnotationService(mendeleyService);
 		
-		Annotation annotation = annotationService.getAnnotationByText("sdfsdfd");
+		System.out.println("ANTES: " + annotationService.getAllAnnotations().size());
 		
-		if(annotation != null)
+		for(Annotation a : annotationService.getAllAnnotations())
 		{
-			System.out.println("Annotation " + annotation.getId() + " y texto " + annotation.getText());
-		}
-		else
-		{
-			System.out.println("No hay annotation con ese texto.");
+			annotationService.deleteAnnotation(a);
 		}
 		
-		String text = "acm";
-		List<Annotation> annotations = annotationService.getAllAnnotationsContainsText(text,true);
-		
-		System.out.println("Hay " + annotations.size() + " anotacion(es) que contiene(n) la palabra " + text);
+		System.out.println("AHORA: " + annotationService.getAllAnnotations().size());
 	}
 
 }

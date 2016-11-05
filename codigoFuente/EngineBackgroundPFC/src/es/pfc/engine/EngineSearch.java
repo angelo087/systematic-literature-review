@@ -175,28 +175,14 @@ public abstract class EngineSearch implements Runnable {
 	
 	private void setAllNotesReferences() throws HttpException, IOException, MendeleyException
 	{
-		DocumentService documentService = new DocumentService(mendeleyService);
 		AnnotationService annotationService = new AnnotationService(mendeleyService);
 		Annotation annotationSelected = null;
 
-		System.out.println("TOTAL DOCUMENTOS  => " + documentService.getAllDocuments().size());
-		System.out.println("TOTAL ANNOTATIONS => " + annotationService.getAllAnnotations().size());
-		
 		for(Reference ref : referencesEngineSearch)
 		{
-			annotationSelected = null;
+			annotationSelected = annotationService.getAnnotationByText(ref.getNotesCont());
 			
-			for (Annotation annotation : annotationService.getAllAnnotations())
-			{
-				System.out.println("Annotation => " + annotation.getText());
-				if (annotation.getText().equals(ref.getNotesCont()))
-				{
-					annotationSelected = annotation;
-					break;
-				}
-			}
-			
-			if (annotationSelected != null)
+			if(annotationSelected != null)
 			{
 				ref.setIdMendeley(annotationSelected.getDocument());
 				annotationService.deleteAnnotation(annotationSelected);
@@ -213,9 +199,6 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	public void moveToFolder() throws NumberFormatException, InterruptedException
 	{
-		/*int tiempoAleatorio = (int) (Math.random()*10+5);
-		System.out.println(engine + " => moveToFolder() in " + tiempoAleatorio + " seconds.");		
-		Thread.sleep(Long.parseLong(Integer.toString(tiempoAleatorio))*1000);*/
 		for(Reference reference : referencesEngineSearch)
 		{
 			System.out.println("=> " + reference.getIdMendeley());
@@ -230,10 +213,10 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private void collectAllReferences()
 	{
-		System.out.println(TAM_MAX);
-		this.referencesEngineSearch.addAll(EngineSearchACM.references.size() <= TAM_MAX 
+		/*this.referencesEngineSearch.addAll(EngineSearchACM.references.size() <= TAM_MAX 
 												? EngineSearchACM.references 
-												: EngineSearchACM.references.subList(0, TAM_MAX));
+												: EngineSearchACM.references.subList(0, TAM_MAX));*/
+		this.referencesEngineSearch.addAll(EngineSearchACM.references);
 	}
 	
 	/**

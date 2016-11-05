@@ -209,7 +209,5 @@ public class AnnotationService {
 	    delete.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
 	    
 	    int status = httpclient.executeMethod(delete);
-	    
-	    String responseBody = new String(delete.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	}
 }
