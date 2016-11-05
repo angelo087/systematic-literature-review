@@ -81,7 +81,8 @@ public class BackgroundSearch {
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year,
 			List<SearchTermParam> searchsTerms) throws Exception {
 
-		this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass,at,rt);
+		//this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass,at,rt);
+		this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass);
 		this.opACM = opACM;
 		this.opIEEE = opIEEE;
 		this.opSCIENCE = opSCIENCE;
