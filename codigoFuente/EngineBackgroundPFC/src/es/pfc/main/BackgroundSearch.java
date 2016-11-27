@@ -3,21 +3,34 @@ package es.pfc.main;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.httpclient.HttpException;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 
 import es.pfc.commons.ComponentSearch;
 import es.pfc.commons.OperatorSearch;
 import es.pfc.commons.SearchTermParam;
+import es.pfc.commons.TypeEngineSearch;
 import es.pfc.engine.EngineSearch;
 import es.pfc.engine.EngineSearchACM;
 import mendeley.pfc.commons.MendeleyException;
+import mendeley.pfc.schemas.Annotation;
+import mendeley.pfc.services.AnnotationService;
 import mendeley.pfc.services.MendeleyService;
 
 public class BackgroundSearch {
 
 	private MendeleyService mendeleyService = null;
+	private String clientId;
+	private String clientSecret;
+	private String redirectUri;
+	private String emailMend;
+	private String passMend;
 	private boolean opACM;
 	private boolean opIEEE;
 	private boolean opSCIENCE;
@@ -40,22 +53,20 @@ public class BackgroundSearch {
 				refresh_token = "asdasdaaaaaaa";
 		
 		String email = "angel.gonzatoro@gmail.com", password = "angel.gonzatoro";
-		//String terminos = "spem";
 		String nameSLR = "SLR1: spem study";
 		
-		//String operator = "any"; //all,any or none
 		int start_year = 2010, end_year = 2012;
-		int tammax = 1;
+		int tammax = 5;
 		
 		SearchTermParam stp01 = new SearchTermParam(ComponentSearch.ANYFIELD, OperatorSearch.ALL, "word");
-		//SearchTermParam stp02 = new SearchTermParam(ComponentSearch.AUTHOR, OperatorSearch.NONE, "toro");
+		SearchTermParam stp02 = new SearchTermParam(ComponentSearch.AUTHOR, OperatorSearch.NONE, "toro");
 		//SearchTermParam stp03 = new SearchTermParam(ComponentSearch.TITLE, OperatorSearch.ANY, "of");
 		List<SearchTermParam> searchsTerms = new ArrayList<SearchTermParam>();
-		searchsTerms.add(stp01); //searchsTerms.add(stp02); searchsTerms.add(stp03);
+		searchsTerms.add(stp01); searchsTerms.add(stp02); //searchsTerms.add(stp03);
 		
 		List<String> tags = new ArrayList<String>();
 		tags.add("cr_included"); tags.add("met_met1_yes"); tags.add("met_met2_35"); tags.add("met_met3_ingles");
-		
+				
 		boolean opACM = true,
 				opIEEE = true,
 				opSCIENCE = false,
@@ -65,6 +76,7 @@ public class BackgroundSearch {
 		{
 			BackgroundSearch backgroundSearch = new BackgroundSearch(client_id, client_secret, access_token, refresh_token, redirect_url, email, password, opACM, opIEEE, opSCIENCE, opSPRINGER, nameSLR, tammax, tags, start_year, end_year, searchsTerms);
 			backgroundSearch.startSearchs();
+			System.out.println(backgroundSearch.getTotalReferences());
 		}
 		catch(Exception ex)
 		{
@@ -81,8 +93,12 @@ public class BackgroundSearch {
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year,
 			List<SearchTermParam> searchsTerms) throws Exception {
 
-		//this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass,at,rt);
-		this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass);
+		//this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass);
+		this.clientId = ci;
+		this.clientSecret = cs;
+		this.redirectUri = ru;
+		this.emailMend = email;
+		this.passMend = pass;
 		this.opACM = opACM;
 		this.opIEEE = opIEEE;
 		this.opSCIENCE = opSCIENCE;
@@ -95,23 +111,23 @@ public class BackgroundSearch {
 		this.searchsTerms = searchsTerms;
 	}
 	
-	public void startSearchs() throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException
+	public void startSearchs() throws Exception
 	{
 		System.out.println("COMIENZA PROCESO BUSQUEDA");
 		
 		Thread tACM = new Thread(), tIEEE = new Thread();
-		
-		opIEEE = false;
-		
+				
 		if(opACM)
 		{
-			tACM = new Thread(new EngineSearchACM(mendeleyService, nameSLR, tammax, tags, start_year, end_year, searchsTerms));
+			tACM = new Thread(new EngineSearchACM(clientId, clientSecret, redirectUri, emailMend, passMend, 
+					nameSLR, tammax, tags, start_year, end_year, searchsTerms));
 			tACM.start();
 		}
 		
 		if(opIEEE)
 		{
-			tIEEE = new Thread(new EngineSearchACM(mendeleyService, nameSLR, tammax, tags, start_year, end_year, searchsTerms));
+			tIEEE = new Thread(new EngineSearchACM(clientId, clientSecret, redirectUri, emailMend, passMend, 
+					nameSLR, tammax, tags, start_year, end_year, searchsTerms));
 			tIEEE.start();
 		}
 		
@@ -121,5 +137,10 @@ public class BackgroundSearch {
 		}
 		
 		System.out.println("PROCESO BUSQUEDA FINALIZADO.");
+	}
+	
+	public int getTotalReferences()
+	{
+		return EngineSearch.referencesEngineSearch.size();
 	}
 }

@@ -1,16 +1,10 @@
 package es.pfc.engine;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.httpclient.HttpException;
-
-import mendeley.pfc.commons.MendeleyException;
-import mendeley.pfc.schemas.Annotation;
-import mendeley.pfc.services.AnnotationService;
-import mendeley.pfc.services.DocumentService;
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
 import es.pfc.commons.DownloadReference;
 import es.pfc.commons.Reference;
@@ -22,7 +16,14 @@ public abstract class EngineSearch implements Runnable {
 	public final int TOTAL_HILOS = 5;
 	
 	protected TypeEngineSearch engine;
-	protected MendeleyService mendeleyService = null;
+	
+	//private MendeleyService mendeleyService = null;
+	protected String clientId;
+	protected String clientSecret;
+	protected String redirectUri;
+	protected String emailMend;
+	protected String passMend;
+	
 	protected String nameSLR;
 	protected List<String> tags;
 	protected String strTags = "";
@@ -34,7 +35,7 @@ public abstract class EngineSearch implements Runnable {
 	protected String web              = "";
 	protected String idEngine			= "";
 	protected List<String> linksDocuments = new ArrayList<String>();
-	private List<Reference> referencesEngineSearch = new ArrayList<Reference>();
+	public static List<Reference> referencesEngineSearch = new ArrayList<Reference>();
 	
 	/**
 	 * Constructor EngineSearch
@@ -47,17 +48,58 @@ public abstract class EngineSearch implements Runnable {
 	 * @param start_year
 	 * @param end_year
 	 * @param searchsTerms
+	 * @throws Exception 
 	 */
-	public EngineSearch(TypeEngineSearch engine, MendeleyService mendeleyService,
+	public EngineSearch(TypeEngineSearch engine, String clientId, String clientSecret, String redirectUri, String emailMend, String passMend,
 			String nameSLR, int tammax, List<String> tags, int start_year,
-			int end_year, List<SearchTermParam> searchsTerms) {
+			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
 		
 		this.engine = engine;
-		this.mendeleyService = mendeleyService;
+		this.clientId = clientId;
+		this.clientSecret = clientSecret;
+		this.redirectUri = redirectUri;
+		this.emailMend = emailMend;
+		this.passMend = passMend;
+		//this.mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, emailMend, passMend);
 		this.nameSLR = nameSLR;
 		this.TAM_MAX= tammax;
 		this.tags = tags;
 		this.strTags = "";
+		
+		for(String t : tags)
+		{
+			this.strTags += t+";";
+		}
+		this.searchsTerms = searchsTerms;
+		
+		if(start_year <= end_year)
+		{
+			this.start_year = start_year;
+			this.end_year = end_year;
+		}
+		else
+		{
+			this.start_year = end_year;
+			this.end_year = start_year;
+		}
+	}
+	
+	public EngineSearch(TypeEngineSearch engine, MendeleyService mendeleyService,
+			String nameSLR, int tammax, List<String> tags, int start_year,
+			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
+		
+		this.engine = engine;
+		//this.mendeleyService = mendeleyService;
+		this.clientId = mendeleyService.getClientId();
+		this.clientSecret = mendeleyService.getClientSecret();
+		this.redirectUri = mendeleyService.getRedirectUri();
+		this.emailMend = mendeleyService.getEmailMend();
+		this.passMend = mendeleyService.getPassMend();
+		this.nameSLR = nameSLR;
+		this.TAM_MAX= tammax;
+		this.tags = tags;
+		this.strTags = "";
+		
 		for(String t : tags)
 		{
 			this.strTags += t+";";
@@ -85,17 +127,14 @@ public abstract class EngineSearch implements Runnable {
 		
 		try
 		{
-			System.out.println("Paso 1 de 5 => GetLinksReferences()");
+			System.out.println("Paso 1 de 3 => GetLinksReferences()");
 			getLinksReferences();
-			System.out.println("Paso 2 de 5 => downloadReferencesToMendeley()");
+			
+			System.out.println("Paso 2 de 3 => downloadReferencesToMendeley()");
 			downloadReferencesToMendeley();
-			System.out.println("Paso 3 de 5 => collectAllReferences()");
+			
+			System.out.println("Paso 3 de 3 => collectAllReferences()");
 			collectAllReferences();
-			System.out.println("Total Referencias => " + referencesEngineSearch.size());
-			System.out.println("Paso 4 de 5 => setAllNotesReferences()");
-			setAllNotesReferences();
-			System.out.println("Paso 5 de 5 => moveToFolder()");
-			moveToFolder();
 		}
 		catch(Exception ex)
 		{
@@ -119,7 +158,6 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	public void downloadReferencesToMendeley() throws InterruptedException
 	{
-		System.out.println(engine + " => downloadReferencesToMendeley()");
 		int index = 0;
 		
 		// Creamos 'N' hilos para busquedas paralelas
@@ -148,7 +186,7 @@ public abstract class EngineSearch implements Runnable {
 					if (downloadReference == null)
 					{
 						downloadReference = new DownloadReference(engine,engine+"-Hilo-"+(posTHread+1), linksDocuments.get(index), 
-								engine+UUID.randomUUID().toString(), "", mendeleyService);
+								"", emailMend, passMend, nameSLR);
 					}
 					else
 					{
@@ -173,50 +211,49 @@ public abstract class EngineSearch implements Runnable {
 		closeDownloadReferences(downloadReferences);
 	}
 	
-	private void setAllNotesReferences() throws HttpException, IOException, MendeleyException
-	{
-		AnnotationService annotationService = new AnnotationService(mendeleyService);
-		Annotation annotationSelected = null;
-
-		for(Reference ref : referencesEngineSearch)
-		{
-			annotationSelected = annotationService.getAnnotationByText(ref.getNotesCont());
-			
-			if(annotationSelected != null)
-			{
-				ref.setIdMendeley(annotationSelected.getDocument());
-				annotationService.deleteAnnotation(annotationSelected);
-			}
-		}
-	}
-	
-	/**
-	 * Método que mueve las referencias descargadas previamente a su
-	 * correspondiente carpeta dentro de Mendeley.
-	 * 
-	 * @throws NumberFormatException
-	 * @throws InterruptedException
-	 */
-	public void moveToFolder() throws NumberFormatException, InterruptedException
-	{
-		for(Reference reference : referencesEngineSearch)
-		{
-			System.out.println("=> " + reference.getIdMendeley());
-		}
-		System.out.println(engine + " => moveToFolder() has finished");
-	}
-	
 	/**
 	 * Método privado que obtiene todas las referencias por motor de búsqueda
 	 * y las almacena en una lista general.
+	 * @throws Exception 
 	 * 
 	 */
-	private void collectAllReferences()
+	private void collectAllReferences() throws Exception
 	{
-		/*this.referencesEngineSearch.addAll(EngineSearchACM.references.size() <= TAM_MAX 
-												? EngineSearchACM.references 
-												: EngineSearchACM.references.subList(0, TAM_MAX));*/
-		this.referencesEngineSearch.addAll(EngineSearchACM.references);
+		// ACM
+		setIdMendeletFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
+		referencesEngineSearch.addAll(EngineSearchACM.references);
+		
+		// IEEE
+		setIdMendeletFolderEngine(EngineSearchACM.references, TypeEngineSearch.IEEE);
+		referencesEngineSearch.addAll(EngineSearchIEEE.references);
+	}
+	
+	private String getIdMendeleyFolderEngine(TypeEngineSearch typeEngineSearch) throws Exception
+	{
+		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, emailMend, passMend);
+		
+		String nameEngine = typeEngineSearch.getKey();
+		
+		FolderService folderService = new FolderService(mendeleyService);
+		Folder folderSLR = folderService.getFolderByName(nameSLR);
+		Folder folderEngine = null;
+		
+		if (folderSLR != null)
+		{
+			folderEngine = folderService.getSubFolder(folderSLR.getId(), nameEngine);
+		}
+		
+		return (folderEngine == null ? "" : folderEngine.getId());
+	}
+	
+	private void setIdMendeletFolderEngine(List<Reference> references, TypeEngineSearch typeEngineSearch) throws Exception
+	{
+		String idMendeleyFolder = getIdMendeleyFolderEngine(typeEngineSearch);
+		
+		for(Reference reference : references)
+		{
+			reference.setIdFolderEngine(idMendeleyFolder);
+		}
 	}
 	
 	/**
@@ -238,6 +275,13 @@ public abstract class EngineSearch implements Runnable {
 				ok = true;
 			}
 		}
+		else if (TypeEngineSearch.IEEE == reference.getTypeEngineSearch())
+		{
+			synchronized (EngineSearchIEEE.references) {
+				EngineSearchIEEE.references.add(reference);
+				ok = true;
+			}
+		}
 		
 		return ok;
 	}
@@ -250,6 +294,10 @@ public abstract class EngineSearch implements Runnable {
 		if (TypeEngineSearch.ACM == engine)
 		{
 			EngineSearchACM.contHilos++;
+		} 
+		else if (TypeEngineSearch.IEEE == engine)
+		{
+			EngineSearchIEEE.contHilos++;
 		}
 	}
 	
@@ -263,6 +311,10 @@ public abstract class EngineSearch implements Runnable {
 		{
 			EngineSearchACM.contHilos--;
 		}
+		else if (TypeEngineSearch.IEEE == typeEngine)
+		{
+			EngineSearchIEEE.contHilos--;
+		}
 	}
 	
 	/**
@@ -275,6 +327,10 @@ public abstract class EngineSearch implements Runnable {
 		if (TypeEngineSearch.ACM == typeEngine)
 		{
 			EngineSearchACM.contMax++;
+		}
+		else if (TypeEngineSearch.IEEE == typeEngine)
+		{
+			EngineSearchIEEE.contMax++;
 		}
 	}
 	
@@ -290,6 +346,10 @@ public abstract class EngineSearch implements Runnable {
 		if (this instanceof EngineSearchACM)
 		{
 			contHilos = EngineSearchACM.contHilos;
+		}
+		else if (this instanceof EngineSearchIEEE)
+		{
+			contHilos = EngineSearchIEEE.contHilos;
 		}
 		
 		return contHilos;
@@ -307,6 +367,10 @@ public abstract class EngineSearch implements Runnable {
 		if (this instanceof EngineSearchACM)
 		{
 			contMax = EngineSearchACM.contMax;
+		}
+		else if (this instanceof EngineSearchIEEE)
+		{
+			contMax = EngineSearchIEEE.contMax;
 		}
 		
 		return contMax;
@@ -344,7 +408,7 @@ public abstract class EngineSearch implements Runnable {
 		}
 		else if (TypeEngineSearch.IEEE == engine)
 		{
-			//references = EngineSearchIEEE.references;
+			references = EngineSearchIEEE.references;
 		}
 		return references;
 	}
@@ -442,13 +506,13 @@ public abstract class EngineSearch implements Runnable {
 		this.engine = engine;
 	}
 
-	public MendeleyService getMendeleyService() {
+	/*public MendeleyService getMendeleyService() {
 		return mendeleyService;
 	}
 
 	public void setMendeleyService(MendeleyService mendeleyService) {
 		this.mendeleyService = mendeleyService;
-	}
+	}*/
 
 	public String getNameSLR() {
 		return nameSLR;
@@ -530,7 +594,43 @@ public abstract class EngineSearch implements Runnable {
 		this.linksDocuments = linksDocuments;
 	}
 
-	public List<Reference> getReferencesEngineSearch() {
-		return referencesEngineSearch;
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public String getClientSecret() {
+		return clientSecret;
+	}
+
+	public void setClientSecret(String clientSecret) {
+		this.clientSecret = clientSecret;
+	}
+
+	public String getRedirectUri() {
+		return redirectUri;
+	}
+
+	public void setRedirectUri(String redirectUri) {
+		this.redirectUri = redirectUri;
+	}
+
+	public String getEmailMend() {
+		return emailMend;
+	}
+
+	public void setEmailMend(String emailMend) {
+		this.emailMend = emailMend;
+	}
+
+	public String getPassMend() {
+		return passMend;
+	}
+
+	public void setPassMend(String passMend) {
+		this.passMend = passMend;
 	}
 }

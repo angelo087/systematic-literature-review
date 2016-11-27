@@ -3,7 +3,11 @@ package mendeley.pfc.tests;
 import java.util.List;
 
 import mendeley.pfc.schemas.Annotation;
+import mendeley.pfc.schemas.Document;
+import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.services.AnnotationService;
+import mendeley.pfc.services.DocumentService;
+import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
 
 public class AnnotationServiceTest {
@@ -19,15 +23,17 @@ public class AnnotationServiceTest {
 		
 		MendeleyService mendeleyService = new MendeleyService(APP_ID, APP_CODE_SECRET, APP_URL, email, pass);
 		AnnotationService annotationService = new AnnotationService(mendeleyService);
+		DocumentService documentService = new DocumentService(mendeleyService);
+		FolderService folderService = new FolderService(mendeleyService);
 		
-		System.out.println("ANTES: " + annotationService.getAllAnnotations().size());
-		
-		for(Annotation a : annotationService.getAllAnnotations())
+		for(Folder folder : folderService.getAllFolders())
 		{
-			annotationService.deleteAnnotation(a);
+			if (folder.getParent() == null || folder.getParent().equals(""))
+			{
+				System.out.print("\t");
+			}
+			System.out.println(folder.getId() + " => " + folder.getName() + " => " + folder.getGroup());
 		}
-		
-		System.out.println("AHORA: " + annotationService.getAllAnnotations().size());
 	}
 
 }

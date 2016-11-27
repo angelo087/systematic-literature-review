@@ -33,12 +33,11 @@ public class EngineSearchACM extends EngineSearch {
 	public static int contHilos = 0;
 	public static List<Reference> references = new ArrayList<Reference>();
 	
-	public EngineSearchACM(MendeleyService mendeleyService,
+	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, String emailMend, String passMend,
 			String nameSLR, int tammax, List<String> tags, int start_year,
-			int end_year, List<SearchTermParam> searchsTerms) throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException {
+			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
 		
-		super(TypeEngineSearch.ACM, mendeleyService, nameSLR, tammax, tags, start_year, end_year,
-				searchsTerms);
+		super(TypeEngineSearch.ACM, clientId, clientSecret, redirectUri, emailMend, passMend, nameSLR, tammax, tags, start_year, end_year, searchsTerms);
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();
@@ -184,11 +183,11 @@ public class EngineSearchACM extends EngineSearch {
 		return query;
 	}
 	
-	private String getIdSubFolder() throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException
+	private String getIdSubFolder() throws Exception
 	{
+		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, emailMend, passMend);
 		FolderService folderservice = new FolderService(mendeleyService);
 		
-		//List<Folder> folders = folderservice.getSubfolders(folderservice.getFolderByName(nameSLR));
 		List<Folder> folders = folderservice.getSubFolders(folderservice.getFolderByName(nameSLR));
 		
 		String idSubFolder = "";

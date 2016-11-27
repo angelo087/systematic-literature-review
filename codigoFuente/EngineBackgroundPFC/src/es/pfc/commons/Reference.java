@@ -6,6 +6,7 @@ public class Reference {
 	private String idMendeley = "";
 	private String notesCont = "";
 	private TypeEngineSearch typeEngineSearch;
+	private String idFolderEngine = "";
 	
 	public Reference(String url, String idmendeley, String notesCont, TypeEngineSearch typeEngineSearch)
 	{
@@ -45,5 +46,13 @@ public class Reference {
 
 	public void setTypeEngineSearch(TypeEngineSearch typeEngineSearch) {
 		this.typeEngineSearch = typeEngineSearch;
+	}
+
+	public String getIdFolderEngine() {
+		return idFolderEngine;
+	}
+
+	public void setIdFolderEngine(String idFolderEngine) {
+		this.idFolderEngine = idFolderEngine;
 	}
 }

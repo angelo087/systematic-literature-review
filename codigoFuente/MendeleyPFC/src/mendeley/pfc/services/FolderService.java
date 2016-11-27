@@ -18,6 +18,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 import com.google.gson.Gson;
@@ -583,14 +584,20 @@ public class FolderService
 		HttpClient httpclient = new HttpClient();
 	    
 	    PostMethod post = new PostMethod(MendeleyUrl.FOLDER_ADD_DOCUMENT.replaceAll("\\{id\\}", idFolder));
+	    
+	    System.out.println(MendeleyUrl.FOLDER_ADD_DOCUMENT.replaceAll("\\{id\\}", idFolder));
+	    
 	    post.addRequestHeader("access_token", mendeleyService.getTokenResponse().getAccessToken());
 	    post.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
 	    post.addRequestHeader("Content-type", "application/vnd.mendeley-document.1+json");
 
-	    StringRequestEntity requestEntity = new StringRequestEntity("{\"id\": \""+ idDocument +"\"}", "application/json", "UTF-8");
+	    //StringRequestEntity requestEntity = new StringRequestEntity("{\"id\": \""+ idDocument +"\"}", "application/json", "UTF-8");
+	    StringRequestEntity requestEntity = new StringRequestEntity("{\"id\": \""+ idDocument +"\"}", "application/json", null);
 	    post.setRequestEntity(requestEntity);
 	    
 	    int status = httpclient.executeMethod(post);
+	    
+	    System.out.println("addDocument => " + status);
 	}
 	
 	/**

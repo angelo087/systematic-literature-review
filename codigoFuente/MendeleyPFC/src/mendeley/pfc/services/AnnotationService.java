@@ -64,14 +64,10 @@ public class AnnotationService {
 	    Gson gson = new Gson();
 		String jsonstring = gson.toJson(metadatos);
 		
-		System.out.println("JSONSTRING: " + jsonstring);
-		
 		StringRequestEntity requestEntity = new StringRequestEntity(jsonstring, "application/json", "UTF-8");
 	    post.setRequestEntity(requestEntity);
 	    
 	    int status = httpclient.executeMethod(post);
-	    
-	    System.out.println("STATUS CREATED: " + status);
 	    
 	    String responseBody = new String(post.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
@@ -127,7 +123,7 @@ public class AnnotationService {
 		
 		for(Annotation a : getAllAnnotations())
 		{
-			if(a.getDocument().equals(idDocument))
+			if(a.getDocument_id().equals(idDocument))
 			{
 				annotation = a;
 				break;
@@ -209,5 +205,7 @@ public class AnnotationService {
 	    delete.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
 	    
 	    int status = httpclient.executeMethod(delete);
+	    
+	    System.out.println("deleteAnnotation => " + status);
 	}
 }

@@ -1,18 +1,12 @@
 package es.pfc.commons;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
-import mendeley.pfc.schemas.Annotation;
-import mendeley.pfc.services.AnnotationService;
 import mendeley.pfc.services.MendeleyService;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
@@ -21,9 +15,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
-import com.gargoylesoftware.htmlunit.util.Cookie;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 import es.pfc.engine.EngineSearch;
 
@@ -33,17 +27,32 @@ public class DownloadReference implements Runnable
 	private TypeEngineSearch typeEngine;
 	private WebClient webClient;
 	private String url;
-	private String notesCont;
 	private String tags;
-	private MendeleyService mendeleyService = null;
+	private String emailMend;
+	private String passMend;
+	private String nameSLR;
 	
-	public DownloadReference(TypeEngineSearch typeEngine, String name, String url, String notesCont, String tags,
+	public DownloadReference(TypeEngineSearch typeEngine, String name, String url, String tags,
+			String emailMend, String passMend, String nameSLR) {
+		this.typeEngine = typeEngine;
+		this.name = name;
+		this.url = "http://www.mendeley.com/import/?url=" + url;
+		this.emailMend = emailMend;
+		this.passMend = passMend;
+		this.tags = tags;
+		this.nameSLR = nameSLR;
+		
+		// Inicializamos WebClient
+		setWebClient();
+	}
+	
+	public DownloadReference(TypeEngineSearch typeEngine, String name, String url, String tags,
 			MendeleyService mendeleyService) {
 		this.typeEngine = typeEngine;
 		this.name = name;
 		this.url = "http://www.mendeley.com/import/?url=" + url;
-		this.mendeleyService = mendeleyService;
-		this.notesCont = notesCont;
+		this.emailMend = mendeleyService.getEmailMend();
+		this.passMend = mendeleyService.getPassMend();
 		this.tags = tags;
 		
 		// Inicializamos WebClient
@@ -102,23 +111,27 @@ public class DownloadReference implements Runnable
 			{
 				System.out.println(this.name + " tiene que hacer login");
 				HtmlForm form = currentPage.getForms().get(0);
-				form.getInputByName("username").setValueAttribute(this.mendeleyService.getEmailMend());
-				form.getInputByName("password").setValueAttribute(this.mendeleyService.getPassMend());
+				form.getInputByName("username").setValueAttribute(this.emailMend);
+				form.getInputByName("password").setValueAttribute(this.passMend);
 				
 				currentPage = (HtmlPage)((HtmlButton)currentPage.getElementById("signin-form-submit")).click();
 				this.webClient.waitForBackgroundJavaScript(5000);
 				//Thread.sleep(10000);
 			}
 			
-			HtmlTextArea notes = (HtmlTextArea) currentPage.getElementById("import-notes");
-			notes.setText(this.notesCont);
+			HtmlSelect folderSelect = (HtmlSelect) currentPage.getElementById("document-add-to");
+			HtmlOption optionSelected = getFolderOption(folderSelect);
+			if (optionSelected != null)
+			{
+				folderSelect.setSelectedAttribute(optionSelected, true);
+			}
 			
 			HtmlAnchor anchor = currentPage.getAnchorByText("Save");
 			
 			currentPage = anchor.click();
 			this.webClient.waitForBackgroundJavaScript(10000);
 			
-			Reference reference = new Reference(this.url, this.notesCont, typeEngine);
+			Reference reference = new Reference(this.url, "", typeEngine);
 			
 			ok = EngineSearch.addReferenceToEngineSearch(reference);
 		}
@@ -160,5 +173,31 @@ public class DownloadReference implements Runnable
 
 	public void setUrl(String url) {
 		this.url = "http://www.mendeley.com/import/?url=" + url;
+	}
+	
+	private HtmlOption getFolderOption(HtmlSelect folderSelect)
+	{
+		HtmlOption optionSelected = null;
+		
+		boolean canCatch = false;
+		
+		for(HtmlOption option : folderSelect.getOptions())
+		{
+			if (canCatch)
+			{
+				if (option.getText().toLowerCase().trim().contains(typeEngine.getKey().toLowerCase().trim()))
+				{
+					optionSelected = option;
+					break;
+				}
+			}
+			
+			if (option.getText().toLowerCase().trim().contains(nameSLR.toLowerCase().trim()))
+			{
+				canCatch = true;
+			}
+		}
+		
+		return optionSelected;
 	}
 }
