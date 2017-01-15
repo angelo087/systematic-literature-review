@@ -36,7 +36,8 @@ public class DownloadReference implements Runnable
 			String emailMend, String passMend, String nameSLR) {
 		this.typeEngine = typeEngine;
 		this.name = name;
-		this.url = "http://www.mendeley.com/import/?url=" + url;
+		//this.url = "http://www.mendeley.com/import/?url=" + url;
+		this.url = (this.typeEngine == TypeEngineSearch.IEEE ? "http://www.mendeley.com/import/?doi=" : "http://www.mendeley.com/import/?url=") + url;
 		this.emailMend = emailMend;
 		this.passMend = passMend;
 		this.tags = tags;
@@ -50,7 +51,8 @@ public class DownloadReference implements Runnable
 			MendeleyService mendeleyService) {
 		this.typeEngine = typeEngine;
 		this.name = name;
-		this.url = "http://www.mendeley.com/import/?url=" + url;
+		//this.url = "http://www.mendeley.com/import/?url=" + url;
+		this.url = (this.typeEngine == TypeEngineSearch.IEEE ? "http://www.mendeley.com/import/?doi=" : "http://www.mendeley.com/import/?url=") + url;
 		this.emailMend = mendeleyService.getEmailMend();
 		this.passMend = mendeleyService.getPassMend();
 		this.tags = tags;
@@ -62,7 +64,7 @@ public class DownloadReference implements Runnable
 	@Override
 	public void run() 
 	{
-		System.out.println("Soy " + this.name);
+		System.out.println("Soy " + this.name + " con " + this.url);
 		
 		boolean ok = false;
 		
@@ -172,7 +174,8 @@ public class DownloadReference implements Runnable
 	}
 
 	public void setUrl(String url) {
-		this.url = "http://www.mendeley.com/import/?url=" + url;
+		//this.url = "http://www.mendeley.com/import/?url=" + url;
+		this.url = (this.typeEngine == TypeEngineSearch.IEEE ? "http://www.mendeley.com/import/?doi=" : "http://www.mendeley.com/import/?url=") + url;
 	}
 	
 	private HtmlOption getFolderOption(HtmlSelect folderSelect)

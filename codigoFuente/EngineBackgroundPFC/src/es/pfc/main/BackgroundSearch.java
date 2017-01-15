@@ -18,6 +18,7 @@ import es.pfc.commons.SearchTermParam;
 import es.pfc.commons.TypeEngineSearch;
 import es.pfc.engine.EngineSearch;
 import es.pfc.engine.EngineSearchACM;
+import es.pfc.engine.EngineSearchIEEE;
 import mendeley.pfc.commons.MendeleyException;
 import mendeley.pfc.schemas.Annotation;
 import mendeley.pfc.services.AnnotationService;
@@ -67,7 +68,7 @@ public class BackgroundSearch {
 		List<String> tags = new ArrayList<String>();
 		tags.add("cr_included"); tags.add("met_met1_yes"); tags.add("met_met2_35"); tags.add("met_met3_ingles");
 				
-		boolean opACM = true,
+		boolean opACM = false,
 				opIEEE = true,
 				opSCIENCE = false,
 				opSPRINGER = false;
@@ -126,7 +127,7 @@ public class BackgroundSearch {
 		
 		if(opIEEE)
 		{
-			tIEEE = new Thread(new EngineSearchACM(clientId, clientSecret, redirectUri, emailMend, passMend, 
+			tIEEE = new Thread(new EngineSearchIEEE(clientId, clientSecret, redirectUri, emailMend, passMend, 
 					nameSLR, tammax, tags, start_year, end_year, searchsTerms));
 			tIEEE.start();
 		}

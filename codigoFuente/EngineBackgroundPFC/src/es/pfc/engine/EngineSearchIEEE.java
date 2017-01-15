@@ -1,17 +1,27 @@
 package es.pfc.engine;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.commons.io.IOUtils;
+import org.apache.xmlbeans.impl.common.IOUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
-
-import org.apache.commons.httpclient.util.URIUtil;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -20,162 +30,198 @@ import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.ThreadedRefreshHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
 
+import es.pfc.commons.OperatorSearch;
 import es.pfc.commons.Reference;
 import es.pfc.commons.SearchTermParam;
 import es.pfc.commons.TypeEngineSearch;
 
 public class EngineSearchIEEE extends EngineSearch {
-	
+
 	public static int contMax	= 0;
 	public static int contHilos = 0;
 	public static List<Reference> references = new ArrayList<Reference>();
-	
+
 	public EngineSearchIEEE(String clientId, String clientSecret, String redirectUri, String emailMend, String passMend,
 			String nameSLR, int tammax, List<String> tags, int start_year,
 			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
 		
 		super(TypeEngineSearch.IEEE, clientId, clientSecret, redirectUri, emailMend, passMend, nameSLR, tammax, tags, start_year, end_year, searchsTerms);
 		
-		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
+		this.web = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp";
 		this.idEngine = getIdSubFolder();
-		this.TAM_DEF = 20;
+		this.TAM_DEF = 100;
 	}
-
+	
 	@Override
 	public void getLinksReferences() throws ElementNotFoundException, IOException
 	{
-		//Para evitar que salga el texto por la salida estandar
-		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
-		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
-		
 		double tamDefDouble = Double.parseDouble(Integer.toString(TAM_DEF));
-		//int num_paginas = (int) Math.ceil(TAM_MAX/TAM_DEF);
 		int num_paginas = (int) Math.ceil(TAM_MAX/tamDefDouble);
-		
-		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
-		
-		//Opciones para la conexion
-		webClient.getOptions().setJavaScriptEnabled(true);
-		webClient.getOptions().setActiveXNative(true);
-		webClient.getOptions().setAppletEnabled(false);
-		webClient.getOptions().setCssEnabled(false);
-		webClient.getOptions().setPopupBlockerEnabled(true);
-		webClient.getOptions().setRedirectEnabled(true);
-		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-		webClient.getOptions().setThrowExceptionOnScriptError(false);
-		webClient.getOptions().setUseInsecureSSL(true);
-		webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-		webClient.getCookieManager().setCookiesEnabled(true);
-		webClient.setCssErrorHandler(new SilentCssErrorHandler());
-		webClient.setRefreshHandler(new ThreadedRefreshHandler());
-		webClient.waitForBackgroundJavaScript(10000);
-		
+				
 		// Insertamos los parámetros necesarios en la web
 		String q = QueryIEEE(searchsTerms);
-		String query = URIUtil.encodeQuery(q);
-		query = query.replaceAll("\\+", "%252B");
-		String filtered = "&dte=" + start_year + "&bfr=" + end_year;
-		web = web.replaceAll("@@query@@", query).replaceAll("@@filtered@@", filtered).replaceAll("@@start@@","0");
-		
-		System.out.println("Conectando a " + web);
-		
-		HtmlPage currentPage = webClient.getPage(web);
-		webClient.waitForBackgroundJavaScriptStartingBefore(10000);
+		web = URIUtil.encodeQuery(q);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		ArrayList<String> linksBib = new ArrayList<String>();
+		ArrayList<String> linksBib = new ArrayList<String>();		
 		
-		for(int i = 0; i < num_paginas; i++)
+		for(int i = 1; i <= num_paginas; i++)
 		{
-			if(currentPage == null)
-			{
-				break;
-			}
-
-			linksBib.addAll(getLinksBib(currentPage.asXml()));
-			currentPage = nextPage(webClient,currentPage,i);
+			System.out.println("Conectando a " + web);
+			linksBib.addAll(getLinksBib(web));
+			nextPage(i);
 		}
 		
 		linksDocuments.addAll(linksBib);
-		
-		webClient.closeAllWindows();
-		
 		System.out.println("Se ha obtenido " + linksDocuments.size());
 	}
-
+	
 	private String QueryIEEE(List<SearchTermParam> searchsTerms)
 	{
-		String query = "";
-		int cont = 0;
-		
-		for(SearchTermParam stp : searchsTerms)
+		String query = web;
+		if(searchsTerms.size() > 0)
 		{
-			String subquery = "";
-			String operator = "";
-			switch (stp.getOperatorSearch())
+			query += "?";
+			List<SearchTermParam> othersParameters = new ArrayList<SearchTermParam>();
+			List<SearchTermParam> noneParameters = new ArrayList<SearchTermParam>();
+			List<SearchTermParam> andParameters = new ArrayList<SearchTermParam>();
+			List<SearchTermParam> orParameters = new ArrayList<SearchTermParam>();
+			
+			for(SearchTermParam stp : searchsTerms)
 			{
-				case ALL:
-					operator="+";
-					break;
-				case NONE:
-					operator="-";
-					break;
-				default:
-					operator=""; //any
+				if(stp.getOperatorSearch() == OperatorSearch.NONE)
+				{
+					othersParameters.add(stp);
+				}
+				else
+				{
+					String subquery = "";
+					switch(stp.getComponentSearch())
+					{
+						case ABSTRACT:
+							subquery = "ab=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case TITLE:
+							subquery = "ti=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case AUTHOR:
+							subquery = "au=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case PUBLISHER:
+							subquery = "jn=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case ISBN:
+							subquery = "isbn=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case ISSN:
+							subquery = "issn=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						case DOI:
+							subquery = "doi=\"" + stp.getTerminos().trim() + "\"";
+							break;
+						default:
+							othersParameters.add(stp);
+					}
+					
+					if(!subquery.equals(""))
+					{
+						query += subquery + "&";
+					}
+					
+					query = query.trim();
+				}
 			}
 			
-			String terminos = "";
-			String[] wordsTerms = stp.getTerminos().split(" ");
-
-			for(String w : wordsTerms)
+			// Restriccion para el rango de years
+			if (query.charAt(query.length()-1) != '&')
 			{
-				terminos += operator + w + " ";
+				query += "&";
 			}
-			terminos = "(" + terminos.trim() + ")";
+			query += "pys=" + start_year;
+			query += "&pye=" + end_year;
 			
-			switch(stp.getComponentSearch())
+			// Restriccion total a mostrar
+			query += "&hc=" + TAM_DEF;
+			
+			// QueryText
+			if (othersParameters.size() > 0)
 			{
-			case ANYFIELD:
-			case REVIEW:
-				subquery = terminos;
-				break;
-			case ABSTRACT:
-				subquery = "recordAbstract:"+terminos;
-				break;
-			case TITLE:
-				subquery = "acmdlTitle:"+terminos;
-				break;
-			case AUTHOR:
-				subquery = "persons.authors.personName:"+terminos;
-				break;
-			case FULLTEXT:
-				subquery = "content.ftsec:"+terminos;
-				break;
-			case PUBLISHER:
-				subquery = "acmdlPublisherName:"+terminos;
-				break;
-			case ISBN:
-			case ISSN:
-				subquery = "isbnissn.isbnissn:"+terminos;
-				break;
-			case DOI:
-				subquery = "allDOIs.doi:"+terminos;
-				break;
-			case KEYWORDS:
-				subquery = "keywords.author.keyword:"+terminos;
-				break;
+				if (query.charAt(query.length()-1) != '&')
+				{
+					query += "&";
+				}
+				
+				query += "querytext=(";
+				
+				for(SearchTermParam param : othersParameters) {
+					if (param.getOperatorSearch() == OperatorSearch.ALL) 
+					{
+						andParameters.add(param);
+					} 
+					else if (param.getOperatorSearch() == OperatorSearch.ANY) 
+					{
+						orParameters.add(param);
+					}
+					else if (param.getOperatorSearch() == OperatorSearch.NONE)
+					{
+						noneParameters.add(param);
+					}
+				}
+				
+				String firstTerm = "";
+				if(andParameters.size() > 0)
+				{
+					firstTerm = andParameters.get(0).getTerminos();
+					andParameters.remove(0);
+				}
+				else
+				{
+					if (orParameters.size() > 0)
+					{
+						firstTerm = orParameters.get(0).getTerminos();
+						orParameters.remove(0);
+					}
+					else
+					{
+						firstTerm = "article";
+					}
+				}
+				
+				query += firstTerm;
+				
+				// Resto de parametros AND
+				if (andParameters.size() > 0)
+				{
+					for (SearchTermParam param : andParameters) {
+						query += " AND " + param.getTerminos();
+					}
+				}
+				
+				// Resto de parametros OR
+				if (orParameters.size() > 0)
+				{
+					for (SearchTermParam param : orParameters) {
+						query += " OR " + param.getTerminos();
+					}
+				}
+				
+				// Resto de parametros NOT
+				if (noneParameters.size() > 0)
+				{
+					for (SearchTermParam param : noneParameters) {
+						query += " NOT " + param.getTerminos();
+					}
+				}
+				
+				query += ")";
 			}
-			
-			if (cont != searchsTerms.size()-1)
+			else if (query.charAt(query.length()-1) == '&') 
 			{
-				subquery += " AND ";
+				query = query.substring(0, query.length()-1);
 			}
-			
-			query += subquery;
-			
-			cont++;
+			query = query.trim() + "&rs=1";
 		}
 		
 		return query;
@@ -192,7 +238,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		for(Folder folder : folders)
 		{
-			if(folder.getName().equals("ieee"))
+			if(folder.getName().equals("acm"))
 			{
 				idSubFolder = folder.getId();
 				break;
@@ -201,56 +247,56 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		if(idSubFolder.equals("")) // Creamos una carpeta
 		{
-			idSubFolder = folderservice.createSubFolder("IEEE", folderservice.getFolderByName(nameSLR).getId()).getId();
+			idSubFolder = folderservice.createSubFolder("ACM", folderservice.getFolderByName(nameSLR).getId()).getId();
 		}
 		
 		return idSubFolder;
 	}
 	
-	private HtmlPage nextPage(WebClient webClient, HtmlPage currentPage, int page) throws ElementNotFoundException, IOException
-	{		
-		web = web.replaceAll(web.substring(web.indexOf("&start=")), "");
-		web = web + "&start=" + (page * TAM_DEF);
-		
-		try
+	private void nextPage(int page)
+	{
+		int rs = 1;
+		if (web.contains("&rs="))
 		{
-			currentPage = (HtmlPage) webClient.getPage(web);
-			webClient.waitForBackgroundJavaScriptStartingBefore(10000);
+			rs = Integer.parseInt(web.substring(web.indexOf("&rs=")).trim().replaceAll("&rs=", ""));
+			web = web.replaceAll(web.substring(web.indexOf("&rs=")), "");				
 		}
-		catch(Exception ex)
-		{
-			currentPage = null;
-		}
-		
-		return currentPage;
+		//web = web + "&rs=" + ((page * TAM_DEF)-1);
+		web = web + "&rs=" + (rs + TAM_DEF);
 	}
 	
 	private ArrayList<String> getLinksBib(String code)
 	{
 		ArrayList<String> bibs = new ArrayList<String>();
 		
-		String textSource = code;
-		
-		textSource = textSource.replaceAll("[\n\r]", "");
-		textSource = textSource.replaceAll(" +", " ");
-		textSource = textSource.replaceAll("<i>", "");
-		textSource = textSource.replaceAll("</i>", "");
-		
-		String regex = "<div class\\=\"title\"> <a href\\=\"citation\\.cfm\\?id\\=";
-		String replacement = "\n" + regex;
-		textSource = textSource.replaceAll(regex, replacement);
-		
-		String pattern = "<div class=\"title\"> <a href=\"(.+?)\".*>(.*)</a>.*";		
-		Matcher matcher = Pattern.compile(pattern).matcher(textSource);
-		
-		while(matcher.find())
+		try
 		{
-			if(matcher.group(1) != null)
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			org.w3c.dom.Document doc = dBuilder.parse(web);
+			
+			doc.getDocumentElement().normalize();
+			
+			NodeList nList = doc.getElementsByTagName("document");
+			
+			if (nList.getLength() > 0)
 			{
-				String link = ("http://dl.acm.org/" + matcher.group(1)).trim();
-				bibs.add(link); //enlaces
+				for (int temp = 0; temp < nList.getLength(); temp++) 
+				{
+
+					Node nNode = nList.item(temp);
+
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+						Element eElement = (Element) nNode;
+
+						//bibs.add(eElement.getElementsByTagName("mdurl").item(0).getTextContent());
+						bibs.add(eElement.getElementsByTagName("doi").item(0).getTextContent());
+					}
+				}
 			}
 		}
+		catch(Exception ex)	{ }
 		
 		return bibs;
 	}

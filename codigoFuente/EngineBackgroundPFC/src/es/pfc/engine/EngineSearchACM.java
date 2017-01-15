@@ -41,7 +41,7 @@ public class EngineSearchACM extends EngineSearch {
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();
-		this.TAM_DEF = 20;
+		this.TAM_DEF = 100;
 	}
 	
 	@Override
@@ -210,7 +210,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	private HtmlPage nextPage(WebClient webClient, HtmlPage currentPage, int page) throws ElementNotFoundException, IOException
-	{		
+	{
 		web = web.replaceAll(web.substring(web.indexOf("&start=")), "");
 		web = web + "&start=" + (page * TAM_DEF);
 		
