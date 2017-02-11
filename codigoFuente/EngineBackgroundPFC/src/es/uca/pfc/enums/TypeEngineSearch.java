@@ -1,4 +1,4 @@
-package es.pfc.commons;
+package es.uca.pfc.enums;
 
 public enum TypeEngineSearch {
 

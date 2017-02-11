@@ -1,9 +1,9 @@
-package es.pfc.engine;
+package es.uca.pfc.engine;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,20 +12,18 @@ import org.apache.commons.httpclient.util.URIUtil;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.ThreadedRefreshHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import mendeley.pfc.commons.MendeleyException;
 import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
-import es.pfc.commons.Reference;
-import es.pfc.commons.SearchTermParam;
-import es.pfc.commons.TypeEngineSearch;
+import es.uca.pfc.commons.Reference;
+import es.uca.pfc.commons.SearchTermParam;
+import es.uca.pfc.enums.TypeEngineSearch;
 
 public class EngineSearchACM extends EngineSearch {
 
@@ -33,11 +31,13 @@ public class EngineSearchACM extends EngineSearch {
 	public static int contHilos = 0;
 	public static List<Reference> references = new ArrayList<Reference>();
 	
-	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, String emailMend, String passMend,
-			String nameSLR, int tammax, List<String> tags, int start_year,
-			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
+	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
+			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
+			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
+			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
 		
-		super(TypeEngineSearch.ACM, clientId, clientSecret, redirectUri, emailMend, passMend, nameSLR, tammax, tags, start_year, end_year, searchsTerms);
+		super(TypeEngineSearch.ACM, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
+				start_year, end_year, searchsTerms, apiKeysEngine, webClients, total_hilos, total_tries);
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();
@@ -185,7 +185,6 @@ public class EngineSearchACM extends EngineSearch {
 	
 	private String getIdSubFolder() throws Exception
 	{
-		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, emailMend, passMend);
 		FolderService folderservice = new FolderService(mendeleyService);
 		
 		List<Folder> folders = folderservice.getSubFolders(folderservice.getFolderByName(nameSLR));
@@ -242,7 +241,7 @@ public class EngineSearchACM extends EngineSearch {
 		String replacement = "\n" + regex;
 		textSource = textSource.replaceAll(regex, replacement);
 		
-		String pattern = "<div class=\"title\"> <a href=\"(.+?)\".*>(.*)</a>.*";		
+		String pattern = "<div class=\"title\"> <a href=\"(.+?)\".*>(.*)</a>.*";
 		Matcher matcher = Pattern.compile(pattern).matcher(textSource);
 		
 		while(matcher.find())

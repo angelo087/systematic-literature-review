@@ -1,4 +1,7 @@
-package es.pfc.commons;
+package es.uca.pfc.commons;
+
+import es.uca.pfc.enums.ComponentSearch;
+import es.uca.pfc.enums.OperatorSearch;
 
 public class SearchTermParam {
 	

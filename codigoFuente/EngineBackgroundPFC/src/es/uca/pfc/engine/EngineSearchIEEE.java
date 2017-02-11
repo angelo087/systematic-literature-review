@@ -1,41 +1,29 @@
-package es.pfc.engine;
+package es.uca.pfc.engine;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.commons.httpclient.util.URIUtil;
-import org.apache.commons.io.IOUtils;
-import org.apache.xmlbeans.impl.common.IOUtil;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
-import com.gargoylesoftware.htmlunit.ThreadedRefreshHandler;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import org.apache.commons.httpclient.util.URIUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import es.pfc.commons.OperatorSearch;
-import es.pfc.commons.Reference;
-import es.pfc.commons.SearchTermParam;
-import es.pfc.commons.TypeEngineSearch;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.gargoylesoftware.htmlunit.WebClient;
+
+import es.uca.pfc.commons.Reference;
+import es.uca.pfc.commons.SearchTermParam;
+import es.uca.pfc.enums.OperatorSearch;
+import es.uca.pfc.enums.TypeEngineSearch;
 
 public class EngineSearchIEEE extends EngineSearch {
 
@@ -43,11 +31,13 @@ public class EngineSearchIEEE extends EngineSearch {
 	public static int contHilos = 0;
 	public static List<Reference> references = new ArrayList<Reference>();
 
-	public EngineSearchIEEE(String clientId, String clientSecret, String redirectUri, String emailMend, String passMend,
-			String nameSLR, int tammax, List<String> tags, int start_year,
-			int end_year, List<SearchTermParam> searchsTerms) throws Exception {
+	public EngineSearchIEEE(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
+			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
+			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
+			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
 		
-		super(TypeEngineSearch.IEEE, clientId, clientSecret, redirectUri, emailMend, passMend, nameSLR, tammax, tags, start_year, end_year, searchsTerms);
+		super(TypeEngineSearch.IEEE, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
+				start_year, end_year, searchsTerms, apiKeysEngine, webClients, total_hilos, total_tries);
 		
 		this.web = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp";
 		this.idEngine = getIdSubFolder();
@@ -66,7 +56,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
 		ArrayList<String> linksBib = new ArrayList<String>();		
-		
+		System.out.println("num_paginas => " + num_paginas);
 		for(int i = 1; i <= num_paginas; i++)
 		{
 			System.out.println("Conectando a " + web);
@@ -229,7 +219,6 @@ public class EngineSearchIEEE extends EngineSearch {
 	
 	private String getIdSubFolder() throws Exception
 	{
-		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, emailMend, passMend);
 		FolderService folderservice = new FolderService(mendeleyService);
 		
 		List<Folder> folders = folderservice.getSubFolders(folderservice.getFolderByName(nameSLR));
@@ -238,7 +227,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		for(Folder folder : folders)
 		{
-			if(folder.getName().equals("acm"))
+			if(folder.getName().equals("ieee"))
 			{
 				idSubFolder = folder.getId();
 				break;
@@ -247,7 +236,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		if(idSubFolder.equals("")) // Creamos una carpeta
 		{
-			idSubFolder = folderservice.createSubFolder("ACM", folderservice.getFolderByName(nameSLR).getId()).getId();
+			idSubFolder = folderservice.createSubFolder("IEEE", folderservice.getFolderByName(nameSLR).getId()).getId();
 		}
 		
 		return idSubFolder;
@@ -255,6 +244,7 @@ public class EngineSearchIEEE extends EngineSearch {
 	
 	private void nextPage(int page)
 	{
+		System.out.println(web);
 		int rs = 1;
 		if (web.contains("&rs="))
 		{
