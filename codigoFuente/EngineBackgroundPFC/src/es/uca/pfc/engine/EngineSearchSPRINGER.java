@@ -8,14 +8,14 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import mendeley.pfc.schemas.Folder;
-import mendeley.pfc.services.FolderService;
-import mendeley.pfc.services.MendeleyService;
-
 import org.apache.commons.httpclient.util.URIUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.services.FolderService;
+import mendeley.pfc.services.MendeleyService;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -26,13 +26,13 @@ import es.uca.pfc.enums.OperatorSearch;
 import es.uca.pfc.enums.TypeEngineSearch;
 
 /**
- * EngineSearchIEEE es una clase que hereda de EngineSearch para representar el motor de busqueda
- * para las referencias de la pagina IEEE.
+ * EngineSearchSPRINGER es una clase que hereda de EngineSearch para representar el motor de busqueda
+ * para las referencias de la pagina Springer Link.
  * 
  * @author agonzatoro
  *
  */
-public class EngineSearchIEEE extends EngineSearch {
+public class EngineSearchSPRINGER extends EngineSearch {
 
 	/** contMax.*/
 	public static int contMax	= 0;
@@ -40,9 +40,9 @@ public class EngineSearchIEEE extends EngineSearch {
 	public static int contHilos = 0;
 	/** references.*/
 	public static List<Reference> references = new ArrayList<Reference>();
-
+	
 	/**
-	 * Constructor de la clase EngineSearchIEEE.
+	 * Constructor de la clase EngineSearchSPRINGER.
 	 * 
 	 * @param clientId String
 	 * @param clientSecret String
@@ -60,15 +60,15 @@ public class EngineSearchIEEE extends EngineSearch {
 	 * @param total_tries int
 	 * @throws Exception Exception
 	 */
-	public EngineSearchIEEE(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
-			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
+	public EngineSearchSPRINGER(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
+			String nameSLR, int tammax, List<String> tags, int start_year,  int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
 			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
 		
-		super(TypeEngineSearch.IEEE, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
+		super(TypeEngineSearch.SPRINGER, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
 				start_year, end_year, searchsTerms, apiKeysEngine, webClients, total_hilos, total_tries);
 		
-		this.web = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp";
+		this.web = "http://api.springer.com/meta/v1/pam";
 		this.idEngine = getIdSubFolder();
 		this.TAM_DEF = 100;
 	}
@@ -84,12 +84,12 @@ public class EngineSearchIEEE extends EngineSearch {
 		int num_paginas = (int) Math.ceil(TAM_MAX/tamDefDouble);
 				
 		// Insertamos los par√°metros necesarios en la web
-		String q = createQueryIEEE(searchsTerms);
+		String q = createQuerySpringer(searchsTerms);
 		web = URIUtil.encodeQuery(q);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
 		List<String> linksBib = new ArrayList<String>();		
-		System.out.println("num_paginas => " + num_paginas);
+		
 		for(int i = 1; i <= num_paginas; i++)
 		{
 			System.out.println("Conectando a " + web);
@@ -107,153 +107,134 @@ public class EngineSearchIEEE extends EngineSearch {
 	 * @param searchsTerms List<SearchTermParam>
 	 * @return String
 	 */
-	private String createQueryIEEE(List<SearchTermParam> searchsTerms)
+	private String createQuerySpringer(List<SearchTermParam> searchsTerms)
 	{
 		String query = web;
+		
+		// Insertamos la api-key y el tipo de formato a obtener (xml)
+		String apiKeySpringer = (String) apiKeysEngine.get(TypeEngineSearch.SPRINGER);
+		query += "?api_key=" + apiKeySpringer;
+		
 		if(searchsTerms.size() > 0)
 		{
-			query += "?";
-			List<SearchTermParam> othersParameters = new ArrayList<SearchTermParam>();
+			query += "&q=((";
+			
 			List<SearchTermParam> noneParameters = new ArrayList<SearchTermParam>();
 			List<SearchTermParam> andParameters = new ArrayList<SearchTermParam>();
 			List<SearchTermParam> orParameters = new ArrayList<SearchTermParam>();
 			
 			for(SearchTermParam stp : searchsTerms)
 			{
-				if(stp.getOperatorSearch() == OperatorSearch.NONE)
-				{
-					othersParameters.add(stp);
+				if (OperatorSearch.ALL == stp.getOperatorSearch()) {
+					andParameters.add(stp);
+				} else if (OperatorSearch.ANY == stp.getOperatorSearch()) {
+					orParameters.add(stp);
+				} else {
+					noneParameters.add(stp);
 				}
-				else
+			}
+			
+			// Introducimos los years de comienzo y fin
+			for(int y = start_year; y <= end_year; y++)
+			{
+				query += "year:" + y;
+				if (y != end_year)
 				{
-					String subquery = "";
-					switch(stp.getComponentSearch())
-					{
-						case ABSTRACT:
-							subquery = "ab=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case TITLE:
-							subquery = "ti=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case AUTHOR:
-							subquery = "au=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case PUBLISHER:
-							subquery = "jn=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case ISBN:
-							subquery = "isbn=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case ISSN:
-							subquery = "issn=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						case DOI:
-							subquery = "doi=\"" + stp.getTerminos().trim() + "\"";
-							break;
-						default:
-							othersParameters.add(stp);
-					}
+					query += " OR ";
+				}
+			}
+			query += ")";
+			
+			// Construimos la query
+			String subquery = "";
+			
+			// Parameters AND
+			for(SearchTermParam stp : andParameters) 
+			{
+				subquery += convertParametersSpringerLink(stp);
+				
+				query += " AND " + subquery;
+			}
+			
+			// Parameters OR
+			subquery = "";
+			if (orParameters.size() > 0)
+			{
+				for(SearchTermParam stp : orParameters)
+				{
+					subquery += convertParametersSpringerLink(stp);
 					
-					if(!subquery.equals(""))
-					{
-						query += subquery + "&";
-					}
-					
-					query = query.trim();
+					query += " OR " + subquery;
 				}
 			}
 			
-			// Restriccion para el rango de years
-			if (query.charAt(query.length()-1) != '&')
+			// Parameters NOT
+			subquery = "";
+			if (noneParameters.size() > 0)
 			{
-				query += "&";
+				for (SearchTermParam stp : noneParameters)
+				{
+					subquery += convertParametersSpringerLink(stp);
+					query += "-(" + subquery + ")";
+				}
 			}
-			query += "pys=" + start_year;
-			query += "&pye=" + end_year;
 			
-			// Restriccion total a mostrar
-			query += "&hc=" + TAM_DEF;
+			query += ")"; // fin param "q"
 			
-			// QueryText
-			if (othersParameters.size() > 0)
-			{
-				if (query.charAt(query.length()-1) != '&')
-				{
-					query += "&";
-				}
-				
-				query += "querytext=(";
-				
-				for(SearchTermParam param : othersParameters) {
-					if (param.getOperatorSearch() == OperatorSearch.ALL) 
-					{
-						andParameters.add(param);
-					} 
-					else if (param.getOperatorSearch() == OperatorSearch.ANY) 
-					{
-						orParameters.add(param);
-					}
-					else if (param.getOperatorSearch() == OperatorSearch.NONE)
-					{
-						noneParameters.add(param);
-					}
-				}
-				
-				String firstTerm = "";
-				if(andParameters.size() > 0)
-				{
-					firstTerm = andParameters.get(0).getTerminos();
-					andParameters.remove(0);
-				}
-				else
-				{
-					if (orParameters.size() > 0)
-					{
-						firstTerm = orParameters.get(0).getTerminos();
-						orParameters.remove(0);
-					}
-					else
-					{
-						firstTerm = "article";
-					}
-				}
-				
-				query += firstTerm;
-				
-				// Resto de parametros AND
-				if (andParameters.size() > 0)
-				{
-					for (SearchTermParam param : andParameters) {
-						query += " AND " + param.getTerminos();
-					}
-				}
-				
-				// Resto de parametros OR
-				if (orParameters.size() > 0)
-				{
-					for (SearchTermParam param : orParameters) {
-						query += " OR " + param.getTerminos();
-					}
-				}
-				
-				// Resto de parametros NOT
-				if (noneParameters.size() > 0)
-				{
-					for (SearchTermParam param : noneParameters) {
-						query += " NOT " + param.getTerminos();
-					}
-				}
-				
-				query += ")";
-			}
-			else if (query.charAt(query.length()-1) == '&') 
-			{
-				query = query.substring(0, query.length()-1);
-			}
-			query = query.trim() + "&rs=1";
+			// Indicamos numero de resultados a obtener
+			query += "&p="+TAM_DEF; //maximo es 100
+			
+			// Indicamos posicion por donde se empieza (index)
+			query += "&s=1";   // comienza desde 1
 		}
 		
 		return query;
+	}
+	
+	/**
+	 * MÈtodo que realiza la conversiÛn de los par·metros a insertar en la url de b˙squeda.
+	 * 
+	 * @param stp SearchTermParam
+	 * @return String
+	 */
+	private static String convertParametersSpringerLink(SearchTermParam stp)
+	{
+		String strParam = "";
+		
+		String terms = stp.getTerminos().trim();
+		
+		switch(stp.getComponentSearch())
+		{
+			case FULLTEXT:
+			case REVIEW:
+			case ANYFIELD:
+			case ABSTRACT:
+				strParam = "\"" + terms + "\"";
+				break;
+			case TITLE:
+				strParam = "title:\"" + terms + "\"";
+				break;
+			case PUBLISHER:
+				strParam = "pub:\"" + terms + "\"";
+				break;
+			case AUTHOR:
+				strParam = "name:\"" + terms + "\"";
+				break;
+			case ISBN:
+				strParam = "isbn:\"" + terms + "\"";
+				break;
+			case ISSN:
+				strParam = "issn:\"" + terms + "\"";
+				break;
+			case DOI:
+				strParam = "doi:\"" +  terms + "\"";
+				break;
+			case KEYWORDS:
+				strParam = "keyword:\"" + terms + "\"";
+				break;
+		}
+		
+		return strParam;
 	}
 	
 	/**
@@ -272,7 +253,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		for(Folder folder : folders)
 		{
-			if(folder.getName().equals("ieee"))
+			if(folder.getName().equals(TypeEngineSearch.SPRINGER.getKey()))
 			{
 				idSubFolder = folder.getId();
 				break;
@@ -281,7 +262,7 @@ public class EngineSearchIEEE extends EngineSearch {
 		
 		if(idSubFolder.equals("")) // Creamos una carpeta
 		{
-			idSubFolder = folderservice.createSubFolder("IEEE", folderservice.getFolderByName(nameSLR).getId()).getId();
+			idSubFolder = folderservice.createSubFolder(TypeEngineSearch.SPRINGER.getKey(), folderservice.getFolderByName(nameSLR).getId()).getId();
 		}
 		
 		return idSubFolder;
@@ -294,15 +275,13 @@ public class EngineSearchIEEE extends EngineSearch {
 	 */
 	private void nextPage(int page)
 	{
-		System.out.println(web);
-		int rs = 1;
-		if (web.contains("&rs="))
+		int s = 1;
+		if (web.contains("&s="))
 		{
-			rs = Integer.parseInt(web.substring(web.indexOf("&rs=")).trim().replaceAll("&rs=", ""));
-			web = web.replaceAll(web.substring(web.indexOf("&rs=")), "");				
+			s = Integer.parseInt(web.substring(web.indexOf("&s=")).trim().replaceAll("&s=", ""));
+			web = web.replaceAll(web.substring(web.indexOf("&s=")), "");				
 		}
-		//web = web + "&rs=" + ((page * TAM_DEF)-1);
-		web = web + "&rs=" + (rs + TAM_DEF);
+		web = web + "&s=" + (s + TAM_DEF);
 	}
 	
 	/**
@@ -322,7 +301,7 @@ public class EngineSearchIEEE extends EngineSearch {
 			
 			doc.getDocumentElement().normalize();
 			
-			NodeList nList = doc.getElementsByTagName("document");
+			NodeList nList = doc.getElementsByTagName("pam:message");
 			
 			if (nList.getLength() > 0)
 			{
@@ -335,8 +314,7 @@ public class EngineSearchIEEE extends EngineSearch {
 
 						Element eElement = (Element) nNode;
 
-						//bibs.add(eElement.getElementsByTagName("mdurl").item(0).getTextContent());
-						bibs.add(eElement.getElementsByTagName("doi").item(0).getTextContent());
+						bibs.add(eElement.getElementsByTagName("prism:doi").item(0).getTextContent());
 					}
 				}
 			}

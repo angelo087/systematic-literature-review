@@ -25,12 +25,41 @@ import es.uca.pfc.commons.SearchTermParam;
 import es.uca.pfc.enums.OperatorSearch;
 import es.uca.pfc.enums.TypeEngineSearch;
 
+/**
+ * EngineSearchSCIENCE es una clase que hereda de EngineSearch para representar el motor de busqueda
+ * para las referencias de la pagina Science Direct.
+ * 
+ * @author agonzatoro
+ *
+ */
 public class EngineSearchSCIENCE extends EngineSearch {
 
+	/** contMax.*/
 	public static int contMax	= 0;
+	/** contHilos.*/
 	public static int contHilos = 0;
+	/** references.*/
 	public static List<Reference> references = new ArrayList<Reference>();
 	
+	/**
+	 * Constructor de la clase EngineSearchSCIENCE.
+	 * 
+	 * @param clientId String
+	 * @param clientSecret String
+	 * @param redirectUri String
+	 * @param mendeleyService MendeleyService
+	 * @param nameSLR String
+	 * @param tammax int
+	 * @param tags List<String>
+	 * @param start_year int
+	 * @param end_year int
+	 * @param searchsTerms List<SearchTermParam>
+	 * @param apiKeysEngine Map<TypeEngineSearch,String>
+	 * @param webClients List<WebClient>
+	 * @param total_hilos int
+	 * @param total_tries int
+	 * @throws Exception Exception
+	 */
 	public EngineSearchSCIENCE(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year,  int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
@@ -44,6 +73,10 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		this.TAM_DEF = 100;
 	}
 	
+	/**
+	 * Método que obtiene las url/doi de las referencias.
+	 * 
+	 */
 	@Override
 	public void getLinksReferences() throws ElementNotFoundException, IOException
 	{
@@ -51,16 +84,16 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		int num_paginas = (int) Math.ceil(TAM_MAX/tamDefDouble);
 				
 		// Insertamos los parÃ¡metros necesarios en la web
-		String q = QueryScience(searchsTerms);
+		String q = createQueryScience(searchsTerms);
 		web = URIUtil.encodeQuery(q);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		ArrayList<String> linksBib = new ArrayList<String>();		
+		List<String> linksBib = new ArrayList<String>();		
 		
 		for(int i = 1; i <= num_paginas; i++)
 		{
 			System.out.println("Conectando a " + web);
-			linksBib.addAll(getLinksBib(web));
+			linksBib.addAll(getLinksBib());
 			nextPage(i);
 		}
 		
@@ -68,7 +101,13 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		System.out.println("Se ha obtenido " + linksDocuments.size());
 	}
 	
-	private String QueryScience(List<SearchTermParam> searchsTerms)
+	/**
+	 * Método que construye la query para obtener los enlaces/dois de las referencias a importar.
+	 * 
+	 * @param searchsTerms List<SearchTermParam>
+	 * @return String
+	 */
+	private String createQueryScience(List<SearchTermParam> searchsTerms)
 	{
 		String query = web;
 		
@@ -163,7 +202,13 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		return query;
 	}
 	
-	private static String convertParametersScienceDirect(SearchTermParam stp)
+	/**
+	 * Método que realiza la conversión de los parámetros a insertar en la url de búsqueda.
+	 * 
+	 * @param stp SearchTermParam
+	 * @return String
+	 */
+	private String convertParametersScienceDirect(SearchTermParam stp)
 	{
 		String strParam = "";
 		
@@ -203,6 +248,12 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		return strParam;
 	}
 	
+	/**
+	 * Método privado que obtiene el id de la carpeta del engine procedente de Mendeley.
+	 * 
+	 * @return String
+	 * @throws Exception Exception
+	 */
 	private String getIdSubFolder() throws Exception
 	{
 		FolderService folderservice = new FolderService(mendeleyService);
@@ -228,6 +279,11 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		return idSubFolder;
 	}
 	
+	/**
+	 * Método que obtiene la página siguiente con más referencias a importar.
+	 * 
+	 * @param page int
+	 */
 	private void nextPage(int page)
 	{
 		int start = 1;
@@ -239,9 +295,14 @@ public class EngineSearchSCIENCE extends EngineSearch {
 		web = web + "&start=" + (start + TAM_DEF);
 	}
 	
-	private ArrayList<String> getLinksBib(String code)
+	/**
+	 * Método que extrae las url/doi de las referencias a importar.
+	 * 
+	 * @return List<String>
+	 */
+	private List<String> getLinksBib()
 	{
-		ArrayList<String> bibs = new ArrayList<String>();
+		List<String> bibs = new ArrayList<String>();
 		
 		try
 		{

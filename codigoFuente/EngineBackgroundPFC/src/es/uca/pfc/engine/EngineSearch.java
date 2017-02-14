@@ -21,41 +21,69 @@ import es.uca.pfc.enums.TypeEngineSearch;
 
 public abstract class EngineSearch implements Runnable {
 	
+	/** TOTAL_TRIES.*/
 	public static int TOTAL_TRIES = 5;
 	
+	/** TypeEngineSearch.*/
 	protected TypeEngineSearch engine;
+	/** clientId.*/
 	protected String clientId;
+	/** clientSecret.*/
 	protected String clientSecret;
+	/** redirectUri.*/
 	protected String redirectUri;
+	/** mendeleyService.*/
 	protected MendeleyService mendeleyService;
+	/** webClients.*/
 	protected List<WebClient> webClients = new ArrayList<WebClient>();
+	/** total_hilos.*/
 	protected int total_hilos;
+	/** nameSLR.*/
 	protected String nameSLR;
+	/** tags.*/
 	protected List<String> tags;
+	/** strTags.*/
 	protected String strTags = "";
+	/** start_year.*/
 	protected int start_year;
+	/** end_year.*/
 	protected int end_year;
+	/** searchsTerms.*/
 	protected List<SearchTermParam> searchsTerms;
+	/** TAM_MAX.*/
 	protected int TAM_MAX          = 0;
+	/** TAM_DEF.*/
 	protected int TAM_DEF			= 0;
+	/** web.*/
 	protected String web              = "";
+	/** idEngine.*/
 	protected String idEngine			= "";
+	/** linksDocuments.*/
 	protected List<String> linksDocuments = new ArrayList<String>();
+	/** apiKeysEngine.*/
 	protected Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
+	/** referencesEngineSearch.*/
 	public static List<Reference> referencesEngineSearch = new ArrayList<Reference>();
 	
 	/**
-	 * Constructor EngineSearch
+	 * MÈtodo de la clase EngineSearch.
 	 * 
-	 * @param engine
-	 * @param mendeleyService
-	 * @param nameSLR
-	 * @param tammax
-	 * @param tags
-	 * @param start_year
-	 * @param end_year
-	 * @param searchsTerms
-	 * @throws Exception 
+	 * @param engine TypeEngineSearch
+	 * @param clientId String
+	 * @param clientSecret String
+	 * @param redirectUri String
+	 * @param mendeleyService MendeleyService
+	 * @param nameSLR String
+	 * @param tammax int
+	 * @param tags List<String>
+	 * @param start_year int
+	 * @param end_year int
+	 * @param searchsTerms List<SearchTermParam>
+	 * @param apiKeysEngine Map<TypeEngineSearch,String>
+	 * @param webClients List<WebClient>
+	 * @param total_hilos int
+	 * @param total_tries int
+	 * @throws Exception Exception
 	 */
 	public EngineSearch(TypeEngineSearch engine, String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
@@ -111,6 +139,10 @@ public abstract class EngineSearch implements Runnable {
 		}
 	}
 	
+	/**
+	 * MÈtodo que realiza la b˙squeda y descarga de las referencias.
+	 * @throws Exception
+	 */
 	public void startSearch() throws Exception {	
 		System.out.println(engine.getKey().toUpperCase() + " Paso 1 de 3 => GetLinksReferences()");
 		getLinksReferences();
@@ -224,6 +256,9 @@ public abstract class EngineSearch implements Runnable {
 		}
 	}
 	
+	/**
+	 * MÈtodo que cierra las conexiones de los WebClients.
+	 */
 	private void closeAllWebClients()
 	{
 		if (webClients != null && webClients.size() > 0)
@@ -238,6 +273,11 @@ public abstract class EngineSearch implements Runnable {
 		}
 	}
 	
+	/**
+	 * MÈtodo que cierra las conexiones de los importsRefMendeley.
+	 * 
+	 * @param importsRefMendeley List<ImportReferenceMendeley>
+	 */
 	public static void closeImportRefMendeley(List<ImportReferenceMendeley> importsRefMendeley) {
 		
 		for(ImportReferenceMendeley im : importsRefMendeley)
@@ -250,6 +290,11 @@ public abstract class EngineSearch implements Runnable {
 		
 	}
 	
+	/**
+	 * MÈtodo privado que inicializa los importRefMendeleys.
+	 * 
+	 * @return List<ImportReferenceMendeley>
+	 */
 	private List<ImportReferenceMendeley> inicialiceArrayImports()
 	{
 		List<ImportReferenceMendeley> importRefMendeley = new ArrayList<ImportReferenceMendeley>();
@@ -271,18 +316,29 @@ public abstract class EngineSearch implements Runnable {
 	private void collectAllReferences() throws Exception
 	{
 		// ACM
-		setIdMendeletFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
+		setIdMendeleyFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
 		referencesEngineSearch.addAll(EngineSearchACM.references);
 		
 		// IEEE
-		setIdMendeletFolderEngine(EngineSearchIEEE.references, TypeEngineSearch.IEEE);
+		setIdMendeleyFolderEngine(EngineSearchIEEE.references, TypeEngineSearch.IEEE);
 		referencesEngineSearch.addAll(EngineSearchIEEE.references);
 		
 		// SCIENCE
-		setIdMendeletFolderEngine(EngineSearchSCIENCE.references, TypeEngineSearch.SCIENCE);
+		setIdMendeleyFolderEngine(EngineSearchSCIENCE.references, TypeEngineSearch.SCIENCE);
 		referencesEngineSearch.addAll(EngineSearchSCIENCE.references);
+		
+		// SPRINGER
+		setIdMendeleyFolderEngine(EngineSearchSPRINGER.references, TypeEngineSearch.SPRINGER);
+		referencesEngineSearch.addAll(EngineSearchSPRINGER.references);
 	}
 	
+	/**
+	 * MÈtodo que obtiene el identificador de mendeley de la carpeta (engine).
+	 * 
+	 * @param typeEngineSearch TypeEngineSearch
+	 * @return String
+	 * @throws Exception Exception
+	 */
 	private String getIdMendeleyFolderEngine(TypeEngineSearch typeEngineSearch) throws Exception
 	{
 		String nameEngine = typeEngineSearch.getKey();
@@ -299,7 +355,14 @@ public abstract class EngineSearch implements Runnable {
 		return (folderEngine == null ? "" : folderEngine.getId());
 	}
 	
-	private void setIdMendeletFolderEngine(List<Reference> references, TypeEngineSearch typeEngineSearch) throws Exception
+	/**
+	 * MÈtodo que establece el identificador de la carpeta (engine).
+	 * 
+	 * @param references List<Reference>
+	 * @param typeEngineSearch TypeEngineSearch
+	 * @throws Exception Exception
+	 */
+	private void setIdMendeleyFolderEngine(List<Reference> references, TypeEngineSearch typeEngineSearch) throws Exception
 	{
 		String idMendeleyFolder = getIdMendeleyFolderEngine(typeEngineSearch);
 		
@@ -310,12 +373,11 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * M√©todo que a√±ade una referencia a la lista de referencias que tiene cada
-	 * uno de los motores de b√∫squedas posibles.
+	 * MÈtodo que establece una referencia a la lista de referencias que tiene cada 
+	 * uno de los motores de busquedas disponibles.
 	 * 
-	 * @param typeEngine Tipo de motor de b√∫squeda
-	 * @param reference Referencia a insertar
-	 * @return Verdadero si la inserci√≥n ha tenido √©xito.
+	 * @param reference Reference
+	 * @return boolean.
 	 */
 	public static boolean addReferenceToEngineSearch(Reference reference)
 	{
@@ -342,12 +404,20 @@ public abstract class EngineSearch implements Runnable {
 				ok = true;
 			}
 		}
+		else if (TypeEngineSearch.SPRINGER == reference.getTypeEngineSearch())
+		{
+			synchronized (EngineSearchSPRINGER.references) {
+				EngineSearchSPRINGER.references.add(reference);
+				ok = true;
+			}
+		}
 		
 		return ok;
 	}
 	
 	/**
-	 * M√©todo privado que incrementa el contador de hilos
+	 * M√©todo privado que incrementa el contador de hilos.
+	 * 
 	 */
 	private void increaseContHilos()
 	{
@@ -363,11 +433,16 @@ public abstract class EngineSearch implements Runnable {
 		{
 			EngineSearchSCIENCE.contHilos++;
 		}
+		else if (TypeEngineSearch.SPRINGER == engine)
+		{
+			EngineSearchSPRINGER.contHilos++;
+		}
 	}
 	
 	/**
 	 * M√©todo est√°tico que decrementa el contador de hilos.
-	 * @param typeEngine
+	 * 
+	 * @param typeEngine TypeEngineSearch
 	 */
 	public static void decreaseContHilos(TypeEngineSearch typeEngine)
 	{
@@ -382,6 +457,10 @@ public abstract class EngineSearch implements Runnable {
 		else if (TypeEngineSearch.SCIENCE == typeEngine && EngineSearchSCIENCE.contHilos != 0)
 		{
 			EngineSearchSCIENCE.contHilos--;
+		}
+		else if (TypeEngineSearch.SPRINGER == typeEngine && EngineSearchSPRINGER.contHilos != 0)
+		{
+			EngineSearchSPRINGER.contHilos--;
 		}
 	}
 	
@@ -403,6 +482,10 @@ public abstract class EngineSearch implements Runnable {
 		else if (TypeEngineSearch.SCIENCE == typeEngine)
 		{
 			EngineSearchSCIENCE.contMax++;
+		}
+		else if (TypeEngineSearch.SPRINGER == typeEngine)
+		{
+			EngineSearchSPRINGER.contMax++;
 		}
 	}
 	
@@ -426,6 +509,10 @@ public abstract class EngineSearch implements Runnable {
 		else if (this instanceof EngineSearchSCIENCE)
 		{
 			contHilos = EngineSearchSCIENCE.contHilos;
+		}
+		else if (this instanceof EngineSearchSPRINGER)
+		{
+			contHilos = EngineSearchSPRINGER.contHilos;
 		}
 		
 		return contHilos;
@@ -452,6 +539,10 @@ public abstract class EngineSearch implements Runnable {
 		{
 			contMax = EngineSearchSCIENCE.contMax;
 		}
+		else if (this instanceof EngineSearchSPRINGER)
+		{
+			contMax = EngineSearchSPRINGER.contMax;
+		}
 		
 		return contMax;
 	}
@@ -459,7 +550,7 @@ public abstract class EngineSearch implements Runnable {
 	/**
 	 * M√©todo que devuelve todas las referencias obtenidas.
 	 * 
-	 * @return
+	 * @return List<Reference>
 	 */
 	private List<Reference> getReferences()
 	{
@@ -476,6 +567,10 @@ public abstract class EngineSearch implements Runnable {
 		{
 			references = EngineSearchSCIENCE.references;
 		}
+		else if (TypeEngineSearch.SPRINGER == engine)
+		{
+			references = EngineSearchSPRINGER.references;
+		}
 		
 		return references;
 	}
@@ -484,7 +579,7 @@ public abstract class EngineSearch implements Runnable {
 	 * M√©todo que comprueba si todos los hilos han finalizado su
 	 * ejecuci√≥n.
 	 * 
-	 * @param threads
+	 * @param threads List<Thread>
 	 * @return Verdadero o Falso dependiendo si todos los hilos han
 	 * 		   finalizado su ejecuci√≥n o no.
 	 */
@@ -526,7 +621,7 @@ public abstract class EngineSearch implements Runnable {
 	 * M√©todo privado que obtiene la posici√≥n del vector de hilos de 
 	 * aquel hilo que se encuentre disponible para ejecutarse.
 	 * 
-	 * @param threads
+	 * @param threads List<Thread>
 	 * @return Posici√≥n del vector donde se encuentra un hilo para ejecutarse.
 	 * 		   En caso de que no haya ninguno, devuelve -1.
 	 */
@@ -545,124 +640,271 @@ public abstract class EngineSearch implements Runnable {
 		return pos;
 	}
 
-	// Gets y Sets
-	
+	/**
+	 * MÈtodo que devuelve el TypeEngineSearch asociado al Engine.
+	 * 
+	 * @return TypeEngineSearch
+	 */
 	public TypeEngineSearch getEngine() {
 		return engine;
 	}
 
+	/**
+	 * MÈtodo que establece el TypeEngineSearch asociado al Engine.
+	 * 
+	 * @param engine TypeEngineSearch
+	 */
 	public void setEngine(TypeEngineSearch engine) {
 		this.engine = engine;
 	}
 
+	/**
+	 * MÈtodo que devuelve el nombre del SLR.
+	 * 
+	 * @return String
+	 */
 	public String getNameSLR() {
 		return nameSLR;
 	}
 
+	/**
+	 * MÈtodo que establece el nombre del SLR.
+	 * 
+	 * @param nameSLR String
+	 */
 	public void setNameSLR(String nameSLR) {
 		this.nameSLR = nameSLR;
 	}
 
+	/**
+	 * MÈtodo que devuelve los tags.
+	 * 
+	 * @return List<String>
+	 */
 	public List<String> getTags() {
 		return tags;
 	}
 
+	/**
+	 * MÈtodo que establece los tags.
+	 * 
+	 * @param tags List<String>
+	 */
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 
+	/**
+	 * MÈtodo que devuelve el ano de comienzo.
+	 * 
+	 * @return int
+	 */
 	public int getStart_year() {
 		return start_year;
 	}
 
+	/**
+	 * MÈtodo que establece el ano de comienzo.
+	 * 
+	 * @param start_year int
+	 */
 	public void setStart_year(int start_year) {
 		this.start_year = start_year;
 	}
 
+	/**
+	 * MÈtodo que establece el ano final.
+	 * 
+	 * @return int
+	 */
 	public int getEnd_year() {
 		return end_year;
 	}
 
+	/**
+	 * MÈtodo que establece el ano final.
+	 * 
+	 * @param end_year int
+	 */
 	public void setEnd_year(int end_year) {
 		this.end_year = end_year;
 	}
 
+	/**
+	 * MÈtodo que devuelve los SearchTermParam asociados al Engine.
+	 * 
+	 * @return List<SearchTermParam>
+	 */
 	public List<SearchTermParam> getSearchsTerms() {
 		return searchsTerms;
 	}
 
+	/**
+	 * MÈtodo que establece los SearchTermParam asociados al Engine.
+	 * 
+	 * @param searchsTerms List<SearchTermParam>
+	 */
 	public void setSearchsTerms(List<SearchTermParam> searchsTerms) {
 		this.searchsTerms = searchsTerms;
 	}
 
+	/**
+	 * MÈtodo que devuelve el tamano maximo de referencias a buscar.
+	 * 
+	 * @return int
+	 */
 	public int getTAM_MAX() {
 		return TAM_MAX;
 	}
 
+	/**
+	 * MÈtodo que establece el tamano maximo de referencias a buscar.
+	 * 
+	 * @param tAM_MAX
+	 */
 	public void setTAM_MAX(int tAM_MAX) {
 		TAM_MAX = tAM_MAX;
 	}
 
+	/**
+	 * MÈtodo que establece el tamano definido por defecto de referencias a buscar.
+	 * 
+	 * @return int
+	 */
 	public int getTAM_DEF() {
 		return TAM_DEF;
 	}
 
+	/**
+	 * MÈtodo que establece el tamano definido por defecto de referencias a buscar.
+	 * 
+	 * @param tAM_DEF int
+	 */
 	public void setTAM_DEF(int tAM_DEF) {
 		TAM_DEF = tAM_DEF;
 	}
 
+	/**
+	 * MÈtodo que devuelve la url asociada al EngineSearch.
+	 * 
+	 * @return String
+	 */
 	public String getWeb() {
 		return web;
 	}
 
+	/**
+	 * MÈtodo que establece la url asociada al EngineSearch.
+	 * 
+	 * @param web String
+	 */
 	public void setWeb(String web) {
 		this.web = web;
 	}
 
+	/**
+	 * MÈtodo que devuelve el idEngine.
+	 * 
+	 * @return String
+	 */
 	public String getIdEngine() {
 		return idEngine;
 	}
 
+	/**
+	 * MÈtodo que establece el idEngine.
+	 * 
+	 * @param idEngine String
+	 */
 	public void setIdEngine(String idEngine) {
 		this.idEngine = idEngine;
 	}
 
+	/**
+	 * MÈtodo que devuelve el listado de los enlaces de las referencias.
+	 * 
+	 * @return List<String>
+	 */
 	public List<String> getLinksDocuments() {
 		return linksDocuments;
 	}
 
+	/**
+	 * MÈtodo que establece el listado de los enlaces de las referencias.
+	 * 
+	 * @param linksDocuments List<String>
+	 */
 	public void setLinksDocuments(List<String> linksDocuments) {
 		this.linksDocuments = linksDocuments;
 	}
 
+	/**
+	 * MÈtodo que obtiene el clientId.
+	 * 
+	 * @return String
+	 */
 	public String getClientId() {
 		return clientId;
 	}
 
+	/**
+	 * MÈtodo que establece el clientId
+	 * 
+	 * @param clientId String
+	 */
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 
+	/**
+	 * MÈtodo que obtiene el clientSecret
+	 * 
+	 * @return String
+	 */
 	public String getClientSecret() {
 		return clientSecret;
 	}
 
+	/**
+	 * MÈtodo que establece el clientSecret.
+	 * 
+	 * @param clientSecret String
+	 */
 	public void setClientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
 	}
 
+	/**
+	 * MÈtodo que obtiene la url de redireccion.
+	 * 
+	 * @return String
+	 */
 	public String getRedirectUri() {
 		return redirectUri;
 	}
 
+	/**
+	 * MÈtodo que establece la url de direccion.
+	 * @param redirectUri
+	 */
 	public void setRedirectUri(String redirectUri) {
 		this.redirectUri = redirectUri;
 	}
 
+	/**
+	 * MÈtodo que obtiene el servicio login de mendeley.
+	 * 
+	 * @return MendeleyService
+	 */
 	public MendeleyService getMendeleyService() {
 		return mendeleyService;
 	}
 	
+	/**
+	 * MÈtodo que establece el servicio login de mendeley.
+	 * 
+	 * @param mendeleyService MendeleyService
+	 */
 	public void setMendeleyService(MendeleyService mendeleyService) {
 		this.mendeleyService = mendeleyService;
 	}

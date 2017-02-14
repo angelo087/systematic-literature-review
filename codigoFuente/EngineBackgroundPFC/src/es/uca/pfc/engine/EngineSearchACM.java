@@ -25,12 +25,41 @@ import es.uca.pfc.commons.Reference;
 import es.uca.pfc.commons.SearchTermParam;
 import es.uca.pfc.enums.TypeEngineSearch;
 
+/**
+ * EngineSearchACM es una clase que hereda de EngineSearch para representar el motor de busqueda
+ * para las referencias de la pagina ACM.
+ * 
+ * @author agonzatoro
+ *
+ */
 public class EngineSearchACM extends EngineSearch {
 
+	/** contMax.*/
 	public static int contMax	= 0;
+	/** contHilos.*/
 	public static int contHilos = 0;
+	/** references.*/
 	public static List<Reference> references = new ArrayList<Reference>();
 	
+	/**
+	 * Constructor de la clase EngineSearchACM.
+	 * 
+	 * @param clientId String
+	 * @param clientSecret String
+	 * @param redirectUri String
+	 * @param mendeleyService MendeleyService
+	 * @param nameSLR String
+	 * @param tammax int
+	 * @param tags List<String>
+	 * @param start_year int
+	 * @param end_year int
+	 * @param searchsTerms List<SearchTermParam>
+	 * @param apiKeysEngine Map<TypeEngineSearch,String>
+	 * @param webClients List<WebClient>
+	 * @param total_hilos int
+	 * @param total_tries int
+	 * @throws Exception Exception
+	 */
 	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
@@ -44,6 +73,10 @@ public class EngineSearchACM extends EngineSearch {
 		this.TAM_DEF = 100;
 	}
 	
+	/**
+	 * MÈtodo que obtiene las url/doi de las referencias.
+	 * 
+	 */
 	@Override
 	public void getLinksReferences() throws ElementNotFoundException, IOException
 	{
@@ -75,7 +108,7 @@ public class EngineSearchACM extends EngineSearch {
 		webClient.waitForBackgroundJavaScript(10000);
 		
 		// Insertamos los par√°metros necesarios en la web
-		String q = QueryACM(searchsTerms);
+		String q = createQueryACM(searchsTerms);
 		String query = URIUtil.encodeQuery(q);
 		query = query.replaceAll("\\+", "%252B");
 		String filtered = "&dte=" + start_year + "&bfr=" + end_year;
@@ -87,7 +120,7 @@ public class EngineSearchACM extends EngineSearch {
 		webClient.waitForBackgroundJavaScriptStartingBefore(10000);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		ArrayList<String> linksBib = new ArrayList<String>();
+		List<String> linksBib = new ArrayList<String>();
 		
 		for(int i = 0; i < num_paginas; i++)
 		{
@@ -107,7 +140,13 @@ public class EngineSearchACM extends EngineSearch {
 		System.out.println("Se ha obtenido " + linksDocuments.size());
 	}
 	
-	private String QueryACM(List<SearchTermParam> searchsTerms)
+	/**
+	 * MÈtodo que construye la query para obtener los enlaces/dois de las referencias a importar.
+	 * 
+	 * @param searchsTerms List<SearchTermParam>
+	 * @return String
+	 */
+	private String createQueryACM(List<SearchTermParam> searchsTerms)
 	{
 		String query = "";
 		int cont = 0;
@@ -183,6 +222,12 @@ public class EngineSearchACM extends EngineSearch {
 		return query;
 	}
 	
+	/**
+	 * MÈtodo privado que obtiene el id de la carpeta del engine procedente de Mendeley.
+	 * 
+	 * @return String
+	 * @throws Exception Exception
+	 */
 	private String getIdSubFolder() throws Exception
 	{
 		FolderService folderservice = new FolderService(mendeleyService);
@@ -208,6 +253,16 @@ public class EngineSearchACM extends EngineSearch {
 		return idSubFolder;
 	}
 	
+	/**
+	 * MÈtodo que obtiene la p·gina siguiente con m·s referencias a importar.
+	 * 
+	 * @param webClient WebClient
+	 * @param currentPage HtmlPage
+	 * @param page int
+	 * @return HtmlPage
+	 * @throws ElementNotFoundException ElementNotFoundException
+	 * @throws IOException IOException
+	 */
 	private HtmlPage nextPage(WebClient webClient, HtmlPage currentPage, int page) throws ElementNotFoundException, IOException
 	{
 		web = web.replaceAll(web.substring(web.indexOf("&start=")), "");
@@ -226,9 +281,15 @@ public class EngineSearchACM extends EngineSearch {
 		return currentPage;
 	}
 	
-	private ArrayList<String> getLinksBib(String code)
+	/**
+	 * MÈtodo que extrae las url/doi de las referencias a importar.
+	 * 
+	 * @param code String
+	 * @return List<String>
+	 */
+	private List<String> getLinksBib(String code)
 	{
-		ArrayList<String> bibs = new ArrayList<String>();
+		List<String> bibs = new ArrayList<String>();
 		
 		String textSource = code;
 		

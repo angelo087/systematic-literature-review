@@ -1,9 +1,21 @@
 package es.uca.pfc.test;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import es.uca.pfc.commons.SearchTermParam;
 import es.uca.pfc.enums.ComponentSearch;
@@ -19,7 +31,7 @@ public class TestSpringerLink {
 	public static Map<TypeEngineSearch, String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 	public static int TAM_DEF = 10;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws URIException {
 		
 		SearchTermParam stp01 = new SearchTermParam(ComponentSearch.ANYFIELD, OperatorSearch.ALL, "word");
 		SearchTermParam stp02 = new SearchTermParam(ComponentSearch.AUTHOR, OperatorSearch.NONE, "toro");
@@ -28,7 +40,10 @@ public class TestSpringerLink {
 		
 		apiKeysEngine.put(TypeEngineSearch.SPRINGER, CODE_API);
 		
-		System.out.println("Web => " + createQuerySpringer(searchsTerms));
+		String url = createQuerySpringer(searchsTerms);
+		System.out.println("Web => " + url);
+		List<String> listDOI = getLinksBib("", url);
+		System.out.println("Hay " + listDOI.size() + " elementos.");
 		
 	}
 	
@@ -116,12 +131,85 @@ public class TestSpringerLink {
 			query += "&s=1";   // comienza desde 1
 		}
 		
+		query = query.trim();
+		
 		return query;
 	}
 	
 	private static String convertParametersSpringerLink(SearchTermParam stp)
 	{
-		return "";
+		String strParam = "";
+		
+		String terms = stp.getTerminos().trim();
+		
+		switch(stp.getComponentSearch())
+		{
+			case FULLTEXT:
+			case REVIEW:
+			case ANYFIELD:
+			case ABSTRACT:
+				strParam = "\"" + terms + "\"";
+				break;
+			case TITLE:
+				strParam = "title:\"" + terms + "\"";
+				break;
+			case PUBLISHER:
+				strParam = "pub:\"" + terms + "\"";
+				break;
+			case AUTHOR:
+				strParam = "name:\"" + terms + "\"";
+				break;
+			case ISBN:
+				strParam = "isbn:\"" + terms + "\"";
+				break;
+			case ISSN:
+				strParam = "issn:\"" + terms + "\"";
+				break;
+			case DOI:
+				strParam = "doi:\"" +  terms + "\"";
+				break;
+			case KEYWORDS:
+				strParam = "keyword:\"" + terms + "\"";
+				break;
+		}
+		
+		return strParam;
 	}
 	
+	public static List<String> getLinksBib(String code, String link) throws URIException
+	{
+		List<String> bibs = new ArrayList<String>();
+		
+		String url = URIUtil.encodeQuery(link);
+
+		try
+		{
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			org.w3c.dom.Document doc = dBuilder.parse(url);
+			
+			doc.getDocumentElement().normalize();
+
+			NodeList nList = doc.getElementsByTagName("pam:message");
+			
+			if (nList.getLength() > 0)
+			{
+				for (int temp = 0; temp < nList.getLength(); temp++) 
+				{
+
+					Node nNode = nList.item(temp);
+
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+						Element eElement = (Element) nNode;
+
+						bibs.add(eElement.getElementsByTagName("prism:doi").item(0).getTextContent());
+					}
+				}
+			}
+		}
+		catch(Exception ex)	{ ex.printStackTrace(); }
+		
+		return bibs;
+	}
 }

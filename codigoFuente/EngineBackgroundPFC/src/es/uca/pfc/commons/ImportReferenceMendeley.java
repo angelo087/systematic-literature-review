@@ -16,19 +16,45 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import es.uca.pfc.engine.EngineSearch;
 import es.uca.pfc.enums.TypeEngineSearch;
 
+/**
+ * Clase que recoge cada una de las referencias para ser importadas posteriormente
+ * a Mendeley.
+ * 
+ * @author agonzatoro
+ *
+ */
 public class ImportReferenceMendeley implements Runnable {
 	
+	/** name .*/
 	private String name;
+	/** typeEngine .*/
 	private TypeEngineSearch typeEngine;
+	/** webClient .*/
 	private WebClient webClient;
+	/** url .*/
 	private String url;
+	/** nameSLR .*/
 	private String nameSLR;
+	/** mendeleyService .*/
 	private MendeleyService mendeleyService;
+	/** prefixUrl .*/
 	private String prefixUrl;
 	
+	/** PREFIX_URL_DOI .*/
 	private static final String PREFIX_URL_DOI = "http://www.mendeley.com/import/?doi=";
+	/** PREFIX_URL_URL .*/
 	private static final String PREFIX_URL_URL = "http://www.mendeley.com/import/?url=";
 	
+	/**
+	 * Constructor de la clase ImportReferenceMendeley
+	 * 
+	 * @param name String
+	 * @param typeEngine TypeEngineSearch
+	 * @param webClient WebClient
+	 * @param url String
+	 * @param nameSLR String
+	 * @param mendeleyService MendeleyService
+	 */
 	public ImportReferenceMendeley(String name, TypeEngineSearch typeEngine,
 			WebClient webClient, String url, String nameSLR,
 			MendeleyService mendeleyService) {
@@ -51,40 +77,83 @@ public class ImportReferenceMendeley implements Runnable {
 		this.mendeleyService = mendeleyService;
 	}
 	
+	/**
+	 * Método que cierra la conexión del WebClient asociado.
+	 */
 	public void closeWebClient() {
 		if (webClient != null) {
 			webClient.closeAllWindows();
 		}
 	}
 
+	/**
+	 * Método que devuelve el nombre del hilo asociado.
+	 * 
+	 * @return String
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Método que inserta el nombre del hilo asociado.
+	 * 
+	 * @param name String
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Método que devuelve el TypeEngine asociado a la referencia.
+	 * 
+	 * @return TypeEngineSearch
+	 */
 	public TypeEngineSearch getTypeEngine() {
 		return typeEngine;
 	}
 
+	/**
+	 * Método que establece el TypeEngineSearch a la referencia a importar.
+	 * 
+	 * @param typeEngine TypeEngineSearch
+	 */
 	public void setTypeEngine(TypeEngineSearch typeEngine) {
 		this.typeEngine = typeEngine;
 	}
 
+	/**
+	 * Método que devuelve el WebClient asociado a la referencia a importar.
+	 * 
+	 * @return WebClient
+	 */
 	public WebClient getWebClient() {
 		return webClient;
 	}
 
+	/**
+	 * Método que establece el WebClient de la referencia a importar.
+	 * 
+	 * @param webClient WebClient
+	 */
 	public void setWebClient(WebClient webClient) {
 		this.webClient = webClient;
 	}
 
+	/**
+	 * Método que devuelve la url de la referencia a importar.
+	 * 
+	 * @return String
+	 */
 	public String getUrl() {
 		return url;
 	}
 
+	/**
+	 * Método que establece la url de la referencia a importar.
+	 * 
+	 * @param url String
+	 */
 	public void setUrl(String url) {
 		if (TypeEngineSearch.ACM == this.typeEngine)
 		{
@@ -97,26 +166,54 @@ public class ImportReferenceMendeley implements Runnable {
 		this.url = prefixUrl + url;
 	}
 
+	/**
+	 * Método que devuelve el nombre del SLR de la referencia a importar.
+	 * 
+	 * @return String
+	 */
 	public String getNameSLR() {
 		return nameSLR;
 	}
 
+	/**
+	 * Método que establece el nombre del SLR de la referencia a importar.
+	 * 
+	 * @param nameSLR String
+	 */
 	public void setNameSLR(String nameSLR) {
 		this.nameSLR = nameSLR;
 	}
 
+	/**
+	 * Método que devuelve la conexión con Mendeley de la referencia a importar.
+	 * 
+	 * @return MendeleyService
+	 */
 	public MendeleyService getMendeleyService() {
 		return mendeleyService;
 	}
 
+	/**
+	 * Método que establece la conexión con Mendeley de la referencia a importar.
+	 * 
+	 * @param mendeleyService MendeleyService
+	 */
 	public void setMendeleyService(MendeleyService mendeleyService) {
 		this.mendeleyService = mendeleyService;
 	}
 	
+	/**
+	 * Método que devuelve la url base que usa la referencia para importar a mendeley.
+	 * 
+	 * @return String
+	 */
 	public String getPrefixUrl() {
 		return prefixUrl;
 	}
 
+	/**
+	 * Método que realiza el proceso paralelo para importar la referencia.
+	 */
 	@Override
 	public void run() {
 		System.out.println("Soy " + this.name + " con " + this.url);
@@ -147,6 +244,16 @@ public class ImportReferenceMendeley implements Runnable {
 		EngineSearch.decreaseContHilos(typeEngine);
 	}
 	
+	/**
+	 * Método privado que realiza la importación de la referencia a Mendeley e indica
+	 * si se ha realizado correctamente o no.
+	 * 
+	 * @return boolean
+	 * @throws FailingHttpStatusCodeException FailingHttpStatusCodeException
+	 * @throws MalformedURLException MalformedURLException
+	 * @throws IOException IOException
+	 * @throws InterruptedException InterruptedException
+	 */
 	private boolean doImport() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException
 	{
 		boolean ok = false;
@@ -175,13 +282,6 @@ public class ImportReferenceMendeley implements Runnable {
 			if (folderSelect == null)
 			{
 				System.out.println(this.name + " => Tras varios intentos, no ha cargado la pÃ¡gina. => " + currentPage.getTitleText());
-				/*try
-				{
-					PrintWriter writer = new PrintWriter("codeACM.txt", "UTF-8");
-				    writer.println(currentPage.asXml());
-				    writer.close();
-				}
-				catch(Exception ex) { }*/
 			}
 			else
 			{
@@ -210,6 +310,13 @@ public class ImportReferenceMendeley implements Runnable {
 		return ok;
 	}
 	
+	/**
+	 * Método privado que devuelve el HtmlOption que contiene el engine (folder) donde se escoge
+	 * la carpeta donde va a ser importada.
+	 * 
+	 * @param folderSelect HtmlSelect
+	 * @return HtmlOption
+	 */
 	private HtmlOption getFolderOption(HtmlSelect folderSelect)
 	{
 		HtmlOption optionSelected = null;
