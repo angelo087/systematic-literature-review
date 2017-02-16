@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.Date;
 
+import es.uca.pfc.ApiKeyEngine
 import es.uca.pfc.Author
 import es.uca.pfc.AuthorReference
 import es.uca.pfc.Criterion
@@ -11,6 +12,7 @@ import es.uca.pfc.Language
 import es.uca.pfc.Logger
 import es.uca.pfc.LoggerFriend
 import es.uca.pfc.LoggerSlr
+import es.uca.pfc.MendeleyApi
 import es.uca.pfc.Notification
 import es.uca.pfc.Reference
 import es.uca.pfc.ResearchQuestion
@@ -98,8 +100,18 @@ class BootStrap {
 		def engine04 = EngineSearch.findByName('SPRINGER') ?: new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER').save(failOnError: true)
 		def engine05 = EngineSearch.findByName('OTHER') ?: new EngineSearch(name: 'OTHER', display_name: 'Other engines', image: 'other.png', text: 'OTHER').save(failOnError: true)
 		
-		println "Creamos Usuarios de prueba..."
+		println "Creamos las api Keys de los motores de busquedas..."
+		def apiACM = ApiKeyEngine.findByEngine('ACM') ?: new ApiKeyEngine(engine: 'ACM').save(failOnError: true)
+		def apiIEEE = ApiKeyEngine.findByEngine('IEEE') ?: new ApiKeyEngine(engine: 'IEEE').save(failOnError: true)
+		def apiSCIENCE = ApiKeyEngine.findByEngine('SCIENCE') ?: new ApiKeyEngine(engine: 'SCIENCE', apiKey: '80aa542193705ce36ebfe094078b9aa3').save(failOnError: true)
+		def apiSPRINGER = ApiKeyEngine.findByEngine('SPRINGER') ?: new ApiKeyEngine(engine: 'SPRINGER', apiKey: 'c8c8ee4b2c20f0046806762317d0d6e2').save(failOnError: true)
 		
+		println "Creamos las credenciales para Mendeley..."
+		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: new MendeleyApi(clientId: '1044', clientSecret: '5qQ6zm5iYpvUehj4', 
+			redirectUri: 'http://localhost:8090/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
+		
+		println "Creamos Usuarios de prueba..."
+				
 		def profile01 = new UserProfile(
 			first_name: 'Paco',
 			last_name: 'Jimenez',

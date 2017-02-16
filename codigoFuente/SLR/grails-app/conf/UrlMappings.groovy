@@ -116,5 +116,15 @@ class UrlMappings {
 			controller="slr"
 			action="show"
 		}
+		
+		"/apiKeyEngine/" {
+			controller="apiKeyEngine"
+			action="index"
+		}
+		
+		"/mendeleyApi/" {
+			controller="mendeleyApi"
+			action="index"
+		}
 	}
 }
