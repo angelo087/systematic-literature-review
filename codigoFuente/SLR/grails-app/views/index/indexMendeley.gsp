@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <%-- Head Meta --%>
+	<g:render template="headMeta" contextPath="/"/>
     <title>Systematic Literature Review</title>
   </head>
   
