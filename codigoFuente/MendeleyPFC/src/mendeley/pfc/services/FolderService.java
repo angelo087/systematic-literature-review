@@ -1,24 +1,22 @@
 package mendeley.pfc.services;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import mendeley.pfc.schemas.Document;
-import mendeley.pfc.schemas.Library;
-import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.commons.MendeleyException;
 import mendeley.pfc.commons.MendeleyUrl;
 import mendeley.pfc.commons.MendeleyUtils;
+import mendeley.pfc.schemas.Document;
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.schemas.Library;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 import com.google.gson.Gson;
