@@ -187,5 +187,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/EngineBackgroundPFC"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MendeleyPFC"/>
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

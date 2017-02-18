@@ -661,12 +661,8 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace()
 			mendeleyService = null;
 		}
-		
-		if(mendeleyService == null) println "MendeleyService => Es nulo"
-		else println "MendeleyService => No es nulo"
 		
 		return mendeleyService;
 	}
