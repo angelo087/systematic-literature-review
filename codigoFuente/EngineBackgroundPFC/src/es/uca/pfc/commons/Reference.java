@@ -54,27 +54,27 @@ public class Reference {
 	}
 	
 	/**
-	 * Método que devuelve el identificador de la referencia en Mendeley.
+	 * Mï¿½todo que devuelve el identificador de la referencia en Mendeley.
 	 * 
 	 * @return String
 	 */
 	public String getIdMendeley() { return idMendeley; }
 	
 	/**
-	 * Método que devuelve la url de donde se ha importado la referencia.
+	 * Mï¿½todo que devuelve la url de donde se ha importado la referencia.
 	 * 
 	 * @return String
 	 */
 	public String getUrl() { return url; }
 	
 	/**
-	 * Método que devuelve el TypeEngineSearch de la referencia.
+	 * Mï¿½todo que devuelve el TypeEngineSearch de la referencia.
 	 * @return String
 	 */
 	public TypeEngineSearch getTypeEngineSearch() { return typeEngineSearch; }
 
 	/**
-	 * Método que devuelve las notas asociadas a la referencia.
+	 * Mï¿½todo que devuelve las notas asociadas a la referencia.
 	 * 
 	 * @return String
 	 */
@@ -83,7 +83,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que establece las notas asociadas a la referencia.
+	 * Mï¿½todo que establece las notas asociadas a la referencia.
 	 * 
 	 * @param notesCont String
 	 */
@@ -92,7 +92,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que establece la url de donde se importa la referencia.
+	 * Mï¿½todo que establece la url de donde se importa la referencia.
 	 * 
 	 * @param url String
 	 */
@@ -101,7 +101,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que establece el identificador de Mendeley de la referencia importada.
+	 * Mï¿½todo que establece el identificador de Mendeley de la referencia importada.
 	 * 
 	 * @param idMendeley String
 	 */
@@ -110,7 +110,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que establce el TypeEngineSearch asociado a la referencia importada.
+	 * Mï¿½todo que establce el TypeEngineSearch asociado a la referencia importada.
 	 * 
 	 * @param typeEngineSearch TypeEngineSearch
 	 */
@@ -119,7 +119,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que devuelve el identificador de la carpeta donde está contenida la referencia.
+	 * Mï¿½todo que devuelve el identificador de la carpeta donde estï¿½ contenida la referencia.
 	 * 
 	 * @return String
 	 */
@@ -128,7 +128,7 @@ public class Reference {
 	}
 
 	/**
-	 * Método que establece el identificador de la carpeta donde está contenida la referencia.
+	 * Mï¿½todo que establece el identificador de la carpeta donde estï¿½ contenida la referencia.
 	 * 
 	 * @param idFolderEngine String
 	 */

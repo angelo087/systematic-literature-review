@@ -78,7 +78,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 	
 	/**
-	 * Método que cierra la conexión del WebClient asociado.
+	 * Mï¿½todo que cierra la conexiï¿½n del WebClient asociado.
 	 */
 	public void closeWebClient() {
 		if (webClient != null) {
@@ -87,7 +87,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el nombre del hilo asociado.
+	 * Mï¿½todo que devuelve el nombre del hilo asociado.
 	 * 
 	 * @return String
 	 */
@@ -96,7 +96,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que inserta el nombre del hilo asociado.
+	 * Mï¿½todo que inserta el nombre del hilo asociado.
 	 * 
 	 * @param name String
 	 */
@@ -105,7 +105,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el TypeEngine asociado a la referencia.
+	 * Mï¿½todo que devuelve el TypeEngine asociado a la referencia.
 	 * 
 	 * @return TypeEngineSearch
 	 */
@@ -114,7 +114,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que establece el TypeEngineSearch a la referencia a importar.
+	 * Mï¿½todo que establece el TypeEngineSearch a la referencia a importar.
 	 * 
 	 * @param typeEngine TypeEngineSearch
 	 */
@@ -123,7 +123,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el WebClient asociado a la referencia a importar.
+	 * Mï¿½todo que devuelve el WebClient asociado a la referencia a importar.
 	 * 
 	 * @return WebClient
 	 */
@@ -132,7 +132,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que establece el WebClient de la referencia a importar.
+	 * Mï¿½todo que establece el WebClient de la referencia a importar.
 	 * 
 	 * @param webClient WebClient
 	 */
@@ -141,7 +141,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve la url de la referencia a importar.
+	 * Mï¿½todo que devuelve la url de la referencia a importar.
 	 * 
 	 * @return String
 	 */
@@ -150,7 +150,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que establece la url de la referencia a importar.
+	 * Mï¿½todo que establece la url de la referencia a importar.
 	 * 
 	 * @param url String
 	 */
@@ -167,7 +167,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el nombre del SLR de la referencia a importar.
+	 * Mï¿½todo que devuelve el nombre del SLR de la referencia a importar.
 	 * 
 	 * @return String
 	 */
@@ -176,7 +176,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que establece el nombre del SLR de la referencia a importar.
+	 * Mï¿½todo que establece el nombre del SLR de la referencia a importar.
 	 * 
 	 * @param nameSLR String
 	 */
@@ -185,7 +185,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve la conexión con Mendeley de la referencia a importar.
+	 * Mï¿½todo que devuelve la conexiï¿½n con Mendeley de la referencia a importar.
 	 * 
 	 * @return MendeleyService
 	 */
@@ -194,7 +194,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que establece la conexión con Mendeley de la referencia a importar.
+	 * Mï¿½todo que establece la conexiï¿½n con Mendeley de la referencia a importar.
 	 * 
 	 * @param mendeleyService MendeleyService
 	 */
@@ -203,7 +203,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 	
 	/**
-	 * Método que devuelve la url base que usa la referencia para importar a mendeley.
+	 * Mï¿½todo que devuelve la url base que usa la referencia para importar a mendeley.
 	 * 
 	 * @return String
 	 */
@@ -212,7 +212,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * Método que realiza el proceso paralelo para importar la referencia.
+	 * Mï¿½todo que realiza el proceso paralelo para importar la referencia.
 	 */
 	@Override
 	public void run() {
@@ -245,7 +245,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 	
 	/**
-	 * Método privado que realiza la importación de la referencia a Mendeley e indica
+	 * Mï¿½todo privado que realiza la importaciï¿½n de la referencia a Mendeley e indica
 	 * si se ha realizado correctamente o no.
 	 * 
 	 * @return boolean
@@ -311,7 +311,7 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 	
 	/**
-	 * Método privado que devuelve el HtmlOption que contiene el engine (folder) donde se escoge
+	 * Mï¿½todo privado que devuelve el HtmlOption que contiene el engine (folder) donde se escoge
 	 * la carpeta donde va a ser importada.
 	 * 
 	 * @param folderSelect HtmlSelect

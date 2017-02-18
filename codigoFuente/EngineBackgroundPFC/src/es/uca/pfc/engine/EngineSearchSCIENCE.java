@@ -74,7 +74,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método que obtiene las url/doi de las referencias.
+	 * Mï¿½todo que obtiene las url/doi de las referencias.
 	 * 
 	 */
 	@Override
@@ -102,7 +102,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método que construye la query para obtener los enlaces/dois de las referencias a importar.
+	 * Mï¿½todo que construye la query para obtener los enlaces/dois de las referencias a importar.
 	 * 
 	 * @param searchsTerms List<SearchTermParam>
 	 * @return String
@@ -203,7 +203,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método que realiza la conversión de los parámetros a insertar en la url de búsqueda.
+	 * Mï¿½todo que realiza la conversiï¿½n de los parï¿½metros a insertar en la url de bï¿½squeda.
 	 * 
 	 * @param stp SearchTermParam
 	 * @return String
@@ -249,7 +249,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método privado que obtiene el id de la carpeta del engine procedente de Mendeley.
+	 * Mï¿½todo privado que obtiene el id de la carpeta del engine procedente de Mendeley.
 	 * 
 	 * @return String
 	 * @throws Exception Exception
@@ -280,7 +280,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método que obtiene la página siguiente con más referencias a importar.
+	 * Mï¿½todo que obtiene la pï¿½gina siguiente con mï¿½s referencias a importar.
 	 * 
 	 * @param page int
 	 */
@@ -296,7 +296,7 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	}
 	
 	/**
-	 * Método que extrae las url/doi de las referencias a importar.
+	 * Mï¿½todo que extrae las url/doi de las referencias a importar.
 	 * 
 	 * @return List<String>
 	 */

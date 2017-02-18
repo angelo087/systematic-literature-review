@@ -66,7 +66,7 @@ public abstract class EngineSearch implements Runnable {
 	public static List<Reference> referencesEngineSearch = new ArrayList<Reference>();
 	
 	/**
-	 * Método de la clase EngineSearch.
+	 * Mï¿½todo de la clase EngineSearch.
 	 * 
 	 * @param engine TypeEngineSearch
 	 * @param clientId String
@@ -140,7 +140,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que realiza la búsqueda y descarga de las referencias.
+	 * Mï¿½todo que realiza la bï¿½squeda y descarga de las referencias.
 	 * @throws Exception
 	 */
 	public void startSearch() throws Exception {	
@@ -257,7 +257,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que cierra las conexiones de los WebClients.
+	 * Mï¿½todo que cierra las conexiones de los WebClients.
 	 */
 	private void closeAllWebClients()
 	{
@@ -274,7 +274,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que cierra las conexiones de los importsRefMendeley.
+	 * Mï¿½todo que cierra las conexiones de los importsRefMendeley.
 	 * 
 	 * @param importsRefMendeley List<ImportReferenceMendeley>
 	 */
@@ -291,7 +291,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método privado que inicializa los importRefMendeleys.
+	 * Mï¿½todo privado que inicializa los importRefMendeleys.
 	 * 
 	 * @return List<ImportReferenceMendeley>
 	 */
@@ -333,7 +333,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que obtiene el identificador de mendeley de la carpeta (engine).
+	 * Mï¿½todo que obtiene el identificador de mendeley de la carpeta (engine).
 	 * 
 	 * @param typeEngineSearch TypeEngineSearch
 	 * @return String
@@ -356,7 +356,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que establece el identificador de la carpeta (engine).
+	 * Mï¿½todo que establece el identificador de la carpeta (engine).
 	 * 
 	 * @param references List<Reference>
 	 * @param typeEngineSearch TypeEngineSearch
@@ -373,7 +373,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que establece una referencia a la lista de referencias que tiene cada 
+	 * Mï¿½todo que establece una referencia a la lista de referencias que tiene cada 
 	 * uno de los motores de busquedas disponibles.
 	 * 
 	 * @param reference Reference
@@ -641,7 +641,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el TypeEngineSearch asociado al Engine.
+	 * Mï¿½todo que devuelve el TypeEngineSearch asociado al Engine.
 	 * 
 	 * @return TypeEngineSearch
 	 */
@@ -650,7 +650,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el TypeEngineSearch asociado al Engine.
+	 * Mï¿½todo que establece el TypeEngineSearch asociado al Engine.
 	 * 
 	 * @param engine TypeEngineSearch
 	 */
@@ -659,7 +659,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el nombre del SLR.
+	 * Mï¿½todo que devuelve el nombre del SLR.
 	 * 
 	 * @return String
 	 */
@@ -668,7 +668,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el nombre del SLR.
+	 * Mï¿½todo que establece el nombre del SLR.
 	 * 
 	 * @param nameSLR String
 	 */
@@ -677,7 +677,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve los tags.
+	 * Mï¿½todo que devuelve los tags.
 	 * 
 	 * @return List<String>
 	 */
@@ -686,7 +686,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece los tags.
+	 * Mï¿½todo que establece los tags.
 	 * 
 	 * @param tags List<String>
 	 */
@@ -695,7 +695,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el ano de comienzo.
+	 * Mï¿½todo que devuelve el ano de comienzo.
 	 * 
 	 * @return int
 	 */
@@ -704,7 +704,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el ano de comienzo.
+	 * Mï¿½todo que establece el ano de comienzo.
 	 * 
 	 * @param start_year int
 	 */
@@ -713,7 +713,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el ano final.
+	 * Mï¿½todo que establece el ano final.
 	 * 
 	 * @return int
 	 */
@@ -722,7 +722,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el ano final.
+	 * Mï¿½todo que establece el ano final.
 	 * 
 	 * @param end_year int
 	 */
@@ -731,7 +731,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve los SearchTermParam asociados al Engine.
+	 * Mï¿½todo que devuelve los SearchTermParam asociados al Engine.
 	 * 
 	 * @return List<SearchTermParam>
 	 */
@@ -740,7 +740,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece los SearchTermParam asociados al Engine.
+	 * Mï¿½todo que establece los SearchTermParam asociados al Engine.
 	 * 
 	 * @param searchsTerms List<SearchTermParam>
 	 */
@@ -749,7 +749,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el tamano maximo de referencias a buscar.
+	 * Mï¿½todo que devuelve el tamano maximo de referencias a buscar.
 	 * 
 	 * @return int
 	 */
@@ -758,7 +758,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el tamano maximo de referencias a buscar.
+	 * Mï¿½todo que establece el tamano maximo de referencias a buscar.
 	 * 
 	 * @param tAM_MAX
 	 */
@@ -767,7 +767,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el tamano definido por defecto de referencias a buscar.
+	 * Mï¿½todo que establece el tamano definido por defecto de referencias a buscar.
 	 * 
 	 * @return int
 	 */
@@ -776,7 +776,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el tamano definido por defecto de referencias a buscar.
+	 * Mï¿½todo que establece el tamano definido por defecto de referencias a buscar.
 	 * 
 	 * @param tAM_DEF int
 	 */
@@ -785,7 +785,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve la url asociada al EngineSearch.
+	 * Mï¿½todo que devuelve la url asociada al EngineSearch.
 	 * 
 	 * @return String
 	 */
@@ -794,7 +794,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece la url asociada al EngineSearch.
+	 * Mï¿½todo que establece la url asociada al EngineSearch.
 	 * 
 	 * @param web String
 	 */
@@ -803,7 +803,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el idEngine.
+	 * Mï¿½todo que devuelve el idEngine.
 	 * 
 	 * @return String
 	 */
@@ -812,7 +812,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el idEngine.
+	 * Mï¿½todo que establece el idEngine.
 	 * 
 	 * @param idEngine String
 	 */
@@ -821,7 +821,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que devuelve el listado de los enlaces de las referencias.
+	 * Mï¿½todo que devuelve el listado de los enlaces de las referencias.
 	 * 
 	 * @return List<String>
 	 */
@@ -830,7 +830,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el listado de los enlaces de las referencias.
+	 * Mï¿½todo que establece el listado de los enlaces de las referencias.
 	 * 
 	 * @param linksDocuments List<String>
 	 */
@@ -839,7 +839,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que obtiene el clientId.
+	 * Mï¿½todo que obtiene el clientId.
 	 * 
 	 * @return String
 	 */
@@ -848,7 +848,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el clientId
+	 * Mï¿½todo que establece el clientId
 	 * 
 	 * @param clientId String
 	 */
@@ -857,7 +857,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que obtiene el clientSecret
+	 * Mï¿½todo que obtiene el clientSecret
 	 * 
 	 * @return String
 	 */
@@ -866,7 +866,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece el clientSecret.
+	 * Mï¿½todo que establece el clientSecret.
 	 * 
 	 * @param clientSecret String
 	 */
@@ -875,7 +875,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que obtiene la url de redireccion.
+	 * Mï¿½todo que obtiene la url de redireccion.
 	 * 
 	 * @return String
 	 */
@@ -884,7 +884,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que establece la url de direccion.
+	 * Mï¿½todo que establece la url de direccion.
 	 * @param redirectUri
 	 */
 	public void setRedirectUri(String redirectUri) {
@@ -892,7 +892,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 
 	/**
-	 * Método que obtiene el servicio login de mendeley.
+	 * Mï¿½todo que obtiene el servicio login de mendeley.
 	 * 
 	 * @return MendeleyService
 	 */
@@ -901,7 +901,7 @@ public abstract class EngineSearch implements Runnable {
 	}
 	
 	/**
-	 * Método que establece el servicio login de mendeley.
+	 * Mï¿½todo que establece el servicio login de mendeley.
 	 * 
 	 * @param mendeleyService MendeleyService
 	 */

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.util.URIUtil;
+import org.eclipse.jetty.util.URIUtil;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -74,7 +74,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	/**
-	 * Método que obtiene las url/doi de las referencias.
+	 * Mï¿½todo que obtiene las url/doi de las referencias.
 	 * 
 	 */
 	@Override
@@ -109,7 +109,8 @@ public class EngineSearchACM extends EngineSearch {
 		
 		// Insertamos los parÃ¡metros necesarios en la web
 		String q = createQueryACM(searchsTerms);
-		String query = URIUtil.encodeQuery(q);
+		//String query = URIUtil.encodeQuery(q);
+		String query = URIUtil.encodePath(q);
 		query = query.replaceAll("\\+", "%252B");
 		String filtered = "&dte=" + start_year + "&bfr=" + end_year;
 		web = web.replaceAll("@@query@@", query).replaceAll("@@filtered@@", filtered).replaceAll("@@start@@","0");
@@ -141,7 +142,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	/**
-	 * Método que construye la query para obtener los enlaces/dois de las referencias a importar.
+	 * Mï¿½todo que construye la query para obtener los enlaces/dois de las referencias a importar.
 	 * 
 	 * @param searchsTerms List<SearchTermParam>
 	 * @return String
@@ -223,7 +224,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	/**
-	 * Método privado que obtiene el id de la carpeta del engine procedente de Mendeley.
+	 * Mï¿½todo privado que obtiene el id de la carpeta del engine procedente de Mendeley.
 	 * 
 	 * @return String
 	 * @throws Exception Exception
@@ -254,7 +255,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	/**
-	 * Método que obtiene la página siguiente con más referencias a importar.
+	 * Mï¿½todo que obtiene la pï¿½gina siguiente con mï¿½s referencias a importar.
 	 * 
 	 * @param webClient WebClient
 	 * @param currentPage HtmlPage
@@ -282,7 +283,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	/**
-	 * Método que extrae las url/doi de las referencias a importar.
+	 * Mï¿½todo que extrae las url/doi de las referencias a importar.
 	 * 
 	 * @param code String
 	 * @return List<String>

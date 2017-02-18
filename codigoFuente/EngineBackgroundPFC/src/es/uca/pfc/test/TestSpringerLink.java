@@ -1,8 +1,5 @@
 package es.uca.pfc.test;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +8,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.URIUtil;
+import org.eclipse.jetty.util.URIUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -21,6 +17,7 @@ import es.uca.pfc.commons.SearchTermParam;
 import es.uca.pfc.enums.ComponentSearch;
 import es.uca.pfc.enums.OperatorSearch;
 import es.uca.pfc.enums.TypeEngineSearch;
+
 
 public class TestSpringerLink {
 
@@ -31,7 +28,7 @@ public class TestSpringerLink {
 	public static Map<TypeEngineSearch, String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 	public static int TAM_DEF = 10;
 	
-	public static void main(String[] args) throws URIException {
+	public static void main(String[] args) {
 		
 		SearchTermParam stp01 = new SearchTermParam(ComponentSearch.ANYFIELD, OperatorSearch.ALL, "word");
 		SearchTermParam stp02 = new SearchTermParam(ComponentSearch.AUTHOR, OperatorSearch.NONE, "toro");
@@ -176,11 +173,12 @@ public class TestSpringerLink {
 		return strParam;
 	}
 	
-	public static List<String> getLinksBib(String code, String link) throws URIException
+	public static List<String> getLinksBib(String code, String link)
 	{
 		List<String> bibs = new ArrayList<String>();
 		
-		String url = URIUtil.encodeQuery(link);
+		//String url = URIUtil.encodeQuery(link);
+		String url = URIUtil.encodePath(link);
 
 		try
 		{

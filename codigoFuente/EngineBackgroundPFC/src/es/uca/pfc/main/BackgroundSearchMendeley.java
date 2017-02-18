@@ -52,7 +52,7 @@ public class BackgroundSearchMendeley {
 
 		String 	client_id = "1044", 
 				client_secret = "5qQ6zm5iYpvUehj4", 
-				redirect_url = "http://localhost:8090/SLR/indexMendeley/",
+				redirect_url = "http://localhost:8095/SLR/indexMendeley/",
 				access_token  = "asdsadasd",
 				refresh_token = "asdasdaaaaaaa";
 		
@@ -61,7 +61,7 @@ public class BackgroundSearchMendeley {
 		
 		int total_hilos = 5;
 		int total_tries = 5;
-		int tammax = 8;
+		int tammax = 5;
 		
 		int start_year = 2010, end_year = 2017;
 		
@@ -75,7 +75,7 @@ public class BackgroundSearchMendeley {
 		tags.add("cr_included"); tags.add("met_met1_yes"); tags.add("met_met2_35"); tags.add("met_met3_ingles");
 		
 		Map<TypeEngineSearch, Boolean> optionsEngine = new HashMap<TypeEngineSearch, Boolean>();
-		optionsEngine.put(TypeEngineSearch.ACM, true);
+		optionsEngine.put(TypeEngineSearch.ACM, false);
 		optionsEngine.put(TypeEngineSearch.IEEE, true);
 		optionsEngine.put(TypeEngineSearch.SCIENCE, false);
 		optionsEngine.put(TypeEngineSearch.SPRINGER, false);

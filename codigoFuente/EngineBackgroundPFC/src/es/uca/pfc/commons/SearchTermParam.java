@@ -4,7 +4,7 @@ import es.uca.pfc.enums.ComponentSearch;
 import es.uca.pfc.enums.OperatorSearch;
 
 /**
- * SearchTermParam es la clase que recoge los términos de búsqueda de las referencias a importar
+ * SearchTermParam es la clase que recoge los tï¿½rminos de bï¿½squeda de las referencias a importar
  * en Mendeley.
  * 
  * @author agonzatoro
@@ -44,7 +44,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que devuelve el ComponentSearch asociado al término de búsqueda.
+	 * Mï¿½todo que devuelve el ComponentSearch asociado al tï¿½rmino de bï¿½squeda.
 	 * 
 	 * @return ComponentSearch
 	 */
@@ -53,7 +53,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que establece el ComponentSearch al término de búsqueda.
+	 * Mï¿½todo que establece el ComponentSearch al tï¿½rmino de bï¿½squeda.
 	 * 
 	 * @param componentSearch ComponentSearch
 	 */
@@ -62,7 +62,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que devuelve el OperatorSearch asociado al término de búsqueda.
+	 * Mï¿½todo que devuelve el OperatorSearch asociado al tï¿½rmino de bï¿½squeda.
 	 * 
 	 * @return OperatorSearch
 	 */
@@ -71,7 +71,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que establece el OperatorSearch asociado al término de búsqueda.
+	 * Mï¿½todo que establece el OperatorSearch asociado al tï¿½rmino de bï¿½squeda.
 	 * 
 	 * @param operatorSearch OperatorSearch
 	 */
@@ -80,7 +80,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que devuelve los términos de búsqueda.
+	 * Mï¿½todo que devuelve los tï¿½rminos de bï¿½squeda.
 	 * 
 	 * @return String
 	 */
@@ -89,7 +89,7 @@ public class SearchTermParam {
 	}
 
 	/**
-	 * Método que establece los términos de búsqueda.
+	 * Mï¿½todo que establece los tï¿½rminos de bï¿½squeda.
 	 * 
 	 * @param terminos String
 	 */
