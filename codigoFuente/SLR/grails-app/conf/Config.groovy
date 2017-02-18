@@ -168,10 +168,5 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
 	}
 }
 
-// Autenticacion Mendeley App
-clientId = '1044'
-clientSecret = '5qQ6zm5iYpvUehj4'
-redirectUri = 'http://localhost:8090/SLR/indexMendeley/'
-
 // Customize authentication
 grails.plugin.springsecurity.providerNames = ['customAuthenticationProvider','anonymousAuthenticationProvider','rememberMeAuthenticationProvider']

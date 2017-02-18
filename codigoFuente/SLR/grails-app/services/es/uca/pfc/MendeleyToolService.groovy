@@ -38,8 +38,6 @@ import org.quartz.impl.matchers.KeyMatcher;
 
 import com.google.gson.Gson;
 
-import grails.util.Holders
-
 @Transactional
 class MendeleyToolService /*implements IMendeleyService*/ {
 	
@@ -206,9 +204,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		boolean isSynchro = false;
 		try
 		{
-			String clientId = Holders.getGrailsApplication().config.clientId
-			String clientSecret = Holders.getGrailsApplication().config.clientSecret
-			String redirectUri = Holders.getGrailsApplication().config.redirectUri
+			MendeleyApi mendeleyApi = MendeleyApi.list().first()
+			String clientId = mendeleyApi.clientId
+			String clientSecret = mendeleyApi.clientSecret
+			String redirectUri = mendeleyApi.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri, 
 				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend), 
@@ -286,9 +285,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		boolean isCreated = false
 		try
 		{
-			String clientId = Holders.getGrailsApplication().config.clientId
-			String clientSecret = Holders.getGrailsApplication().config.clientSecret
-			String redirectUri = Holders.getGrailsApplication().config.redirectUri
+			MendeleyApi mendeleyApi = MendeleyApi.list().first()
+			String clientId = mendeleyApi.clientId
+			String clientSecret = mendeleyApi.clientSecret
+			String redirectUri = mendeleyApi.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
 				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
@@ -348,9 +348,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		boolean isSynchro = false;
 		try
 		{
-			String clientId = Holders.getGrailsApplication().config.clientId
-			String clientSecret = Holders.getGrailsApplication().config.clientSecret
-			String redirectUri = Holders.getGrailsApplication().config.redirectUri
+			MendeleyApi mendeleyApi = MendeleyApi.list().first()
+			String clientId = mendeleyApi.clientId
+			String clientSecret = mendeleyApi.clientSecret
+			String redirectUri = mendeleyApi.redirectUri
 			
 			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
 				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
@@ -475,9 +476,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	
 	void updateReferenceFromMendeley(Reference reference, User userInstance)
 	{
-		String clientId = Holders.getGrailsApplication().config.clientId
-		String clientSecret = Holders.getGrailsApplication().config.clientSecret
-		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		MendeleyApi mendeleyApi = MendeleyApi.list().first()
+		String clientId = mendeleyApi.clientId
+		String clientSecret = mendeleyApi.clientSecret
+		String redirectUri = mendeleyApi.redirectUri
 		
 		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
 			userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
@@ -642,9 +644,15 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	{
 		MendeleyService mendeleyService = null;
 		
-		String clientId = Holders.getGrailsApplication().config.clientId
-		String clientSecret = Holders.getGrailsApplication().config.clientSecret
-		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		println emailMend
+		println passMend
+		MendeleyApi mendeleyApi = MendeleyApi.list().first()
+		String clientId = mendeleyApi.clientId
+		String clientSecret = mendeleyApi.clientSecret
+		String redirectUri = mendeleyApi.redirectUri
+		println clientId
+		println clientSecret
+		println redirectUri
 		
 		try
 		{
@@ -653,8 +661,12 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		catch(Exception ex)
 		{
+			ex.printStackTrace()
 			mendeleyService = null;
 		}
+		
+		if(mendeleyService == null) println "MendeleyService => Es nulo"
+		else println "MendeleyService => No es nulo"
 		
 		return mendeleyService;
 	}
@@ -663,9 +675,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	{
 		User userInstance = null;
 		
-		String clientId = Holders.getGrailsApplication().config.clientId
-		String clientSecret = Holders.getGrailsApplication().config.clientSecret
-		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		MendeleyApi mendeleyApi = MendeleyApi.list().first()
+		String clientId = mendeleyApi.clientId
+		String clientSecret = mendeleyApi.clientSecret
+		String redirectUri = mendeleyApi.redirectUri
 		
 		try
 		{
@@ -738,9 +751,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	boolean saveReferenceMendeley(Reference reference, User userInstance)
 	{
 		boolean isSaved = false;
-		String clientId = Holders.getGrailsApplication().config.clientId
-		String clientSecret = Holders.getGrailsApplication().config.clientSecret
-		String redirectUri = Holders.getGrailsApplication().config.redirectUri
+		MendeleyApi mendeleyApi = MendeleyApi.list().first()
+		String clientId = mendeleyApi.clientId
+		String clientSecret = mendeleyApi.clientSecret
+		String redirectUri = mendeleyApi.redirectUri
 		
 		try
 		{

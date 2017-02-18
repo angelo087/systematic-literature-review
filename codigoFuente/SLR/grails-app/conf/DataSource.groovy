@@ -1,4 +1,4 @@
-dataSource {
+/*dataSource {
 	pooled = true
 	//jmxExport = true
 	driverClassName = "com.mysql.jdbc.Driver"
@@ -60,8 +60,9 @@ environments {
 		}
 	}
 }
+*/
 // Sin MYSQL
-/*dataSource {
+dataSource {
     pooled = true
     jmxExport = true
     driverClassName = "org.h2.Driver"
@@ -117,4 +118,4 @@ environments {
             }
         }
     }
-}*/
+}
