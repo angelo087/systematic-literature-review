@@ -36,6 +36,7 @@ import grails.transaction.Transactional;
 
 import org.quartz.impl.matchers.KeyMatcher;
 
+import background.pfc.main.BackgroundSearchMendeley
 import com.google.gson.Gson;
 
 @Transactional
