@@ -87,8 +87,7 @@ public class EngineSearchSPRINGER extends EngineSearch {
 				
 		// Insertamos los parámetros necesarios en la web
 		String q = createQuerySpringer(searchsTerms);
-		//web = URIUtil.encodeQuery(q);
-		web = URIUtil.encodePath(q);
+		web = URIUtil.encodeQuery(q);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
 		List<String> linksBib = new ArrayList<String>();		

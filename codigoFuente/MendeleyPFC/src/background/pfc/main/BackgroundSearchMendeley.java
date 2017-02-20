@@ -13,6 +13,7 @@ import background.pfc.engine.EngineSearch;
 import background.pfc.engine.EngineSearchACM;
 import background.pfc.engine.EngineSearchIEEE;
 import background.pfc.engine.EngineSearchSCIENCE;
+import background.pfc.engine.EngineSearchSPRINGER;
 import background.pfc.enums.ComponentSearch;
 import background.pfc.enums.OperatorSearch;
 import background.pfc.enums.TypeEngineSearch;
@@ -77,9 +78,9 @@ public class BackgroundSearchMendeley {
 		
 		Map<TypeEngineSearch, Boolean> optionsEngine = new HashMap<TypeEngineSearch, Boolean>();
 		optionsEngine.put(TypeEngineSearch.ACM, false);
-		optionsEngine.put(TypeEngineSearch.IEEE, true);
+		optionsEngine.put(TypeEngineSearch.IEEE, false);
 		optionsEngine.put(TypeEngineSearch.SCIENCE, false);
-		optionsEngine.put(TypeEngineSearch.SPRINGER, false);
+		optionsEngine.put(TypeEngineSearch.SPRINGER, true);
 		
 		Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 		apiKeysEngine.put(TypeEngineSearch.SCIENCE, "80aa542193705ce36ebfe094078b9aa3");
@@ -206,6 +207,7 @@ public class BackgroundSearchMendeley {
 			else
 			{				
 				EngineSearch engineSearch = null;
+				
 				for(Map.Entry<TypeEngineSearch, Boolean> entry : optionsEngine.entrySet())
 				{
 					if (Boolean.TRUE.equals(entry.getValue()))
@@ -228,6 +230,9 @@ public class BackgroundSearchMendeley {
 										total_hilos, total_tries);
 								break;
 							case SPRINGER:
+								engineSearch = new EngineSearchSPRINGER(clientId, clientSecret, redirectUri, mendeleyService, 
+										nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, webClients, 
+										total_hilos, total_tries);
 								break;
 							default:
 								break;
@@ -237,7 +242,7 @@ public class BackgroundSearchMendeley {
 				} //fin for
 				
 				int totalReferences = EngineSearchACM.references.size() + EngineSearchIEEE.references.size() +
-						EngineSearchSCIENCE.references.size();
+						EngineSearchSCIENCE.references.size() + EngineSearchSPRINGER.references.size();
 				
 				System.out.println("TOTAL ENCONTRADOS => " + totalReferences);
 				
