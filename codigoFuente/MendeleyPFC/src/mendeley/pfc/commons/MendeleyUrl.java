@@ -31,4 +31,12 @@ public class MendeleyUrl
 	public static final String ANNOTATION_CREATE = "https://api.mendeley.com/annotations";
 	public static final String ANNOTATION_UPDATE = "https://api.mendeley.com/annotations/{id}";
 	public static final String ANNOTATION_DELETE = "https://api.mendeley.com/annotations/{id}";
+	
+	// CATALOG DOCUMENT
+	public static final String CATALOG_DETAILS_ALL = "https://api.mendeley.com/catalog/{id}?view=all";
+	public static final String CATALOG_DETAILS_BY_DOI = "https://api.mendeley.com/catalog?doi={id}";
+	public static final String CATALOG_DETAILS_BY_ISBN = "https://api.mendeley.com/catalog?isbn={id}?view=all";
+	public static final String CATALOG_DETAILS_BY_ISSN = "https://api.mendeley.com/catalog?issn={id}?view=all";
+	public static final String CATALOG_DETAILS_BY_ARXIV = "https://api.mendeley.com/catalog?arxiv={id}?view=all";
+	public static final String CATALOG_DETAILS_BY_PMID = "https://api.mendeley.com/catalog?pmid={id}?view=all";
 }

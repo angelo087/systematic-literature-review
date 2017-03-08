@@ -141,6 +141,19 @@ public class MendeleyService {
 	 */
 	private void getTokens() throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException
 	{
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.ActiveXObject").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.html.HTMLDocument").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.html.HtmlScript").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.WindowProxy").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache.commons.http").setLevel(java.util.logging.Level.OFF);
+		
 		Random rnd = new Random();
 		double state = rnd.nextDouble() * 100000;
 		String uriAuthorize = templateUriAuthorize;

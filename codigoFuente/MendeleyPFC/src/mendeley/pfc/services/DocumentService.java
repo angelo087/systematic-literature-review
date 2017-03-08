@@ -63,7 +63,8 @@ public class DocumentService {
 	    String responseBody = new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	    
 	    responseBody = responseBody.replace("\"abstract\":", "\"docAbstract\":");
-		JsonParser parser = new JsonParser();
+	    
+	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();

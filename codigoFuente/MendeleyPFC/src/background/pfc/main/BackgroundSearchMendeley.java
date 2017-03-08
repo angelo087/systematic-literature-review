@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import background.pfc.commons.Reference;
 import background.pfc.commons.SearchTermParam;
 import background.pfc.engine.EngineSearch;
 import background.pfc.engine.EngineSearchACM;
@@ -25,7 +27,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
 
 /**
@@ -73,11 +78,25 @@ public class BackgroundSearchMendeley {
 		this.total_hilos = total_hilos;
 		this.total_tries = total_tries;
 		
+		FolderService folderService = new FolderService(mendeleyService);
+		
+		Folder folder = folderService.getFolderByName(nameSLR);
+		
+		if(folder == null)
+		{
+			throw new Exception("La carpeta no existe.");
+		}
+		
 		inicialiceArrayWebClients();
 	}
 	
 	public void startSearchsWithThreads() throws Exception
 	{
+		//Para evitar que salga el texto por la salida estandar
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+				
 		// Comprobamos que los webClients esten inicializados correctamente.
 		int tries = total_tries;
 		while(tries > 0 && !hasAllFirstLogin())
@@ -137,6 +156,11 @@ public class BackgroundSearchMendeley {
 	
 	public void startSearchs() throws Exception
 	{
+		//Para evitar que salga el texto por la salida estandar
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+				
 		if(hasEnginesForSearch())
 		{
 			// Comprobamos que los webClients esten inicializados correctamente.
@@ -240,7 +264,12 @@ public class BackgroundSearchMendeley {
 			for(int i = 0; i < total_hilos; i++)
 			{
 				wbAux = createWebClient();
-				wbAux.setCookieManager(webClient.getCookieManager());
+				//wbAux.setCookieManager(webClient.getCookieManager());
+				Iterator<Cookie> cookie = (Iterator<Cookie>) webClient.getCookieManager().getCookies();
+				while (cookie.hasNext()) 
+				{
+					wbAux.getCookieManager().addCookie(cookie.next());
+		        }
 				webClients.add(wbAux);
 			}
 		}
@@ -248,6 +277,11 @@ public class BackgroundSearchMendeley {
 	
 	private WebClient firstLogin() throws FailingHttpStatusCodeException, MalformedURLException, IOException
 	{
+		//Para evitar que salga el texto por la salida estandar
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+				
 		WebClient webClient = null;
 		try
 		{
@@ -278,6 +312,13 @@ public class BackgroundSearchMendeley {
 
 	private WebClient createWebClient()
 	{
+		//Para evitar que salga el texto por la salida estandar
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+		
+		System.setProperty("https.protocols", "TLSv1");
+		
 		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
 
 		webClient.getOptions().setJavaScriptEnabled(true);
@@ -294,7 +335,7 @@ public class BackgroundSearchMendeley {
 		webClient.setCssErrorHandler(new SilentCssErrorHandler());
 		webClient.setRefreshHandler(new ThreadedRefreshHandler());
 		webClient.waitForBackgroundJavaScript(10000);
-		
+				
 		return webClient;
 	}
 	
@@ -316,6 +357,11 @@ public class BackgroundSearchMendeley {
 	
 	private void inicialiceWebClient() throws FailingHttpStatusCodeException, MalformedURLException, IOException
 	{
+		//Para evitar que salga el texto por la salida estandar
+		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
+				
 		int pos = 0;
 		List<WebClient> webClientsCopy = new ArrayList<WebClient>();
 		for(WebClient wc : webClientsCopy)
@@ -332,5 +378,17 @@ public class BackgroundSearchMendeley {
 	public int getTotalReferences()
 	{
 		return EngineSearch.referencesEngineSearch.size();
+	}
+	
+	public List<Reference> getReferences()
+	{
+		List<Reference> totalReferences = new ArrayList<Reference>();
+		
+		totalReferences.addAll(EngineSearchACM.references);
+		totalReferences.addAll(EngineSearchIEEE.references);
+		totalReferences.addAll(EngineSearchSCIENCE.references);
+		totalReferences.addAll(EngineSearchSPRINGER.references);
+		
+		return totalReferences;
 	}
 }
