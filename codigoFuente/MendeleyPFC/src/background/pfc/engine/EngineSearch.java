@@ -68,6 +68,10 @@ public abstract class EngineSearch implements Runnable {
 	protected Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 	/** referencesEngineSearch.*/
 	public static List<Reference> referencesEngineSearch = new ArrayList<Reference>();
+	/** contMax.*/
+	public static int contMax	= 0;
+	/** contHilos.*/
+	public static int contHilos = 0;
 	
 	/**
 	 * M�todo de la clase EngineSearch.
@@ -124,6 +128,8 @@ public abstract class EngineSearch implements Runnable {
 			this.start_year = end_year;
 			this.end_year = start_year;
 		}
+		
+		resetParamsOfEngineSearch();
 	}
 	
 	@Override
@@ -154,8 +160,8 @@ public abstract class EngineSearch implements Runnable {
 		System.out.println(engine.getKey().toUpperCase() + " Paso 2 de 4 => downloadReferencesToMendeley()");
 		downloadReferencesToMendeley();
 		
-		System.out.println(engine.getKey().toUpperCase() + " Paso 3 de 4 => collectAllReferences()");
-		collectAllReferences();
+		System.out.println(engine.getKey().toUpperCase() + " Paso 3 de 4 => getMendeleyFolderEngine()");
+		getMendeleyFolderEngine();
 		
 		System.out.println(engine.getKey().toUpperCase() + " Paso 4 de 4 => moveReferencesToFolder()");
 		moveReferencesToFolder();
@@ -196,21 +202,14 @@ public abstract class EngineSearch implements Runnable {
 			System.out.println("Login realizado correctamente.");
 			int index = 0;
 			boolean exit = false;
+						
 			synchronized (idsDocuments) {
-				
-				int contMax = getContMax();
-				List<Reference> references = getReferences();
-				int contHilos = getContHilos();
 				
 				// Mientras que haya referencias a importar y no sobrepase el tamaño fijado
 				while(!exit)
 				{
-					while(contMax < TAM_MAX && index < idsDocuments.size() && (references.size() + contHilos <= TAM_MAX))
-					{
-						contMax = getContMax();
-						contHilos = getContHilos();
-						references = getReferences();
-						
+					while(contMax < TAM_MAX && index < idsDocuments.size() && (referencesEngineSearch.size() + contHilos <= TAM_MAX))
+					{						
 						int posThread = getDisponibleThread(threads);
 						if(posThread != -1)
 						{
@@ -218,8 +217,6 @@ public abstract class EngineSearch implements Runnable {
 							ImportReferenceMendeley importReference = importsRefMendeley.get(posThread);
 							if (importReference == null)
 							{
-								/*importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1), 
-										engine, idsDocuments.get(index), nameSLR, typeReferenceId, catalogService, documentService);*/
 								importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1), 
 										engine, idsDocuments.get(index).getId(), nameSLR, idsDocuments.get(index).getTypeReferenceId(),
 										catalogService, documentService);
@@ -234,7 +231,6 @@ public abstract class EngineSearch implements Runnable {
 							threads.set(posThread, thread);
 							index++;
 							increaseContHilos();
-							contHilos = getContHilos();
 							thread.start();
 						}// fin-if posThread
 					}// fin - while
@@ -247,13 +243,9 @@ public abstract class EngineSearch implements Runnable {
 						Thread.sleep(5000);
 					}
 					
-					if(!(index < idsDocuments.size()) || references.size() >= TAM_MAX)
+					if(!(index < idsDocuments.size()) || referencesEngineSearch.size() >= TAM_MAX)
 					{
 						exit = true;
-					}
-					else
-					{
-						contHilos = getContHilos();
 					}
 				} // fin-while
 			} // fin-synchronized
@@ -287,66 +279,40 @@ public abstract class EngineSearch implements Runnable {
 	 * @throws Exception 
 	 * 
 	 */
-	private void collectAllReferences() throws Exception
+	private void getMendeleyFolderEngine() throws Exception
 	{
 		if (this instanceof EngineSearchACM)
 		{
 			// ACM
-			setIdMendeleyFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
-			referencesEngineSearch.addAll(EngineSearchACM.references);
+			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.ACM);
 		}
 		
 		if (this instanceof EngineSearchIEEE)
 		{
 			// IEEE
-			setIdMendeleyFolderEngine(EngineSearchIEEE.references, TypeEngineSearch.IEEE);
-			referencesEngineSearch.addAll(EngineSearchIEEE.references);
+			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.IEEE);
 		}
 		
 		if (this instanceof EngineSearchSCIENCE)
 		{
 			// SCIENCE
-			setIdMendeleyFolderEngine(EngineSearchSCIENCE.references, TypeEngineSearch.SCIENCE);
-			referencesEngineSearch.addAll(EngineSearchSCIENCE.references);
+			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.SCIENCE);
 		}
 		
 		if (this instanceof EngineSearchSPRINGER)
 		{
 			// SPRINGER
-			setIdMendeleyFolderEngine(EngineSearchSPRINGER.references, TypeEngineSearch.SPRINGER);
-			referencesEngineSearch.addAll(EngineSearchSPRINGER.references);
+			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.SPRINGER);
 		}
-	}
-	
-	private List<Reference> getReferencesByEngineSearch()
-	{
-		List<Reference> references = new ArrayList<Reference>();
-		if (this instanceof EngineSearchACM)
-		{
-			references = EngineSearchACM.references;
-		}
-		else if (this instanceof EngineSearchIEEE)
-		{
-			references = EngineSearchIEEE.references;
-		}
-		else if (this instanceof EngineSearchSCIENCE)
-		{
-			references = EngineSearchSCIENCE.references;
-		}
-		else if (this instanceof EngineSearchSPRINGER)
-		{
-			references = EngineSearchSPRINGER.references;
-		}
-		return references;
 	}
 	
 	private void moveReferencesToFolder() throws MendeleyException, HttpException, IOException
 	{
-		List<Reference> references = getReferencesByEngineSearch();
+		//List<Reference> references = getReferencesByEngineSearch();
 		
 		FolderService folderService = new FolderService(mendeleyService);
 		
-		for(Reference reference : references)
+		for(Reference reference : referencesEngineSearch)
 		{
 			folderService.addDocument(reference.getIdFolderEngine(), reference.getIdMendeley());
 		}
@@ -403,36 +369,23 @@ public abstract class EngineSearch implements Runnable {
 	{
 		boolean ok = false;
 		
-		if (TypeEngineSearch.ACM == reference.getTypeEngineSearch())
+		try
 		{
-			synchronized (EngineSearchACM.references) {
-				EngineSearchACM.references.add(reference);
+			synchronized (referencesEngineSearch) {
+				referencesEngineSearch.add(reference);
 				ok = true;
 			}
 		}
-		else if (TypeEngineSearch.IEEE == reference.getTypeEngineSearch())
-		{
-			synchronized (EngineSearchIEEE.references) {
-				EngineSearchIEEE.references.add(reference);
-				ok = true;
-			}
-		}
-		else if (TypeEngineSearch.SCIENCE == reference.getTypeEngineSearch())
-		{
-			synchronized (EngineSearchSCIENCE.references) {
-				EngineSearchSCIENCE.references.add(reference);
-				ok = true;
-			}
-		}
-		else if (TypeEngineSearch.SPRINGER == reference.getTypeEngineSearch())
-		{
-			synchronized (EngineSearchSPRINGER.references) {
-				EngineSearchSPRINGER.references.add(reference);
-				ok = true;
-			}
-		}
+		catch(Exception ex) { ok = false; }
 		
 		return ok;
+	}
+	
+	private void resetParamsOfEngineSearch()
+	{
+		EngineSearch.referencesEngineSearch = new ArrayList<Reference>();
+		EngineSearch.contMax	= 0;
+		EngineSearch.contHilos = 0;
 	}
 	
 	/**
@@ -441,21 +394,9 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private void increaseContHilos()
 	{
-		if (TypeEngineSearch.ACM == engine)
+		if (contHilos < total_hilos)
 		{
-			EngineSearchACM.contHilos++;
-		} 
-		else if (TypeEngineSearch.IEEE == engine)
-		{
-			EngineSearchIEEE.contHilos++;
-		}
-		else if (TypeEngineSearch.SCIENCE == engine)
-		{
-			EngineSearchSCIENCE.contHilos++;
-		}
-		else if (TypeEngineSearch.SPRINGER == engine)
-		{
-			EngineSearchSPRINGER.contHilos++;
+			contHilos++;
 		}
 	}
 	
@@ -466,21 +407,9 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	public static void decreaseContHilos(TypeEngineSearch typeEngine)
 	{
-		if (TypeEngineSearch.ACM == typeEngine && EngineSearchACM.contHilos != 0)
+		if (contHilos != 0)
 		{
-			EngineSearchACM.contHilos--;
-		}
-		else if (TypeEngineSearch.IEEE == typeEngine && EngineSearchIEEE.contHilos != 0)
-		{
-			EngineSearchIEEE.contHilos--;
-		}
-		else if (TypeEngineSearch.SCIENCE == typeEngine && EngineSearchSCIENCE.contHilos != 0)
-		{
-			EngineSearchSCIENCE.contHilos--;
-		}
-		else if (TypeEngineSearch.SPRINGER == typeEngine && EngineSearchSPRINGER.contHilos != 0)
-		{
-			EngineSearchSPRINGER.contHilos--;
+			contHilos--;
 		}
 	}
 	
@@ -491,22 +420,7 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	public static void increaseContMax(TypeEngineSearch typeEngine)
 	{
-		if (TypeEngineSearch.ACM == typeEngine)
-		{
-			EngineSearchACM.contMax++;
-		}
-		else if (TypeEngineSearch.IEEE == typeEngine)
-		{
-			EngineSearchIEEE.contMax++;
-		}
-		else if (TypeEngineSearch.SCIENCE == typeEngine)
-		{
-			EngineSearchSCIENCE.contMax++;
-		}
-		else if (TypeEngineSearch.SPRINGER == typeEngine)
-		{
-			EngineSearchSPRINGER.contMax++;
-		}
+		contMax++;
 	}
 	
 	/**
@@ -516,25 +430,6 @@ public abstract class EngineSearch implements Runnable {
 	 * @return Número de hilos que el motor de búsqueda está usando en ese momento.
 	 */
 	private int getContHilos() {
-		int contHilos = 0;
-
-		if (this instanceof EngineSearchACM)
-		{
-			contHilos = EngineSearchACM.contHilos;
-		}
-		else if (this instanceof EngineSearchIEEE)
-		{
-			contHilos = EngineSearchIEEE.contHilos;
-		}
-		else if (this instanceof EngineSearchSCIENCE)
-		{
-			contHilos = EngineSearchSCIENCE.contHilos;
-		}
-		else if (this instanceof EngineSearchSPRINGER)
-		{
-			contHilos = EngineSearchSPRINGER.contHilos;
-		}
-		
 		return contHilos;
 	}
 
@@ -545,25 +440,6 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private int getContMax() 
 	{
-		int contMax = 0;
-
-		if (this instanceof EngineSearchACM)
-		{
-			contMax = EngineSearchACM.contMax;
-		}
-		else if (this instanceof EngineSearchIEEE)
-		{
-			contMax = EngineSearchIEEE.contMax;
-		}
-		else if (this instanceof EngineSearchSCIENCE)
-		{
-			contMax = EngineSearchSCIENCE.contMax;
-		}
-		else if (this instanceof EngineSearchSPRINGER)
-		{
-			contMax = EngineSearchSPRINGER.contMax;
-		}
-		
 		return contMax;
 	}
 
@@ -574,25 +450,7 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private List<Reference> getReferences()
 	{
-		List<Reference> references = new ArrayList<Reference>();
-		if (TypeEngineSearch.ACM == engine)
-		{
-			references = EngineSearchACM.references;
-		}
-		else if (TypeEngineSearch.IEEE == engine)
-		{
-			references = EngineSearchIEEE.references;
-		}
-		else if (TypeEngineSearch.SCIENCE == engine)
-		{
-			references = EngineSearchSCIENCE.references;
-		}
-		else if (TypeEngineSearch.SPRINGER == engine)
-		{
-			references = EngineSearchSPRINGER.references;
-		}
-		
-		return references;
+		return referencesEngineSearch;
 	}
 	
 	/**

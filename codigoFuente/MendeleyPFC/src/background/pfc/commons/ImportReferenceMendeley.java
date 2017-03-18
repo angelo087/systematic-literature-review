@@ -168,8 +168,6 @@ public class ImportReferenceMendeley implements Runnable {
 	 */
 	@Override
 	public void run() {
-		System.out.println("Soy " + this.name + " con codigo " + this.codeReference);
-		
 		boolean ok = false;
 		
 		try
@@ -179,17 +177,12 @@ public class ImportReferenceMendeley implements Runnable {
 		catch(Exception ex)
 		{
 			ok = false;
-			System.out.println(this.name + "=> Excepcion: " + ex.getMessage());
 		}
 		
-		if(!ok)
-		{
-			System.out.println(this.name + " NO ha finalizado.");
-		}
-		else
+		if(ok)
 		{
 			EngineSearch.increaseContMax(typeEngine);
-			System.out.println(this.name + " ha finalizado.");
+			System.out.println(this.name + " ha insertado referencia con " + this.typeReferenceId.getKey() + " = " + this.codeReference);
 		}
 		
 		// Decrementamos el contador de hilos

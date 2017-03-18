@@ -40,13 +40,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  *
  */
 public class EngineSearchACM extends EngineSearch {
-
-	/** contMax.*/
-	public static int contMax	= 0;
-	/** contHilos.*/
-	public static int contHilos = 0;
-	/** references.*/
-	public static List<Reference> references = new ArrayList<Reference>();
 	
 	/**
 	 * Constructor de la clase EngineSearchACM.
@@ -77,7 +70,8 @@ public class EngineSearchACM extends EngineSearch {
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();
-		this.TAM_DEF = 10;
+		//this.TAM_DEF = 10;
+		this.TAM_DEF = 100;
 	}
 	
 	/**
@@ -128,25 +122,11 @@ public class EngineSearchACM extends EngineSearch {
 		webClient.waitForBackgroundJavaScriptStartingBefore(10000);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		List<ReferenceToImport> linksBib = new ArrayList<ReferenceToImport>();
-		
-		for(int i = 0; i < num_paginas; i++)
-		{
-			if(currentPage == null)
-			{
-				break;
-			}
-
-			linksBib.addAll(getReferencesToImport(currentPage));
-			currentPage = nextPage(webClient,currentPage,i);
-		}
-		
-		idsDocuments.addAll(linksBib);
+		idsDocuments.addAll(getReferencesToImport(currentPage));
 		
 		webClient.close();
 
-		System.out.println("Se ha obtenido " + idsDocuments.size());
-		
+		System.out.println("Se ha obtenido " + idsDocuments.size());		
 	}
 	
 	/**
@@ -262,34 +242,6 @@ public class EngineSearchACM extends EngineSearch {
 		return idSubFolder;
 	}
 	
-	/**
-	 * M�todo que obtiene la p�gina siguiente con m�s referencias a importar.
-	 * 
-	 * @param webClient WebClient
-	 * @param currentPage HtmlPage
-	 * @param page int
-	 * @return HtmlPage
-	 * @throws ElementNotFoundException ElementNotFoundException
-	 * @throws IOException IOException
-	 */
-	private HtmlPage nextPage(WebClient webClient, HtmlPage currentPage, int page) throws ElementNotFoundException, IOException
-	{
-		web = web.replaceAll(web.substring(web.indexOf("&start=")), "");
-		web = web + "&start=" + (page * TAM_DEF);
-		
-		try
-		{
-			currentPage = (HtmlPage) webClient.getPage(web);
-			webClient.waitForBackgroundJavaScriptStartingBefore(10000);
-		}
-		catch(Exception ex)
-		{
-			currentPage = null;
-		}
-		
-		return currentPage;
-	}
-	
 	private List<ReferenceToImport> getReferencesToImport(HtmlPage currentPage) throws IOException
 	{
 		List<ReferenceToImport> referencesToImport = new ArrayList<ReferenceToImport>();
@@ -317,44 +269,53 @@ public class EngineSearchACM extends EngineSearch {
 		List<ReferenceToImport> references = new ArrayList<ReferenceToImport>();
 		
 		String[] bibRefs = bibtex.split("\n");
+		int cont = 0;
 		
 		for(String b : bibRefs)
 		{
-			String title = getByField("title",b);
-			TypeReferenceId typeReferenceId = TypeReferenceId.DOI;
-			
-			if (title != null && !title.equals(""))
+			if (cont > TAM_DEF)
 			{
-				// Primero buscamos 'doi'
-				String code = getByField("doi",b);
+				break;
+			}
+			else
+			{
+				String title = getByField("title",b);
+				TypeReferenceId typeReferenceId = TypeReferenceId.DOI;
 				
-				if(code.equals(""))
+				if (title != null && !title.equals(""))
 				{
-					code = getByField("isbn",b); // Por isbn
-					typeReferenceId = TypeReferenceId.ISBN;
+					// Primero buscamos 'doi'
+					String code = getByField("doi",b);
 					
-					if (code.equals(""))
+					if(code.equals(""))
 					{
-						code = getByField("issn", b);
-						typeReferenceId = TypeReferenceId.ISSN;
+						code = getByField("isbn",b); // Por isbn
+						typeReferenceId = TypeReferenceId.ISBN;
 						
 						if (code.equals(""))
 						{
-							code = getByField("pmid",b);
-							typeReferenceId = TypeReferenceId.PMID;
+							code = getByField("issn", b);
+							typeReferenceId = TypeReferenceId.ISSN;
 							
 							if (code.equals(""))
 							{
-								code = getByField("arxiv",b);
-								typeReferenceId = TypeReferenceId.ARXIV;
+								code = getByField("pmid",b);
+								typeReferenceId = TypeReferenceId.PMID;
+								
+								if (code.equals(""))
+								{
+									code = getByField("arxiv",b);
+									typeReferenceId = TypeReferenceId.ARXIV;
+								}
 							}
 						}
 					}
-				}
-				
-				if(!code.equals(""))
-				{
-					references.add(new ReferenceToImport(title, typeReferenceId, code));
+					
+					if(!code.equals(""))
+					{
+						references.add(new ReferenceToImport(title, typeReferenceId, code));
+						cont++;
+					}
 				}
 			}
 		}

@@ -41,6 +41,7 @@ public class BackgroundSearchMendeley {
 	private Map<TypeEngineSearch,String> apiKeysEngine;
 	private int total_hilos;
 	private int total_tries;
+	private List<Reference> references = new ArrayList<Reference>();
 	
 	public BackgroundSearchMendeley(String ci, String cs, String at, String rt, String ru, String email, String pass,
 			Map<TypeEngineSearch, Boolean> optionsEngine, String nameSLR, int tammax, List<String> tags, 
@@ -75,7 +76,9 @@ public class BackgroundSearchMendeley {
 	public void startSearchsWithThreads() throws Exception
 	{
 		System.out.println("COMIENZA PROCESO BUSQUEDA");
-		
+
+		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+
 		Thread tACM = new Thread(), tIEEE = new Thread(), tSCIENCE = new Thread();
 		
 		if(optionsEngine.get(TypeEngineSearch.ACM))
@@ -106,11 +109,6 @@ public class BackgroundSearchMendeley {
 		{
 			// Wait finish process
 		}
-		
-		int totalReferences = EngineSearchACM.references.size() + EngineSearchIEEE.references.size() +
-				EngineSearchSCIENCE.references.size();
-		
-		System.out.println("TOTAL ENCONTRADOS => " + totalReferences);
 		
 		System.out.println("PROCESO BUSQUEDA FINALIZADO.");
 	}
@@ -156,13 +154,9 @@ public class BackgroundSearchMendeley {
 							break;
 					}
 					engineSearch.startSearch();
+					references.addAll(EngineSearch.referencesEngineSearch);
 				} // fin if
 			} //fin for
-			
-			int totalReferences = EngineSearchACM.references.size() + EngineSearchIEEE.references.size() +
-					EngineSearchSCIENCE.references.size() + EngineSearchSPRINGER.references.size();
-			
-			System.out.println("TOTAL ENCONTRADOS => " + totalReferences);
 			
 			System.out.println("PROCESO BUSQUEDA FINALIZADO.");
 		} // fin if
@@ -186,18 +180,11 @@ public class BackgroundSearchMendeley {
 	
 	public int getTotalReferences()
 	{
-		return EngineSearch.referencesEngineSearch.size();
+		return references.size();
 	}
 	
 	public List<Reference> getReferences()
 	{
-		List<Reference> totalReferences = new ArrayList<Reference>();
-		
-		totalReferences.addAll(EngineSearchACM.references);
-		totalReferences.addAll(EngineSearchIEEE.references);
-		totalReferences.addAll(EngineSearchSCIENCE.references);
-		totalReferences.addAll(EngineSearchSPRINGER.references);
-		
-		return totalReferences;
+		return references;
 	}
 }

@@ -36,13 +36,6 @@ import background.pfc.engine.EngineSearch;
  */
 public class EngineSearchIEEE extends EngineSearch {
 
-	/** contMax.*/
-	public static int contMax	= 0;
-	/** contHilos.*/
-	public static int contHilos = 0;
-	/** references.*/
-	public static List<Reference> references = new ArrayList<Reference>();
-
 	/**
 	 * Constructor de la clase EngineSearchIEEE.
 	 * 
