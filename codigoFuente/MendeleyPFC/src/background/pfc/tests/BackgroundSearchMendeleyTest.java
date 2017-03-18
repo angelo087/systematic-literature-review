@@ -29,7 +29,7 @@ public class BackgroundSearchMendeleyTest {
 		
 		int total_hilos = 5;
 		int total_tries = 5;
-		int tammax = 1;
+		int tammax = 8;
 		
 		int start_year = 2010, end_year = 2017;
 		
@@ -43,10 +43,10 @@ public class BackgroundSearchMendeleyTest {
 		tags.add("cr_included"); tags.add("met_met1_yes"); tags.add("met_met2_35"); tags.add("met_met3_ingles");
 		
 		Map<TypeEngineSearch, Boolean> optionsEngine = new HashMap<TypeEngineSearch, Boolean>();
-		optionsEngine.put(TypeEngineSearch.ACM, true);
+		optionsEngine.put(TypeEngineSearch.ACM, false);
 		optionsEngine.put(TypeEngineSearch.IEEE, false);
-		optionsEngine.put(TypeEngineSearch.SCIENCE, false);
-		optionsEngine.put(TypeEngineSearch.SPRINGER, false);
+		optionsEngine.put(TypeEngineSearch.SCIENCE, true);
+		optionsEngine.put(TypeEngineSearch.SPRINGER, true);
 		
 		Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 		apiKeysEngine.put(TypeEngineSearch.SCIENCE, "80aa542193705ce36ebfe094078b9aa3");
@@ -61,7 +61,7 @@ public class BackgroundSearchMendeleyTest {
 					tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
 			backgroundSearch.startSearchs();
 			//backgroundSearch.startSearchsWithThreads();
-			//System.out.println(backgroundSearch.getTotalReferences());
+			System.out.println(backgroundSearch.getTotalReferences());
 		}
 		catch(Exception ex)
 		{

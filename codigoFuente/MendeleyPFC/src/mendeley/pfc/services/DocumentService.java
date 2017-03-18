@@ -204,7 +204,6 @@ public class DocumentService {
 		
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
-		
 		Document document = gson.fromJson(json, Document.class);
 		
 		return document;

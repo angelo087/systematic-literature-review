@@ -583,8 +583,6 @@ public class FolderService
 	    
 	    PostMethod post = new PostMethod(MendeleyUrl.FOLDER_ADD_DOCUMENT.replaceAll("\\{id\\}", idFolder));
 	    
-	    System.out.println(MendeleyUrl.FOLDER_ADD_DOCUMENT.replaceAll("\\{id\\}", idFolder));
-	    
 	    post.addRequestHeader("access_token", mendeleyService.getTokenResponse().getAccessToken());
 	    post.addRequestHeader("Authorization", "Bearer " + mendeleyService.getTokenResponse().getAccessToken());
 	    post.addRequestHeader("Content-type", "application/vnd.mendeley-document.1+json");
@@ -594,8 +592,6 @@ public class FolderService
 	    post.setRequestEntity(requestEntity);
 	    
 	    int status = httpclient.executeMethod(post);
-	    
-	    System.out.println("addDocument => " + status);
 	}
 	
 	/**

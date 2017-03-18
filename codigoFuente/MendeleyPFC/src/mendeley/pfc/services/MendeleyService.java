@@ -162,7 +162,7 @@ public class MendeleyService {
 								   .replaceAll("@REDIRECT_URI@", URLEncoder.encode(redirectUri,"UTF-8"))
 								   .replaceAll("@STATE@", Double.toString(state));
 		
-		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
+		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_45);
 		
 		//Opciones para la conexion
 		webClient.getOptions().setJavaScriptEnabled(true);

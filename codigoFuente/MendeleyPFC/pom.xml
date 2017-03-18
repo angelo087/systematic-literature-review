@@ -34,7 +34,7 @@
   	<dependency>
   		<groupId>net.sourceforge.htmlunit</groupId>
   		<artifactId>htmlunit</artifactId>
-  		<version>2.13</version>
+  		<version>2.22</version>
   	</dependency>
   	<dependency>
   		<groupId>commons-codec</groupId>
@@ -69,7 +69,7 @@
   	<dependency>
   		<groupId>net.sourceforge.cssparser</groupId>
   		<artifactId>cssparser</artifactId>
-  		<version>0.9.11</version>
+  		<version>0.9.22</version>
   	</dependency>
   	<dependency>
   		<groupId>dom4j</groupId>
@@ -79,22 +79,22 @@
   	<dependency>
   		<groupId>net.sourceforge.htmlunit</groupId>
   		<artifactId>htmlunit-core-js</artifactId>
-  		<version>2.13</version>
+  		<version>2.23</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>
   		<artifactId>httpclient</artifactId>
-  		<version>4.3.1</version>
+  		<version>4.5.3</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>
   		<artifactId>httpcore</artifactId>
-  		<version>4.3</version>
+  		<version>4.4.5</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>
   		<artifactId>httpmime</artifactId>
-  		<version>4.3.1</version>
+  		<version>4.5.3</version>
   	</dependency>
   	<dependency>
   		<groupId>jetty</groupId>
@@ -104,27 +104,27 @@
   	<dependency>
   		<groupId>org.eclipse.jetty</groupId>
   		<artifactId>jetty-http</artifactId>
-  		<version>8.1.12.v20130726</version>
+  		<version>9.4.2.v20170220</version>
   	</dependency>
   	<dependency>
   		<groupId>org.eclipse.jetty</groupId>
   		<artifactId>jetty-io</artifactId>
-  		<version>8.1.12.v20130726</version>
+  		<version>9.2.2.v20140723</version>
   	</dependency>
   	<dependency>
   		<groupId>org.eclipse.jetty</groupId>
   		<artifactId>jetty-util</artifactId>
-  		<version>8.1.12.v20130726</version>
+  		<version>9.2.2.v20140723</version>
   	</dependency>
   	<dependency>
   		<groupId>org.eclipse.jetty</groupId>
   		<artifactId>jetty-websocket</artifactId>
-  		<version>8.1.12.v20130726</version>
+  		<version>8.2.0.v20160908</version>
   	</dependency>
   	<dependency>
   		<groupId>net.sourceforge.nekohtml</groupId>
   		<artifactId>nekohtml</artifactId>
-  		<version>1.9.19</version>
+  		<version>1.9.22</version>
   	</dependency>
   	<dependency>
   		<groupId>org.w3c.css</groupId>
@@ -134,22 +134,22 @@
   	<dependency>
   		<groupId>xalan</groupId>
   		<artifactId>serializer</artifactId>
-  		<version>2.7.1</version>
+  		<version>2.7.2</version>
   	</dependency>
   	<dependency>
   		<groupId>oauth.signpost</groupId>
   		<artifactId>signpost-commonshttp4</artifactId>
-  		<version>1.2</version>
+  		<version>1.2.1.2</version>
   	</dependency>
   	<dependency>
   		<groupId>oauth.signpost</groupId>
   		<artifactId>signpost-core</artifactId>
-  		<version>1.2</version>
+  		<version>1.2.1.2</version>
   	</dependency>
   	<dependency>
   		<groupId>xalan</groupId>
   		<artifactId>xalan</artifactId>
-  		<version>2.7.1</version>
+  		<version>2.7.2</version>
   	</dependency>
   	<dependency>
   		<groupId>xerces</groupId>
@@ -171,5 +171,10 @@
   		<artifactId>commons-httpclient</artifactId>
   		<version>3.1</version>
   	</dependency>
+  	<!-- <dependency>
+         <groupId>org.seleniumhq.selenium</groupId>
+         <artifactId>selenium-server</artifactId>
+         <version>3.0.1</version>
+     </dependency> -->
   </dependencies>
 </project>

@@ -1,6 +1,7 @@
 package background.pfc.commons;
 
 import background.pfc.enums.TypeEngineSearch;
+import background.pfc.enums.TypeReferenceId;
 
 /**
  * Clase Reference, es la encargada de recoger cada una de las referencias que son importadas
@@ -12,7 +13,7 @@ import background.pfc.enums.TypeEngineSearch;
 public class Reference {
 	
 	/** url.*/
-	private String url;
+	private String codeReference;
 	/** idMendeley.*/
 	private String idMendeley = "";
 	/** notesCont.*/
@@ -21,6 +22,8 @@ public class Reference {
 	private TypeEngineSearch typeEngineSearch;
 	/** idFolderEngine.*/
 	private String idFolderEngine = "";
+	/** typeReferenceId.*/
+	private TypeReferenceId typeReferenceId;
 	
 	/**
 	 * Constructor de la clase Reference.
@@ -30,9 +33,9 @@ public class Reference {
 	 * @param notesCont String
 	 * @param typeEngineSearch TypeEngineSearch
 	 */
-	public Reference(String url, String idmendeley, String notesCont, TypeEngineSearch typeEngineSearch)
+	public Reference(String codeReference, String idmendeley, String notesCont, TypeEngineSearch typeEngineSearch)
 	{
-		this.url = url;
+		this.codeReference = codeReference;
 		this.idMendeley = idmendeley;
 		this.typeEngineSearch = typeEngineSearch;
 		this.notesCont = notesCont;
@@ -45,9 +48,9 @@ public class Reference {
 	 * @param notesCont String
 	 * @param typeEngineSearch TypeEngineSearch
 	 */
-	public Reference(String url, String notesCont, TypeEngineSearch typeEngineSearch)
+	public Reference(String codeReference, String notesCont, TypeEngineSearch typeEngineSearch)
 	{
-		this.url = url;
+		this.codeReference = codeReference;
 		this.idMendeley = "";
 		this.typeEngineSearch = typeEngineSearch;
 		this.notesCont = notesCont;
@@ -61,11 +64,11 @@ public class Reference {
 	public String getIdMendeley() { return idMendeley; }
 	
 	/**
-	 * M�todo que devuelve la url de donde se ha importado la referencia.
+	 * M�todo que devuelve el codeReference de la referencia.
 	 * 
 	 * @return String
 	 */
-	public String getUrl() { return url; }
+	public String getCodeReference() { return codeReference; }
 	
 	/**
 	 * M�todo que devuelve el TypeEngineSearch de la referencia.
@@ -96,8 +99,8 @@ public class Reference {
 	 * 
 	 * @param url String
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setCodeReference(String codeReference) {
+		this.codeReference = codeReference;
 	}
 
 	/**
@@ -135,4 +138,12 @@ public class Reference {
 	public void setIdFolderEngine(String idFolderEngine) {
 		this.idFolderEngine = idFolderEngine;
 	}
+
+	public TypeReferenceId getTypeReferenceId() {
+		return typeReferenceId;
+	}
+
+	public void setTypeReferenceId(TypeReferenceId typeReferenceId) {
+		this.typeReferenceId = typeReferenceId;
+	}	
 }

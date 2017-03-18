@@ -18,13 +18,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import background.pfc.commons.Reference;
+import background.pfc.commons.ReferenceToImport;
 import background.pfc.commons.SearchTermParam;
 import background.pfc.enums.OperatorSearch;
 import background.pfc.enums.TypeEngineSearch;
+import background.pfc.enums.TypeReferenceId;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.WebClient;
-
 import background.pfc.engine.EngineSearch;
 
 /**
@@ -65,10 +65,10 @@ public class EngineSearchSPRINGER extends EngineSearch {
 	public EngineSearchSPRINGER(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year,  int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries) throws Exception {
 		
 		super(TypeEngineSearch.SPRINGER, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
-				start_year, end_year, searchsTerms, apiKeysEngine, webClients, total_hilos, total_tries);
+				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
 		
 		this.web = "http://api.springer.com/meta/v1/pam";
 		this.idEngine = getIdSubFolder();
@@ -80,7 +80,7 @@ public class EngineSearchSPRINGER extends EngineSearch {
 	 * 
 	 */
 	@Override
-	public void getLinksReferences() throws ElementNotFoundException, IOException
+	public void getIdsReferences() throws ElementNotFoundException, IOException
 	{
 		double tamDefDouble = Double.parseDouble(Integer.toString(TAM_DEF));
 		int num_paginas = (int) Math.ceil(TAM_MAX/tamDefDouble);
@@ -90,17 +90,17 @@ public class EngineSearchSPRINGER extends EngineSearch {
 		web = URIUtil.encodeQuery(q);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		List<String> linksBib = new ArrayList<String>();		
+		List<ReferenceToImport> linksBib = new ArrayList<ReferenceToImport>();		
 		
 		for(int i = 1; i <= num_paginas; i++)
 		{
 			System.out.println("Conectando a " + web);
-			linksBib.addAll(getLinksBib());
+			linksBib.addAll(getDoiReferences());
 			nextPage(i);
 		}
 		
-		linksDocuments.addAll(linksBib);
-		System.out.println("Se ha obtenido " + linksDocuments.size());
+		idsDocuments.addAll(linksBib);
+		System.out.println("Se ha obtenido " + idsDocuments.size());
 	}
 	
 	/**
@@ -291,9 +291,9 @@ public class EngineSearchSPRINGER extends EngineSearch {
 	 * 
 	 * @return List<String>
 	 */
-	private List<String> getLinksBib()
+	private List<ReferenceToImport> getDoiReferences()
 	{
-		List<String> bibs = new ArrayList<String>();
+		List<ReferenceToImport> bibs = new ArrayList<ReferenceToImport>();
 		
 		try
 		{
@@ -309,15 +309,20 @@ public class EngineSearchSPRINGER extends EngineSearch {
 			{
 				for (int temp = 0; temp < nList.getLength(); temp++) 
 				{
-
-					Node nNode = nList.item(temp);
-
-					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
-						Element eElement = (Element) nNode;
-
-						bibs.add(eElement.getElementsByTagName("prism:doi").item(0).getTextContent());
+					try
+					{
+						Node nNode = nList.item(temp);
+	
+						if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	
+							Element eElement = (Element) nNode;
+	
+							//bibs.add(eElement.getElementsByTagName("prism:doi").item(0).getTextContent());
+							String doi = eElement.getElementsByTagName("prism:doi").item(0).getTextContent();
+							bibs.add(new ReferenceToImport(doi,TypeReferenceId.DOI, doi));
+						}
 					}
+					catch(Exception ex) { }
 				}
 			}
 		}

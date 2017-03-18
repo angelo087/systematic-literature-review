@@ -2,18 +2,22 @@ package background.pfc.commons;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
-import mendeley.pfc.services.MendeleyService;
+import mendeley.pfc.commons.MendeleyException;
+import mendeley.pfc.schemas.Catalog;
+import mendeley.pfc.schemas.Document;
+import mendeley.pfc.services.CatalogService;
+import mendeley.pfc.services.DocumentService;
+
+import org.apache.commons.httpclient.HttpException;
+
 import background.pfc.engine.EngineSearch;
 import background.pfc.enums.TypeEngineSearch;
+import background.pfc.enums.TypeReferenceId;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 
 /**
@@ -29,21 +33,16 @@ public class ImportReferenceMendeley implements Runnable {
 	private String name;
 	/** typeEngine .*/
 	private TypeEngineSearch typeEngine;
-	/** webClient .*/
-	private WebClient webClient;
+	/** typeReferenceId .*/
+	private TypeReferenceId typeReferenceId;
 	/** url .*/
-	private String url;
+	private String codeReference;
 	/** nameSLR .*/
 	private String nameSLR;
-	/** mendeleyService .*/
-	private MendeleyService mendeleyService;
-	/** prefixUrl .*/
-	private String prefixUrl;
-	
-	/** PREFIX_URL_DOI .*/
-	private static final String PREFIX_URL_DOI = "http://www.mendeley.com/import/?doi=";
-	/** PREFIX_URL_URL .*/
-	private static final String PREFIX_URL_URL = "http://www.mendeley.com/import/?url=";
+	/** catalogService .*/
+	private CatalogService catalogService;
+	/** documentService. */
+	private DocumentService documentService;
 	
 	/**
 	 * Constructor de la clase ImportReferenceMendeley
@@ -56,38 +55,20 @@ public class ImportReferenceMendeley implements Runnable {
 	 * @param mendeleyService MendeleyService
 	 */
 	public ImportReferenceMendeley(String name, TypeEngineSearch typeEngine,
-			WebClient webClient, String url, String nameSLR,
-			MendeleyService mendeleyService) {
+			String codeReference, String nameSLR, TypeReferenceId typeReferenceId, 
+			CatalogService catalogService, DocumentService documentService) {
 		
 		this.name = name;
 		this.typeEngine = typeEngine;
-		
-		if (TypeEngineSearch.ACM == this.typeEngine)
-		{
-			prefixUrl = PREFIX_URL_URL;
-		}
-		else
-		{
-			prefixUrl = PREFIX_URL_DOI;
-		}
-		
-		this.webClient = webClient;
-		this.url = prefixUrl + url;
+		this.typeReferenceId = typeReferenceId;		
+		this.codeReference = codeReference;
 		this.nameSLR = nameSLR;
-		this.mendeleyService = mendeleyService;
-	}
-	
-	/**
-	 * M�todo que cierra la conexi�n del WebClient asociado.
-	 */
-	public void closeWebClient() {
-		if (webClient != null) {
-			webClient.closeAllWindows();
-		}
+		this.catalogService = catalogService;
+		this.documentService = documentService;
 	}
 
 	/**
-	 * M�todo que devuelve el nombre del hilo asociado.
+	 * Metodo que devuelve el nombre del hilo asociado.
 	 * 
 	 * @return String
 	 */
@@ -102,6 +83,14 @@ public class ImportReferenceMendeley implements Runnable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public TypeReferenceId getTypeReferenceId() {
+		return typeReferenceId;
+	}
+
+	public void setTypeReferenceId(TypeReferenceId typeReferenceId) {
+		this.typeReferenceId = typeReferenceId;
 	}
 
 	/**
@@ -123,30 +112,12 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 
 	/**
-	 * M�todo que devuelve el WebClient asociado a la referencia a importar.
-	 * 
-	 * @return WebClient
-	 */
-	public WebClient getWebClient() {
-		return webClient;
-	}
-
-	/**
-	 * M�todo que establece el WebClient de la referencia a importar.
-	 * 
-	 * @param webClient WebClient
-	 */
-	public void setWebClient(WebClient webClient) {
-		this.webClient = webClient;
-	}
-
-	/**
-	 * M�todo que devuelve la url de la referencia a importar.
+	 * M�todo que devuelve el code de la referencia a importar.
 	 * 
 	 * @return String
 	 */
-	public String getUrl() {
-		return url;
+	public String getCodeReference() {
+		return codeReference;
 	}
 
 	/**
@@ -154,16 +125,8 @@ public class ImportReferenceMendeley implements Runnable {
 	 * 
 	 * @param url String
 	 */
-	public void setUrl(String url) {
-		if (TypeEngineSearch.ACM == this.typeEngine)
-		{
-			prefixUrl = PREFIX_URL_URL;
-		}
-		else
-		{
-			prefixUrl = PREFIX_URL_DOI;
-		}
-		this.url = prefixUrl + url;
+	public void setCodeReference(String codeReference) {
+		this.codeReference = codeReference;
 	}
 
 	/**
@@ -184,31 +147,20 @@ public class ImportReferenceMendeley implements Runnable {
 		this.nameSLR = nameSLR;
 	}
 
-	/**
-	 * M�todo que devuelve la conexi�n con Mendeley de la referencia a importar.
-	 * 
-	 * @return MendeleyService
-	 */
-	public MendeleyService getMendeleyService() {
-		return mendeleyService;
+	public CatalogService getCatalogService() {
+		return catalogService;
 	}
 
-	/**
-	 * M�todo que establece la conexi�n con Mendeley de la referencia a importar.
-	 * 
-	 * @param mendeleyService MendeleyService
-	 */
-	public void setMendeleyService(MendeleyService mendeleyService) {
-		this.mendeleyService = mendeleyService;
+	public void setCatalogService(CatalogService catalogService) {
+		this.catalogService = catalogService;
 	}
-	
-	/**
-	 * M�todo que devuelve la url base que usa la referencia para importar a mendeley.
-	 * 
-	 * @return String
-	 */
-	public String getPrefixUrl() {
-		return prefixUrl;
+
+	public DocumentService getDocumentService() {
+		return documentService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	/**
@@ -216,7 +168,7 @@ public class ImportReferenceMendeley implements Runnable {
 	 */
 	@Override
 	public void run() {
-		System.out.println("Soy " + this.name + " con " + this.url);
+		System.out.println("Soy " + this.name + " con codigo " + this.codeReference);
 		
 		boolean ok = false;
 		
@@ -245,100 +197,54 @@ public class ImportReferenceMendeley implements Runnable {
 	}
 	
 	/**
-	 * M�todo privado que realiza la importaci�n de la referencia a Mendeley e indica
+	 * Metodo privado que realiza la importaci�n de la referencia a Mendeley e indica
 	 * si se ha realizado correctamente o no.
 	 * 
 	 * @return boolean
+	 * @throws HttpException 
 	 * @throws FailingHttpStatusCodeException FailingHttpStatusCodeException
 	 * @throws MalformedURLException MalformedURLException
 	 * @throws IOException IOException
+	 * @throws MendeleyException 
 	 * @throws InterruptedException InterruptedException
 	 */
-	private boolean doImport() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException
+	private boolean doImport() throws HttpException, IOException, MendeleyException
 	{
 		boolean ok = false;
+		List<Catalog> catalogs = new ArrayList<Catalog>();
 		
-		//Para evitar que salga el texto por la salida estandar
-		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
-		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
-		
-		HtmlPage currentPage = webClient.getPage(this.url);
-		this.webClient.waitForBackgroundJavaScript(5000);
-		
-		if(currentPage.getWebResponse().getStatusCode() == 200 && currentPage.getTitleText().toLowerCase().contains("importer"))
+		switch(typeReferenceId)
 		{
-			HtmlSelect folderSelect = (HtmlSelect) currentPage.getElementById("document-add-to");
-			int tries = EngineSearch.TOTAL_TRIES;
-			while(tries > 0 && folderSelect == null)
-			{
-				tries--;				
-				synchronized(currentPage) {
-					currentPage.wait(5000);
-				}
-				folderSelect = (HtmlSelect) currentPage.getElementById("document-add-to");
-			}
-			
-			if (folderSelect == null)
-			{
-				System.out.println(this.name + " => Tras varios intentos, no ha cargado la página. => " + currentPage.getTitleText());
-			}
-			else
-			{
-				HtmlOption optionSelected = getFolderOption(folderSelect);
-				if (optionSelected != null)
-				{
-					folderSelect.setSelectedAttribute(optionSelected, true);
-				}
-				HtmlAnchor anchor = currentPage.getAnchorByText("Save");
-				if (anchor != null)
-				{
-					currentPage = anchor.click();
-					webClient.waitForBackgroundJavaScript(10000);
-					
-					Reference reference = new Reference(url, "", typeEngine);
-					
-					ok = EngineSearch.addReferenceToEngineSearch(reference);
-				}
-			}
+			case DOI:
+				catalogs = catalogService.getCatalogDocumentByDOI(codeReference);
+				break;
+			case ISBN:
+				catalogs = catalogService.getCatalogDocumentByISBN(codeReference);
+				break;
+			case PMID:
+				catalogs = catalogService.getCatalogDocumentByPMID(codeReference);
+				break;
+			case ARXIV:
+				catalogs = catalogService.getCatalogDocumentByARXIV(codeReference);
+				break;
+			case ISSN:
+				catalogs = catalogService.getCatalogDocumentByISSN(codeReference);
+				break;
 		}
-		else
+		
+		if (catalogs != null && catalogs.size() > 0)
 		{
-			System.out.println(this.name + " => No es importer (" + currentPage.getWebResponse().getStatusCode() + ") " + currentPage.getTitleText());
+			Catalog catalog = catalogs.get(0);
+			Document document = catalog.convertToDocument();
+			Document docResult = documentService.createDocument(document);
+			
+			if(docResult != null && docResult.getId() != null)
+			{
+				Reference reference = new Reference(codeReference, docResult.getId(), "", typeEngine);
+				ok = EngineSearch.addReferenceToEngineSearch(reference);
+			}
 		}
 		
 		return ok;
-	}
-	
-	/**
-	 * M�todo privado que devuelve el HtmlOption que contiene el engine (folder) donde se escoge
-	 * la carpeta donde va a ser importada.
-	 * 
-	 * @param folderSelect HtmlSelect
-	 * @return HtmlOption
-	 */
-	private HtmlOption getFolderOption(HtmlSelect folderSelect)
-	{
-		HtmlOption optionSelected = null;
-		boolean canCatch = false;
-		
-		for(HtmlOption option : folderSelect.getOptions())
-		{
-			if (canCatch)
-			{
-				if (option.getText().toLowerCase().trim().contains(typeEngine.getKey().toLowerCase().trim()))
-				{
-					optionSelected = option;
-					break;
-				}
-			}
-			
-			if (option.getText().toLowerCase().trim().contains(nameSLR.toLowerCase().trim()))
-			{
-				canCatch = true;
-			}
-		}
-		
-		return optionSelected;
 	}
 }

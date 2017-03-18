@@ -1,6 +1,8 @@
 package background.pfc.engine;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +10,18 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.services.FolderService;
+import mendeley.pfc.services.MendeleyService;
+
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.util.URIUtil;
 
 import background.pfc.commons.Reference;
+import background.pfc.commons.ReferenceToImport;
 import background.pfc.commons.SearchTermParam;
 import background.pfc.enums.TypeEngineSearch;
+import background.pfc.enums.TypeReferenceId;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -20,12 +29,8 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.ThreadedRefreshHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-import mendeley.pfc.schemas.Folder;
-import mendeley.pfc.services.FolderService;
-import mendeley.pfc.services.MendeleyService;
-import background.pfc.engine.EngineSearch;
 
 /**
  * EngineSearchACM es una clase que hereda de EngineSearch para representar el motor de busqueda
@@ -65,14 +70,14 @@ public class EngineSearchACM extends EngineSearch {
 	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries) throws Exception {
 		
 		super(TypeEngineSearch.ACM, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
-				start_year, end_year, searchsTerms, apiKeysEngine, webClients, total_hilos, total_tries);
+				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();
-		this.TAM_DEF = 100;
+		this.TAM_DEF = 10;
 	}
 	
 	/**
@@ -80,7 +85,7 @@ public class EngineSearchACM extends EngineSearch {
 	 * 
 	 */
 	@Override
-	public void getLinksReferences() throws ElementNotFoundException, IOException
+	public void getIdsReferences() throws ElementNotFoundException, IOException
 	{
 		//Para evitar que salga el texto por la salida estandar
 		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
@@ -91,7 +96,7 @@ public class EngineSearchACM extends EngineSearch {
 		//int num_paginas = (int) Math.ceil(TAM_MAX/TAM_DEF);
 		int num_paginas = (int) Math.ceil(TAM_MAX/tamDefDouble);
 		
-		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
+		WebClient webClient = new WebClient(BrowserVersion.FIREFOX_45);
 		
 		//Opciones para la conexion
 		webClient.getOptions().setJavaScriptEnabled(true);
@@ -123,7 +128,7 @@ public class EngineSearchACM extends EngineSearch {
 		webClient.waitForBackgroundJavaScriptStartingBefore(10000);
 		
 		//Obtenemos los enlaces de cada uno de las bibliografias encontradas
-		List<String> linksBib = new ArrayList<String>();
+		List<ReferenceToImport> linksBib = new ArrayList<ReferenceToImport>();
 		
 		for(int i = 0; i < num_paginas; i++)
 		{
@@ -132,15 +137,16 @@ public class EngineSearchACM extends EngineSearch {
 				break;
 			}
 
-			linksBib.addAll(getLinksBib(currentPage.asXml()));
+			linksBib.addAll(getReferencesToImport(currentPage));
 			currentPage = nextPage(webClient,currentPage,i);
 		}
 		
-		linksDocuments.addAll(linksBib);
+		idsDocuments.addAll(linksBib);
 		
-		webClient.closeAllWindows();
+		webClient.close();
+
+		System.out.println("Se ha obtenido " + idsDocuments.size());
 		
-		System.out.println("Se ha obtenido " + linksDocuments.size());
 	}
 	
 	/**
@@ -284,39 +290,102 @@ public class EngineSearchACM extends EngineSearch {
 		return currentPage;
 	}
 	
-	/**
-	 * M�todo que extrae las url/doi de las referencias a importar.
-	 * 
-	 * @param code String
-	 * @return List<String>
-	 */
-	private List<String> getLinksBib(String code)
+	private List<ReferenceToImport> getReferencesToImport(HtmlPage currentPage) throws IOException
 	{
-		List<String> bibs = new ArrayList<String>();
+		List<ReferenceToImport> referencesToImport = new ArrayList<ReferenceToImport>();
 		
-		String textSource = code;
+		HtmlAnchor anchorBibTex = (HtmlAnchor) currentPage.getAnchorByText("bibtex");
 		
-		textSource = textSource.replaceAll("[\n\r]", "");
-		textSource = textSource.replaceAll(" +", " ");
-		textSource = textSource.replaceAll("<i>", "");
-		textSource = textSource.replaceAll("</i>", "");
-		
-		String regex = "<div class\\=\"title\"> <a href\\=\"citation\\.cfm\\?id\\=";
-		String replacement = "\n" + regex;
-		textSource = textSource.replaceAll(regex, replacement);
-		
-		String pattern = "<div class=\"title\"> <a href=\"(.+?)\".*>(.*)</a>.*";
-		Matcher matcher = Pattern.compile(pattern).matcher(textSource);
-		
-		while(matcher.find())
+		if (anchorBibTex != null)
 		{
-			if(matcher.group(1) != null)
+			InputStream is = anchorBibTex.click().getWebResponse().getContentAsStream();
+			
+			String bibtex = IOUtils.toString(is, Charset.defaultCharset());
+			bibtex = bibtex.replaceAll("[\n\r]", "").replaceAll(" +", " ").replaceAll("booktitle", "book").trim();
+			String regex = "@";
+			String replacement = "\n" + regex;
+			bibtex = bibtex.replaceAll(regex, replacement);
+
+			referencesToImport = getAllReferences(bibtex);
+		}
+		
+		return referencesToImport;
+	}
+	
+	private List<ReferenceToImport> getAllReferences(String bibtex)
+	{
+		List<ReferenceToImport> references = new ArrayList<ReferenceToImport>();
+		
+		String[] bibRefs = bibtex.split("\n");
+		
+		for(String b : bibRefs)
+		{
+			String title = getByField("title",b);
+			TypeReferenceId typeReferenceId = TypeReferenceId.DOI;
+			
+			if (title != null && !title.equals(""))
 			{
-				String link = ("http://dl.acm.org/" + matcher.group(1)).trim();
-				bibs.add(link); //enlaces
+				// Primero buscamos 'doi'
+				String code = getByField("doi",b);
+				
+				if(code.equals(""))
+				{
+					code = getByField("isbn",b); // Por isbn
+					typeReferenceId = TypeReferenceId.ISBN;
+					
+					if (code.equals(""))
+					{
+						code = getByField("issn", b);
+						typeReferenceId = TypeReferenceId.ISSN;
+						
+						if (code.equals(""))
+						{
+							code = getByField("pmid",b);
+							typeReferenceId = TypeReferenceId.PMID;
+							
+							if (code.equals(""))
+							{
+								code = getByField("arxiv",b);
+								typeReferenceId = TypeReferenceId.ARXIV;
+							}
+						}
+					}
+				}
+				
+				if(!code.equals(""))
+				{
+					references.add(new ReferenceToImport(title, typeReferenceId, code));
+				}
 			}
 		}
 		
-		return bibs;
+		return references;
+	}
+	
+	private String getByField(String field, String bibtex)
+	{
+		String value = "";
+		
+		try
+		{
+			String[] array = bibtex.split(field + " =");
+	
+			if (array.length == 2)
+			{
+				String textSource = array[1].trim();
+				String pattern = "\\{(.+?)\\}.*";
+				Matcher matcher = Pattern.compile(pattern).matcher(textSource);
+				
+				matcher.find();
+				
+				if (matcher.group(1) != null)
+				{
+					value = matcher.group(1);
+				}
+			}
+		}
+		catch(Exception ex) { }
+		
+		return value;
 	}
 }

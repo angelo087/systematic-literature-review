@@ -21,6 +21,7 @@ import mendeley.pfc.commons.TypeDocument;
 import mendeley.pfc.commons.TypeDocumentDeserializer;
 import mendeley.pfc.schemas.Catalog;
 import mendeley.pfc.schemas.Document;
+import mendeley.pfc.schemas.Folder;
 
 public class CatalogService {
 
@@ -139,27 +140,47 @@ public class CatalogService {
 				redirect_url = "http://localhost:8095/SLR/indexMendeley/",
 				email = "angel.gonzatoro@gmail.com",
 				password = "Number98*";
-		
-		String doiDocument = "10.1145/1161039.1161053";
-		
+
 		MendeleyService mendeleyService = new MendeleyService(client_id,client_secret,redirect_url,email,password);
 		DocumentService documentService = new DocumentService(mendeleyService);
 		CatalogService catalogService = new CatalogService(mendeleyService);
+		FolderService folderService = new FolderService(mendeleyService);
 		
-		List<Catalog> catalogs = catalogService.getCatalogDocumentByDOI(doiDocument);
+		String idFolderEngine = "b63c2513-d03d-44e7-87d7-d1d61287ebe7";
 		
-		if (catalogs == null || catalogs.size() == 0)
+		List<String> dois = new ArrayList<String>();
+		dois.add("10.1109/TC.2017.2651828");
+		dois.add("10.1109/IIH-MSP.2015.81");
+		dois.add("10.1109/TIM.2016.2644898");
+		dois.add("10.1109/eScience.2014.24");
+		dois.add("10.1109/CSSS.2011.5974986");
+		dois.add("10.1109/CAOL.2010.5634281");
+		dois.add("10.1109/IEMBS.2010.5628010");
+		dois.add("10.1109/ISDEA.2013.552");
+		dois.add("10.1109/CVPRW.2014.57");		
+		
+		for(String doi : dois)
 		{
-			System.out.println("No existe un catalog con ese doi.");
-		}
-		else
-		{
-			for(Catalog catalog : catalogs)
+			String doiDocument = doi;
+			
+			List<Catalog> catalogs = catalogService.getCatalogDocumentByDOI(doiDocument);
+			
+			if (catalogs == null || catalogs.size() == 0)
 			{
-				Document document = catalog.convertToDocument();
-				documentService.createDocument(document);
-				
-				System.out.println("Documento de catalog con id=" + catalog.getId() + " creado!");
+				System.out.println("No existe un catalog con doi= " + doiDocument);
+			}
+			else
+			{
+				for(Catalog catalog : catalogs)
+				{
+					Document document = catalog.convertToDocument();
+					Document docResult = documentService.createDocument(document);
+					
+					System.out.println("Documento de catalog con id=" 
+					+ catalog.getId() + " creado => " + docResult.getId());
+					
+					folderService.addDocument(idFolderEngine, docResult.getId());
+				}
 			}
 		}
 	}

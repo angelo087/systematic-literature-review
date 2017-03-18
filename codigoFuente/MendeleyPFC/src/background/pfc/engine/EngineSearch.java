@@ -8,21 +8,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import mendeley.pfc.commons.MendeleyException;
+import mendeley.pfc.schemas.Folder;
+import mendeley.pfc.services.CatalogService;
+import mendeley.pfc.services.DocumentService;
+import mendeley.pfc.services.FolderService;
+import mendeley.pfc.services.MendeleyService;
+
+import org.apache.commons.httpclient.HttpException;
+
 import background.pfc.commons.ImportReferenceMendeley;
 import background.pfc.commons.Reference;
+import background.pfc.commons.ReferenceToImport;
 import background.pfc.commons.SearchTermParam;
 import background.pfc.enums.TypeEngineSearch;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-
-import mendeley.pfc.schemas.Folder;
-import mendeley.pfc.services.FolderService;
-import mendeley.pfc.services.MendeleyService;
-import background.pfc.engine.EngineSearchACM;
-import background.pfc.engine.EngineSearchIEEE;
-import background.pfc.engine.EngineSearchSCIENCE;
-import background.pfc.engine.EngineSearchSPRINGER;
 
 public abstract class EngineSearch implements Runnable {
 	
@@ -39,8 +40,6 @@ public abstract class EngineSearch implements Runnable {
 	protected String redirectUri;
 	/** mendeleyService.*/
 	protected MendeleyService mendeleyService;
-	/** webClients.*/
-	protected List<WebClient> webClients = new ArrayList<WebClient>();
 	/** total_hilos.*/
 	protected int total_hilos;
 	/** nameSLR.*/
@@ -64,7 +63,7 @@ public abstract class EngineSearch implements Runnable {
 	/** idEngine.*/
 	protected String idEngine			= "";
 	/** linksDocuments.*/
-	protected List<String> linksDocuments = new ArrayList<String>();
+	protected List<ReferenceToImport> idsDocuments = new ArrayList<ReferenceToImport>();
 	/** apiKeysEngine.*/
 	protected Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
 	/** referencesEngineSearch.*/
@@ -90,10 +89,11 @@ public abstract class EngineSearch implements Runnable {
 	 * @param total_tries int
 	 * @throws Exception Exception
 	 */
-	public EngineSearch(TypeEngineSearch engine, String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
+	public EngineSearch(TypeEngineSearch engine,
+			String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			List<WebClient> webClients, int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries) throws Exception {
 		
 		this.engine = engine;
 		this.clientId = clientId;
@@ -105,7 +105,6 @@ public abstract class EngineSearch implements Runnable {
 		this.tags = tags;
 		this.strTags = "";
 		this.apiKeysEngine = apiKeysEngine;
-		this.webClients = webClients;
 		this.total_hilos = total_hilos;
 		TOTAL_TRIES = total_tries;
 		
@@ -149,14 +148,17 @@ public abstract class EngineSearch implements Runnable {
 	 * @throws Exception
 	 */
 	public void startSearch() throws Exception {	
-		System.out.println(engine.getKey().toUpperCase() + " Paso 1 de 3 => GetLinksReferences()");
-		getLinksReferences();
+		System.out.println(engine.getKey().toUpperCase() + " Paso 1 de 4 => GetLinksReferences()");
+		getIdsReferences();
 		
-		System.out.println(engine.getKey().toUpperCase() + " Paso 2 de 3 => downloadReferencesToMendeley()");
+		System.out.println(engine.getKey().toUpperCase() + " Paso 2 de 4 => downloadReferencesToMendeley()");
 		downloadReferencesToMendeley();
 		
-		System.out.println(engine.getKey().toUpperCase() + " Paso 3 de 3 => collectAllReferences()");
+		System.out.println(engine.getKey().toUpperCase() + " Paso 3 de 4 => collectAllReferences()");
 		collectAllReferences();
+		
+		System.out.println(engine.getKey().toUpperCase() + " Paso 4 de 4 => moveReferencesToFolder()");
+		moveReferencesToFolder();
 	}
 	
 	/**
@@ -165,7 +167,7 @@ public abstract class EngineSearch implements Runnable {
 	 * 
 	 * @throws Exception
 	 */
-	public abstract void getLinksReferences() throws Exception;
+	public abstract void getIdsReferences() throws Exception;
 	
 	/**
 	 * Método que realiza la descarga de las referencias a través de los enlaces
@@ -188,10 +190,13 @@ public abstract class EngineSearch implements Runnable {
 			List<Thread> threads = inicialiceArrayThreads();
 			List<ImportReferenceMendeley> importsRefMendeley = inicialiceArrayImports();
 			
+			DocumentService documentService = new DocumentService(mendeleyService);
+			CatalogService catalogService = new CatalogService(mendeleyService);
+			
 			System.out.println("Login realizado correctamente.");
 			int index = 0;
 			boolean exit = false;
-			synchronized (linksDocuments) {
+			synchronized (idsDocuments) {
 				
 				int contMax = getContMax();
 				List<Reference> references = getReferences();
@@ -200,7 +205,7 @@ public abstract class EngineSearch implements Runnable {
 				// Mientras que haya referencias a importar y no sobrepase el tamaño fijado
 				while(!exit)
 				{
-					while(contMax < TAM_MAX && index < linksDocuments.size() && (references.size() + contHilos <= TAM_MAX))
+					while(contMax < TAM_MAX && index < idsDocuments.size() && (references.size() + contHilos <= TAM_MAX))
 					{
 						contMax = getContMax();
 						contHilos = getContHilos();
@@ -213,12 +218,16 @@ public abstract class EngineSearch implements Runnable {
 							ImportReferenceMendeley importReference = importsRefMendeley.get(posThread);
 							if (importReference == null)
 							{
-								importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1),
-										engine, webClients.get(posThread), linksDocuments.get(index),nameSLR, mendeleyService);
+								/*importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1), 
+										engine, idsDocuments.get(index), nameSLR, typeReferenceId, catalogService, documentService);*/
+								importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1), 
+										engine, idsDocuments.get(index).getId(), nameSLR, idsDocuments.get(index).getTypeReferenceId(),
+										catalogService, documentService);
 							}
 							else
 							{
-								importReference.setUrl(linksDocuments.get(index));
+								importReference.setCodeReference(idsDocuments.get(index).getId());
+								importReference.setTypeReferenceId(idsDocuments.get(index).getTypeReferenceId());
 							}
 							importsRefMendeley.set(posThread, importReference);
 							thread = new Thread(importReference);
@@ -238,7 +247,7 @@ public abstract class EngineSearch implements Runnable {
 						Thread.sleep(5000);
 					}
 					
-					if(!(index < linksDocuments.size()) || references.size() >= TAM_MAX)
+					if(!(index < idsDocuments.size()) || references.size() >= TAM_MAX)
 					{
 						exit = true;
 					}
@@ -248,51 +257,11 @@ public abstract class EngineSearch implements Runnable {
 					}
 				} // fin-while
 			} // fin-synchronized
-			
-			closeImportRefMendeley(importsRefMendeley);
 		}
 		catch(Exception e)
 		{
 			System.out.println("Exception in EngineSearch.downloadReferencesToMendeley()");
 		}
-		finally
-		{
-			closeAllWebClients();
-		}
-	}
-	
-	/**
-	 * M�todo que cierra las conexiones de los WebClients.
-	 */
-	private void closeAllWebClients()
-	{
-		if (webClients != null && webClients.size() > 0)
-		{
-			for (WebClient wc : webClients)
-			{
-				if (wc != null)
-				{
-					wc.closeAllWindows();
-				}
-			}
-		}
-	}
-	
-	/**
-	 * M�todo que cierra las conexiones de los importsRefMendeley.
-	 * 
-	 * @param importsRefMendeley List<ImportReferenceMendeley>
-	 */
-	public static void closeImportRefMendeley(List<ImportReferenceMendeley> importsRefMendeley) {
-		
-		for(ImportReferenceMendeley im : importsRefMendeley)
-		{
-			if (im != null)
-			{
-				im.closeWebClient();
-			}
-		}
-		
 	}
 	
 	/**
@@ -320,21 +289,67 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private void collectAllReferences() throws Exception
 	{
-		// ACM
-		setIdMendeleyFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
-		referencesEngineSearch.addAll(EngineSearchACM.references);
+		if (this instanceof EngineSearchACM)
+		{
+			// ACM
+			setIdMendeleyFolderEngine(EngineSearchACM.references, TypeEngineSearch.ACM);
+			referencesEngineSearch.addAll(EngineSearchACM.references);
+		}
 		
-		// IEEE
-		setIdMendeleyFolderEngine(EngineSearchIEEE.references, TypeEngineSearch.IEEE);
-		referencesEngineSearch.addAll(EngineSearchIEEE.references);
+		if (this instanceof EngineSearchIEEE)
+		{
+			// IEEE
+			setIdMendeleyFolderEngine(EngineSearchIEEE.references, TypeEngineSearch.IEEE);
+			referencesEngineSearch.addAll(EngineSearchIEEE.references);
+		}
 		
-		// SCIENCE
-		setIdMendeleyFolderEngine(EngineSearchSCIENCE.references, TypeEngineSearch.SCIENCE);
-		referencesEngineSearch.addAll(EngineSearchSCIENCE.references);
+		if (this instanceof EngineSearchSCIENCE)
+		{
+			// SCIENCE
+			setIdMendeleyFolderEngine(EngineSearchSCIENCE.references, TypeEngineSearch.SCIENCE);
+			referencesEngineSearch.addAll(EngineSearchSCIENCE.references);
+		}
 		
-		// SPRINGER
-		setIdMendeleyFolderEngine(EngineSearchSPRINGER.references, TypeEngineSearch.SPRINGER);
-		referencesEngineSearch.addAll(EngineSearchSPRINGER.references);
+		if (this instanceof EngineSearchSPRINGER)
+		{
+			// SPRINGER
+			setIdMendeleyFolderEngine(EngineSearchSPRINGER.references, TypeEngineSearch.SPRINGER);
+			referencesEngineSearch.addAll(EngineSearchSPRINGER.references);
+		}
+	}
+	
+	private List<Reference> getReferencesByEngineSearch()
+	{
+		List<Reference> references = new ArrayList<Reference>();
+		if (this instanceof EngineSearchACM)
+		{
+			references = EngineSearchACM.references;
+		}
+		else if (this instanceof EngineSearchIEEE)
+		{
+			references = EngineSearchIEEE.references;
+		}
+		else if (this instanceof EngineSearchSCIENCE)
+		{
+			references = EngineSearchSCIENCE.references;
+		}
+		else if (this instanceof EngineSearchSPRINGER)
+		{
+			references = EngineSearchSPRINGER.references;
+		}
+		return references;
+	}
+	
+	private void moveReferencesToFolder() throws MendeleyException, HttpException, IOException
+	{
+		List<Reference> references = getReferencesByEngineSearch();
+		
+		FolderService folderService = new FolderService(mendeleyService);
+		
+		for(Reference reference : references)
+		{
+			folderService.addDocument(reference.getIdFolderEngine(), reference.getIdMendeley());
+		}
 	}
 	
 	/**
@@ -830,8 +845,8 @@ public abstract class EngineSearch implements Runnable {
 	 * 
 	 * @return List<String>
 	 */
-	public List<String> getLinksDocuments() {
-		return linksDocuments;
+	public List<ReferenceToImport> getIdsDocuments() {
+		return idsDocuments;
 	}
 
 	/**
@@ -839,8 +854,8 @@ public abstract class EngineSearch implements Runnable {
 	 * 
 	 * @param linksDocuments List<String>
 	 */
-	public void setLinksDocuments(List<String> linksDocuments) {
-		this.linksDocuments = linksDocuments;
+	public void setIdsDocuments(List<ReferenceToImport> idsDocuments) {
+		this.idsDocuments = idsDocuments;
 	}
 
 	/**
