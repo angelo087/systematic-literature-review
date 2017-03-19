@@ -82,7 +82,7 @@ class BootStrap {
 		def type13 = TypeDocument.findByNomenclatura('newspaper_article') ?: new TypeDocument(nombre: 'Newspaper Article', nomenclatura: 'newspaper_article').save(failOnError: true)
 		def type14 = TypeDocument.findByNomenclatura('computer_program') ?: new TypeDocument(nombre: 'Computer Program', nomenclatura: 'computer_program').save(failOnError: true)
 		def type15 = TypeDocument.findByNomenclatura('hearing') ?: new TypeDocument(nombre: 'Hearing', nomenclatura: 'hearing').save(failOnError: true)
-		def type16 = TypeDocument.findByNomenclatura('television_boradcast') ?: new TypeDocument(nombre: 'Television Broadcast', nomenclatura: 'television_broadcast').save(failOnError: true)
+		def type16 = TypeDocument.findByNomenclatura('television_broadcast') ?: new TypeDocument(nombre: 'Television Broadcast', nomenclatura: 'television_broadcast').save(failOnError: true)
 		def type17 = TypeDocument.findByNomenclatura('encyclopedia_article') ?: new TypeDocument(nombre: 'Encyclopedia Article', nomenclatura: 'encyclopedia_article').save(failOnError: true)
 		def type18 = TypeDocument.findByNomenclatura('case') ?: new TypeDocument(nombre: 'Case', nomenclatura: 'case').save(failOnError: true)
 		def type19 = TypeDocument.findByNomenclatura('film') ?: new TypeDocument(nombre: 'Film', nomenclatura: 'film').save(failOnError: true)

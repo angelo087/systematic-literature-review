@@ -136,7 +136,7 @@ class SearchController {
 			}
 			else
 			{		
-				List<EngineSearch> engines = new ArrayList<EngineSearch>()
+				/*List<EngineSearch> engines = new ArrayList<EngineSearch>()
 						
 				if (opACM)
 				{
@@ -153,7 +153,13 @@ class SearchController {
 				if (opSPRINGER)
 				{
 					engines.add(EngineSearch.findByName('SPRINGER'))
-				}
+				}*/
+				Map<String, Boolean> engines = new HashMap<String, Boolean>();
+				
+				engines.put("ACM", opACM)
+				engines.put("IEEE", opIEEE)
+				engines.put("SCIENCE", opSCIENCE)
+				engines.put("SPRINGER", opSPRINGER)
 				
 				mendeleyToolService.insertSearchsBackground(slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
 							

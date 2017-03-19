@@ -2,7 +2,10 @@ package es.uca.pfc
 
 import java.lang.annotation.Documented;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import mendeley.pfc.schemas.Document
 import mendeley.pfc.schemas.Folder
@@ -36,7 +39,10 @@ import grails.transaction.Transactional;
 
 import org.quartz.impl.matchers.KeyMatcher;
 
+import background.pfc.enums.TypeEngineSearch;
 import background.pfc.main.BackgroundSearchMendeley
+import background.pfc.tests.BackgroundSearchMendeleyTest;
+
 import com.google.gson.Gson;
 
 @Transactional
@@ -56,16 +62,19 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	}
 	
 	boolean insertSearchsBackground(Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
-		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, List<EngineSearch> engines)
+		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, Map<String, Boolean> engines)
 	{
 		println "insertSearchsBackground"
 		boolean isSuccess = true
 		def userInstance = User.get(springSecurityService.currentUser.id)
-		String strIdProfile = userInstance.userProfile.id.toString()
+		String emailMend = userInstance.userMendeley.email_mend
+		String passMend = decodePasswordMendeley(userInstance.userMendeley.pass_mend)
+		
 		runAsync {
 			try
 			{
-				createSearch(strIdProfile, slrInstance, terminos, operators, components, minYear, maxYear, maxTotal, engines)
+				//createSearchTest(strIdProfile, slrInstance, terminos, operators, components, minYear, maxYear, maxTotal, engines)
+				createSearch(emailMend, passMend, slrInstance.title, terminos, operators, components, minYear, maxYear, maxTotal, engines)
 			}
 			catch(Exception ex)
 			{
@@ -77,6 +86,76 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		
 		return isSuccess;
 	}	
+	
+	void createSearch(String emailMend, String passMend, String nameSlr, List<String> terminos, List<SearchOperator> operators, 
+		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, Map<String, Boolean> engines)
+	{
+		// Obtenemos datos de api Mendeley
+		def mendeleyApi = MendeleyApi.list().first()
+		
+		// Obtenemos map de los engines donde buscar
+		Map<TypeEngineSearch, Boolean> optionsEngine = new HashMap<TypeEngineSearch, Boolean>();
+		for(Map.Entry<String, Boolean> entry : engines.entrySet())
+		{
+			optionsEngine.put(TypeEngineSearch.fromKey(entry.getKey().toLowerCase()), entry.getValue())
+		}
+		
+		// Obtenemos los api engines
+		def apiKeyEngineList = ApiKeyEngine.list()
+		Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
+		for(ApiKeyEngine apiEngine : apiKeyEngineList)
+		{
+			String apiKeyValue = (apiEngine.apiKey == null ? "" : apiEngine.apiKey)
+			apiKeysEngine.put(TypeEngineSearch.fromKey(apiEngine.engine.toLowerCase()), apiKeyValue)
+		}
+		
+		List<background.pfc.commons.SearchTermParam> termsMendeley = new ArrayList<background.pfc.commons.SearchTermParam>();
+		List<es.uca.pfc.SearchTermParam> termsSLR = new ArrayList<es.uca.pfc.SearchTermParam>();
+		int index = 0
+		for(String termino : terminos)
+		{
+			background.pfc.commons.SearchTermParam termMendeley = new background.pfc.commons.SearchTermParam();
+			
+			termMendeley = new background.pfc.commons.SearchTermParam();
+			termMendeley.setTerminos(termino)
+			termMendeley.setOperatorSearch(background.pfc.enums.OperatorSearch.fromKey(operators.get(index).value.toString()))
+			termMendeley.setComponentSearch(background.pfc.enums.ComponentSearch.fromKey(components.get(index).value.toString()))
+			
+			termsMendeley.add(termMendeley)
+			
+			index++;
+		}
+
+		try
+		{
+			BackgroundSearchMendeley backgroundMendeley = new BackgroundSearchMendeley(
+				mendeleyApi.clientId,
+				mendeleyApi.clientSecret,
+				"token", "token",
+				mendeleyApi.redirectUri,
+				emailMend,
+				passMend,
+				optionsEngine,
+				nameSlr,
+				Integer.parseInt(maxTotal),
+				new ArrayList<String>(),
+				Integer.parseInt(minYear),
+				Integer.parseInt(maxYear),
+				termsMendeley,
+				apiKeysEngine,
+				mendeleyApi.totalHilos, mendeleyApi.totalTries)
+			
+			backgroundMendeley.startSearchs()
+			
+			List<background.pfc.commons.Reference> referencesImported = backgroundMendeley.getReferences()
+			
+			println "Hay que crear " + referencesImported.size()
+		}
+		catch(Exception ex)
+		{
+			println "Hay algun error => " + ex.getMessage()
+		}
+	}
 	
 	@Transactional
 	void sendSearchNotification(String strIdProfile, Slr slrInstance, boolean success)
@@ -101,10 +180,11 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		println "Notificación enviada"
 	}
 	
-	void createSearch(String strIdProfile, Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
+	void createSearchTest(String strIdProfile, Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
 		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, List<EngineSearch> engines)
 	{
 		println "crearBusquedas"
+		Thread.sleep(30000);
 		boolean success = true;
 		
 		try
@@ -645,15 +725,10 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 	{
 		MendeleyService mendeleyService = null;
 		
-		println emailMend
-		println passMend
 		MendeleyApi mendeleyApi = MendeleyApi.list().first()
 		String clientId = mendeleyApi.clientId
 		String clientSecret = mendeleyApi.clientSecret
 		String redirectUri = mendeleyApi.redirectUri
-		println clientId
-		println clientSecret
-		println redirectUri
 		
 		try
 		{

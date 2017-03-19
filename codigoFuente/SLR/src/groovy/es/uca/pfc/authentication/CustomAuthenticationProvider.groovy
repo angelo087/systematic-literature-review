@@ -1,6 +1,7 @@
 package es.uca.pfc.authentication;
 
 import mendeley.pfc.services.MendeleyService
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -8,9 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.GrantedAuthorityImpl
+
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import es.uca.pfc.User;
 
+@SuppressWarnings("deprecation")
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	def springSecurityService 
