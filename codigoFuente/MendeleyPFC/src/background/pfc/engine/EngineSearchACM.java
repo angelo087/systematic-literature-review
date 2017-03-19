@@ -1,7 +1,10 @@
 package background.pfc.engine;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -243,7 +246,7 @@ public class EngineSearchACM extends EngineSearch {
 	}
 	
 	private List<ReferenceToImport> getReferencesToImport(HtmlPage currentPage) throws IOException
-	{
+	{		
 		List<ReferenceToImport> referencesToImport = new ArrayList<ReferenceToImport>();
 		
 		HtmlAnchor anchorBibTex = (HtmlAnchor) currentPage.getAnchorByText("bibtex");
@@ -252,16 +255,44 @@ public class EngineSearchACM extends EngineSearch {
 		{
 			InputStream is = anchorBibTex.click().getWebResponse().getContentAsStream();
 			
-			String bibtex = IOUtils.toString(is, Charset.defaultCharset());
+			String bibtex = getStringFromInputStream(is);
+			
 			bibtex = bibtex.replaceAll("[\n\r]", "").replaceAll(" +", " ").replaceAll("booktitle", "book").trim();
 			String regex = "@";
 			String replacement = "\n" + regex;
 			bibtex = bibtex.replaceAll(regex, replacement);
-
 			referencesToImport = getAllReferences(bibtex);
 		}
 		
 		return referencesToImport;
+	}
+	
+	private String getStringFromInputStream(InputStream is)
+	{
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+		
+		String line;
+		
+		try
+		{
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+		}
+		catch(IOException e) { }
+		finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 	private List<ReferenceToImport> getAllReferences(String bibtex)
