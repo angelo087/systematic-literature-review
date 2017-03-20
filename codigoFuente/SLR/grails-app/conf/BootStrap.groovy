@@ -1,7 +1,6 @@
 import java.util.List;
 import java.util.Date;
 
-import es.uca.pfc.ApiKeyEngine
 import es.uca.pfc.Author
 import es.uca.pfc.AuthorReference
 import es.uca.pfc.Criterion
@@ -96,15 +95,9 @@ class BootStrap {
 		println "Creamos los engines"
 		def engine01 = EngineSearch.findByName('ACM') ?: new EngineSearch(name: 'ACM', display_name: 'ACM Digital Library', image: 'acm.jpeg', text: 'ACM').save(failOnError: true)
 		def engine02 = EngineSearch.findByName('IEEE') ?: new EngineSearch(name: 'IEEE', display_name: 'IEEE Computer Society', image: 'ieee.jpeg', text: 'IEEE').save(failOnError: true)
-		def engine03 = EngineSearch.findByName('SCIENCE') ?: new EngineSearch(name: 'SCIENCE', display_name: 'Science Direct', image: 'science.jpeg', text: 'SCIENCE').save(failOnError: true)
-		def engine04 = EngineSearch.findByName('SPRINGER') ?: new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER').save(failOnError: true)
+		def engine03 = EngineSearch.findByName('SCIENCE') ?: new EngineSearch(name: 'SCIENCE', display_name: 'Science Direct', image: 'science.jpeg', text: 'SCIENCE', apiKey: '80aa542193705ce36ebfe094078b9aa3').save(failOnError: true)
+		def engine04 = EngineSearch.findByName('SPRINGER') ?: new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER', apiKey: 'c8c8ee4b2c20f0046806762317d0d6e2').save(failOnError: true)
 		def engine05 = EngineSearch.findByName('OTHER') ?: new EngineSearch(name: 'OTHER', display_name: 'Other engines', image: 'other.png', text: 'OTHER').save(failOnError: true)
-		
-		println "Creamos las api Keys de los motores de busquedas..."
-		def apiACM = ApiKeyEngine.findByEngine('ACM') ?: new ApiKeyEngine(engine: 'ACM').save(failOnError: true)
-		def apiIEEE = ApiKeyEngine.findByEngine('IEEE') ?: new ApiKeyEngine(engine: 'IEEE').save(failOnError: true)
-		def apiSCIENCE = ApiKeyEngine.findByEngine('SCIENCE') ?: new ApiKeyEngine(engine: 'SCIENCE', apiKey: '80aa542193705ce36ebfe094078b9aa3').save(failOnError: true)
-		def apiSPRINGER = ApiKeyEngine.findByEngine('SPRINGER') ?: new ApiKeyEngine(engine: 'SPRINGER', apiKey: 'c8c8ee4b2c20f0046806762317d0d6e2').save(failOnError: true)
 		
 		println "Creamos las credenciales para Mendeley..."
 		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: new MendeleyApi(clientId: '1044', clientSecret: '5qQ6zm5iYpvUehj4', 

@@ -149,7 +149,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/researchQuestion/**':		['permitAll'],
 	'/register/**':				['permitAll'],
 	'/loginMendeley/**':		['permitAll'],
-	'/apiKeyEngine/**':			['permitAll'],
+	'/engineSearch/**':			['permitAll'],
 	'/mendeleyApi/**':			['permitAll']
 ]
 

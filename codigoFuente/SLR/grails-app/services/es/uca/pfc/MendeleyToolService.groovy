@@ -46,7 +46,7 @@ import background.pfc.tests.BackgroundSearchMendeleyTest;
 import com.google.gson.Gson;
 
 @Transactional
-class MendeleyToolService /*implements IMendeleyService*/ {
+class MendeleyToolService {
 	
 	def springSecurityService
 	def toolService
@@ -101,12 +101,12 @@ class MendeleyToolService /*implements IMendeleyService*/ {
 		}
 		
 		// Obtenemos los api engines
-		def apiKeyEngineList = ApiKeyEngine.list()
-		Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
-		for(ApiKeyEngine apiEngine : apiKeyEngineList)
+		def engineSearchList = EngineSearch.findAllByNameNotEqual('OTHER', [sort: 'name', order: 'asc'])
+		Map<TypeEngineSearch, String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
+		for(EngineSearch engine : engineSearchList)
 		{
-			String apiKeyValue = (apiEngine.apiKey == null ? "" : apiEngine.apiKey)
-			apiKeysEngine.put(TypeEngineSearch.fromKey(apiEngine.engine.toLowerCase()), apiKeyValue)
+			String apiKeyValue = ( engine.apiKey == null ? "" : engine.apiKey )
+			apiKeysEngine.put(TypeEngineSearch.fromKey(engine.name.toLowerCase()), apiKeyValue)
 		}
 		
 		List<background.pfc.commons.SearchTermParam> termsMendeley = new ArrayList<background.pfc.commons.SearchTermParam>();

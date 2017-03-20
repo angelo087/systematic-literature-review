@@ -117,8 +117,8 @@ class UrlMappings {
 			action="show"
 		}
 		
-		"/apiKeyEngine/" {
-			controller="apiKeyEngine"
+		"/engineSearch/" {
+			controller="engineSearch"
 			action="index"
 		}
 		

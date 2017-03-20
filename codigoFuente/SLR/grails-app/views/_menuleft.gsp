@@ -33,6 +33,16 @@
 			<li>
 			    <g:link controller="index" action="faqs"><i class="fa fa-question fa-fw"></i> FAQS</g:link>
 			</li>
+			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
+				<li>
+					<g:link controller="engineSearch" actions="index"><i class="fa fa-question fa-fw"></i> Engines</g:link>
+				</li>
+			</g:if>
+			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
+				<li>
+					<g:link controller="mendeleyApi" actions="index"><i class="fa fa-question fa-fw"></i> Mendeley API</g:link>
+				</li>
+			</g:if>
 			<li>
 			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Notificaciones</a>
 			</li>

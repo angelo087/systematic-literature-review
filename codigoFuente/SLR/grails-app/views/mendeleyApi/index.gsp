@@ -34,7 +34,9 @@
 <g:form class="form-horizontal" controller="mendeleyApi" action="save" method="POST" name="myForm" id="myForm">
 
 	<div id="wrapper">
-	
+		<%-- Head --%>
+        <g:render template="head" contextPath="/"/>
+        	
 		<div id="page-wrapper">
         	<div class="row" style="margin-bottom: 20px;">
 				<div class="col-lg-12">
