@@ -62,8 +62,17 @@ class EngineSearchController {
 					{
 						String value = (String)params.get(input);
 						engine.apiKey = value;
-						engine.save(failOnError: true)
 					}
+					
+					String checkbox = "cbox"+engine.name
+					boolean valueCheckBox = false
+					if(params.containsKey(checkbox))
+					{
+						valueCheckBox = (boolean)params.get(checkbox);
+					}
+					engine.status = valueCheckBox;
+					
+					engine.save(failOnError: true)
 				}
 				updateOk = true;
 			}

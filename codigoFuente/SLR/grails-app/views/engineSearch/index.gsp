@@ -1,4 +1,4 @@
-<%@ page import="es.uca.pfc.ApiKeyEngine" %>
+<%@ page import="es.uca.pfc.EngineSearch" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,12 +49,37 @@
 				<div class="col-lg-12">
 					<div id="divSuccess" class="alert alert-success" role="alert" style="display: none;"><i class="fa fa-check fa-fw"></i> Cambios guardados.</div>
 					<g:each in="${engineSearchListInstance}" var="engineSearchInstance">
-						<div class="form-group">
+						<%--<div class="form-group">
 							<label for="${'input' + engineSearchInstance.name}" class="col-sm-3 control-label">${engineSearchInstance.display_name}</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="${'input' + engineSearchInstance.name}" name="${'input' + engineSearchInstance.name}" 
 									value="${engineSearchInstance.apiKey}"  />
 							</div>
+						</div> --%>
+						
+						<h3>${engineSearchInstance.display_name}</h3>
+						
+						<div class="form-group">
+							<label for="${'input' + engineSearchInstance.name}" class="col-sm-3 control-label">api key</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="${'input' + engineSearchInstance.name}" name="${'input' + engineSearchInstance.name}" 
+									value="${engineSearchInstance.apiKey}"  />
+							</div>						
+						</div>
+						<div class="form-group">
+							<div class="col-sm-3"></div>
+						    <div class="col-sm-8">
+						      <div class="checkbox">
+						        <label>
+						        	<g:if test="${engineSearchInstance.status == true}">
+						        		<input id="${'cbox' + engineSearchInstance.name}" name="${'cbox' + engineSearchInstance.name}" type="checkbox" checked="checked" /> Mostrar en búsquedas
+						        	</g:if>
+						        	<g:else>
+						        		<input id="${'cbox' + engineSearchInstance.name}" name="${'cbox' + engineSearchInstance.name}" type="checkbox" /> Mostrar en búsquedas
+						        	</g:else>
+						        </label>
+						      </div>
+						    </div>
 						</div>
 					</g:each>
 				</div>

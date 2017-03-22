@@ -35,12 +35,12 @@
 			</li>
 			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
 				<li>
-					<g:link controller="engineSearch" actions="index"><i class="fa fa-question fa-fw"></i> Engines</g:link>
+					<g:link controller="engineSearch" actions="index"><i class="fa fa-university fa-fw"></i> Engines</g:link>
 				</li>
 			</g:if>
 			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
 				<li>
-					<g:link controller="mendeleyApi" actions="index"><i class="fa fa-question fa-fw"></i> Mendeley API</g:link>
+					<g:link controller="mendeleyApi" actions="index"><i class="fa fa-key  fa-fw"></i> Mendeley API</g:link>
 				</li>
 			</g:if>
 			<li>
