@@ -5,15 +5,17 @@
 	<g:if test="${!request.forwardURI.contains("references")}">
 		<ul class="nav" id="side-menu">
 			<li class="sidebar-search">
-				<div class="input-group custom-search-form">
-					<input type="text" class="form-control" placeholder="Search...">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button">
-							<i class="fa fa-search"></i>
-						</button>
-					</span>
-				</div>
-				<!-- /input-group -->
+				<g:form class="form-horizontal" controller="searcher" action="search" method="POST" name="myForm" id="myForm">
+					<div class="input-group custom-search-form">
+						<input id="query" name="query" type="text" class="form-control" placeholder="Search...">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="submit">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div>
+					<!-- /input-group -->
+				</g:form>
 			</li>
 			<li>
 				<g:link controller="index" action="menu"><i class="fa fa-dashboard fa-fw"></i> Menu Principal</g:link>

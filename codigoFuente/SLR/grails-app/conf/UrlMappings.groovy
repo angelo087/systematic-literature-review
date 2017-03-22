@@ -126,5 +126,10 @@ class UrlMappings {
 			controller="mendeleyApi"
 			action="index"
 		}
+		
+		"/searcher/" {
+			controller="searcher"
+			action="index"
+		}
 	}
 }
