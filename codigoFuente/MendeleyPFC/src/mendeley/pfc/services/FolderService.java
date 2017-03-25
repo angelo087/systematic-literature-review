@@ -630,4 +630,24 @@ public class FolderService
 	    
 	    int status = httpclient.executeMethod(delete);
 	}
+	
+	public void deleteAllDocument(Folder folder) throws HttpException, MendeleyException, IOException
+	{
+		// Borramos documentos
+		List<Document> documents = getDocuments(folder);
+		for(Document document : documents)
+		{
+			deleteDocument(folder, document);
+		}
+		
+		// Borramos documentos de cada una de sus subcarpetas
+		for(Folder subfolder : getSubFolders(folder))
+		{
+			documents = getDocuments(subfolder);
+			for(Document document : documents)
+			{
+				deleteDocument(subfolder, document);
+			}
+		}
+	}
 }

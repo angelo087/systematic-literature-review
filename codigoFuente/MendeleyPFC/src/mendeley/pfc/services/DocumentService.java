@@ -359,4 +359,16 @@ public class DocumentService {
 		
 		return subFolder;
 	}
+	
+	public void deleteDocumentsFromFolder(Folder folder) throws MendeleyException, HttpException, IOException
+	{
+		FolderService folderService = new FolderService(mendeleyService);
+		
+		List<Document> documents = folderService.getDocuments(folder);
+		
+		for(Document document : documents)
+		{
+			deleteDocument(document);
+		}
+	}
 }
