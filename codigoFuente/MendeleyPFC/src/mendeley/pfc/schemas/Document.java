@@ -49,7 +49,7 @@ public class Document
 	private List<String> tags = new ArrayList<String>();
 	private Identifier identifiers = new Identifier();
 	private boolean file_attached;
-	
+	private String bibtex;
 	
 	public String getId() { return this.id; }
 	public void setId(String id) { this.id = id; }
@@ -230,6 +230,9 @@ public class Document
 	
 	public boolean getFileAttached() { return file_attached; }
 	public void setFileAttached(boolean file_attached) { this.file_attached = file_attached; }
+	
+	public String getBibtex() { return bibtex; }
+	public void setBibtex(String bibtex) { this.bibtex = bibtex; }
 	
 	public Document()
 	{

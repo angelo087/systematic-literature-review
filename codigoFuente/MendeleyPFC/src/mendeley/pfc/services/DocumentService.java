@@ -71,6 +71,8 @@ public class DocumentService {
 		gsonBuilder.registerTypeAdapter(TypeDocument.class, new TypeDocumentDeserializer());
 		Gson gson = gsonBuilder.create();
 		Document document = gson.fromJson(json, Document.class);
+		
+		document.setBibtex(getBibtex(document));
 
 		return document;
 	}
@@ -118,7 +120,13 @@ public class DocumentService {
 		Gson gson = gsonBuilder.create();
 		Type typeListDocument = new TypeToken<List<Document>>(){}.getType();
 		List<Document> documents = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListDocument);
-	    		
+	    
+		// Bibtex
+		for(Document doc : documents)
+		{
+			doc.setBibtex(getBibtex(doc));
+		}
+		
 		return documents;
 	}
 	
@@ -146,6 +154,12 @@ public class DocumentService {
 		Gson gson = gsonBuilder.create();
 		Type typeListDocument = new TypeToken<List<Document>>(){}.getType();
 		List<Document> documents = gson.fromJson(new String(get.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8"), typeListDocument);
+		
+		// Bibtex
+		for(Document doc : documents)
+		{
+			doc.setBibtex(getBibtex(doc));
+		}
 	    		
 		return documents;
 	}
@@ -205,6 +219,9 @@ public class DocumentService {
 	    JsonParser parser = new JsonParser();
 		JsonElement json = (JsonElement) parser.parse(responseBody);
 		Document document = gson.fromJson(json, Document.class);
+		
+		// Bibtex
+		document.setBibtex(getBibtex(document));
 		
 		return document;
 	}
@@ -269,6 +286,9 @@ public class DocumentService {
 		
 		Document updateDocument = gson.fromJson(json, Document.class);
 	    
+		// Bibtex
+		updateDocument.setBibtex(getBibtex(updateDocument));
+		
 	    return updateDocument;
 	}
 	
