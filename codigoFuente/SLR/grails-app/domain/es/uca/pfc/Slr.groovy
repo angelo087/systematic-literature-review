@@ -38,6 +38,7 @@ class Slr {
 	// Indicamos que la justificacion es un texto
 	static mapping = {
 		justification type: 'text'
+		searchs lazy: false
 	}
 	
 	def beforeUpdate = {

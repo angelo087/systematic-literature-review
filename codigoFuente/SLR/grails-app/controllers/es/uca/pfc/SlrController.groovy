@@ -371,20 +371,51 @@ class SlrController {
 			newSlrInstance.save flush: true
 			
 			// Creamos el Slr en Mendeley
-			mendeleyToolService.createSlrMendeley(userInstance, newSlrInstance)
+			boolean isCreated = mendeleyToolService.createSlrMendeley(userInstance, newSlrInstance)
 			
-			redirect(controller: 'slr', action: 'myList', params: [success: true])
+			if (!isCreated)
+			{
+				error = "ERROR: Hay problemas de conexión con Mendeley. Sincronice más tarde."
+				redirect(controller: 'slr', action: 'myList',
+					params: [error: error,
+							 tituloSlr: params.titulo,
+							 justificacionSlr: params.justificacion])
+			}
+			else
+			{
+				redirect(controller: 'slr', action: 'myList', params: [success: true])
+			}
 		}
 	}
 	
 	@Transactional
 	def delete()
 	{
-		def slrInstance = Slr.findByGuid(params.guidSlr.toString())
+		def isLogin = springSecurityService.loggedIn
 		
-		toolService.deleteSlr(slrInstance)
-		
-		redirect(controller: 'slr', action: 'myList')
+		if (isLogin)
+		{
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			def slrInstance = Slr.findByGuid(params.guidSlr.toString())
+			
+			toolService.deleteSlr(slrInstance)
+			
+			boolean isDeleted = mendeleyToolService.deleteSlr(slrInstance, userLogin)
+			
+			if (!isDeleted)
+			{
+				redirect(controller: 'index', action: 'index')
+			}
+			else
+			{
+				redirect(controller: 'slr', action: 'myList')
+			}
+		}
+		else
+		{
+			redirect(controller: 'index', action: 'index')
+		}
 	}
 	
 	def show()

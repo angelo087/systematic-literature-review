@@ -55,7 +55,9 @@ class Reference implements Comparator<Reference> {
 	
 	// Indicamos que bibtex es un texto largo
 	static mapping = {
+		title type: 'text'
 		bibtex type: 'text'
+		docAbstract type: 'text'
 	}
 	
 	def beforeInsert = {

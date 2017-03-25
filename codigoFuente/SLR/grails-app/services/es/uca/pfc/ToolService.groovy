@@ -777,4 +777,14 @@ class ToolService {
 		
 		return usersOnline
 	}
+	
+	String getStringIfNotNull(String strValue)
+	{
+		if (strValue != null)
+		{
+			return strValue;
+		}
+		
+		return "";
+	}
 }
