@@ -72,8 +72,11 @@ public class DocumentService {
 		Gson gson = gsonBuilder.create();
 		Document document = gson.fromJson(json, Document.class);
 		
-		document.setBibtex(getBibtex(document));
-
+		if (document.getId() != null && !document.getId().equals(""))
+		{
+			document.setBibtex(getBibtex(document));
+		}
+		
 		return document;
 	}
 	
@@ -124,7 +127,10 @@ public class DocumentService {
 		// Bibtex
 		for(Document doc : documents)
 		{
-			doc.setBibtex(getBibtex(doc));
+			if (doc.getId() != null && !doc.getId().equals(""))
+			{
+				doc.setBibtex(getBibtex(doc));
+			}
 		}
 		
 		return documents;
@@ -158,7 +164,10 @@ public class DocumentService {
 		// Bibtex
 		for(Document doc : documents)
 		{
-			doc.setBibtex(getBibtex(doc));
+			if (doc.getId() != null && !doc.getId().equals(""))
+			{
+				doc.setBibtex(getBibtex(doc));
+			}
 		}
 	    		
 		return documents;
@@ -221,7 +230,10 @@ public class DocumentService {
 		Document document = gson.fromJson(json, Document.class);
 		
 		// Bibtex
-		document.setBibtex(getBibtex(document));
+		if (document.getId() != null && !document.getId().equals(""))
+		{
+			document.setBibtex(getBibtex(document));
+		}
 		
 		return document;
 	}
@@ -287,7 +299,10 @@ public class DocumentService {
 		Document updateDocument = gson.fromJson(json, Document.class);
 	    
 		// Bibtex
-		updateDocument.setBibtex(getBibtex(updateDocument));
+		if (updateDocument.getId() != null && !updateDocument.getId().equals(""))
+		{
+			updateDocument.setBibtex(getBibtex(updateDocument));
+		}
 		
 	    return updateDocument;
 	}
