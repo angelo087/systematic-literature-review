@@ -633,11 +633,14 @@ public class FolderService
 	
 	public void deleteAllDocument(Folder folder) throws HttpException, MendeleyException, IOException
 	{
+		DocumentService documentService = new DocumentService(mendeleyService);
+		
 		// Borramos documentos
 		List<Document> documents = getDocuments(folder);
 		for(Document document : documents)
 		{
-			deleteDocument(folder, document);
+			//deleteDocument(folder, document);
+			documentService.deleteDocument(document);
 		}
 		
 		// Borramos documentos de cada una de sus subcarpetas
@@ -646,7 +649,8 @@ public class FolderService
 			documents = getDocuments(subfolder);
 			for(Document document : documents)
 			{
-				deleteDocument(subfolder, document);
+				//deleteDocument(subfolder, document);
+				documentService.deleteDocument(document);
 			}
 		}
 	}

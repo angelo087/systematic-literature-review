@@ -306,7 +306,7 @@ public class DocumentService {
 	    
 	    int status = httpclient.executeMethod(delete);
 	    
-	    String responseBody = new String(delete.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
+	    //String responseBody = new String(delete.getResponseBodyAsString().getBytes("ISO-8859-1"), "UTF-8");
 	}
 	
 	public void deleteDocument(Document document) throws HttpException, IOException, MendeleyException
@@ -368,7 +368,7 @@ public class DocumentService {
 		
 		for(Document document : documents)
 		{
-			deleteDocument(document);
+			deleteDocument(document.getId());
 		}
 	}
 }
