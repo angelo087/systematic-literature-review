@@ -436,26 +436,37 @@ class MendeleyToolService {
 	@Transactional
 	void sendSearchNotification(String emailMend, Slr slrInstance, boolean success)
 	{
-		String asunto = "Nuevas búsquedas"
-		String txt = ""
-		if (!success)
+		try
 		{
-			asunto = "Error en búsquedas"
-			txt = "Ha habido problemas en la realización de búsquedas en el SLR " + slrInstance.title
+			String asunto = "Nuevas búsquedas"
+			String txt = ""
+			if (!success)
+			{
+				asunto = "Error en búsquedas"
+				txt = "Ha habido problemas en la realización de búsquedas en el SLR " + slrInstance.title
+			}
+			else
+			{
+				txt = "Se han realizado nuevas búsquedas para " + slrInstance.title
+			}
+	
+			User userInstance = User.findByUsernameIlike(emailMend)
+			
+			if (userInstance != null)
+			{
+				UserProfile userProfile = userInstance.userProfile
+				userProfile.addToNotifications(new NotificationSlr(tipo: "search", asunto: asunto, texto: txt, slr: slrInstance, leido: false))
+				userProfile.save(failOnError: true)
+				println "Notificacion enviada para " + slrInstance.title
+			}
+			else
+			{
+				println "Notificacion NO enviada para " + slrInstance.title
+			}
 		}
-		else
+		catch(Exception ex)
 		{
-			txt = "Se han realizado nuevas búsquedas para " + slrInstance.title
-		}
-
-		User userInstance = User.findByUsernameIlike(emailMend)
-		
-		if (userInstance != null)
-		{
-			UserProfile userProfile = userInstance.userProfile
-			userProfile.addToNotifications(new NotificationSlr(tipo: "search", asunto: asunto, texto: txt, slr: slrInstance, leido: false))
-			userProfile.save(failOnError: true)
-			println "Notificación enviada"
+			println "Notificacion NO enviada para " + slrInstance.title
 		}
 	}
 	
@@ -642,7 +653,7 @@ class MendeleyToolService {
 					idsSlrUpdate.add(slr.id)
 				}
 			}
-
+			
 			// Eliminamos Slrs
 			if (idsSlrDrop.size() > 0)
 			{
@@ -651,16 +662,17 @@ class MendeleyToolService {
 					Slr slrInstance = Slr.get(idSlr)
 					userInstance.userProfile.removeFromSlrs(slrInstance)
 					toolService.deleteSlr(slrInstance)
+					deleteSlr(slrInstance, userInstance)
 				}
 			}
-
+			
 			// Actualizamos Slrs
 			if (idsSlrUpdate.size() > 0)
 			{
 				def engines = EngineSearch.list()
 				List<Reference> referencesDrop = new ArrayList<Reference>()
 				List<Reference> referencesUpdate = new ArrayList<Reference>()
-
+				
 				for(Long idSlr : idsSlrUpdate)
 				{
 					Slr slrInstance = Slr.get(idSlr)
@@ -671,7 +683,6 @@ class MendeleyToolService {
 					{
 						if (folderService.getSubFolder(folder.getId(), engine.name.toString().toLowerCase().trim()) == null)
 						{
-							println slrInstance.idmend
 							println folder.getId() + " => Creamos el folder " + engine.name.toString().toLowerCase().trim() + " para el folder " + folder.getName()
 							folderService.createSubFolder(engine.name.toString().toLowerCase().trim(), folder)
 						}
@@ -687,8 +698,8 @@ class MendeleyToolService {
 						for(Reference reference : search.references)
 						{
 							Document document = documentService.getDocument(reference.idmend)
-							
-							if(document == null)
+
+							if(document == null || document.getId() == null)
 							{
 								referencesDrop.add(reference.id)
 							}
@@ -699,7 +710,7 @@ class MendeleyToolService {
 						}
 					}
 				} // fin-for idsSlrUpdate
-
+				
 				// Eliminamos referencias no incluidas
 				for(Long idRef : referencesDrop)
 				{
@@ -710,10 +721,14 @@ class MendeleyToolService {
 					
 					// Borramos las referencias con los atributos especificos
 					SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
+
+					// Borramos la referencia de search
+					Search searchInstance = reference.search
+					searchInstance.references.remove(reference)
 					
 					reference.delete flush: true
 				}
-
+				
 				// Actualizamos referencias
 				for(Long idRef : referencesUpdate)
 				{
@@ -730,6 +745,8 @@ class MendeleyToolService {
 			isSynchro = false;
 			println "EXCEPCION MendeleyToolService.synchronizeSlrList() => " + ex.getMessage()
 		}
+		
+		println "FIN SINCRONIZACION"
 
 		return isSynchro;
 	}
@@ -760,32 +777,37 @@ class MendeleyToolService {
 		Document document = documentService.getDocument(reference.idmend.toString())
 		
 		reference.idmend = document.getId()
-		reference.title = (document.getTitle() == null ? "" : document.getTitle());
-		reference.docAbstract = (document.getAbstract() == null ? "" : document.getAbstract())
-		reference.source = (document.getSource() == null ? "" : document.getSource())
-		reference.pages = (document.getPages() == null ? "" : document.getPages())
-		reference.volume = (document.getVolume() == null ? "" : document.getVolume())
-		reference.issue = (document.getIssue() == null ? "" : document.getIssue())
-		reference.publisher = (document.getPublisher() == null ? "" : document.getPublisher())
-		reference.city = (document.getCity() == null ? "" : document.getCity())
-		reference.institution = (document.getInstitution() == null ? "" : document.getInstitution())
-		reference.series = (document.getSeries() == null ? "" : document.getSeries())
-		reference.chapter = (document.getChapter() == null ? "" : document.getChapter())
-		reference.citation_key = (document.getCitationKey() == null ? "" : document.getCitationKey())
-		reference.source_type = (document.getSourceType() == null ? "" : document.getSourceType())
-		reference.genre = (document.getGenre() == null ? "" : document.getGenre())
-		reference.country = (document.getCountry() == null ? "" : document.getCountry())
-		reference.department = (document.getDepartment() == null ? "" : document.getDepartment())
-		reference.arxiv = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getArxiv() == null ? "" : document.getIdentifiers().getArxiv()))
-		reference.doi = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getDoi() == null ? "" : document.getIdentifiers().getDoi()))
-		reference.isbn = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getIsbn() == null ? "" : document.getIdentifiers().getIsbn()))
-		reference.issn = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getIssn() == null ? "" : document.getIdentifiers().getIssn()))
-		reference.pmid = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getPmid() == null ? "" : document.getIdentifiers().getPmid()))
-		reference.scopus = (document.getIdentifiers() == null ? "" : (document.getIdentifiers().getScopus() == null ? "" : document.getIdentifiers().getScopus()))
-		reference.month = (document.getMonthName("") == null ? "" : document.getMonthName(""))
-		reference.day = (document.getDay() == null ? "" : document.getDay())
-		reference.file_attached = (document.getFileAttached() == null ? false : document.getFileAttached())
-		reference.bibtex = documentService.getBibtex(document)
+		reference.title = toolService.getStringIfNotNull(document.getTitle())
+		reference.docAbstract = toolService.getStringIfNotNull(document.getAbstract())
+		reference.source = toolService.getStringIfNotNull(document.getSource())
+		reference.pages = toolService.getStringIfNotNull(document.getPages())
+		reference.volume = toolService.getStringIfNotNull(document.getVolume())
+		reference.issue = toolService.getStringIfNotNull(document.getIssue())
+		reference.publisher = toolService.getStringIfNotNull(document.getPublisher())
+		reference.city = toolService.getStringIfNotNull(document.getCity())
+		reference.institution = toolService.getStringIfNotNull(document.getInstitution())
+		reference.series = toolService.getStringIfNotNull(document.getSeries())
+		reference.chapter = toolService.getStringIfNotNull(document.getChapter())
+		reference.citation_key = toolService.getStringIfNotNull(document.getCitationKey())
+		reference.source_type = toolService.getStringIfNotNull(document.getSourceType())
+		reference.genre = toolService.getStringIfNotNull(document.getGenre())
+		reference.country = toolService.getStringIfNotNull(document.getCountry())
+		reference.department = toolService.getStringIfNotNull(document.getDepartment())
+		
+		if(document.getIdentifiers() != null)
+		{
+			reference.arxiv = toolService.getStringIfNotNull(document.getIdentifiers().getArxiv())
+			reference.doi = toolService.getStringIfNotNull(document.getIdentifiers().getDoi())
+			reference.isbn = toolService.getStringIfNotNull(document.getIdentifiers().getIsbn())
+			reference.issn = toolService.getStringIfNotNull(document.getIdentifiers().getIssn())
+			reference.pmid = toolService.getStringIfNotNull(document.getIdentifiers().getPmid())
+			reference.scopus = toolService.getStringIfNotNull(document.getIdentifiers().getScopus())
+		}
+
+		reference.month = toolService.getStringIfNotNull(document.getMonthName("en"))
+		reference.day = toolService.getStringIfNotNull(Integer.toString(document.getDay()))
+		reference.file_attached = document.getFileAttached()
+		reference.bibtex = toolService.getStringIfNotNull(document.getBibtex())
 		
 		// Actualizamos año y dia
 		Calendar now = Calendar.getInstance();
@@ -844,7 +866,7 @@ class MendeleyToolService {
 		}
 		else
 		{
-			def typeRef = TypeDocument.findByNomenclaturaLike(document.getType().getKey().toLowerCase())
+			def typeRef = TypeDocument.findByNomenclaturaLike("%"+document.getType().getKey().toLowerCase()+"%")
 			reference.type = (typeRef == null ? TypeDocument.findByNomenclatura('journal') : typeRef)
 		}
 		
@@ -1113,8 +1135,8 @@ class MendeleyToolService {
 			Folder folder = folderService.getFolderById(slrInstance.idmend)
 			
 			// Borramos los documentos del SLR
-			//folderService.deleteAllDocument(folder)
-			documentService.deleteDocumentsFromFolder(folder);
+			folderService.deleteAllDocument(folder)
+			//documentService.deleteDocumentsFromFolder(folder);
 			
 			// Borramos la carpeta con sus subcarpetas
 			folderService.deleteFolder(folder)

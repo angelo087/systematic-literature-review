@@ -713,6 +713,10 @@ class ToolService {
 			LoggerSlr.deleteAll(LoggerSlr.findAllBySlr(slrInstance))
 			FriendLoggerSlr.deleteAll(FriendLoggerSlr.findAllBySlr(slrInstance))
 			
+			// Borramos notificaciones
+			Collection<NotificationSlr> notificationsRemove = NotificationSlr.findAllBySlr(slrInstance);
+			notificationsRemove*.delete();
+			
 			slrInstance.delete flush: true
 		}
 	}

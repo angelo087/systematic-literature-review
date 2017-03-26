@@ -401,16 +401,9 @@ class SlrController {
 			
 			toolService.deleteSlr(slrInstance)
 			
-			boolean isDeleted = mendeleyToolService.deleteSlr(slrInstance, userLogin)
+			mendeleyToolService.deleteSlr(slrInstance, userLogin)
 			
-			if (!isDeleted)
-			{
-				redirect(controller: 'index', action: 'index')
-			}
-			else
-			{
-				redirect(controller: 'slr', action: 'myList')
-			}
+			redirect(controller: 'slr', action: 'myList')
 		}
 		else
 		{
