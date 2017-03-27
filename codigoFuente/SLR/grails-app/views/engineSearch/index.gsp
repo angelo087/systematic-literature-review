@@ -40,6 +40,12 @@
         	<div class="row" style="margin-bottom: 20px;">
 				<div class="col-lg-12">
 					<h1 class="page-header">ENGINE SEARCHS</h1>
+					
+					<ol class="breadcrumb">
+					  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+					  <li class="active">Engine Searchs</li>
+					</ol>
+					
 					<g:submitButton name="create" class="btn btn-primary" value="Guardar cambios"/>
 					<p> </p>
 				</div>

@@ -26,7 +26,14 @@
 	        <div id="page-wrapper">	
 				<div class="row" style="margin-bottom: 20px;">
 					<div class="col-lg-12">
-						<h1 class="page-header">SLR: ${slrInstance.title}</h1>
+						<h1 class="page-header">${slrInstance.title}</h1>
+						
+						<ol class="breadcrumb">
+						  <li><g:link controller="index" action="menu">Home</g:link></li>
+						  <li><g:link controller="slr" action="myList">Mis SLR's</g:link></li>
+						  <li class="active">${slrBreadCrumb}</li>
+						</ol>
+					
 						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar Referencia</button>
 					</div>
 				</div>

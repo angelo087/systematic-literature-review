@@ -59,6 +59,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Búsquedas en ${slrInstance.title}</h1>
+                    
+                    <ol class="breadcrumb">
+					  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+					  <li><g:link controller="slr" action="myList">Mis SLR's</g:link></li>
+					  <li><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrBreadCrumb}</g:link></li>
+					  <li class="active">Busquedas</li>
+					</ol>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

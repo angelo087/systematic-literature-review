@@ -70,6 +70,15 @@
 				<div class="row" style="margin-bottom: 20px;">
 					<div class="col-lg-12">
 						<h1 class="page-header">${referenceInstance.title}</h1>
+						
+						<ol class="breadcrumb">
+						  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+						  <li><g:link controller="slr" action="myList">Mis SLR's</g:link></li>
+						  <li><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrBreadCrumb}</g:link></li>
+						  <li><g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">Referencias</g:link></li>
+						  <li class="active">${refBreadCrumb}</li>
+						</ol>
+						
 						<g:if test="${userOwnerInstance.id == User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).id}">
 							<g:submitButton class="btn btn-success" name="create" value="Guardar cambios" onclick="loading('Aplicando cambios...');" />
 							<g:if test="${!noDrop}">

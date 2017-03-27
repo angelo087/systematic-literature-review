@@ -10,6 +10,7 @@ class ReferenceController {
 	def toolService
 	def exportService
 	def mendeleyToolService
+	int maxStrTitle = 20
 	
     def index() {
 		redirect(controller: 'slr', action: 'myList')
@@ -101,6 +102,10 @@ class ReferenceController {
 				
 				boolean noDrop = referenceInstance.search.slr.noDrop
 				
+				def slrInstance = referenceInstance.search.slr
+				def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+				def refBreadCrumb = (referenceInstance.title.toString().length() > maxStrTitle ? referenceInstance.title.toString().substring(0,maxStrTitle)+"..." : referenceInstance.title)
+				
 				[
 					referenceInstance: referenceInstance,
 					typeListInstance: TypeDocument.all,
@@ -113,7 +118,10 @@ class ReferenceController {
 					userOwnerInstance: userOwnerInstance,
 					error: error,
 					success: success,
-					noDrop: noDrop
+					noDrop: noDrop,
+					slrInstance: slrInstance,
+					slrBreadCrumb: slrBreadCrumb,
+					refBreadCrumb: refBreadCrumb
 				]
 			}
 		}

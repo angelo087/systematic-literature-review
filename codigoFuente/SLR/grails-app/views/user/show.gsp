@@ -88,6 +88,15 @@
 			    	<g:else>
 			    		<h1 class="page-header">Perfil de ${profileInstance.display_name}</h1>
 			    	</g:else>
+			    	<ol class="breadcrumb">
+					  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+					  <g:if test="${isMyProfile}">
+						  <li class="active">Mi Perfil</li>
+					  </g:if>
+					  <g:else>
+						  <li class="active">Perfil de ${profileInstance.display_name}</li>
+					  </g:else>
+					</ol>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

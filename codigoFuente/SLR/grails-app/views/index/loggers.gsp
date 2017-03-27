@@ -28,6 +28,11 @@
             <div class="row">
                 <div class="col-lg-12">
 		    		<h1 class="page-header">Mis Loggers</h1>
+		    		
+			    	<ol class="breadcrumb">
+					  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+					  <li class="active">Mis Loggers</li>
+					</ol>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

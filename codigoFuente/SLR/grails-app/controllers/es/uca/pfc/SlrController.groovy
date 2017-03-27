@@ -15,6 +15,7 @@ class SlrController {
 	def graphService
 	def strSearch = ""
 	int maxPerPage = 10
+	int maxStrTitle = 20
 	
     def index() 
 	{ 
@@ -208,7 +209,9 @@ class SlrController {
 				notification.save(failOnError: true, flush: true)
 			}
 			
-			[slrInstance: slrInstance, searchListInstance: slrInstance.searchs]
+			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+			
+			[slrInstance: slrInstance, searchListInstance: slrInstance.searchs, slrBreadCrumb: slrBreadCrumb]
 		}
 	}
 	
@@ -265,6 +268,8 @@ class SlrController {
 					
 					referenceListInstance = toolService.getPaginatedReferences(referenceListInstance, maxPerPage,offset)
 					
+					def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle) : slrInstance.title)
+					
 					strSearch = ""
 				
 					[
@@ -283,7 +288,8 @@ class SlrController {
 						referenceListCount: totalRefs,
 						totalPages: totalPages,
 						page: page,
-						offset: offset
+						offset: offset,
+						slrBreadCrumb: slrBreadCrumb
 					]
 				}
 			}
@@ -423,7 +429,9 @@ class SlrController {
 		{
 			List<String> queriesChart = graphService.chartsByTag(slrInstance)
 			
-			[slrInstance: slrInstance, queryCriterion1: queriesChart.get(1)]
+			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+			
+			[slrInstance: slrInstance, queryCriterion1: queriesChart.get(1), slrBreadCrumb: slrBreadCrumb]
 		}
 	}
 	

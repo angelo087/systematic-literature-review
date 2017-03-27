@@ -25,6 +25,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">References <small>${slrInstance.title}</small></h1>
+                    
+                    <ol class="breadcrumb">
+					  <li><g:link controller="index" action="menu">Inicio</g:link></li>
+					  <li><g:link controller="slr" action="myList">Mis SLR's</g:link></li>
+					  <li><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrBreadCrumb}</g:link></li>
+					  <li class="active">References</li>
+					</ol>
+					
                 </div>
             </div>
             
