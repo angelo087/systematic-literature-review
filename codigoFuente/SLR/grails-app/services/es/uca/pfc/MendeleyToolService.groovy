@@ -894,6 +894,7 @@ class MendeleyToolService {
 		}
 		
 		// Autores
+		reference.authorsRefs.removeAll(AuthorReference.findAllByReference(reference))
 		AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
 		reference.save(failOnError: true, flush: true)
 		
