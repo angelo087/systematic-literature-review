@@ -94,11 +94,11 @@ environments {
     }
     production {
         dataSource {
-			dbCreate = "update"
+			pooled = true
+			dbCreate = "create"
 			driverClassName = "com.mysql.jdbc.Driver"
-			//dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
 			dialect = "es.uca.pfc.bbdd.ImprovedMySQLDialect"
-			url = "jdbc:mysql://45.76.95.81:3306/pfcslr?useUnicode=yes&characterEncoding=UTF-8"
+			url = "jdbc:mysql://localhost:3306/pfcslr?useUnicode=yes&characterEncoding=UTF-8"
 			username = "root"
 			password = "mysql"
 		}
