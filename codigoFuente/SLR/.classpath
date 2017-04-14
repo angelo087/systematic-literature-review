@@ -187,6 +187,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.grails.ide.eclipse.core.CLASSPATH_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/mendeley-pfc-java.jar"/>
 	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

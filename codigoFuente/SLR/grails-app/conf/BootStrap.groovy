@@ -101,8 +101,9 @@ class BootStrap {
 		
 		println "Creamos las credenciales para Mendeley..."
 		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: new MendeleyApi(clientId: '1044', clientSecret: 'H959MWw9Jrs3vlnH', 
-			redirectUri: 'http://45.76.86.180:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
-		
+			redirectUri: 'http://45.76.94.16:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
+			//redirectUri: 'http://localhost:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
+			
 		println "Creamos Usuarios de prueba..."
 				
 		def profile01 = new UserProfile(
