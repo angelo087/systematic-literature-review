@@ -20,25 +20,6 @@ public class ProfileServiceTest {
 
 	public static void main(String[] args)
 	{
-		String email = "angel.gonzatoro@gmail.com";
-		String pass  = "angel.gonzatoro";
-		String accessToken = "";
-		String refreshToken = "";
-		
-		try 
-		{
-			MendeleyService mendeleyService = new MendeleyService(APP_ID, APP_CODE_SECRET, APP_URL, email, pass, accessToken, refreshToken);
-			ProfileService profileService = new ProfileService(mendeleyService);
-			
-			Profile profile = profileService.getCurrentProfile();
-			
-			System.out.println(profile.getDisplayName());
-		}
-		catch (FailingHttpStatusCodeException | IOException
-				| MendeleyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 }

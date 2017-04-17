@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.google.gson.Gson;

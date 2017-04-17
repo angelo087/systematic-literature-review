@@ -10,7 +10,7 @@ import mendeley.pfc.schemas.TokenResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -69,8 +69,9 @@ public class MendeleyService {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 * @throws MendeleyException
+	 * @throws HttpException 
 	 */
-	public MendeleyService(String clientId, String clientSecret, String redirectUri, String email, String pass, String accessToken, String refreshToken) throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException
+	public MendeleyService(String clientId, String clientSecret, String redirectUri, String email, String pass, String accessToken, String refreshToken) throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException, HttpException
 	{
 		this.clientId     = clientId;
 		this.clientSecret = clientSecret;
@@ -108,8 +109,9 @@ public class MendeleyService {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 * @throws MendeleyException
+	 * @throws HttpException 
 	 */
-	public MendeleyService(String clientId, String clientSecret, String redirectUri, String email, String pass, TokenResponse tokenResponse) throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException
+	public MendeleyService(String clientId, String clientSecret, String redirectUri, String email, String pass, TokenResponse tokenResponse) throws FailingHttpStatusCodeException, MalformedURLException, IOException, MendeleyException, HttpException
 	{
 		this.clientId     = clientId;
 		this.clientSecret = clientSecret;

@@ -2,7 +2,7 @@ package mendeley.pfc.commons;
 
 import java.io.IOException;
 
-import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpException;
 
 import mendeley.pfc.schemas.Document;
 import mendeley.pfc.schemas.Folder;

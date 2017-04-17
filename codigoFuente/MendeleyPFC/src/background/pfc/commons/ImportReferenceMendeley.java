@@ -11,7 +11,7 @@ import mendeley.pfc.schemas.Document;
 import mendeley.pfc.services.CatalogService;
 import mendeley.pfc.services.DocumentService;
 
-import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpException;
 
 import background.pfc.engine.EngineSearch;
 import background.pfc.enums.TypeEngineSearch;

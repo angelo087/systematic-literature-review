@@ -15,7 +15,7 @@ import mendeley.pfc.services.DocumentService;
 import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
 
-import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpException;
 
 import background.pfc.commons.ImportReferenceMendeley;
 import background.pfc.commons.Reference;
