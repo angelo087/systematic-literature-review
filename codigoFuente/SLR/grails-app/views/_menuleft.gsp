@@ -45,7 +45,7 @@
 					<g:link controller="mendeleyApi" actions="index"><i class="fa fa-key  fa-fw"></i> Mendeley API</g:link>
 				</li>
 			</g:if>
-			<li>
+			<!-- <li>
 			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Notificaciones</a>
 			</li>
 			<li>
@@ -77,8 +77,7 @@
 			            <a href="grid.html">Grid</a>
 			        </li>
 			    </ul>
-			    <!-- /.nav-second-level -->
-	        </li>
+	        </li> -->
 	    </ul>
     </g:if>
     <g:else>

@@ -133,7 +133,9 @@
                                 <th>#</th>
                                 <th>Usuario</th>
                                 <th>Email</th>
+                                <g:if test="${roleUserLogin != "U"}">
                                 <th>Habilitado</th>
+                                </g:if>
                                 <th>Fecha registro</th>
                                 <th>Última visita</th>
                                 <th>Rol</th>
@@ -146,9 +148,11 @@
                             <g:each in="${userListInstance}" var="userInstance" status="i">
                             	<tr class="gradeX">
                             		<td>${i+1}</td>
-                            		<td><i class="fa fa-user fa-fw" style="color: green;"></i> ${userInstance.userProfile.display_name}</td>
+                            		<td><i class="fa fa-user fa-fw" style="color: blue;"></i> ${userInstance.userProfile.display_name}</td>
                             		<td><g:link controller="user" action="show" params="[guid: "${userInstance.userProfile.guid}"]">${userInstance.username}</g:link></td>
+                            		<g:if test="${roleUserLogin != "U"}">
                             		<td>${userInstance.enabled ? "Habilitado" : "No habilitado"}</td>
+                            		</g:if>
                             		<td>${formatDate(format: 'dd/MMM/yyyy', date: userInstance.userProfile.fechaRegistro)}</td>
                             		<td>${formatDate(format: 'dd/MMM/yyyy', date: userInstance.userProfile.ultimaConexion)}</td>
                             		<td>${userInstance.getAuthorities().toString().contains("USER") ? "Usuario" : (userInstance.getAuthorities().toString().contains("SUPER") ? "Super Admin" : "Administrador")}</td>

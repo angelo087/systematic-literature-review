@@ -1,8 +1,8 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<i class="fa fa-bell fa-fw"></i> Estadísticas SLR
+		<i class="fa fa-bell fa-fw"></i> Estadísticas Systematic Literature Review
 	</div>
-	<!-- /.panel-heading -->
+	<!--
 	<div class="panel-body">
 		<div class="list-group">
 			<a href="#" class="list-group-item">
@@ -16,5 +16,20 @@
 			</a>
 		</div>
 	</div>
-	<!-- /.panel-body -->
+	-->
+	
+	<div class="panel-body">
+		<div class="list-group">
+			<a href="#" class="list-group-item">
+				<i class="fa fa-book fa-fw"></i> ${totalSLR} Systematic Literature Reviews
+			</a>
+			<a href="#" class="list-group-item">
+				<i class="fa fa-user fa-fw"></i> ${totalUsers} Usuarios registrados.
+			</a>
+			<a href="#" class="list-group-item">
+				<i class="fa fa-user fa-fw" style="color: green;"></i> ${totalUsersOnline} Usuarios conectados.
+			</a>
+		</div>
+	</div>
+	
 </div>

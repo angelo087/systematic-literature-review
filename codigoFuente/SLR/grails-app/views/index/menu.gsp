@@ -46,10 +46,10 @@
 
                 <div class="col-lg-4">
                     
+                    <g:render template="statgraphics" contextPath="/"/>
                     <g:render template="friendsconnect" contextPath="/"/>
                     <g:render template="lastusers" contextPath="/"/>
                     <g:render template="lastslrs" contextPath="/"/>
-                    <g:render template="statgraphics" contextPath="/"/>
                     
                 </div>
 
@@ -63,7 +63,7 @@
 
     <%-- JavaScript --%>
     <g:render template="javascript" contextPath="/"/>
-
+	<g:render template="graphGoogleIndex" contextPath="/graphs"/>
 </body>
 
 </html>
