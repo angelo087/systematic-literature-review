@@ -694,7 +694,9 @@ class SlrController {
 		else
 		{
 			List<String> queriesChart = graphService.chartsByTag(slrInstance)
-						
+		
+			println queriesChart.get(1)
+							
 			[
 				slrInstance: slrInstance, 
 				criterionShowTextEvery: queriesChart.get(0),

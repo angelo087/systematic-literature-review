@@ -4,6 +4,7 @@ class IndexController {
 
 	def springSecurityService
 	def toolService
+	def graphService
 	def maxPerPage = 10
 	
     def index() 
@@ -45,23 +46,49 @@ class IndexController {
 			redirect(controller: 'index', action: 'index')
 			return
 		}
+		
+		// Perfil usuario
 		def userProfileInstance = User.get(springSecurityService.principal.id).userProfile
 		
+		// Logers usuario
 		def loggerListInstance = Logger.findAllByProfile(userProfileInstance,[sort: 'submitDate', order: 'desc'])
 		
 		loggerListInstance = toolService.updateTimeStringLogger(loggerListInstance)
 		
 		// Usuarios conectados
 		List<User> usersOnline = toolService.getUsersOnline()
+		def totalUsersOnline = 0
 		
 		def lastUsersRegistered = UserProfile.list(max: 10, sort: 'fechaRegistro', order: 'desc')
 		for(UserProfile profile : lastUsersRegistered)
 		{
 			profile.isOnline = usersOnline.contains(profile.user)
 			profile.save(failOnError: true, flush: true)
+			
+			if(profile.isOnline)
+			{
+				totalUsersOnline++
+			}
 		}
 		
-		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered]
+		// Ultimos SLR's creados
+		def lastSlrCreated = Slr.list(max: 5, sort: 'submitDate', order: 'desc')
+		
+		lastSlrCreated = toolService.updateTimeStringSlr(lastSlrCreated)
+		
+		// Estadisticas
+		def totalSLR = Slr.list().size()
+		def totalUsers = User.list().size()
+		
+		// Gráfica slr's creados en los últimos 5 meses
+		String queryChartIndex = graphService.chartTotal5LastSlrCreated(userProfileInstance)
+		
+		// Total referencias incluidas
+		int totalRefsIncluded
+		
+		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered,
+			lastSlrCreated: lastSlrCreated, totalSLR: totalSLR, totalUsers: totalUsers, totalUsersOnline: totalUsersOnline,
+			queryChartIndex: queryChartIndex]
 	}
 	
 	def menu2() { }

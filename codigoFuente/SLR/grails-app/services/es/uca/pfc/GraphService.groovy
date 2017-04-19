@@ -1,16 +1,19 @@
 package es.uca.pfc
 
 import grails.transaction.Transactional
+import java.text.SimpleDateFormat
 
 @Transactional
 class GraphService {
 
+	def toolService
+	
     def serviceMethod() {
 
     }
 	
 	private String labelCriterionIncluded = "Criterion Included"
-	private labelCriterionNoIncluded = "Criterion No Included"
+	private String labelCriterionNoIncluded = "Criterion No Included"
 	
 	List<Integer> getMinAndMaxYear(Slr slrInstance)
 	{
@@ -186,6 +189,43 @@ class GraphService {
 		}
 		
 		return keyRange
+	}
+	
+	String chartTotal5LastSlrCreated(UserProfile userInstance)
+	{
+		String queryChart = "[\"SLR\", \"Total SLR\", { role: \"style\" }], ";
+		
+		Calendar cal = Calendar.getInstance();
+		Date currentDate = cal.getTime();
+		
+		for(int i=4; i >= 0; i--)
+		{
+			Date dateLabel = toolService.addMonthToDate(currentDate, 0 - i);
+			String strLabelMonth = new SimpleDateFormat("MMM").format(dateLabel).toUpperCase();
+			String strLabelYear  = new SimpleDateFormat("YYYY").format(dateLabel);
+			
+			//queryChart += "[\"" + strAuxMonth + " " + strAuxYear + "\", 5, \"\"], "
+			int totalSlr = 0
+			
+			def slrListInstance = Slr.findAllByUserProfile(userInstance)
+			
+			for(Slr slrInstance : slrListInstance)
+			{
+				String strMonthDateSubmit = new SimpleDateFormat("MMM").format(slrInstance.submitDate).toUpperCase();
+				String strYearDateSubmit = new SimpleDateFormat("YYYY").format(slrInstance.submitDate).toUpperCase();
+				
+				if (strLabelMonth.equals(strMonthDateSubmit) && strLabelYear.equals(strYearDateSubmit))
+				{
+					totalSlr++;
+				}
+			}
+			
+			queryChart += "[\"" + strLabelMonth + " " + strLabelYear + "\", " + totalSlr + ", \"\"], "
+		}
+		
+		queryChart = queryChart.substring(0, queryChart.length()-1)
+		
+		return queryChart;
 	}
 	
 	List<String> chartsByTag(Slr slrInstance)

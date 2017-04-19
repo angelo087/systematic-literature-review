@@ -791,4 +791,12 @@ class ToolService {
 		
 		return "";
 	}
+	
+	Date addMonthToDate(Date fecha, int months)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha); // Configuramos la fecha que se recibe
+		calendar.add(Calendar.MONTH, months);  // numero de días a añadir, o restar en caso de días<0
+		return calendar.getTime();
+	}
 }
