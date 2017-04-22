@@ -24,7 +24,7 @@ function drawColumnChart() {
 	         chartArea: {
 	        	    left: 40,
 	        	    top: 50,
-	        	    width: 600
+	        	    width: 500
 	        },
 	        bar: {groupWidth: "95%"}
 	       };

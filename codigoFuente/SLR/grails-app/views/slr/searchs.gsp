@@ -92,7 +92,7 @@
                         <tbody>
                             <g:each in="${searchListInstance}" var="searchInstance">
                             	<tr class="gradeX">
-                            		<td>${formatDate(format: 'dd/MMM/yyyy', date: searchInstance.fecha)}</td>
+                            		<td>${formatDate(format: 'dd/MMM/yyyy HH:mm:ss', date: searchInstance.fecha)}</td>
                             		<td>${searchInstance.startYear}</td>
                             		<td>${searchInstance.endYear}</td>
                             		<td>${searchInstance.maxTotal}</td>

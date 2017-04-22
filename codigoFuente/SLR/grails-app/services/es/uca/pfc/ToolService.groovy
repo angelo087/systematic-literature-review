@@ -796,7 +796,56 @@ class ToolService {
 	{
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha); // Configuramos la fecha que se recibe
-		calendar.add(Calendar.MONTH, months);  // numero de días a añadir, o restar en caso de días<0
+		calendar.add(Calendar.MONTH, months);  // numero de dï¿½as a aï¿½adir, o restar en caso de dï¿½as<0
 		return calendar.getTime();
+	}
+	
+	List<String> extractForenameAndSurnameAuthor(String forename, String surname)
+	{
+		List<String> names = new ArrayList<String>()
+		
+		if(forename != null && surname != null && !forename.equals("") && !surname.equals(""))
+		{
+			names.add(forename)
+			names.add(surname)
+		}
+		else if(forename == null || forename.equals(""))
+		{
+			names = extractForenameAndSurnameAuthorAux(surname)
+		}
+		else if(surname == null || surname.equals(""))
+		{
+			names = extractForenameAndSurnameAuthorAux(forename)
+		}
+		else
+		{
+			names.add("Mr")
+			names.add("X")
+		}
+		
+		return names
+	}
+	
+	private List<String> extractForenameAndSurnameAuthorAux(String name)
+	{
+		List<String> names = new ArrayList<String>()
+		String[] nameAuxArray = name.replaceAll(","," ").trim().split(" ")
+		if(nameAuxArray.length > 1)
+		{
+			names.add(nameAuxArray[0])
+			String nameRest = ""
+			for(int i = 1; i<nameAuxArray.length; i++)
+			{
+				nameRest += nameAuxArray[i] + " "
+			}
+			names.add(nameRest.trim())
+		}
+		else
+		{
+			names.add("Mr.")
+			names.add(name)
+		}
+		
+		return names
 	}
 }

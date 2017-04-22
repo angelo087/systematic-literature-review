@@ -30,18 +30,18 @@
 	                       <i class="fa fa-book fa-5x"></i>
 	                   </div>
 	                   <div class="col-xs-9 text-right">
-	                       <div class="huge">--</div>
+	                       <div class="huge">${totalRefsIncluded}</div>
 	                       <div>Referencias<br />incluidas</div>
 	                   </div>
 	               </div>
 	           </div>
-	           <a href="#">
+	           <g:link controller="slr" action="myList">
 	               <div class="panel-footer">
 	                   <span class="pull-left">View Details</span>
 	                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 	                   <div class="clearfix"></div>
 	               </div>
-	           </a>
+	           </g:link>
 	       </div>
 	   </div>
 	   <div class="col-lg-3 col-md-6">
@@ -49,21 +49,21 @@
 	           <div class="panel-heading">
 	               <div class="row">
 	                   <div class="col-xs-3">
-	                       <i class="fa fa-envelope fa-5x"></i>
+	                       <i class="fa fa-tasks fa-5x"></i>
 	                   </div>
 	                   <div class="col-xs-9 text-right">
-	                       <div class="huge">--</div>
-	                       <div>Notificaciones<br />sin leer<br /></div>
+	                       <div class="huge">${totalTaskSearchs}</div>
+	                       <div>Busquedas<br />en proceso<br /></div>
 	                   </div>
 	               </div>
 	           </div>
-	           <a href="#">
+	           <g:link controller="slr" action="taskSearchs">
 	               <div class="panel-footer">
 	                   <span class="pull-left">View Details</span>
 	                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 	                   <div class="clearfix"></div>
 	               </div>
-	           </a>
+	           </g:link>
 	       </div>
 	   </div>
 	   <div class="col-lg-3 col-md-6">
@@ -79,13 +79,13 @@
 	                   </div>
 	               </div>
 	           </div>
-	           <a href="#">
+	           <g:link controller="user" action="list">
 	               <div class="panel-footer">
 	                   <span class="pull-left">View Details</span>
 	                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 	                   <div class="clearfix"></div>
 	               </div>
-	           </a>
+	           </g:link>
 	       </div>
 	   </div>
 </div>

@@ -23,7 +23,12 @@
 		</div>
 		<g:each in="${lastUsersRegistered}" var="profileInstance">
 			<g:link class="list-group-item" controller="user" action="show" params="[guid: "${profileInstance.guid}"]">
-				<i class="fa fa-user fa-fw" style="color: green;"></i> ${profileInstance.display_name}
+				<g:if test="${profileInstance.isOnline}">
+					<i class="fa fa-user fa-fw" style="color: green;"></i> ${profileInstance.display_name}
+				</g:if>
+				<g:else>
+					<i class="fa fa-user fa-fw" style="color: blue;"></i> ${profileInstance.display_name}
+				</g:else>
 				<g:if test="${profileInstance.isOnline}">
 					<span class="pull-right text-muted small" style="color: green;"><em>conectado</em>
 					</span>

@@ -39,7 +39,7 @@ class IndexController {
 	}
 	
 	def menu()
-	{
+	{		
 		// Si no esta logado, redirigimos a la pagina principal.
 		if(!springSecurityService.isLoggedIn())
 		{
@@ -80,15 +80,44 @@ class IndexController {
 		def totalSLR = Slr.list().size()
 		def totalUsers = User.list().size()
 		
-		// Gráfica slr's creados en los últimos 5 meses
+		// Grafica slr's creados en los ultimos 5 meses
 		String queryChartIndex = graphService.chartTotal5LastSlrCreated(userProfileInstance)
 		
 		// Total referencias incluidas
-		int totalRefsIncluded
+		int totalRefsIncluded = 0
+		for(Slr slrInstance : userProfileInstance.slrs)
+		{
+			for(Search searchInstance : slrInstance.searchs)
+			{
+				for(Reference referenceInstance : searchInstance.references)
+				{
+					if(referenceInstance.criterion.name.toLowerCase().equals("included"))
+					{
+						totalRefsIncluded++
+					}
+				}
+			}
+		}
+		
+		// Total task searchs
+		def totalTaskSearchs = 0
+		def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
+		List<String> guidsSlr = new ArrayList<String>()
+		for(Slr slrInstance : userProfileInstance.slrs)
+		{
+			guidsSlr.add(slrInstance.guid)
+		}
+		for(TaskSearch t : taskSearchList)
+		{
+			if(guidsSlr.contains(t.guidSlr) && !t.hasErrors && t.percentage != 100)
+			{
+				totalTaskSearchs++
+			}
+		}
 		
 		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered,
 			lastSlrCreated: lastSlrCreated, totalSLR: totalSLR, totalUsers: totalUsers, totalUsersOnline: totalUsersOnline,
-			queryChartIndex: queryChartIndex]
+			queryChartIndex: queryChartIndex, totalRefsIncluded: totalRefsIncluded, totalTaskSearchs: totalTaskSearchs]
 	}
 	
 	def menu2() { }

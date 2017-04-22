@@ -36,8 +36,7 @@ import static org.quartz.CalendarIntervalScheduleBuilder.*;
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.DateBuilder.*;
 import es.uca.pfc.encode.EncodeDecodeMendeley;
-import es.uca.pfc.task.TaskEngineSearch
-import es.uca.pfc.task.TaskSearch
+import es.uca.pfc.TaskSearch
 import grails.transaction.Transactional;
 
 import org.quartz.impl.matchers.KeyMatcher;
@@ -64,10 +63,12 @@ class MendeleyToolService {
 		return EncodeDecodeMendeley.decodePasswordMendeley(password);
 	}
 	
-	boolean insertSearchsBackground(Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
+	boolean insertSearchsBackground(String guidTaskSearch, String nameSlr, String guidSlr, List<String> terminos, List<SearchOperator> operators, 
 		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, Map<String, Boolean> engines)
 	{
 		println "insertSearchsBackground"
+		
+		increaseProgressBar(0, guidTaskSearch)
 		boolean isSuccess = true
 		def userInstance = User.get(springSecurityService.currentUser.id)
 		String emailMend = userInstance.userMendeley.email_mend
@@ -76,33 +77,78 @@ class MendeleyToolService {
 		runAsync {
 			try
 			{
-				createSearch(emailMend, passMend, slrInstance, terminos, operators, components, minYear, maxYear, maxTotal, engines)
+				// Obtenemos referencias para mendeley
+				increaseProgressBar(25, guidTaskSearch)
+				List<background.pfc.commons.Reference> referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
+					operators, components, minYear, maxYear, maxTotal, engines)
+								
+				// Creamos busqueda para el SLR
+				increaseProgressBar(50, guidTaskSearch)
+				Search searchInstance = createSearchForSlr(terminos, operators, components,
+															minYear, maxYear, maxTotal, engines)
+				
+				// Insertamos las referencias en la busqueda
+				increaseProgressBar(75, guidTaskSearch)
+				createSearchFromMendeley(emailMend, searchInstance, guidSlr, referencesMend)
+				
+				// Finalizamos proceso
+				increaseProgressBar(100, guidTaskSearch)
 			}
 			catch(Exception ex)
 			{
 				isSuccess = false
 				println "ERROR => " + ex.getMessage()
+				increaseProgressBar(-100, guidTaskSearch)
 			}
-			sendSearchNotification(emailMend, slrInstance, isSuccess)
+			sendSearchNotification(emailMend, guidSlr, isSuccess)
 		}
 		
 		return isSuccess;
-	}	
+	}
 	
-	void createSearch(String emailMend, String passMend, Slr slrInstance, List<String> terminos, List<SearchOperator> operators, 
-		List<SearchComponent> components, String minYear, String maxYear, String maxTotal, Map<String, Boolean> engines)
+	void increaseProgressBar(int percen, String guidTaskSearch)
 	{
-		// Obtenemos referencias para mendeley
-		String nameSlr = slrInstance.title
-		List<background.pfc.commons.Reference> referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos, 
-			operators, components, minYear, maxYear, maxTotal, engines)
+		def taskSearchInstance = TaskSearch.findByGuidLike(guidTaskSearch)
 		
-		// Creamos busqueda para el SLR
-		Search searchInstance = createSearchForSlr(terminos, operators, components,
-													minYear, maxYear, maxTotal, engines)
-		
-		// Insertamos las referencias en la busqueda
-		createSearchFromMendeley(emailMend, searchInstance, slrInstance, referencesMend)
+		if (taskSearchInstance != null)
+		{
+			def state = ""
+			def hasErrors = false
+			def percentage = percen
+			
+			if (percentage < 0)
+			{
+				percentage = 0
+				state = "Ha habido un fallo en el proceso de busqueda."
+				hasErrors = true;
+			}
+			else if(percentage >= 0 && percentage < 25)
+			{
+				state = "Conectando con los engines..."
+			}
+			else if (percentage >= 25 && percentage < 50)
+			{
+				state = "Realizando busqueda en los engines..."
+			}
+			else if (percentage >= 50 && percentage < 75)
+			{
+				state = "Recopilando las referencias..."
+			}
+			else if (percentage >= 75 && percentage < 100)
+			{
+				state = "Guardando referencias en SLR..."
+			}
+			else if (percentage == 100)
+			{
+				state = "Finalizado!"
+			}
+
+			taskSearchInstance.percentage = percentage
+			taskSearchInstance.state = state
+			taskSearchInstance.hasErrors = hasErrors
+			taskSearchInstance.endDate = new Date()
+			taskSearchInstance.save(failOnError: true, flush: true)
+		}
 	}
 	
 	Search createSearchForSlr(List<String> terminos, List<SearchOperator> operators,
@@ -139,7 +185,7 @@ class MendeleyToolService {
 		return searchInstance;
 	}
 	
-	void createSearchFromMendeley(String emailMend, Search searchInstance, Slr slrInstance, 
+	void createSearchFromMendeley(String emailMend, Search searchInstance, String guidSlr, 
 		List<background.pfc.commons.Reference> referencesMend)
 	{
 		User userInstance = User.findByUsernameLike(emailMend)
@@ -164,6 +210,8 @@ class MendeleyToolService {
 			Reference reference = convertReferenceMendToReference(ref, userInstance)
 			searchInstance.addToReferences(reference)
 		}
+		
+		Slr slrInstance = Slr.findByGuidLike(guidSlr)
 		
 		slrInstance.addToSearchs(searchInstance)
 		
@@ -194,15 +242,23 @@ class MendeleyToolService {
 			{
 				for(mendeley.pfc.schemas.Person person : docMend.getAuthors())
 				{
-					def authorInstance = Author.findByForenameIlikeAndSurnameIlike("%" + person.getForename() + "%", 
-																					"%" + person.getSurname() + "%")
-					
-					if (authorInstance == null)
+					if ((person.getForename() != null && !person.getForename().equals("")) || 
+						(person.getSurname() != null && !person.getSurname().equals("")))
 					{
-						authorInstance = new Author(forename: person.getForename(), surname: person.getSurname()).save(failOnError: true)
+						List<String> names = toolService.extractForenameAndSurnameAuthor(person.getForename(), person.getSurname())
+						String forenamePerson = names.get(0)
+						String surnamePerson = names.get(1)
+						
+						def authorInstance = Author.findByForenameIlikeAndSurnameIlike("%" + forenamePerson + "%", 
+																						"%" + surnamePerson + "%")
+						
+						if (authorInstance == null)
+						{
+							authorInstance = new Author(forename: forenamePerson, surname: surnamePerson).save(failOnError: true)
+						}
+						
+						authorInstance.addToAuthorsRefs(reference: ref).save(failOnError: true)
 					}
-					
-					authorInstance.addToAuthorsRefs(reference: ref).save(failOnError: true)
 				}
 			}
 		}
@@ -434,10 +490,11 @@ class MendeleyToolService {
 	}
 	
 	@Transactional
-	void sendSearchNotification(String emailMend, Slr slrInstance, boolean success)
+	void sendSearchNotification(String emailMend, String guidSlr, boolean success)
 	{
 		try
 		{
+			Slr slrInstance = Slr.findByGuidLike(guidSlr)
 			String asunto = "Nuevas búsquedas"
 			String txt = ""
 			if (!success)

@@ -6,7 +6,7 @@ class Slr {
 	
 	static belongsTo = [userProfile: UserProfile]
 	static hasMany = [searchs: Search, criterions: Criterion, questions: ResearchQuestion, 
-					  specAttributes: SpecificAttribute]
+					  specAttributes: SpecificAttribute, taskSearchs: TaskSearch]
 	
 	String title
 	String justification
@@ -32,7 +32,7 @@ class Slr {
 	// Sobrecarga m�todo toString()
 	String toString()
 	{
-		return "${titulo}";
+		return "${title}";
 	}
 	
 	// Indicamos que la justificacion es un texto

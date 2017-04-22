@@ -148,7 +148,14 @@
                             <g:each in="${userListInstance}" var="userInstance" status="i">
                             	<tr class="gradeX">
                             		<td>${i+1}</td>
-                            		<td><i class="fa fa-user fa-fw" style="color: blue;"></i> ${userInstance.userProfile.display_name}</td>
+                            		<td>
+                            			<g:if test="${userInstance.userProfile.isOnline}">
+	                            			<i class="fa fa-user fa-fw" style="color: green;"></i> ${userInstance.userProfile.display_name}
+                            			</g:if>
+                            			<g:else>
+                            				<i class="fa fa-user fa-fw" style="color: blue;"></i> ${userInstance.userProfile.display_name}
+                            			</g:else>
+                            		</td>
                             		<td><g:link controller="user" action="show" params="[guid: "${userInstance.userProfile.guid}"]">${userInstance.username}</g:link></td>
                             		<g:if test="${roleUserLogin != "U"}">
                             		<td>${userInstance.enabled ? "Habilitado" : "No habilitado"}</td>

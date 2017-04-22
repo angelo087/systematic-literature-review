@@ -135,25 +135,7 @@ class SearchController {
 						 ])
 			}
 			else
-			{		
-				/*List<EngineSearch> engines = new ArrayList<EngineSearch>()
-						
-				if (opACM)
-				{
-					engines.add(EngineSearch.findByName('ACM'))
-				}
-				if (opIEEE)
-				{
-					engines.add(EngineSearch.findByName('IEEE'))
-				}
-				if (opSCIENCE)
-				{
-					engines.add(EngineSearch.findByName('SCIENCE'))
-				}
-				if (opSPRINGER)
-				{
-					engines.add(EngineSearch.findByName('SPRINGER'))
-				}*/
+			{
 				Map<String, Boolean> engines = new HashMap<String, Boolean>();
 				
 				engines.put("ACM", opACM)
@@ -161,8 +143,16 @@ class SearchController {
 				engines.put("SCIENCE", opSCIENCE)
 				engines.put("SPRINGER", opSPRINGER)
 				
-				mendeleyToolService.insertSearchsBackground(slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
-							
+				// Creamos el progressBar
+				String guidTask = UUID.randomUUID().toString();
+				TaskSearch taskSearchInstance = new TaskSearch(percentage: 0,
+					titleSlr: slrInstance.title, guidSlr: slrInstance.guid, 
+					guid: guidTask)
+				taskSearchInstance = taskSearchInstance.save(failOnError: true)
+				
+				//mendeleyToolService.insertSearchsBackground(guidTask, slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
+				mendeleyToolService.insertSearchsBackground(guidTask, slrInstance.title, slrInstance.guid, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
+				
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
 			}
 		}

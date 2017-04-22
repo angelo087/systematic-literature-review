@@ -131,5 +131,10 @@ class UrlMappings {
 			controller="searcher"
 			action="index"
 		}
+		
+		"/slr/taskSearchs" {
+			controller="slr"
+			action="taskSearchs"
+		}
 	}
 }

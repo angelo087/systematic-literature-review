@@ -8,17 +8,7 @@ grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.war.file = "target/SLR.war"
 
-//grails.server.port.http=8095
 grails.server.port.http=8080
-
-/*def deps = ["mendeley-pfc.jar"]
-grails.war.dependencies = {
-	fileset(dir: "lib") {
-		for (pattern in deps) {
-			include(name: pattern)
-		}
-	}
-}*/
 
 grails.project.fork = [
     // configure settings for compilation JVM, note that if you alter the Groovy version forked compilation is required

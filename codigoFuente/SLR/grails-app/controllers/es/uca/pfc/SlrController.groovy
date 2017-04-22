@@ -773,4 +773,82 @@ class SlrController {
 			}
 		}
 	}
+	
+	def loadTaskSearchs()
+	{
+		def isLogin = springSecurityService.isLoggedIn()
+		
+		if (!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
+			def taskSearchUser = new ArrayList<TaskSearch>()
+			
+			List<String> guidsSlr = new ArrayList<String>()
+			for(Slr slrInstance : userInstance.userProfile.slrs)
+			{
+				guidsSlr.add(slrInstance.guid)
+			}
+			
+			int cont = 5;
+			for(TaskSearch t : taskSearchList)
+			{
+				if(guidsSlr.contains(t.guidSlr) && cont > 0)
+				{
+					taskSearchUser.add(t);
+					cont--;
+				}
+			}
+			
+			Map model = [taskSearchList: taskSearchUser]
+			render(template: 'taskSearchList', model: model)
+		}
+		/*if (isLogin)
+		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			
+			def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc', max: 5)
+			
+			Map model = [taskSearchList: taskSearchList]
+			render(template: 'taskSearchList', model: model)
+		}*/
+	}
+	
+	def taskSearchs()
+	{
+		def isLogin = springSecurityService.isLoggedIn()
+		
+		if (!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')			
+		}
+		else
+		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
+			def taskSearchUser = new ArrayList<TaskSearch>()
+			
+			List<String> guidsSlr = new ArrayList<String>()
+			for(Slr slrInstance : userInstance.userProfile.slrs)
+			{
+				guidsSlr.add(slrInstance.guid)
+			}
+			
+			int cont = 5;
+			for(TaskSearch t : taskSearchList)
+			{
+				if(guidsSlr.contains(t.guidSlr) && cont > 0)
+				{
+					taskSearchUser.add(t);
+					cont--;
+				}
+			}
+			
+			[taskSearchList: taskSearchUser]
+		}
+	}
 }

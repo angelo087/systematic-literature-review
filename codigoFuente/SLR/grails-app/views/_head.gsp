@@ -26,12 +26,7 @@
 	        <g:include controller='index' action='loadNotifications' />
         </li>
         
-        <%-- Task Background Proccess
-        <li id="liTemplate" class="dropdown">
-	        <g:include controller='index' action='loadTaskBackgroundProccess' />
-        </li> --%>
-        
-        <li class="dropdown">
+        <!-- <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
@@ -88,8 +83,7 @@
                     </a>
                 </li>
             </ul>
-            <!-- /.dropdown-alerts -->
-        </li>
+        </li>-->
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">

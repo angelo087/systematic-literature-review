@@ -33,7 +33,8 @@ class BootStrap {
 
     def init = { servletContext ->
 		
-		println "Creamos los componentes de busquedas..."
+		log.info "Creamos los componentes de busquedas..."
+		
 		def comp01 = SearchComponent.findByValue('full-text') ?: new SearchComponent(name: 'Full-text', value: 'full-text').save(failOnError: true)
 		def comp02 = SearchComponent.findByValue('abstract') ?: new SearchComponent(name: 'Abstract', value: 'abstract').save(failOnError: true)
 		def comp03 = SearchComponent.findByValue('review') ?: new SearchComponent(name: 'Review', value: 'review').save(failOnError: true)
@@ -46,12 +47,12 @@ class BootStrap {
 		def comp10 = SearchComponent.findByValue('doi') ?: new SearchComponent(name: 'DOI', value: 'doi').save(failOnError: true)
 		def comp11 = SearchComponent.findByValue('keywords') ?: new SearchComponent(name: 'Keywords', value: 'keywords').save(failOnError: true)
 		
-		println "Creamos los operators de busquedas..."
+		log.info "Creamos los operators de busquedas..."
 		def opALL = SearchOperator.findByValue('all') ?: new SearchOperator(name: 'ALL', value: 'all').save(failOnError: true)
 		def opANY  = SearchOperator.findByValue('any') ?: new SearchOperator(name: 'ANY', value: 'any').save(failOnError: true)
 		def opNONE = SearchOperator.findByValue('none') ?: new SearchOperator(name: 'NONE', value: 'none').save(failOnError: true)
 		
-		println "Creamos los idiomas..."
+		log.info "Creamos los idiomas..."
 		def langES = Language.findByName('spanish') ?: new Language(name: 'spanish', code: 'ES', image: 'flag-ES.PNG').save(failOnError: true)
 		def langEN = Language.findByName('english') ?: new Language(name: 'english', code: 'EN', image: 'flag-EN.PNG').save(failOnError: true)
 		def langDE = Language.findByName('german') ?: new Language(name: 'german', code: 'DE', image: 'flag-DE.PNG').save(failOnError: true)
@@ -65,7 +66,7 @@ class BootStrap {
 		def langRU = Language.findByName('russian') ?: new Language(name: 'russian', code: 'RU', image: 'flag-RU.PNG').save(failOnError: true)
 		def langOTHER = Language.findByName('other') ?: new Language(name: 'other', code: 'OTHER', image: 'flag-OTHER.PNG').save(failOnError: true)
 		
-		println "Creamos los tipos de documentos..."
+		log.info "Creamos los tipos de documentos..."
 		def type01 = TypeDocument.findByNomenclatura('journal') ?: new TypeDocument(nombre: 'Journal', nomenclatura: 'journal').save(failOnError: true)
 		def type02 = TypeDocument.findByNomenclatura('book') ?: new TypeDocument(nombre: 'Book', nomenclatura: 'book').save(failOnError: true)
 		def type03 = TypeDocument.findByNomenclatura('generic') ?: new TypeDocument(nombre: 'Generic', nomenclatura: 'generic').save(failOnError: true)
@@ -87,24 +88,24 @@ class BootStrap {
 		def type19 = TypeDocument.findByNomenclatura('film') ?: new TypeDocument(nombre: 'Film', nomenclatura: 'film').save(failOnError: true)
 		def type20 = TypeDocument.findByNomenclatura('bill') ?: new TypeDocument(nombre: 'Bill', nomenclatura: 'bill').save(failOnError: true)
 		
-		println "Creamos Roles..."
+		log.info "Creamos Roles..."
 		def userRole =  Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
 		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
 		def superRole = Role.findByAuthority('ROLE_SUPER') ?: new Role(authority: 'ROLE_SUPER').save(failOnError: true)
 		
-		println "Creamos los engines"
+		log.info "Creamos los engines"
 		def engine01 = EngineSearch.findByName('ACM') ?: new EngineSearch(name: 'ACM', display_name: 'ACM Digital Library', image: 'acm.jpeg', text: 'ACM').save(failOnError: true)
 		def engine02 = EngineSearch.findByName('IEEE') ?: new EngineSearch(name: 'IEEE', display_name: 'IEEE Computer Society', image: 'ieee.jpeg', text: 'IEEE').save(failOnError: true)
 		def engine03 = EngineSearch.findByName('SCIENCE') ?: new EngineSearch(name: 'SCIENCE', display_name: 'Science Direct', image: 'science.jpeg', text: 'SCIENCE', apiKey: '80aa542193705ce36ebfe094078b9aa3').save(failOnError: true)
 		def engine04 = EngineSearch.findByName('SPRINGER') ?: new EngineSearch(name: 'SPRINGER', display_name: 'Springer Link', image: 'springer.jpeg', text: 'SPRINGER', apiKey: 'c8c8ee4b2c20f0046806762317d0d6e2').save(failOnError: true)
 		def engine05 = EngineSearch.findByName('OTHER') ?: new EngineSearch(name: 'OTHER', display_name: 'Other engines', image: 'other.png', text: 'OTHER').save(failOnError: true)
 		
-		println "Creamos las credenciales para Mendeley..."
+		log.info "Creamos las credenciales para Mendeley..."
 		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: new MendeleyApi(clientId: '1044', clientSecret: 'H959MWw9Jrs3vlnH', 
 			redirectUri: 'http://45.76.94.16:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
 			//redirectUri: 'http://localhost:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
 			
-		println "Creamos Usuarios de prueba..."
+		log.info "Creamos Usuarios de prueba..."
 				
 		def profile01 = new UserProfile(
 			first_name: 'Paco',
@@ -157,7 +158,7 @@ class BootStrap {
 			UserRole.create user02, superRole
 		}
 		
-		println "Creamos las Estudios..."
+		log.info "Creamos las Estudios..."
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 1', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 2', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 3', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
@@ -168,12 +169,12 @@ class BootStrap {
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 8', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
 		user01.userProfile.addToEducations(new Education(degree: 'Degree 9', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))		
 		
-		println "Creamos las notificaciones..."
+		log.info "Creamos las notificaciones..."
 		//user01.userProfile.addToNotifications(new Notification(asunto: "Hola", texto: "hola", tipo: "search"))
 		
 		user01.save(failOnError: true)
 				
-		println "Creamos las amistades"
+		log.info "Creamos las amistades"
 		/*user01.userProfile.addToFriends(profile03)
 		user03.userProfile.addToFriends(profile01)
 		user02.userProfile.addToFriends(profile04)
@@ -184,7 +185,7 @@ class BootStrap {
 		user02.userProfile.addToLoggers(new LoggerFriend(friendProfile: user04.userProfile, tipo: 'seguir')).save(failOnError: true)
 		user03.userProfile.addToLoggers(new LoggerFriend(friendProfile: user01.userProfile, tipo: 'seguir')).save(failOnError: true)*/
 		
-		println "Creamos los SLR..."
+		log.info "Creamos los SLR..."
 		Slr slr01 = new Slr(title: 'Titulo 1', justification: 'Justificacion 1', userProfile: user02.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr02 = new Slr(title: 'Titulo 2', justification: 'Justificacion 2', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr03 = new Slr(title: 'Titulo 3', justification: 'Justificacion 3', userProfile: user01.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
@@ -206,7 +207,7 @@ class BootStrap {
 		Slr slr19 = new Slr(title: 'Titulo 19', justification: 'Justificacion 19', userProfile: user02.userProfile, idmend: 'asdsad').save(failOnError: true, flush: true)
 		Slr slr20 = new Slr(title: 'SLR1: spem study', justification: 'Justificacion 20', userProfile: user02.userProfile, idmend: '1aacc5c4-ee2b-4292-9b26-95fe2744542e').save(failOnError: true, flush: true)
 				
-		println "Insertamos los criterios..."
+		log.info "Insertamos los criterios..."
 		def criterion02 = new Criterion(name: 'language', description: 'Language diferent to english', nomenclatura: 'cr_language')
 		def criterion03 = new Criterion(name: 'version', description: 'Version diferent to 1.3', nomenclatura: 'cr_version')
 		def criterion04 = new Criterion(name: 'metamodel', description: 'Metamodel no present', nomenclatura: 'cr_metamodel')
@@ -215,7 +216,7 @@ class BootStrap {
 		slr01.addToCriterions(criterion03)
 		slr01.addToCriterions(criterion04)
 		
-		println "Insertamos los atributos especificos..."
+		log.info "Insertamos los atributos especificos..."
 		def specAttribute01 = new SpecificAttribute(name: "specAttribute01", tipo: "number")
 		def specAttribute02 = new SpecificAttribute(name: "specAttribute02", tipo: "string")
 		def specAttribute03 = new SpecificAttributeMultipleValue(name: "specAttribute03", tipo: "list", options: ['uno','dos','tres'], optionDefault: 'uno')
@@ -224,7 +225,7 @@ class BootStrap {
 		slr01.addToSpecAttributes(specAttribute02)
 		slr01.addToSpecAttributes(specAttribute03)
 		
-		println "Insertamos las preguntas de investigacion...."
+		log.info "Insertamos las preguntas de investigacion...."
 		def question01 = new ResearchQuestion(enunciado: '�Pregunta 1?')
 		def question02 = new ResearchQuestion(enunciado: '�Pregunta 2?')
 		def question03 = new ResearchQuestion(enunciado: '�Pregunta 3?')
@@ -233,7 +234,7 @@ class BootStrap {
 		slr01.addToQuestions(question02)
 		slr01.addToQuestions(question03)
 		
-		println "Creamos las busquedas..."
+		log.info "Creamos las busquedas..."
 		def terms01 = new SearchTermParam(terminos: "terminos 1", component: comp01, operator: opALL)
 		def terms02 = new SearchTermParam(terminos: "terminos 2", component: comp02, operator: opANY)
 		def terms03 = new SearchTermParam(terminos: "terminos 3", component: comp03, operator: opNONE)
@@ -315,7 +316,7 @@ class BootStrap {
 		search15.addToEngines(engine02); search15.addToTermParams(terms30)
 		search15.addToEngines(engine03); search15.addToTermParams(terms31)
 	
-		println "Creamos las referencias..."
+		log.info "Creamos las referencias..."
 		def reference01 = new Reference(idmend : 'mend01', engine: engine05, title : 'Reference 1', type : type01, docAbstract : 'Abstract 1', source : 'Source 1', year : '1987',    keywords: ["key1", "key2", "key3"], pages : '12', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi1', city : 'Cadiz', institution : 'Institution 1', series : 'Series 1', chapter : '1', tags: ['tag1', 'tag2', 'tag3'], citation_key : 'citationkey1', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 1')
 		def reference02 = new Reference(idmend : 'mend02', engine: engine02, title : 'Reference 2', type : type02, docAbstract : 'Abstract 2', source : 'Source 2', year : '1987',    keywords: ['key5', 'key3', 'key2'], pages : '1', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi2', city : 'Madrid', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag2', 'tag3'], citation_key : 'citationkey2', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 2')
 		def reference03 = new Reference(idmend : 'mend03', engine: engine03, title : 'Reference 3', type : type03, docAbstract : 'Abstract 3', source : 'Source 3', year : '1987',    keywords: ['key5', 'key2', 'key3'], pages : '2', volume : '2', issue : '1', websites: ['web1', 'web2'], publisher : 'publi3', city : 'Teruel', institution : 'Institution 2', series : 'Series 1', chapter : '1', tags: ['tag3'], citation_key : 'citationkey3', source_type : 'Source Type 1', language : langEN, genre : 'Genre 1', country : 'England', department : 'Science', arxiv : 'a1', doi : 'd1', isbn : 'isb1', issn : 'issn1', pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', bibtex: 'Bibtex 3')
@@ -359,7 +360,7 @@ class BootStrap {
 										pmid : 'p1', scopus : 's1', notes : 'n1', month : 'January', day : '1', 
 										bibtex: 'Bibtex 28')
 		
-		println "Insertamos las referencias en las busquedas..."
+		log.info "Insertamos las referencias en las busquedas..."
 		search01.addToReferences(reference01)
 		search01.addToReferences(reference04)
 		search02.addToReferences(reference02)
@@ -390,7 +391,7 @@ class BootStrap {
 		search14.addToReferences(reference28)
 		search15.addToReferences(reference29)
 		
-		println "Insertamos las busquedas en los slr's"
+		log.info "Insertamos las busquedas en los slr's"
 		slr01.addToSearchs(search01)
 		slr01.addToSearchs(search02)
 		slr01.addToSearchs(search03)
@@ -410,13 +411,13 @@ class BootStrap {
 		user01.userProfile.addToLoggers(new LoggerSlr(slr: slr01, isSearch: true, tipo: 'buscar')).save(failOnError: true)
 		user02.userProfile.addToLoggers(new LoggerSlr(slr: slr19, isSearch: true, tipo: 'buscar')).save(failOnError: true)
 		
-		println "Creamos autores para las referencias..."
+		log.info "Creamos autores para las referencias..."
 		def author01 = new Author(forename: 'Angel', surname: 'Gonzalez').save(failOnError: true)
 		def author02 = new Author(forename: 'Aradia', surname: 'Rocha').save(failOnError: true)
 		def author03 = new Author(forename: 'Will', surname: 'Smith').save(failOnError: true)
 		def author04 = new Author(forename: 'Natalia', surname: 'Verbeke').save(failOnError: true)
 		
-		println "Establecemos relacion entre autores y referencias"
+		log.info "Establecemos relacion entre autores y referencias"
 		author01.addToAuthorsRefs(reference: reference01).save(failOnError: true)
 		author01.addToAuthorsRefs(reference: reference03).save(failOnError: true)
 		author01.addToAuthorsRefs(reference: reference05).save(failOnError: true)
@@ -452,12 +453,12 @@ class BootStrap {
 		author04.addToAuthorsRefs(reference: reference22).save(failOnError: true)
 		author04.addToAuthorsRefs(reference: reference29).save(failOnError: true)
 		
-		println "Creamos FAQ's"
+		log.info "Creamos FAQ's"
 		def faq01 = new FAQ(enunciado: '�Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
 		def faq02 = new FAQ(enunciado: '�Esto es una pregunta 2?', respuesta: 'Efectivamente, esto es una respuesta 2').save(failOnError: true)
 		def faq03 = new FAQ(enunciado: '�Esto es una pregunta 3?', respuesta: 'Efectivamente, esto es una respuesta 3').save(failOnError: true)
 		
-		println "FIN BOOTSRAP"
+		log.info "FIN BOOTSRAP"
     }
     def destroy = {
     }
