@@ -132,8 +132,8 @@ class UrlMappings {
 			action="index"
 		}
 		
-		"/slr/taskSearchs" {
-			controller="slr"
+		"/taskSearchs" {
+			controller="index"
 			action="taskSearchs"
 		}
 	}

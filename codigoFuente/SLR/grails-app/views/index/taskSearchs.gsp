@@ -1,4 +1,3 @@
-<%@ page import="es.uca.pfc.Slr" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,7 +21,7 @@
         	
 		<div id="page-wrapper">
 		
-			<g:include controller='slr' action='loadTaskSearchs' />
+			<g:include controller='index' action='loadTaskSearchs' />
 		
         </div>
         
@@ -35,8 +34,8 @@
 	$(document).ready(
 	           function() {
 	               setInterval(function() { 
-	               $('#page-wrapper').load('/SLR/slr/loadTaskSearchs');
-	               }, 5000);
+	               $('#page-wrapper').load('/SLR/index/loadTaskSearchs');
+	               }, 10000);
 	           });
 </script>
 
