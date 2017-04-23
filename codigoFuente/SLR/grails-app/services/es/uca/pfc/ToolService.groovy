@@ -848,4 +848,54 @@ class ToolService {
 		
 		return names
 	}
+	
+	List<TaskSearch> getNotCompletedTaskSearchFromUser(User userInstance)
+	{
+		List<TaskSearch> taskSearchList = getAllTaskSearchFromUser(userInstance)
+		List<TaskSearch> taskNotCompleted = new ArrayList<TaskSearch>()
+		
+		for(TaskSearch t : taskSearchList)
+		{
+			if (t.percentage != 100 && !t.hasErrors)
+			{
+				taskNotCompleted.add(t)
+			}
+		}
+		
+		return taskNotCompleted
+	}
+	
+	List<TaskSearch> getAllTaskSearchFromUser(User userInstance)
+	{
+		def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
+		List<TaskSearch> taskSearchUser = new ArrayList<TaskSearch>()
+		
+		List<String> guidsSlr = new ArrayList<String>()
+		for(Slr slrInstance : userInstance.userProfile.slrs)
+		{
+			guidsSlr.add(slrInstance.guid)
+		}
+		
+		for(TaskSearch t : taskSearchList)
+		{
+			Calendar cal1 = Calendar.getInstance();
+			Calendar cal2 = Calendar.getInstance();
+			
+			cal1.setTime(t.endDate);
+			cal2.setTime(new Date());
+			
+			def milis1 = cal1.getTimeInMillis();
+			def milis2 = cal2.getTimeInMillis();
+			def diff = milis2 - milis1;
+			def diffMinutes = diff / (60 * 1000);
+			
+			// Cuando pase media hora, los progress bar desapareceran de la lista
+			if(guidsSlr.contains(t.guidSlr) && diffMinutes < 30)
+			{
+				taskSearchUser.add(t);
+			}
+		}
+		
+		return taskSearchUser
+	}
 }

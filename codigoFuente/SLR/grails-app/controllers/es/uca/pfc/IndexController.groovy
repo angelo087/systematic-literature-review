@@ -100,7 +100,7 @@ class IndexController {
 		}
 		
 		// Total task searchs
-		def totalTaskSearchs = 0
+		/*def totalTaskSearchs = 0
 		def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
 		List<String> guidsSlr = new ArrayList<String>()
 		for(Slr slrInstance : userProfileInstance.slrs)
@@ -113,7 +113,8 @@ class IndexController {
 			{
 				totalTaskSearchs++
 			}
-		}
+		}*/
+		def totalTaskSearchs = toolService.getNotCompletedTaskSearchFromUser(userProfileInstance.user).size()
 		
 		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered,
 			lastSlrCreated: lastSlrCreated, totalSLR: totalSLR, totalUsers: totalUsers, totalUsersOnline: totalUsersOnline,
@@ -237,24 +238,7 @@ class IndexController {
 		else
 		{
 			def userInstance = User.get(springSecurityService.principal.id)
-			def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
-			def taskSearchUser = new ArrayList<TaskSearch>()
-			
-			List<String> guidsSlr = new ArrayList<String>()
-			for(Slr slrInstance : userInstance.userProfile.slrs)
-			{
-				guidsSlr.add(slrInstance.guid)
-			}
-			
-			int cont = 5;
-			for(TaskSearch t : taskSearchList)
-			{
-				if(guidsSlr.contains(t.guidSlr) && cont > 0)
-				{
-					taskSearchUser.add(t);
-					cont--;
-				}
-			}
+			def taskSearchUser = toolService.getAllTaskSearchFromUser(userInstance)
 			
 			Map model = [taskSearchList: taskSearchUser]
 			render(template: 'taskSearchList', model: model)
@@ -272,24 +256,7 @@ class IndexController {
 		else
 		{
 			def userInstance = User.get(springSecurityService.principal.id)
-			def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
-			def taskSearchUser = new ArrayList<TaskSearch>()
-			
-			List<String> guidsSlr = new ArrayList<String>()
-			for(Slr slrInstance : userInstance.userProfile.slrs)
-			{
-				guidsSlr.add(slrInstance.guid)
-			}
-			
-			int cont = 5;
-			for(TaskSearch t : taskSearchList)
-			{
-				if(guidsSlr.contains(t.guidSlr) && cont > 0)
-				{
-					taskSearchUser.add(t);
-					cont--;
-				}
-			}
+			def taskSearchUser = toolService.getAllTaskSearchFromUser(userInstance)
 			
 			[taskSearchList: taskSearchUser]
 		}
