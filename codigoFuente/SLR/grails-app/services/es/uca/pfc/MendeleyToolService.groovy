@@ -101,6 +101,7 @@ class MendeleyToolService {
 				increaseProgressBar(-100, guidTaskSearch)
 			}
 			sendSearchNotification(emailMend, guidSlr, isSuccess)
+			sendSearchLogger(emailMend, guidSlr, isSuccess)
 		}
 		
 		return isSuccess;
@@ -490,11 +491,33 @@ class MendeleyToolService {
 	}
 	
 	@Transactional
-	void sendSearchNotification(String emailMend, String guidSlr, boolean success)
+	void sendSearchLogger(String emailMend, String guidSlr, boolean success)
 	{
+		Slr slrInstance = Slr.findByGuidLike(guidSlr)
 		try
 		{
-			Slr slrInstance = Slr.findByGuidLike(guidSlr)
+			if (success)
+			{
+				User userInstance = User.findByUsernameIlike(emailMend)
+				
+				if (userInstance != null)
+				{
+					userInstance.userProfile.addToLoggers(new LoggerSlr(slr: slrInstance, isSearch: true, tipo: 'buscar')).save(failOnError: true)
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			println "Logger NO creado para " + slrInstance.title			
+		}
+	}
+	
+	@Transactional
+	void sendSearchNotification(String emailMend, String guidSlr, boolean success)
+	{
+		Slr slrInstance = Slr.findByGuidLike(guidSlr)
+		try
+		{
 			String asunto = "Nuevas búsquedas"
 			String txt = ""
 			if (!success)
