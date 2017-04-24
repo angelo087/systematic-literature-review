@@ -26,6 +26,10 @@
 	        <g:include controller='index' action='loadNotifications' />
         </li>
         
+        <li id="liSearchTask" class="dropdown">
+	        <g:include controller='index' action='loadTaskSearchsHead' />
+        </li>
+        
         <!-- <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -117,6 +121,7 @@
 	           function() {
 	               setInterval(function() { 
 	               $('#liTemplate').load('/SLR/index/loadNotifications');
-	               }, 5000);
+	               $('#liSearchTask').load('/SLR/index/loadTaskSearchsHead');
+	               }, 10000);
 	           });
 </script>

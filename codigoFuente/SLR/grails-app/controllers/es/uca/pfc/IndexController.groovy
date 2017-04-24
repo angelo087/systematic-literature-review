@@ -245,6 +245,24 @@ class IndexController {
 		}
 	}
 	
+	def loadTaskSearchsHead()
+	{
+		def isLogin = springSecurityService.isLoggedIn()
+		
+		if (!isLogin)
+		{
+			redirect(controller: 'index', action: 'index')
+		}
+		else
+		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			def taskSearchUser = toolService.getAllTaskSearchFromUser(userInstance)
+			
+			Map model = [taskSearchListHead: taskSearchUser]
+			render(template: 'taskSearchListHead', model: model)
+		}
+	}
+	
 	def taskSearchs()
 	{
 		def isLogin = springSecurityService.isLoggedIn()
@@ -258,7 +276,7 @@ class IndexController {
 			def userInstance = User.get(springSecurityService.principal.id)
 			def taskSearchUser = toolService.getAllTaskSearchFromUser(userInstance)
 			
-			[taskSearchList: taskSearchUser]
+			[taskSearchList: taskSearchUser, dateNow: new Date()]
 		}
 	}
 }
