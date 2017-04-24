@@ -1,6 +1,5 @@
-<%@ page import="es.uca.pfc.User" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 

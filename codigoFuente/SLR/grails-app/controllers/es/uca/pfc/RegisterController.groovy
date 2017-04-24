@@ -22,6 +22,7 @@ class RegisterController {
 		
 	def registerUser() {
 		
+		log.info 'Registramos usuario'
 		def emailMend    = (params.j_email_mend == null ? "" : params.j_email_mend.toString())
 		def passMend     = (params.j_pass_mend == null ? "" : params.j_pass_mend.toString())
 		def passMendRep  = (params.j_pass_mend_rep == null ? "" : params.j_pass_mend_rep.toString())
@@ -52,12 +53,20 @@ class RegisterController {
 		}
 		
 		if(!error.equals("")) {
+			log.info "Validacion incorrecta en el registro de usuarios"
 			flash.message = error
 			redirect(controller: 'register', action: 'index', params: [emailMend: emailMend])
 		}
 		else
 		{
 			User userInstance = mendeleyToolService.getUserFromMendeley(emailMend, passMend)
+			
+			if (!userInstance.validate())
+			{
+				userInstance.errors.each {
+					println "error => " + it
+				}
+			}
 		
 			if(userInstance == null || !userInstance.validate())
 			{
@@ -68,8 +77,17 @@ class RegisterController {
 			{
 				userInstance.save flush: true
 				
-				def userRole = Role.findByAuthority('ROLE_USER')
-				UserRole.create userInstance, userRole
+				// Creamos role
+				def userRole =  Role.findByAuthority('ROLE_USER') ?: new Role(authority: 'ROLE_USER').save(failOnError: true)
+				
+				if (!userInstance.authorities.contains(userRole)) {
+					println "Creamos el role"
+					UserRole.create userInstance, userRole
+				}
+				
+				userInstance.save(failOnError: true, flush: true)
+				
+				log.info "Usuario registrado: " + userInstance.username + "=>" + userInstance.authorities
 				
 				// Hacemos Login automaticamente
 				springSecurityService.reauthenticate(userInstance.username, userInstance.password)

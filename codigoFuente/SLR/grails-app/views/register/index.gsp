@@ -77,7 +77,7 @@
 				                        	<label class="sr-only" for="j_pass_mend_rep">Repeat Password Mendeley</label>
 				                        	<input type="password" name="j_pass_mend_rep" placeholder="Repeat Password Mendeley..." class="form-password form-control" id="j_pass_mend_rep">
 				                        </div>
-				                        <button type="submit" class="btn">Sign me now!</button>
+				                        <button type="submit" class="btn" onclick="loading('Registrando usuario...');">Sign me now!</button>
 				                    </g:form>
 			                    </div>
 		                    </div>

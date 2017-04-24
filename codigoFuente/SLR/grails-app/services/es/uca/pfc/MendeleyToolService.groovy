@@ -1041,6 +1041,7 @@ class MendeleyToolService {
 			ProfileService profileService = new ProfileService(mendeleyService)			
 			Profile profile = profileService.getCurrentProfile();
 			
+			// Perfil de Mendeley
 			UserProfile userProfileInstance = getUserProfileFromMendeley(profile)
 			UserMendeley userMendeleyInstance = new UserMendeley(
 																	email_mend: emailMend,
@@ -1049,12 +1050,17 @@ class MendeleyToolService {
 																	token_type: mendeleyService.getTokenResponse().getTokenType(),
 																	expires_in: mendeleyService.getTokenResponse().getExpiresIn(),
 																	refresh_token: mendeleyService.getTokenResponse().getRefreshToken())
+			// User Settings
+			//UserSetting userSettingInstance = new UserSetting(langWeb: Language.findByNameIlike('english').code.toLowerCase(), autoSynchro: false)
+			
+			// Save User
 			userInstance = new User(
 									username: emailMend,
 									password: passMend,
 									enabled: true,
 									userProfile: userProfileInstance,
-									userMendeley: userMendeleyInstance
+									userMendeley: userMendeleyInstance/*,
+									userSetting: userSettingInstance*/
 									)
 		}
 		catch(Exception ex)
