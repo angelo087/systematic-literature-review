@@ -62,14 +62,14 @@
 											<div>
 												${referenceInstance.month + ", " + referenceInstance.year}
 												<div style="display: inline-block;">
-													<div style="display: inline-block; margin-left: 30px;">${referenceInstance.publisher}</div>
-													<div style="display: inline-block; font-size: x-small;">Volume ${referenceInstance.volume}, Páginas ${referenceInstance.pages}</div>
-													<div style="display: inline-block; margin-left: 30px;">${referenceInstance.department}</div>
+													<div style="display: inline-block; margin-left: 30px;">${referenceInstance.publisher != null && referenceInstance.publisher != '' ? referenceInstance.publisher : ''}</div>
+													<div style="display: inline-block; font-size: x-small;">${referenceInstance.volume != null && referenceInstance.volume != '' ? 'Volume ' + referenceInstance.volume : ''}  ${referenceInstance.pages != null && referenceInstance.pages != '' ? 'Páginas ' + referenceInstance.pages : ''}</div>
+													<div style="display: inline-block; margin-left: 30px;">${referenceInstance.department != null && referenceInstance.department != '' ? referenceInstance.department : ''}</div>
 												</div>
 											</div>
 											<div style="margin-top: 5px;">
-												${referenceInstance.city + ", " + referenceInstance.country}
-												<div style="display: inline-block; margin-left: 30px;"><b>Keywords: </b>${referenceInstance.keywords.toString()}</div>
+												${(referenceInstance.city != null && referenceInstance.city != '' ? referenceInstance.city : '') + (referenceInstance.country != null && referenceInstance.country != '' ? ', '+referenceInstance.country : '')}
+												<g:if test="${referenceInstance.keywords.size() > 0}"><div style="display: inline-block; margin-left: 30px;"><b>Keywords: </b>${referenceInstance.keywords.toString()}</div></g:if>
 											</div>
 											<div style="margin-top: 5px;">
 												<p><b>Abstract</b></p>
@@ -78,7 +78,7 @@
 														${word + " "}
 													</g:if>
 												</g:each>
-												.... [Leer Mas]
+												....
 											</div>
 											<small class="pull-right text-muted">
 												${i+offset+1} de ${referenceListCount}

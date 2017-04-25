@@ -336,7 +336,8 @@ class ToolService {
 			}
 			
 			// Departamento
-			if (!departaments.contains(reference.department))
+			if (reference.department != null && !reference.department.equals("") 
+				&& !departaments.contains(reference.department))
 			{
 				departaments.add(reference.department)
 			}
