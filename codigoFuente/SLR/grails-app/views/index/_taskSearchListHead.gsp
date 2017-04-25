@@ -48,5 +48,11 @@
 			</li>
 			<li class="divider"></li>
 		</g:each>
+		<li>
+			<g:link class="text-center" controller="index" action="taskSearchs">
+		        <strong>Ver todos los procesos</strong>
+		        <i class="fa fa-angle-right"></i>
+		    </g:link>
+		</li>
 	</g:else>
 </ul>

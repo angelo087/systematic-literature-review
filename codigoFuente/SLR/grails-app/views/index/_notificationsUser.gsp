@@ -60,11 +60,11 @@
 		    <li class="divider"></li>
 	    </g:each>
 	    <li>
-	        <a class="text-center" href="#">
-	            <strong>Read All Messages</strong>
-	            <i class="fa fa-angle-right"></i>
-	        </a>
-	    </li>
+			<g:link class="text-center" controller="slr" action="myList" params="[guidNotif: 'all']">
+		        <strong>Ver todos</strong>
+		        <i class="fa fa-angle-right"></i>
+		    </g:link>
+		</li>
 	</g:else>
 </ul>
 <!-- /.dropdown-messages -->    

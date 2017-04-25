@@ -13,7 +13,7 @@
 <g:each var="taskSearch" in="${taskSearchList}">
 	<div class="row">
 		<div class="col-lg-4" align="right">
-			<label>${taskSearch.titleSlr}</label>
+			<label><g:link controller="slr" action="searchs" params="[guid: "${taskSearch.guidSlr}"]">${taskSearch.titleSlr}</g:link></label>
 			<p>Comienzo: ${formatDate(format: 'dd/MMM/yyyy HH:mm', date: taskSearch.submitDate)}</p>
 			<g:if test="${taskSearch.hasErrors || taskSearch.percentage == 100}">
 			Fin: ${formatDate(format: 'dd/MMM/yyyy HH:mm', date: taskSearch.endDate)}
@@ -47,19 +47,3 @@
 		</div>
 	</div>
 </g:each>
-<%--<div class="row">
-	<div class="col-lg-4" align="right">
-		<label>SLR: Systematic Literature Review</label>
-		<p>Comienzo: 20/04/2017 20:05</br>
-		Fin: 20/04/2017 20:16</p>
-	</div>
-	<div class="col-lg-8">
-		<div class="progress">
-			<div class="progress-bar progress-bar-striped progress-bar-primary active" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-		    <span class="sr-only">45% Complete</span>
-		    90%
-		  </div>
-		</div>
-		Estado: Buscando...
-	</div>
-</div>--%>

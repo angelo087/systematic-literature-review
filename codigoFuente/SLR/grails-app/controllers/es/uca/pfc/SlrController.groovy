@@ -33,11 +33,25 @@ class SlrController {
 		}
 		else
 		{
+			def userInstance = User.get(springSecurityService.principal.id)
+			
 			if(params.guidNotif != null)
 			{
-				def notification = Notification.findByGuidLike(params.guidNotif.toString())
-				notification.leido = true;
-				notification.save(failOnError: true, flush: true)
+				if(params.guidNotif.toString().equals("all"))
+				{
+					def notifications = Notification.findAllByProfileAndLeido(userInstance.userProfile, false, [sort: 'fecha', order: 'desc'])
+					for(Notification not : notifications)
+					{
+						not.leido = true;
+						not.save(failOnError: true, flush: true)
+					}
+				}
+				else
+				{
+					def notification = Notification.findByGuidLike(params.guidNotif.toString())
+					notification.leido = true;
+					notification.save(failOnError: true, flush: true)
+				}
 			}
 			
 			// Comprobamos si se va a crear un nuevo SLR.
@@ -151,7 +165,6 @@ class SlrController {
 				errorSynchro = "Ha habido problemas de sincronización. Inténtelo más tarde."
 			}
 						
-			def userInstance = User.get(springSecurityService.principal.id)
 			def slrListInstance = userInstance.userProfile.slrs
 			
 			for(Slr slr : slrListInstance)
