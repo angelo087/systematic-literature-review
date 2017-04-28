@@ -242,22 +242,24 @@ class ReferenceController {
 						
 						referenceInstance.save(failOnError: true)
 						
-						// Authors
-						Set<Long> ids = new HashSet<Long>()
-						
-						for(AuthorReference ar : referenceInstance.authorsRefs)
+						// Atributos específicos
+						def slrInstance = referenceInstance.search.slr
+						for(SpecificAttribute attribute : slrInstance.specAttributes)
 						{
-							ids.add(ar.id)
-						}
-						
-						for(Long i : ids)
-						{
-							AuthorReference.executeUpdate("delete AuthorReference ar where ar.id = :arid", [arid:i])
+							def attributeReference = SpecificAttributeReference.findByReferenceAndAttribute(referenceInstance,attribute)
+							def value = (params["att"+attribute.id.toString()] == null ? "" : params["att"+attribute.id.toString()].toString())
+							attributeReference.value = value;
+							attributeReference.save(failOnError: true)
 						}
 						
 						referenceInstance.authorsRefs.clear()
-						referenceInstance.save(failOnError: true)
+						referenceInstance.save(failOnError: true, flush: true)
 	
+						// Borramos referencias con los autores que contenga
+						AuthorReference.deleteAll(AuthorReference.findAllByReference(referenceInstance))
+						referenceInstance.save(flush: true)
+						
+						// Autores
 						if (!params.inputAuthors.toString().equals(""))
 						{
 							Set<Author> authors = new HashSet<Author>()
@@ -300,24 +302,15 @@ class ReferenceController {
 							
 							for(Author author : authors)
 							{
-								author.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true)
+								//author.addToAuthorsRefs(reference: referenceInstance).save(failOnError: true, flush: true)
+								referenceInstance.addToAuthorsRefs(author: author).save(failOnError: true, flush: true)
 							}
 							
 							// Citation Key
 							referenceInstance.citation_key = toolService.getCitationKey(referenceInstance, authors)
-							
-							// Atributos específicos
-							def slrInstance = referenceInstance.search.slr
-							for(SpecificAttribute attribute : slrInstance.specAttributes)
-							{
-								def attributeReference = SpecificAttributeReference.findByReferenceAndAttribute(referenceInstance,attribute)
-								def value = (params["att"+attribute.id.toString()] == null ? "" : params["att"+attribute.id.toString()].toString())
-								attributeReference.value = value;
-								attributeReference.save(failOnError: true)
-							}
 						}
 						
-						referenceInstance.save(failOnError: true)					
+						referenceInstance.save(failOnError: true, flush: true)
 						
 						// Guardar cambios en mendeley
 						boolean isSynchro = mendeleyToolService.saveReferenceMendeley(referenceInstance, userInstance)
