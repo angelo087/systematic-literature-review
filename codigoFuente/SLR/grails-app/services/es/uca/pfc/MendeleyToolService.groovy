@@ -250,8 +250,7 @@ class MendeleyToolService {
 						String forenamePerson = names.get(0)
 						String surnamePerson = names.get(1)
 						
-						def authorInstance = Author.findByForenameIlikeAndSurnameIlike("%" + forenamePerson + "%", 
-																						"%" + surnamePerson + "%")
+						def authorInstance = Author.findByForenameIlikeAndSurnameIlike(forenamePerson, surnamePerson)
 						
 						if (authorInstance == null)
 						{
