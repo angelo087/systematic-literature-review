@@ -327,7 +327,7 @@ class ReferenceController {
 	{
 		String idmend = (null == params.idmendReference ? "" : params.idmendReference)
 		
-		if (idmend.equals(""))+
+		if (idmend.equals(""))
 		{
 			redirect(controller: 'index', action: 'index')
 		}

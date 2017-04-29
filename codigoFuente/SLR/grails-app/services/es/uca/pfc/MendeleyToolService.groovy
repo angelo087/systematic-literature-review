@@ -237,13 +237,17 @@ class MendeleyToolService {
 		
 		for(Reference ref : searchInstance.references)
 		{
+			AuthorReference.deleteAll(AuthorReference.findAllByReference(ref))
+			ref.save(flush: true)
+			List<Author> authors = new ArrayList<Author>()
+			
 			Document docMend = documentService.getDocument(ref.idmend)
 			
 			if(docMend != null && docMend.getAuthors() != null && docMend.getAuthors().size() > 0)
 			{
 				for(mendeley.pfc.schemas.Person person : docMend.getAuthors())
 				{
-					if ((person.getForename() != null && !person.getForename().equals("")) || 
+					if ((person.getForename() != null && !person.getForename().equals("")) ||
 						(person.getSurname() != null && !person.getSurname().equals("")))
 					{
 						List<String> names = toolService.extractForenameAndSurnameAuthor(person.getForename(), person.getSurname())
@@ -257,8 +261,14 @@ class MendeleyToolService {
 							authorInstance = new Author(forename: forenamePerson, surname: surnamePerson).save(failOnError: true)
 						}
 						
-						authorInstance.addToAuthorsRefs(reference: ref).save(failOnError: true)
+						authors.add(authorInstance)
+						//authorInstance.addToAuthorsRefs(reference: ref).save(failOnError: true)
 					}
+				}
+				
+				for(Author author : authors)
+				{
+					ref.addToAuthorsRefs(author: author).save(failOnError: true, flush: true)
 				}
 			}
 		}
@@ -830,12 +840,13 @@ class MendeleyToolService {
 		return isSynchro;
 	}
 	
-	void updateReferenceFromMendeley(Reference reference, User userInstance)
+	boolean updateReferenceFromMendeley(Reference reference, User userInstance)
 	{
 		MendeleyApi mendeleyApi = MendeleyApi.list().first()
 		String clientId = mendeleyApi.clientId
 		String clientSecret = mendeleyApi.clientSecret
 		String redirectUri = mendeleyApi.redirectUri
+		boolean isOnMendeley = true
 		
 		MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
 			userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
@@ -847,8 +858,25 @@ class MendeleyToolService {
 		userInstance.save(failOnError: true, flush: true)
 		
 		DocumentService documentService = new DocumentService(mendeleyService)
+		Document document = documentService.getDocument(reference.idmend.toString())
 		
-		updateReferenceFromMendeley(reference, documentService)
+		if (document != null && document.getId() != null && !document.getId().equals(""))
+		{
+			updateReferenceFromMendeley(reference, documentService)
+		}
+		else
+		{
+			isOnMendeley = false
+			// Borramos las referencias con los autores
+			AuthorReference.deleteAll(AuthorReference.findAllByReference(reference))
+			
+			// Borramos las referencias con los atributos especificos
+			SpecificAttributeReference.deleteAll(SpecificAttributeReference.findAllByReference(reference))
+			
+			reference.delete flush: true
+		}
+		
+		return isOnMendeley
 	}
 	
 	void updateReferenceFromMendeley(Reference reference, DocumentService documentService)
