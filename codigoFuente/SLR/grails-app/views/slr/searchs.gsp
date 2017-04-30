@@ -86,7 +86,7 @@
                                 <th>Encontrados:</th>
                                 <th>Engines</th>
                                 <th>Términos</th>
-                                <th>Acciones</th>
+                                <!-- <th>Acciones</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -96,7 +96,7 @@
                             		<td>${searchInstance.startYear}</td>
                             		<td>${searchInstance.endYear}</td>
                             		<td>${searchInstance.maxTotal}</td>
-                            		<td><g:link controller="slr" action="references" params="[guid: "${searchInstance.slr.guid}"]">${searchInstance.references.size()}</g:link></td>
+                            		<td><g:link controller="slr" action="references" params="[guid: "${searchInstance.slr.guid}"]">${searchInstance.references.size()} Referencias</g:link></td>
                             		<td>
                             			<ul>
                             				<g:each in="${searchInstance.engines}" var="engine">
@@ -111,14 +111,14 @@
 	                            			</g:each>
 	                            		</ul>
                             		</td>
-                            		<td>
+                            		<!-- <td>
                             			<g:if test="${slrInstance.noDrop == false}">
 											<button title="ELiminar búsqueda" type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSearch('${searchInstance.guid}')"><i class="fa fa-times"></i></button>
 										</g:if>
 										<g:else>
 											<button title="ELiminar búsqueda" type="button" class="btn btn-default btn-circle disabled" data-toggle="modal" data-target="#myModalDrop"><i class="fa fa-times"></i></button>
 										</g:else>
-                            		</td>
+                            		</td> -->
                             	</tr>
                             </g:each>
                         </tbody>

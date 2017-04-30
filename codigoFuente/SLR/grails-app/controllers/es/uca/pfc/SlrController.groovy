@@ -510,10 +510,12 @@ class SlrController {
 				}
 			}
 			
+			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+			
 			[slrInstance: slrInstance, criterionListInstance: slrInstance.criterions,
 			 errorCriterion: errorCriterion, successCriterion: successCriterion,
 			 nombreCriterion: nombreCriterion, descripcionCriterion: descripcionCriterion,
-			 totalReferences: totalReferences]
+			 totalReferences: totalReferences, slrBreadCrumb: slrBreadCrumb]
 		}
 	}
 	
@@ -568,10 +570,12 @@ class SlrController {
 				redirect(controller: 'index', action: 'index')
 			}
 			
+			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+			
 			[slrInstance: slrInstance, specAttributesListInstance: slrInstance.specAttributes,
 			 errorAttribute: errorAttribute, successAttribute: successAttribute,
 			 nombreAttribute: nombreAttribute, opcionesAttribute: opcionesAttribute,
-			 tipoAttribute: tipoAttribute]
+			 tipoAttribute: tipoAttribute, slrBreadCrumb: slrBreadCrumb]
 		}
 	}
 	
@@ -614,9 +618,11 @@ class SlrController {
 				redirect(controller: 'index', action: 'index')
 			}
 			
+			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
+			
 			[slrInstance: slrInstance, questionListInstance: slrInstance.questions,
 			 errorQuestion: errorQuestion, successQuestion: successQuestion,
-			 enunciadoQuestion: enunciadoQuestion]
+			 enunciadoQuestion: enunciadoQuestion, slrBreadCrumb: slrBreadCrumb]
 		}
 	}
 	
@@ -707,9 +713,7 @@ class SlrController {
 		else
 		{
 			List<String> queriesChart = graphService.chartsByTag(slrInstance)
-		
-			println queriesChart.get(1)
-							
+			
 			[
 				slrInstance: slrInstance, 
 				criterionShowTextEvery: queriesChart.get(0),

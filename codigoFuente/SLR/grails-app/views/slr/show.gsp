@@ -34,7 +34,7 @@
 						  <li class="active">${slrBreadCrumb}</li>
 						</ol>
 					
-						<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar Referencia</button>
+						<!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar SLR</button> -->
 					</div>
 				</div>
 
@@ -46,18 +46,33 @@
 					<div class="col-lg-5">
 						<p><b>Título: </b>${slrInstance.title}</p>
 						<p><b>Creado por: </b><g:link controller="user" action="show" params="[guid: "${slrInstance.userProfile.guid}"]">${slrInstance.userProfile.display_name}</g:link></p>
-						<p><b>Total Búsquedas: </b><g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()} búsqueda(s)</g:link></p>
-						<p><b>Total Referencias: </b><g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">${slrInstance.totalReferences} referencia(s)</g:link></p>
-						<p><b>Total visitas: </b>${slrInstance.numVisits} visita(s)</p>
+						<p><b>Total Búsquedas: </b>
+						<g:if test="${slrInstance.searchs.size() > 0}">
+							<g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()} búsqueda(s)</g:link>
+						</g:if>
+						<g:else>
+							${slrInstance.searchs.size()} busquedas
+						</g:else>
+						</p>
+						<p><b>Total Referencias: </b>
+						<g:if test="${slrInstance.totalReferences > 0}">
+							<g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">${slrInstance.totalReferences} referencia(s)</g:link>
+						</g:if>
+						<g:else>
+							${slrInstance.totalReferences} referencias
+						</g:else>
+						</p>
 						<p><b>Justificación:</b></p>${slrInstance.justification}
 					</div>
 					<div class="col-lg-5">
+						<g:if test="${slrInstance.questions.size() > 0}">
 						<p><b>Preguntas Investigación</b></p>
 						<ul>
 							<g:each in="${slrInstance.questions}" var="questionInstance">
 								<li>${questionInstance.enunciado}</li>
 							</g:each>
 						</ul>
+						</g:if>
 					</div>
 				</div>
 				

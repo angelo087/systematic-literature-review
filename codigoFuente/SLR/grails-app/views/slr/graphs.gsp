@@ -100,7 +100,7 @@
 		            			</div>
 		                		<div class="col-lg-1"></div>
 							</div>
-							<div class="row">
+							<%--<div class="row">
 		            			<div class="col-lg-1"></div>            		
 		            			<div class="col-lg-10">
 		            				<div class="panel panel-default">
@@ -113,7 +113,7 @@
 				                    </div>
 		            			</div>
 		                		<div class="col-lg-1"></div>
-							</div>
+							</div>--%>
 	            		</div>
 	
 	            		<div class="tab-pane fade" id="engine" style="padding-top: 25px;">
@@ -173,7 +173,7 @@
 								</div>
 								<div class="col-lg-1"></div>
 							</div>
-							<div class="row">
+							<%--<div class="row">
 								<div class="col-lg-1"></div>            		
 								<div class="col-lg-10">
 									<div class="panel panel-default">
@@ -186,7 +186,7 @@
 									</div>
 								</div>
 								<div class="col-lg-1"></div>
-							</div>
+							</div>--%>
 	            		</div>
 	            		<div class="tab-pane fade" id="search" style="padding-top: 25px;">
 	            			<div class="row">
@@ -275,7 +275,7 @@
 								</div>
 								<div class="col-lg-1"></div>
 							</div>
-							<div class="row">
+							<!-- <div class="row">
 								<div class="col-lg-1"></div>            		
 								<div class="col-lg-10">
 									<div class="panel panel-default">
@@ -288,7 +288,7 @@
 									</div>
 								</div>
 								<div class="col-lg-1"></div>
-							</div>
+							</div>-->
 	            		</div>
 	            		<div class="tab-pane fade" id="language" style="padding-top: 25px;">
 	           				<div class="row">
@@ -347,7 +347,7 @@
 								</div>
 								<div class="col-lg-1"></div>
 							</div>
-							<div class="row">
+							<!-- <div class="row">
 								<div class="col-lg-1"></div>            		
 								<div class="col-lg-10">
 									<div class="panel panel-default">
@@ -360,7 +360,7 @@
 									</div>
 								</div>
 								<div class="col-lg-1"></div>
-							</div>
+							</div>-->
 	            		</div>
 	            		<div class="tab-pane fade" id="department" style="padding-top: 25px;">
 	            			<div class="row">
@@ -419,7 +419,7 @@
 								</div>
 								<div class="col-lg-1"></div>
 							</div>
-							<div class="row">
+							<%--<div class="row">
 								<div class="col-lg-1"></div>            		
 								<div class="col-lg-10">
 									<div class="panel panel-default">
@@ -432,7 +432,7 @@
 									</div>
 								</div>
 								<div class="col-lg-1"></div>
-							</div>
+							</div>--%>
 	            		</div>
 	            	</div>
             	</div>

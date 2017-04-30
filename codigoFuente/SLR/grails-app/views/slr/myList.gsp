@@ -331,8 +331,6 @@
                         <thead>
                             <tr>
                                 <th>Titulo</th>
-                                <th>Estado</th>
-                                <th>Nº Visitas</th>
                                 <th>Fecha creación</th>
                                 <th>Nº Búsquedas</th>
                                 <th>Nº Referencias</th>
@@ -343,23 +341,21 @@
                             <g:each in="${slrListInstance}" var="slrInstance">
                             	<tr class="gradeX">
                             		<td><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrInstance.title}</g:link></td>
-                            		<td>${slrInstance.state}</td>
-                            		<td>${slrInstance.numVisits}</td>
                             		<td>${formatDate(format: 'MMM/yyyy', date: slrInstance.submitDate)}</td>
                             		<td>
                             			<g:if test="${slrInstance.searchs.size() > 0}">
-                            				<g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()}</g:link>
+                            				<g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()} Búsquedas</g:link>
                             			</g:if>
                             			<g:else>
-                            				${slrInstance.searchs.size()}
+                            				${slrInstance.searchs.size()} Búsquedas
                             			</g:else>
                             		</td>
                             		<td>
                             			<g:if test="${slrInstance.totalReferences > 0}">
-                            				<g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">${slrInstance.totalReferences}</g:link>
+                            				<g:link controller="slr" action="references" params="[guid: "${slrInstance.guid}"]">${slrInstance.totalReferences} Referencias</g:link>
                             			</g:if>
                             			<g:else>
-                            				${slrInstance.totalReferences}
+                            				${slrInstance.totalReferences} Referencias
                             			</g:else>
                             		</td>
                             		<td>

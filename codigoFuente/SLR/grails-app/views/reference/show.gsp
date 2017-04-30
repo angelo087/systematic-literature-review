@@ -50,7 +50,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
-						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí"/>
+						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí" onclick="loading('Eliminando...');" />
 					</div>
 				</g:form>
 			</div>
@@ -82,7 +82,7 @@
 						<g:if test="${userOwnerInstance.id == User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).id}">
 							<g:submitButton class="btn btn-success" name="create" value="Guardar cambios" onclick="loading('Aplicando cambios...');" />
 							<g:if test="${!noDrop}">
-								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" onclick="loading('Eliminando...');">Eliminar Referencia</button>
+								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop">Eliminar Referencia</button>
 							</g:if>
 							<g:else>
 								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" disabled="disabled">Eliminar Referencia</button>

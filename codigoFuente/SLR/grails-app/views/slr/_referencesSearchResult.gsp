@@ -71,15 +71,17 @@
 												${(referenceInstance.city != null && referenceInstance.city != '' ? referenceInstance.city : '') + (referenceInstance.country != null && referenceInstance.country != '' ? ', '+referenceInstance.country : '')}
 												<g:if test="${referenceInstance.keywords.size() > 0}"><div style="display: inline-block; margin-left: 30px;"><b>Keywords: </b>${referenceInstance.keywords.toString()}</div></g:if>
 											</div>
-											<div style="margin-top: 5px;">
-												<p><b>Abstract</b></p>
-												<g:each in="${referenceInstance.docAbstract.split(" ")}" var="word" status="w">
-													<g:if test="${w < 30}">
-														${word + " "}
-													</g:if>
-												</g:each>
-												....
-											</div>
+											<g:if test="${referenceInstance.docAbstract != null && !referenceInstance.docAbstract.equals('')}">
+												<div style="margin-top: 5px;">
+													<p><b>Abstract</b></p>
+													<g:each in="${referenceInstance.docAbstract.split(" ")}" var="word" status="w">
+														<g:if test="${w < 30}">
+															${word + " "}
+														</g:if>
+													</g:each>
+													....
+												</div>
+											</g:if>
 											<small class="pull-right text-muted">
 												${i+offset+1} de ${referenceListCount}
 											</small>
