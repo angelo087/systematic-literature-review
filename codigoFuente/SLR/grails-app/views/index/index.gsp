@@ -44,7 +44,7 @@
               <a class="navbar-brand" href="#">Systematic Literature Review</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
+              <!-- <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -61,7 +61,7 @@
                     <li><a href="#">One more separated link</a></li>
                   </ul>
                 </li>
-              </ul>
+              </ul> -->
             </div>
           </div>
         </nav>
@@ -153,7 +153,7 @@
 
       <!-- START THE FEATURETTES -->
 
-      <hr class="featurette-divider">
+      <!-- <hr class="featurette-divider">
 
       <div class="row featurette">
         <div class="col-md-7">
@@ -187,7 +187,7 @@
         <div class="col-md-5">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
         </div>
-      </div>
+      </div> -->
 
       <hr class="featurette-divider">
 
@@ -197,7 +197,7 @@
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; 2016 Universidad de Cádiz. &middot; <!-- <a href="#">Privacy</a> &middot; <a href="#">Terms</a> --></p>
       </footer>
 
     </div><!-- /.container -->
