@@ -16,6 +16,7 @@ class SlrController {
 	def strSearch = ""
 	int maxPerPage = 10
 	int maxStrTitle = 20
+	def fileNameTemplateExcel = "templates/template.xlsx"
 	
     def index() 
 	{ 
@@ -636,7 +637,10 @@ class SlrController {
 		}
 		else
 		{
-			def file = exportService.exportToExcel(slrInstance)
+			def templateExcel = grailsAttributes.getApplicationContext().getResource(fileNameTemplateExcel).getFile().toString()
+			def folderTmp = grailsAttributes.getApplicationContext().getResource("tmp").getFile().toString() + "/"
+			
+			def file = exportService.exportToExcel(slrInstance, templateExcel, folderTmp)
 			
 			if (file.exists()) {
 				response.setContentType("application/octet-stream")
@@ -658,8 +662,10 @@ class SlrController {
 			redirect(controller: 'slr', action: 'myList')
 		}
 		else
-		{
-			def file = exportService.exportToPdf(slrInstance)
+		{	
+			def folderTmp = grailsAttributes.getApplicationContext().getResource("tmp").getFile().toString() + "/"
+			def fileLogoUCA = grailsAttributes.getApplicationContext().getResource("templates/logoUCA.PNG").getFile().toString() + "/"
+			def file = exportService.exportToPdf(slrInstance, folderTmp, fileLogoUCA)
 			
 			if (file.exists()) {
 				response.setContentType("application/octet-stream")
@@ -682,7 +688,9 @@ class SlrController {
 		}
 		else
 		{
-			def file = exportService.exportToBibTex(slrInstance)
+			def folderTmp = grailsAttributes.getApplicationContext().getResource("tmp").getFile().toString() + "/"
+
+			def file = exportService.exportToBibTex(slrInstance, folderTmp)
 			
 			if (file.exists()) {
 				response.setContentType("application/octet-stream")

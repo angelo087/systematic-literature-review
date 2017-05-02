@@ -59,7 +59,6 @@ class UserProfile implements Comparator<UserProfile> {
 	def beforeInsert = {
 		applyEncode()
 		display_name = first_name + ' ' + last_name;
-		println display_name + ': ' + guid
 		
 		addToLoggers(new Logger(tipo: 'bienvenida'))
 	}

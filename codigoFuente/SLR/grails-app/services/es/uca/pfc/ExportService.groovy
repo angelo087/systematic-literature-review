@@ -48,8 +48,6 @@ import es.uca.pdf.SearchHelper
 
 @Transactional
 class ExportService {
-
-	def fileTemplate = "templates/template.xlsx";
 	
 	def INDEX_SHEET_INDEX = 0;
 	def INDEX_SHEET_RESEARCH_QUESTION = 1;
@@ -63,7 +61,7 @@ class ExportService {
 
     }
 	
-	File exportToExcel(Slr slrInstance)
+	File exportToExcel(Slr slrInstance, String fileTemplate, String folderTmp)
 	{
 		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
 		List<Reference> referencesIncluded = new ArrayList<Reference>()
@@ -99,7 +97,7 @@ class ExportService {
 		wb.setActiveSheet(INDEX_SHEET_INDEX)
 		
 		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		String fileExcel = "tmp/"+slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".xlsx";
+		String fileExcel = folderTmp + slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".xlsx";
 		File file = new File(fileExcel)
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);
@@ -609,10 +607,10 @@ class ExportService {
 		return wb;
 	}
 	
-	File exportToPdf(Slr slrInstance)
+	File exportToPdf(Slr slrInstance, String folderTmp, String fileLogoUCA)
 	{
 		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		String filePdf = "tmp/"+slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".pdf";
+		String filePdf = folderTmp + slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".pdf";
 		
 		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
 		List<Reference> referencesIncluded = new ArrayList<Reference>()
@@ -636,7 +634,7 @@ class ExportService {
 		List<PrimaryStudyHelper> primaryStudies = getPrimaryStudiesHelper(referencesIncluded)
 		Map<String, AnnualTrend> annualTrends = getAnnualTrends(referencesIncluded);
 				
-		ExportPdf.createPdf(filePdf,slrInstance, slrInstance.userProfile, questions, attributes, searchs, criterionStudies, primaryStudies, annualTrends)
+		ExportPdf.createPdf(filePdf,fileLogoUCA,slrInstance, slrInstance.userProfile, questions, attributes, searchs, criterionStudies, primaryStudies, annualTrends)
 		
 		File file = new File(filePdf)
 		
@@ -813,7 +811,7 @@ class ExportService {
 		return trends;
 	}
 	
-	File exportToBibTex(Slr slrInstance)
+	File exportToBibTex(Slr slrInstance, String folderTmp)
 	{
 		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
 		List<Reference> referencesIncluded = new ArrayList<Reference>()
@@ -829,7 +827,7 @@ class ExportService {
 		}
 		
 		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		String fileExcel = "tmp/"+slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".bib";
+		String fileExcel = folderTmp + slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".bib";
 		File file = new File(fileExcel)
 
 		try

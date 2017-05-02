@@ -37,7 +37,7 @@ public class ExportPdf {
 	public static Font underlineFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.UNDERLINE);
 	public static Font tableFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
 	
-	public static void createPdf(String filePdf, Slr slrInstance, UserProfile userProfile, List<ResearchQuestion> questions,
+	public static void createPdf(String filePdf, String fileLogoUCA, Slr slrInstance, UserProfile userProfile, List<ResearchQuestion> questions,
 			List<SpecificAttribute> attributes, List<SearchHelper> searchs, List<CriterionStudyHelper> criterions, 
 			List<PrimaryStudyHelper> primaryStudies, Map<String, AnnualTrend> annualTrends)
 	{
@@ -47,7 +47,7 @@ public class ExportPdf {
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePdf));
 			document.open();
 			
-			addFrontPage(document, slrInstance, userProfile);
+			addFrontPage(fileLogoUCA, document, slrInstance, userProfile);
 			addContentPdf(document, slrInstance, questions, attributes, searchs, criterions, primaryStudies, annualTrends);
 			addAttributesPdf(document, slrInstance, userProfile);
 			
@@ -61,9 +61,10 @@ public class ExportPdf {
 		}
 	}
 	
-	private static void addFrontPage(Document document, Slr slrInstance, UserProfile userProfile) throws MalformedURLException, IOException, DocumentException
+	private static void addFrontPage(String fileLogoUCA, Document document, Slr slrInstance, UserProfile userProfile) throws MalformedURLException, IOException, DocumentException
 	{
-		Image imageCover = Image.getInstance("templates/logoUCA.PNG");
+		//Image imageCover = Image.getInstance("templates/logoUCA.PNG");
+		Image imageCover = Image.getInstance(fileLogoUCA);
 		imageCover.scaleAbsolute(200, 300);
 		imageCover.setAlignment(Image.ALIGN_CENTER);
 		document.add(imageCover);
