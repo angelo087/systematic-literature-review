@@ -341,7 +341,7 @@
                             <g:each in="${slrListInstance}" var="slrInstance">
                             	<tr class="gradeX">
                             		<td><g:link controller="slr" action="show" params="[guidSlr: "${slrInstance.guid}"]">${slrInstance.title}</g:link></td>
-                            		<td>${formatDate(format: 'MMM/yyyy', date: slrInstance.submitDate)}</td>
+                            		<td>${formatDate(format: 'dd/MMM/yyyy', date: slrInstance.submitDate)}</td>
                             		<td>
                             			<g:if test="${slrInstance.searchs.size() > 0}">
                             				<g:link controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]">${slrInstance.searchs.size()} Búsquedas</g:link>
