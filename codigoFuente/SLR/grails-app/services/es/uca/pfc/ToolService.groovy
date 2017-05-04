@@ -899,4 +899,9 @@ class ToolService {
 		
 		return taskSearchUser
 	}
+	
+	List<Slr> getSlrFromFriendsAndMe(UserProfile userProfileInstance)
+	{
+		return Slr.findAllByUserProfileInListOrUserProfileLike(userProfileInstance.friends,userProfileInstance)
+	}
 }

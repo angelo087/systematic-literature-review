@@ -47,7 +47,7 @@
                     
                     <g:render template="statgraphics" contextPath="/"/>
                     <%--<g:render template="friendsconnect" contextPath="/"/> --%>
-                    <g:render template="lastusers" contextPath="/"/>
+                    <%--<g:render template="lastusers" contextPath="/"/> --%>
                     <g:render template="lastslrs" contextPath="/"/>
                     
                 </div>

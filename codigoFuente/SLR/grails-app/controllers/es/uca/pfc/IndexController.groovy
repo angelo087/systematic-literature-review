@@ -72,7 +72,8 @@ class IndexController {
 		}
 		
 		// Ultimos SLR's creados
-		def lastSlrCreated = Slr.list(max: 5, sort: 'submitDate', order: 'desc')
+		//def lastSlrCreated = Slr.list(max: 5, sort: 'submitDate', order: 'desc')
+		def lastSlrCreated = toolService.getSlrFromFriendsAndMe(userProfileInstance)
 		
 		lastSlrCreated = toolService.updateTimeStringSlr(lastSlrCreated)
 		
@@ -100,20 +101,6 @@ class IndexController {
 		}
 		
 		// Total task searchs
-		/*def totalTaskSearchs = 0
-		def taskSearchList = TaskSearch.list(sort: 'submitDate', order: 'desc')
-		List<String> guidsSlr = new ArrayList<String>()
-		for(Slr slrInstance : userProfileInstance.slrs)
-		{
-			guidsSlr.add(slrInstance.guid)
-		}
-		for(TaskSearch t : taskSearchList)
-		{
-			if(guidsSlr.contains(t.guidSlr) && !t.hasErrors && t.percentage != 100)
-			{
-				totalTaskSearchs++
-			}
-		}*/
 		def totalTaskSearchs = toolService.getNotCompletedTaskSearchFromUser(userProfileInstance.user).size()
 		
 		[loggerListInstance: loggerListInstance, userProfileInstance: userProfileInstance, lastUsersRegistered: lastUsersRegistered,
