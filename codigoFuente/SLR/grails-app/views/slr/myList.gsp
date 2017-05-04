@@ -326,6 +326,7 @@
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>
 	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="loading('Sincronizando con Mendeley...');">Sincronizar (Mendeley)</g:link>
+	                	<button type="button" class="btn btn-info" data-html="true" data-toggle="popover" title="Información"><i class="fa fa-info"></i> Información</button>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-myslrs">
                         <thead>
@@ -359,10 +360,10 @@
                             			</g:else>
                             		</td>
                             		<td>
-										<g:link title="Búsquedas" type="button" class="btn btn-outline btn-primary btn-circle" controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-search"></i></g:link>
 										<g:link title="Criterios" class="btn btn-outline btn-primary btn-circle" controller="slr" action="criterions" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-bookmark"></i></g:link>
 										<g:link title="Atributos Especificos" class="btn btn-outline btn-primary btn-circle" controller="slr" action="specAttributes" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-tags"></i></g:link>
 										<g:link title="Listar preguntas" type="button" class="btn btn-outline btn-primary btn-circle" controller="slr" action="researchQuestions" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-question"></i></g:link>
+										<g:link title="Búsquedas" type="button" class="btn btn-outline btn-primary btn-circle" controller="slr" action="searchs" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-search"></i></g:link>
 										<g:if test="${slrInstance.noDrop == false}">
 											<button title="Eliminar SLR" type="button" class="btn btn-outline btn-danger btn-circle" data-toggle="modal" data-target="#myModalDrop" onclick="getIdSlr('${slrInstance.guid}')"><i class="fa fa-times"></i></button>
 										</g:if>
@@ -398,6 +399,9 @@
 	        $('#dataTables-myslrs').DataTable({
 	                responsive: true
 	        });
+	        $('[data-toggle="popover"]').popover({
+	        	content: '<g:render template="slrInfo" contextPath="/slr"/>'
+	        }); 
 	    });
     </script>
 
