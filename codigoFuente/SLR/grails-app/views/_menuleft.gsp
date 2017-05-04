@@ -7,7 +7,7 @@
 			<li class="sidebar-search">
 				<g:form class="form-horizontal" controller="searcher" action="search" method="POST" name="myForm" id="myForm">
 					<div class="input-group custom-search-form">
-						<input id="query" name="query" type="text" class="form-control" placeholder="Search...">
+						<input id="query" name="query" type="text" class="form-control" placeholder="Search user or slr...">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="submit">
 								<i class="fa fa-search"></i>
