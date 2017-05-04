@@ -193,7 +193,7 @@ class GraphService {
 	
 	String chartTotal5LastSlrCreated(UserProfile userInstance)
 	{
-		String queryChart = "[\"SLR\", \"Total SLR\", { role: \"style\" }], ";
+		String queryChart = "[\"Month-Year\", \"Slr Total\",\"Slr Amigos\",\"Slr Propios\"], ";
 		
 		Calendar cal = Calendar.getInstance();
 		Date currentDate = cal.getTime();
@@ -203,29 +203,71 @@ class GraphService {
 			Date dateLabel = toolService.addMonthToDate(currentDate, 0 - i);
 			String strLabelMonth = new SimpleDateFormat("MMM").format(dateLabel).toUpperCase();
 			String strLabelYear  = new SimpleDateFormat("YYYY").format(dateLabel);
+			String strDateLabel = strLabelMonth + " " + strLabelYear
+			int totalSlr = getTotalSlrInRange(userInstance, strLabelMonth, strLabelYear)
+			int totalSlrAmigos = getTotalSlrFromFriendsInRange(userInstance, strLabelMonth, strLabelYear)
+			int totalSlrPropios = getTotalMySlrInRange(userInstance, strLabelMonth, strLabelYear)
 			
-			//queryChart += "[\"" + strAuxMonth + " " + strAuxYear + "\", 5, \"\"], "
-			int totalSlr = 0
-			
-			def slrListInstance = Slr.findAllByUserProfile(userInstance)
-			
-			for(Slr slrInstance : slrListInstance)
-			{
-				String strMonthDateSubmit = new SimpleDateFormat("MMM").format(slrInstance.submitDate).toUpperCase();
-				String strYearDateSubmit = new SimpleDateFormat("YYYY").format(slrInstance.submitDate).toUpperCase();
-				
-				if (strLabelMonth.equals(strMonthDateSubmit) && strLabelYear.equals(strYearDateSubmit))
-				{
-					totalSlr++;
-				}
-			}
-			
-			queryChart += "[\"" + strLabelMonth + " " + strLabelYear + "\", " + totalSlr + ", \"\"], "
+			queryChart += "[\"" + strDateLabel + "\"," + totalSlr + "," + totalSlrAmigos + "," + totalSlrPropios + "],"
 		}
 		
-		queryChart = queryChart.substring(0, queryChart.length()-1)
+		return queryChart
+	}
+	
+	int getTotalSlrInRange(UserProfile userInstance, String strLabelMonth, String strLabelYear)
+	{
+		int total = 0
 		
-		return queryChart;
+		for(Slr slrInstance : Slr.list())
+		{
+			String strMonthDateSubmit = new SimpleDateFormat("MMM").format(slrInstance.submitDate).toUpperCase();
+			String strYearDateSubmit = new SimpleDateFormat("YYYY").format(slrInstance.submitDate).toUpperCase();
+			
+			if (strLabelMonth.equals(strMonthDateSubmit) && strLabelYear.equals(strYearDateSubmit))
+			{
+				total++;
+			}
+		}
+		
+		return total
+	}
+	
+	int getTotalMySlrInRange(UserProfile userInstance, String strLabelMonth, String strLabelYear)
+	{
+		int total = 0;
+		
+		for(Slr slrInstance : userInstance.slrs)
+		{
+			String strMonthDateSubmit = new SimpleDateFormat("MMM").format(slrInstance.submitDate).toUpperCase();
+			String strYearDateSubmit = new SimpleDateFormat("YYYY").format(slrInstance.submitDate).toUpperCase();
+			
+			if (strLabelMonth.equals(strMonthDateSubmit) && strLabelYear.equals(strYearDateSubmit))
+			{
+				total++;
+			}
+		}
+		
+		return total
+	}
+	
+	int getTotalSlrFromFriendsInRange(UserProfile userProfileInstance, String strLabelMonth, String strLabelYear)
+	{
+		int total = 0;
+		
+		def slrs = Slr.findAllByUserProfileInList(userProfileInstance.friends)
+		
+		for(Slr slrInstance : slrs)
+		{
+			String strMonthDateSubmit = new SimpleDateFormat("MMM").format(slrInstance.submitDate).toUpperCase();
+			String strYearDateSubmit = new SimpleDateFormat("YYYY").format(slrInstance.submitDate).toUpperCase();
+			
+			if (strLabelMonth.equals(strMonthDateSubmit) && strLabelYear.equals(strYearDateSubmit))
+			{
+				total++;
+			}
+		}
+		
+		return total;
 	}
 	
 	List<String> chartsByTag(Slr slrInstance)

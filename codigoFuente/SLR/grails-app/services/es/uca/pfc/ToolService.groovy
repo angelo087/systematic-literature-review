@@ -902,6 +902,8 @@ class ToolService {
 	
 	List<Slr> getSlrFromFriendsAndMe(UserProfile userProfileInstance)
 	{
-		return Slr.findAllByUserProfileInListOrUserProfileLike(userProfileInstance.friends,userProfileInstance)
+		return Slr.findAllByUserProfileInListOrUserProfileLike(userProfileInstance.friends,
+																userProfileInstance, 
+																[max: 5, sort: 'submitDate', order: 'desc'])
 	}
 }

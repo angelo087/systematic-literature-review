@@ -72,7 +72,6 @@ class IndexController {
 		}
 		
 		// Ultimos SLR's creados
-		//def lastSlrCreated = Slr.list(max: 5, sort: 'submitDate', order: 'desc')
 		def lastSlrCreated = toolService.getSlrFromFriendsAndMe(userProfileInstance)
 		
 		lastSlrCreated = toolService.updateTimeStringSlr(lastSlrCreated)
@@ -83,7 +82,7 @@ class IndexController {
 		
 		// Grafica slr's creados en los ultimos 5 meses
 		String queryChartIndex = graphService.chartTotal5LastSlrCreated(userProfileInstance)
-		
+				
 		// Total referencias incluidas
 		int totalRefsIncluded = 0
 		for(Slr slrInstance : userProfileInstance.slrs)
