@@ -23,9 +23,11 @@
 			<li>
 			    <g:link controller="user" action="show" params="[guid: "${User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).userProfile.guid.toString()}"]"><i class="fa fa-user fa-fw"></i> Perfil</g:link>
 			</li>
-			<li>
-		    	<g:link controller="user" action="list"><i class="fa fa-group fa-fw"></i> Usuarios</g:link>
-			</li>
+			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
+				<li>
+			    	<g:link controller="user" action="list"><i class="fa fa-group fa-fw"></i> Usuarios</g:link>
+				</li>
+			</g:if>
 			<li>
 				<g:link controller="slr" action="myList"><i class="fa fa-folder-open"></i> SLR's</g:link>
 			</li>

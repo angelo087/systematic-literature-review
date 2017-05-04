@@ -186,10 +186,18 @@ class UserController {
 		else
 		{
 			def userLogin = User.get(springSecurityService.principal.id)
-			def userListInstance = User.list()
-			String roleUserLogin = (userLogin.authorities.any { it.authority == "ROLE_SUPER" } ? "S" : (userLogin.authorities.any { it.authority == "ROLE_ADMIN" } ? "A" : "U"))
-
-			[userListInstance: userListInstance, userLogin: userLogin, roleUserLogin: roleUserLogin]
+			
+			if(userLogin.authorities.any { it.authority != "ROLE_USER" })
+			{
+				def userListInstance = User.list()
+				String roleUserLogin = (userLogin.authorities.any { it.authority == "ROLE_SUPER" } ? "S" : (userLogin.authorities.any { it.authority == "ROLE_ADMIN" } ? "A" : "U"))
+	
+				[userListInstance: userListInstance, userLogin: userLogin, roleUserLogin: roleUserLogin]
+			}
+			else
+			{
+				redirect(controller: 'index', action: 'index')
+			}
 		}
 	}
 
