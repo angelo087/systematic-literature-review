@@ -10,7 +10,15 @@ class TaskSearch {
 	String titleSlr
 	String guidSlr
 	String guid
+	String strException
+	String username
 
     static constraints = {
+		strException(nullable: true)
     }
+	
+	// Indicamos que strException es un texto
+	static mapping = {
+		strException type: 'text'
+	}
 }

@@ -39,47 +39,19 @@
 			</li>
 			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
 				<li>
-					<g:link controller="engineSearch" actions="index"><i class="fa fa-university fa-fw"></i> Engines</g:link>
+					<g:link controller="engineSearch" action="index"><i class="fa fa-university fa-fw"></i> Engines</g:link>
 				</li>
 			</g:if>
 			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
 				<li>
-					<g:link controller="mendeleyApi" actions="index"><i class="fa fa-key  fa-fw"></i> Mendeley API</g:link>
+					<g:link controller="mendeleyApi" action="index"><i class="fa fa-key  fa-fw"></i> Mendeley API</g:link>
 				</li>
 			</g:if>
-			<!-- <li>
-			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Notificaciones</a>
-			</li>
-			<li>
-			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> FAQ's</a>
-			</li>
-			<li>
-			    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Amigos</a>
-			</li>
-
-			<li>
-			    <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-			    <ul class="nav nav-second-level">
-			        <li>
-			            <a href="panels-wells.html">Panels and Wells</a>
-			        </li>
-			        <li>
-			            <a href="buttons.html">Buttons</a>
-			        </li>
-			        <li>
-			            <a href="notifications.html">Notifications</a>
-			        </li>
-			        <li>
-			            <a href="typography.html">Typography</a>
-			        </li>
-			        <li>
-			            <a href="icons.html"> Icons</a>
-			        </li>
-			        <li>
-			            <a href="grid.html">Grid</a>
-			        </li>
-			    </ul>
-	        </li> -->
+			<g:if test="${!User.get(sec.loggedInUserInfo(field:"id").toString().toLong()).getAuthorities().toString().contains("USER")}">
+				<li>
+					<g:link controller="search" action="errorsSearchs"><i class="fa fa-times fa-fw"></i> Errores Búsquedas</g:link>
+				</li>
+			</g:if>
 	    </ul>
     </g:if>
     <g:else>

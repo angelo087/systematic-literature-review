@@ -24,7 +24,9 @@ class UrlMappings {
 
         //"/"(view:"/index")
         "/"(controller:"index", action: "index")
-        "500"(view:'/error')
+        //"500"(view:'/error')
+		"500"(controller:"error", action: "error500")
+		"404"(controller:"error", action: "error404")
 		
 		"/menu"(controller: "index", action: "menu")
 		
@@ -135,6 +137,11 @@ class UrlMappings {
 		"/taskSearchs" {
 			controller="index"
 			action="taskSearchs"
+		}
+		
+		"/search/errorsSearchs" {
+			controller="search"
+			action="errorsSearchs"
 		}
 	}
 }

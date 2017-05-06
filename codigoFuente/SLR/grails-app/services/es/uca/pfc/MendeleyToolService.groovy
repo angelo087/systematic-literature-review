@@ -78,27 +78,27 @@ class MendeleyToolService {
 			try
 			{
 				// Obtenemos referencias para mendeley
-				increaseProgressBar(25, guidTaskSearch)
+				increaseProgressBar(25, guidTaskSearch, null)
 				List<background.pfc.commons.Reference> referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
 					operators, components, minYear, maxYear, maxTotal, engines)
 								
 				// Creamos busqueda para el SLR
-				increaseProgressBar(50, guidTaskSearch)
+				increaseProgressBar(50, guidTaskSearch, null)
 				Search searchInstance = createSearchForSlr(terminos, operators, components,
 															minYear, maxYear, maxTotal, engines)
 				
 				// Insertamos las referencias en la busqueda
-				increaseProgressBar(75, guidTaskSearch)
+				increaseProgressBar(75, guidTaskSearch, null)
 				createSearchFromMendeley(emailMend, searchInstance, guidSlr, referencesMend)
 				
 				// Finalizamos proceso
-				increaseProgressBar(100, guidTaskSearch)
+				increaseProgressBar(100, guidTaskSearch, null)
 			}
 			catch(Exception ex)
 			{
 				isSuccess = false
 				println "ERROR => " + ex.getMessage()
-				increaseProgressBar(-100, guidTaskSearch)
+				increaseProgressBar(-100, guidTaskSearch, ex.getMessage())
 			}
 			sendSearchNotification(emailMend, guidSlr, isSuccess)
 			sendSearchLogger(emailMend, guidSlr, isSuccess)
@@ -107,7 +107,7 @@ class MendeleyToolService {
 		return isSuccess;
 	}
 	
-	void increaseProgressBar(int percen, String guidTaskSearch)
+	void increaseProgressBar(int percen, String guidTaskSearch, String strException)
 	{
 		def taskSearchInstance = TaskSearch.findByGuidLike(guidTaskSearch)
 		
@@ -148,6 +148,10 @@ class MendeleyToolService {
 			taskSearchInstance.state = state
 			taskSearchInstance.hasErrors = hasErrors
 			taskSearchInstance.endDate = new Date()
+			if(strException != null)
+			{
+				taskSearchInstance.strException = strException
+			}
 			taskSearchInstance.save(failOnError: true, flush: true)
 		}
 	}
@@ -532,7 +536,7 @@ class MendeleyToolService {
 			if (!success)
 			{
 				asunto = "Error en búsquedas"
-				txt = "Ha habido problemas en la realización de búsquedas en el SLR " + slrInstance.title
+				txt = "Ha habido problemas en la realización de búsquedas en " + slrInstance.title
 			}
 			else
 			{

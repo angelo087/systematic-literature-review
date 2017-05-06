@@ -154,7 +154,10 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/loginMendeley/**':		['permitAll'],
 	'/engineSearch/**':			['permitAll'],
 	'/mendeleyApi/**':			['permitAll'],
-	'/searcher/**':				['permitAll']
+	'/searcher/**':				['permitAll'],
+	'/login/**':				['permitAll'],
+	'/logout/**':				['permitAll'],
+	'/error/**':				['permitAll']
 ]
 
 grails.gorm.failOnError = true

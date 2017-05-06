@@ -147,10 +147,9 @@ class SearchController {
 				String guidTask = UUID.randomUUID().toString();
 				TaskSearch taskSearchInstance = new TaskSearch(percentage: 0,
 					titleSlr: slrInstance.title, guidSlr: slrInstance.guid, 
-					guid: guidTask)
+					guid: guidTask, username: slrInstance.userProfile.user.username)
 				taskSearchInstance = taskSearchInstance.save(failOnError: true)
 				
-				//mendeleyToolService.insertSearchsBackground(guidTask, slrInstance, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
 				mendeleyToolService.insertSearchsBackground(guidTask, slrInstance.title, slrInstance.guid, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
 				
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
@@ -184,6 +183,31 @@ class SearchController {
 				searchInstance.delete flush: true
 				
 				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
+			}
+		}
+	}
+	
+	def errorsSearchs()
+	{
+		def isLogin = springSecurityService.loggedIn
+		
+		if(!isLogin)
+		{
+			redirect(controller: "index", action: "index")
+		}
+		else
+		{
+			def userLogin = User.get(springSecurityService.principal.id)
+			
+			if(userLogin.authorities.any { it.authority != "ROLE_USER" })
+			{
+				[
+					taskWithErrors: TaskSearch.findAllByStrExceptionIsNotNull([sort: 'submitDate', order: 'desc'])
+				]
+			}
+			else
+			{
+				redirect(controller: "index", action: "index")
 			}
 		}
 	}
