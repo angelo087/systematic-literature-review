@@ -3,7 +3,7 @@
    google.charts.load("current", {packages:['corechart','treemap','bar']});
    google.charts.setOnLoadCallback(drawColumnChart);
    google.charts.setOnLoadCallback(drawLineChart);
-   google.charts.setOnLoadCallback(drawAreaChart);
+   //google.charts.setOnLoadCallback(drawAreaChart);
    google.charts.setOnLoadCallback(drawPieChart);
    google.charts.setOnLoadCallback(drawComboChart);
    function drawColumnChart() {
