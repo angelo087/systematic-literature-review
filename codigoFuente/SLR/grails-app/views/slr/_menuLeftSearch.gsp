@@ -21,6 +21,26 @@
 	   		<input type="hidden" class="range-slider" value="${minYear},${maxYear}" />
    		</div>
 	</div>
+	
+	<!-- Atributos especificos  -->
+	<g:if test="${specificAttributesMapInstance.size() > 0}">
+		<div id="critery_search" style="margin-top: 20px;">
+			<g:each in="${specificAttributesMapInstance}" var="specificAttribute">
+				<b>${specificAttribute.key}</b>
+				<g:each in="${specificAttribute.value}" var="valueAttribute">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" value="${valueAttribute}" 
+						    	onchange="${remoteFunction(controller:'slr', action:'filtredReferencesByParam', update:'searchresults',params:[guidSlr: guidSlr, filter: "@as@" + specificAttribute.key + "="+valueAttribute])}"
+						    />
+					    	${valueAttribute}
+						</label>
+					</div>
+				</g:each>				
+			</g:each>
+		</div>	
+	</g:if>	
+	
 	<div id="critery_search" style="margin-top: 20px;">
 		<g:if test="${enginesListInstance.size() > 0}">
 			<b>Motor búsqueda</b>

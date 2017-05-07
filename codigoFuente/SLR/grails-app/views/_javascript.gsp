@@ -30,6 +30,12 @@
 			message: text
 	       });
 	}
+	function closeModalWithMessage(name,msg)
+	{
+		//$('#modal').modal('hide');
+		$('#'+name).modal('hide');
+		loading(msg);
+	}
 </script>
 
 <!-- Tokenizer -->

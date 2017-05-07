@@ -274,7 +274,6 @@ class SlrController {
 					toolService.getAllParamsFilter(referenceListInstance)
 					
 					// Paginamos los resultados
-					
 					def totalRefs  = referenceListInstance.size()
 					def totalPages = Math.round(totalRefs / maxPerPage);
 					def page = 1
@@ -292,6 +291,7 @@ class SlrController {
 						guidSlr: slrInstance.guid,
 						authorsListInstance: toolService.getAuthors(),
 						criterionsListInstance: toolService.getCriterions(),
+						specificAttributesMapInstance: toolService.getSpecificAttributesMap(),
 						minYear: Integer.parseInt(toolService.getMinYear()),
 						maxYear: Integer.parseInt(toolService.getMaxYear()),
 						enginesListInstance: toolService.getEngines(),

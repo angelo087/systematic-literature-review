@@ -263,6 +263,28 @@
 			</div>
 		</div>
 	</div>
+	
+	<%-- Ventana modal para sincronizar slr's --%>
+    <div class="modal fade" id="myModalSynchro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Sincronizar SLR</h4>
+				</div>
+				<div class="modal-body">
+					<b>Atención:</b> Si realizas el proceso de sincronización toda la información será reemplazada por la que se disponga en Mendeley.
+					Si en la web dispones de algún SLR o referencia que hayan sido suprimidas en Mendeley, serán eliminados.
+					<p>¿Deseas continuar con la sincronización?</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
+					<!--<button class="btn btn-default" data-dismiss="modal" type="button" onclick="closeModalWithMessage('myModalSynchro','Sincronizando con Mendeley...');">Si</button> -->
+					<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="closeModalWithMessage('myModalSynchro','Sincronizando con Mendeley...');">Si</g:link>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<%--Ventana modal crear question --%>
@@ -325,7 +347,8 @@
             	<div class="col-lg-12">
                 	<div style="margin-top: 5px; margin-bottom: 20px;">
 	                	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Crear SLR</button>
-	                	<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="loading('Sincronizando con Mendeley...');">Sincronizar (Mendeley)</g:link>
+	                	<!--<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="loading('Sincronizando con Mendeley...');">Sincronizar (Mendeley)</g:link>-->
+	                	<button title="Sincronizar (Mendeley)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalSynchro">Sincronizar (Mendeley)</button>
 	                	<button type="button" class="btn btn-info" data-html="true" data-toggle="popover" title="Información"><i class="fa fa-info"></i> Información</button>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-myslrs">

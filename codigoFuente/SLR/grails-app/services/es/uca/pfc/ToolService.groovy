@@ -17,6 +17,7 @@ class ToolService {
 	Set<String> languages = new TreeSet<String>()
 	Set<String> departaments = new TreeSet<String>()
 	Set<String> types = new TreeSet<String>()
+	Map<String, Set<String>> specificAttributesMap = new HashMap<String, Set<String>>()
 	String minYear = ""
 	String maxYear = ""
 	
@@ -119,6 +120,10 @@ class ToolService {
 
 	public Set<String> getDepartaments() {
 		return departaments;
+	}
+	
+	public Map<String, Set<String>> getSpecificAttributesMap() {
+		return specificAttributesMap;
 	}
 	
 	// Método para obtener el �ltimo login de un usuario en formato cadena
@@ -300,6 +305,8 @@ class ToolService {
 		languages = new TreeSet<String>()
 		departaments = new TreeSet<String>()
 		types = new TreeSet<String>()
+		specificAttributesMap = new HashMap<String, Set<String>>()
+		
 		minYear = "9999"
 		maxYear = "0"
 		
@@ -356,6 +363,21 @@ class ToolService {
 					authors.add(ar.author.display_name)
 				}
 			}
+			
+			// Atributos especificos
+			for (SpecificAttributeReference sar : reference.specificAttributes)
+			{
+				Set<String> values = new HashSet<String>()
+				if(specificAttributesMap.get(sar.attribute.name) != null)
+				{
+					values = specificAttributesMap.get(sar.attribute.name)
+				}
+				if(!sar.value.equals(""))
+				{
+					values.add(sar.value)
+					specificAttributesMap.put(sar.attribute.name, values)
+				}
+			}
 		}
 	}
 	
@@ -373,6 +395,8 @@ class ToolService {
 		List<String> departments = new ArrayList<String>()
 		List<String> types = new ArrayList<String>()
 		List<String> authors = new ArrayList<String>()
+		Map<String, Set<String>> specificAttributesMap = new HashMap<String, Set<String>>()
+		
 		String min_year = "";
 		String max_year = "";
 
@@ -409,6 +433,30 @@ class ToolService {
 			else if (filter.trim().contains("max_year="))
 			{
 				max_year = filter.trim().replaceAll("max_year=")
+			}			
+			// Insertar aqui otro campo de filtro antes que los atributos especificos
+			// ...
+			else if (slrInstance.specAttributes.size() > 0)
+			{
+				String[] fieldsFilter = filter.split("=")
+				if(fieldsFilter.length == 2)
+				{
+					String nameAS = fieldsFilter[0].trim().replaceAll("@as@","")
+					
+					def attributeSpecific = SpecificAttribute.findBySlrAndNameIlike(slrInstance,nameAS)
+					
+					String value = fieldsFilter[1].trim()
+					if(attributeSpecific != null && !value.equals(""))
+					{
+						Set<String> values = new HashSet<String>()
+						if(specificAttributesMap.get(nameAS) != null)
+						{
+							values = specificAttributesMap.get(nameAS)
+						}
+						values.add(value)
+						specificAttributesMap.put(nameAS, values)
+					}
+				}
 			}
 		}
 		
@@ -459,6 +507,33 @@ class ToolService {
 					
 					inserted = inserted && isAuthor
 				}
+				// Hacer comprobaciones aqui de otros campos antes de los atributos
+				// especificos
+				// ....
+				else if (specificAttributesMap.size() > 0)
+				{
+					for(Map.Entry<String, Set<String>> entry : specificAttributesMap.entrySet())
+					{
+						String nameAS = entry.getKey()
+						Set<String> values = entry.getValue()
+						
+						def specificAtt = SpecificAttribute.findBySlrAndNameIlike(slrInstance,nameAS)
+						
+						if (specificAtt == null)
+						{
+							inserted = false
+						}
+						else
+						{
+							def specificAttRef = SpecificAttributeReference.findByAttributeAndReference(specificAtt,reference)
+							
+							if (specificAttRef == null || !values.contains(specificAttRef.value))
+							{
+								inserted = false
+							}
+						}
+					}
+				}
 				
 				if (inserted)
 				{
@@ -472,15 +547,17 @@ class ToolService {
 	
 	String formatSearchString(String strSearch, String filter)
 	{
+		String strSearchAux = strSearch.replaceAll("@as@","");
+		String filterAux = filter.replaceAll("@as@","");
 		String result = "";
 		
-		if (strSearch.indexOf(filter) != -1)
+		if (strSearchAux.indexOf(filterAux) != -1)
 		{
-			String[] strArray = strSearch.trim().split("AND")
+			String[] strArray = strSearchAux.trim().split("AND")
 			
 			for(String str : strArray)
 			{
-				if (!str.trim().equals(filter.trim()) && !str.trim().equals(""))
+				if (!str.trim().equals(filterAux.trim()) && !str.trim().equals(""))
 				{
 					if(result.equals(""))
 					{
@@ -495,13 +572,13 @@ class ToolService {
 		}
 		else
 		{
-			if (strSearch.equals(""))
+			if (strSearchAux.equals(""))
 			{
-				result = filter;
+				result = filterAux;
 			}
 			else
 			{
-				result = strSearch.trim() + " AND " + filter.trim()
+				result = strSearchAux.trim() + " AND " + filterAux.trim()
 			}
 		}
 		
