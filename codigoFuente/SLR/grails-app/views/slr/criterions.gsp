@@ -132,7 +132,6 @@
             	<div class="col-lg-12">
                   	<div style="margin-top: 5px; margin-bottom: 20px;">
                   		<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalCriterion">Crear Criterio</button>
-                  		<button type="button" class="btn btn-primary" disabled="disabled">Sincronizar (Mendeley)</button>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-mycriterions">
                         <thead>
@@ -140,7 +139,6 @@
                                 <th>Nombre</th>
                                 <th>Fecha creación:</th>
                                 <th>Última moficiación:</th>
-                                <th>Nomenclatura (Mendeley)</th>
                                 <th>Referencias asignadas:</th>
                                 <th>Acciones</th>
                             </tr>
@@ -150,9 +148,8 @@
                             	<g:set var="contReference" value="0" />
                             	<tr class="gradeX">
                             		<td>${criterionInstance.name}</td>
-                            		<td>${formatDate(format: 'HH:mm - dd/MMM/yyyy', date: criterionInstance.submitDate)}</td>
-                            		<td>${formatDate(format: 'HH:mm - dd/MMM/yyyy', date: criterionInstance.modifyDate)}</td>
-                            		<td>${criterionInstance.nomenclatura}</td>
+                            		<td>${formatDate(format: 'dd/MMM/yyyy HH:mm', date: criterionInstance.submitDate)}</td>
+                            		<td>${formatDate(format: 'dd/MMM/yyyy HH:mm', date: criterionInstance.modifyDate)}</td>
                             		<td>
                             			<g:if test="${null == totalReferences.get(criterionInstance.name)}">
                             				0

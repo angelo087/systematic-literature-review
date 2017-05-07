@@ -117,9 +117,9 @@
 				    	</g:if>
 				    	<div class="form-inline">
 				    		<table>
-				    			<tr>
+				    			<tr style="padding-bottom: 20px;">
 				    				<td><b>Titulo:</b></td>
-				    				<td><div class="input-group" id="in-tit-slr"><span class="input-group-addon" id="basic-addon1">SLR</span><input id="titulo" type="text" name="titulo" class="form-control" value="${tituloSlr}" aria-describedby="in-tit-slr" /></div></td>
+				    				<td><div id="in-tit-slr" class="input-group"><span class="input-group-addon" id="basic-addon1">SLR</span><input id="titulo" type="text" name="titulo" class="form-control" value="${tituloSlr}" aria-describedby="in-tit-slr" style="width: 350px;" /></div></td>
 				    			</tr>
 				    			<tr>
 				    				<td><b>Justificación:</b></td>

@@ -181,7 +181,6 @@
             	<div class="col-lg-12">
                   	<div style="margin-top: 5px; margin-bottom: 20px;">
                   		<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAttribute">Crear Atributo</button>
-                  		<button type="button" class="btn btn-primary" disabled="disabled">Sincronizar (Mendeley)</button>
 	            	</div>
 					<table class="table table-striped table-bordered table-hover" id="dataTables-myattributes">
                         <thead>

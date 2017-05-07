@@ -74,12 +74,14 @@ class MendeleyToolService {
 		String emailMend = userInstance.userMendeley.email_mend
 		String passMend = decodePasswordMendeley(userInstance.userMendeley.pass_mend)
 		
+		List<background.pfc.commons.Reference> referencesMend = new ArrayList<background.pfc.commons.Reference>()
+		
 		runAsync {
 			try
 			{
 				// Obtenemos referencias para mendeley
 				increaseProgressBar(25, guidTaskSearch, null)
-				List<background.pfc.commons.Reference> referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
+				referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
 					operators, components, minYear, maxYear, maxTotal, engines)
 								
 				// Creamos busqueda para el SLR
@@ -98,6 +100,7 @@ class MendeleyToolService {
 			{
 				isSuccess = false
 				println "ERROR => " + ex.getMessage()
+				deleteAllDocumentImported(referencesMend, emailMend)
 				increaseProgressBar(-100, guidTaskSearch, ex.getMessage())
 			}
 			sendSearchNotification(emailMend, guidSlr, isSuccess)
@@ -1266,5 +1269,39 @@ class MendeleyToolService {
 		}
 		
 		return isDeleted;
+	}
+	
+	void deleteAllDocumentImported(List<background.pfc.commons.Reference> references, String emailMend)
+	{
+		log.info 'Se procede a borrar documentos importados...'
+		User userInstance = User.findByUsernameIlike(emailMend)
+		
+		MendeleyApi mendeleyApi = MendeleyApi.list().first()
+		String clientId = mendeleyApi.clientId
+		String clientSecret = mendeleyApi.clientSecret
+		String redirectUri = mendeleyApi.redirectUri
+		
+		try
+		{
+			MendeleyService mendeleyService = new MendeleyService(clientId, clientSecret, redirectUri,
+				userInstance.userMendeley.email_mend, decodePasswordMendeley(userInstance.userMendeley.pass_mend),
+				userInstance.userMendeley.access_token, userInstance.userMendeley.refresh_token);
+			
+			FolderService folderService = new FolderService(mendeleyService);
+			DocumentService documentService = new DocumentService(mendeleyService);
+			
+			for(background.pfc.commons.Reference reference : references)
+			{
+				try
+				{
+					documentService.deleteDocument(reference.getIdMendeley())
+				}
+				catch(Exception) { }
+			}
+		}
+		catch(Exception ex)
+		{
+			log.error 'Los documentos importados no han podido ser borrados.'
+		}
 	}
 }
