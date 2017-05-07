@@ -15,7 +15,7 @@
 		
 		<div class="chat-panel panel panel-default">
 			<div class="panel-heading">
-				<i class="fa fa-comments fa-fw"></i>
+				<i class="fa fa-book fa-fw"></i>
 				Total encontrados: ${referenceListCount}
 		    </div>
 			<div class="panel-body" style="font-size: 11px; height: auto; overflow: hidden;">

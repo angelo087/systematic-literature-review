@@ -61,9 +61,30 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
-						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí" onclick="loading('Eliminando...');" />
+						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí" onclick="closeModalWithMessage('myModalDrop','Eliminando...');" />
 					</div>
 				</g:form>
+			</div>
+		</div>
+	</div>
+	
+	<%-- Ventana modal para sincronizar slr's --%>
+    <div class="modal fade" id="myModalSynchro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Sincronizar Referencia</h4>
+				</div>
+				<div class="modal-body">
+					<b>Atención:</b> Si realizas el proceso de sincronización toda la información será reemplazada por la que se disponga en Mendeley.
+					Si en Mendeley no dispones de esta referencia, será suprimida de la aplicación.
+					<p>¿Deseas continuar con la sincronización?</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
+					<g:link type="button" class="btn btn-primary" controller="reference" action="sychronizeReferenceMend" onclick="closeModalWithMessage('myModalSynchro','Sincronizando con Mendeley...');" params="[idmend: "${referenceInstance.idmend}"]">Si</g:link>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -99,7 +120,7 @@
 								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalDrop" disabled="disabled">Eliminar Referencia</button>
 							</g:else>
 							<g:link type="button" class="btn btn-primary" controller="reference" action="exportReferenceToBibTex" params="[idmend: "${referenceInstance.idmend}"]">Exportar BibTex</g:link>
-							<g:link type="button" class="btn btn-primary" controller="reference" action="sychronizeReferenceMend" onclick="loading('Sincronizando con Mendeley...');" params="[idmend: "${referenceInstance.idmend}"]">Sincronizar (Mendeley)</g:link>
+							<button title="Sincronizar (Mendeley)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalSynchro">Sincronizar (Mendeley)</button>
 							<p> </p>
 						</g:if>
 					</div>
