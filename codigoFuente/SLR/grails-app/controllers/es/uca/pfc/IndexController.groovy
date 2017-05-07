@@ -128,15 +128,19 @@ class IndexController {
 		// Todos los loggers
 		allLoggers.addAll(Logger.findAllByProfile(userProfileInstance, [sort: 'submitDate', order: 'desc']))
 		int totalAllLoggers = allLoggers.size()
+		allLoggers = toolService.updateTimeStringLogger(allLoggers)
 		
 		// Mis Loggers
 		myLoggers.addAll(Logger.findAllByProfileAndTipoInList(userProfileInstance,['bienvenida','crear','buscar','seguir'],[sort: 'submitDate', order: 'desc']))
-		int totalMyLoggers = myLoggers.size()
+		int totalMyLoggers = myLoggers.size()		
+		myLoggers = toolService.updateTimeStringLogger(myLoggers)
+		
 		
 		// Loggers de amistades
 		friendsLoggers.addAll(Logger.findAllByProfileAndTipoInList(userProfileInstance,['fr-bienvenida','fr-crear','fr-buscar','fr-seguir'],[sort: 'submitDate', order: 'desc']))
 		int totalFriendsLoggers = friendsLoggers.size()
-
+		friendsLoggers = toolService.updateTimeStringLogger(friendsLoggers)
+		
 		def totalPagesAllLoggers = Math.round(totalAllLoggers / maxPerPage);
 		def totalPagesMyLoggers = Math.round(totalMyLoggers / maxPerPage);
 		def totalPagesFriendsLoggers = Math.round(totalFriendsLoggers / maxPerPage);
