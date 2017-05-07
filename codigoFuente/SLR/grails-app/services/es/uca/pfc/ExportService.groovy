@@ -5,6 +5,9 @@ import grails.transaction.Transactional
 import java.io.FileOutputStream;
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Color
@@ -21,9 +24,17 @@ import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFParagraph
+import org.apache.poi.xwpf.usermodel.XWPFRun
+import org.apache.poi.xwpf.usermodel.XWPFTable
+import org.apache.poi.xwpf.usermodel.XWPFTableRow
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.openxml4j.opc.OPCPackage
 import org.hibernate.internal.CriteriaImpl.CriterionEntry;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.util.Units
+import org.apache.poi.xwpf.usermodel.BreakType
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chapter
@@ -60,6 +71,393 @@ class ExportService {
     def serviceMethod() {
 
     }
+	
+	File exportToWord(Slr slrInstance, String folderTmp, String fileLogoUCA)
+	{
+		UserProfile userProfileInstance = slrInstance.userProfile
+		
+		Criterion criterionIncluded = Criterion.findBySlrAndNameLike(slrInstance,"included")
+		List<Reference> referencesIncluded = new ArrayList<Reference>()
+		for(Search search : slrInstance.searchs)
+		{
+			for(Reference reference : search.references)
+			{
+				if (reference.criterion.name.equals(criterionIncluded.name))
+				{
+					referencesIncluded.add(reference)
+				}
+			}
+		}
+		
+		List<ResearchQuestion> questions = new ArrayList<ResearchQuestion>()
+		questions.addAll(slrInstance.questions)
+		List<SpecificAttribute> attributes = new ArrayList<SpecificAttribute>()
+		attributes.addAll(slrInstance.specAttributes)
+		List<SearchHelper> searchs = getSearchsHelper(slrInstance, criterionIncluded)
+		List<CriterionStudyHelper> criterionStudies = getCriterionStudiesHelper(slrInstance)
+		List<PrimaryStudyHelper> primaryStudies = getPrimaryStudiesHelper(referencesIncluded)
+		Map<String, AnnualTrend> annualTrends = getAnnualTrends(referencesIncluded);
+		
+		XWPFDocument document= new XWPFDocument();
+		
+		document = addFrontPageWord(fileLogoUCA, document, slrInstance, userProfileInstance)
+		document = addSection1Word(slrInstance, document)
+		document = addSection2Word(slrInstance, document)
+		document = addSection3Word(slrInstance, document)
+		document = addSection4Word(searchs, document)
+		document = addSection5Word(criterionStudies, document)
+		document = addSection6Word(primaryStudies, document)
+		document = addSection7Word(annualTrends, document)
+		
+		DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String fileWord = folderTmp + slrInstance.title.toString().trim().replaceAll(" ", "_") + "_" + df.format(new Date())+".docx";
+		File file = new File(fileWord)
+		FileOutputStream fileOut = new FileOutputStream(file);
+		document.write(fileOut);
+		fileOut.close();
+		
+		return file;
+	}
+	
+	XWPFDocument addFrontPageWord(String fileLogoUCA, XWPFDocument document, Slr slrInstance, UserProfile userProfileInstance)
+	{
+		XWPFParagraph title = document.createParagraph();
+		title.setAlignment(ParagraphAlignment.CENTER);
+		
+		XWPFRun runSLR = title.createRun();
+		FileInputStream is = new FileInputStream(fileLogoUCA);
+		runSLR.addPicture(is, XWPFDocument.PICTURE_TYPE_JPEG, fileLogoUCA, Units.toEMU(200), Units.toEMU(300)); // 200x200 pixels
+		runSLR.addBreak();
+		runSLR.setText(slrInstance.title);
+		runSLR.setBold(true);
+		runSLR.setFontSize(30);
+		runSLR.addBreak();
+		
+		XWPFRun runUsername = title.createRun();
+		runUsername.setText(userProfileInstance.display_name);
+		runUsername.setFontSize(20);
+
+		runUsername.addBreak(BreakType.PAGE);
+		is.close();
+		
+		return document;
+	}
+	
+	XWPFDocument addSection1Word(Slr slrInstance, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.setText("1. Index");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTitleSLR = section.createRun();
+		runTitleSLR.setText("Title: " + slrInstance.title);
+		runTitleSLR.setFontSize(12);
+		runTitleSLR.addBreak();
+		
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		XWPFRun runCreatedDate = section.createRun();
+		runCreatedDate.setText("Creation date: " + df.format(slrInstance.submitDate));
+		runCreatedDate.setFontSize(12);
+		runCreatedDate.addBreak();
+		
+		XWPFRun runJustification = section.createRun();
+		runJustification.setText("Justificacion: " + slrInstance.justification);
+		runJustification.setFontSize(12);
+		runJustification.addBreak();
+		
+		runJustification.addBreak(BreakType.PAGE);
+		
+		return document;
+	}
+	
+	XWPFDocument addSection2Word(Slr slrInstance, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.setText("2. Research Questions");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTotalQuestions = section.createRun();
+		runTotalQuestions.setText("Total: " + slrInstance.questions.size());
+		runTotalQuestions.setFontSize(12);
+		runTotalQuestions.addBreak();
+		
+		if(slrInstance.questions.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("#");
+			tableRowOne.addNewTableCell().setText("Research Question");
+			
+			int cont=1;
+			for(ResearchQuestion rquestion : slrInstance.questions)
+			{
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(0).setText(Integer.toString(cont));
+				tableRow.getCell(1).setText(rquestion.enunciado);
+				cont++
+			}
+		}
+		
+		return document;
+	}
+	
+	XWPFDocument addSection3Word(Slr slrInstance, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.addBreak(BreakType.PAGE);
+		runTitleSection.setText("3. Specific Attributes");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTotalQuestions = section.createRun();
+		runTotalQuestions.setText("Total: " + slrInstance.specAttributes.size());
+		runTotalQuestions.setFontSize(12);
+		runTotalQuestions.addBreak();
+		
+		if(slrInstance.specAttributes.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("#");
+			tableRowOne.addNewTableCell().setText("Name");
+			tableRowOne.addNewTableCell().setText("Type");
+			tableRowOne.addNewTableCell().setText("Values");
+			
+			int cont=1;
+			for(SpecificAttribute attribute : slrInstance.specAttributes)
+			{
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(0).setText(Integer.toString(cont));
+				tableRow.getCell(1).setText(attribute.name);
+				tableRow.getCell(2).setText(attribute.tipo);
+				String options = ""
+				if (attribute instanceof SpecificAttributeMultipleValue)
+				{
+					SpecificAttributeMultipleValue aSpec = (SpecificAttributeMultipleValue) attribute;
+					options = aSpec.getStrOptions();
+				}
+				tableRow.getCell(3).setText(options);
+				cont++
+			}
+		}
+		
+		return document;
+	}
+	
+	XWPFDocument addSection4Word(List<SearchHelper> searchs, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.addBreak(BreakType.PAGE);
+		runTitleSection.setText("4. Studies Searches");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTotalQuestions = section.createRun();
+		runTotalQuestions.setText("Total: " + searchs.size());
+		runTotalQuestions.setFontSize(12);
+		runTotalQuestions.addBreak();
+		
+		if(searchs.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("#");
+			tableRowOne.addNewTableCell().setText("Source");
+			tableRowOne.addNewTableCell().setText("Search Terms & Scope");
+			tableRowOne.addNewTableCell().setText("Results");
+			tableRowOne.addNewTableCell().setText("Primary Studies");
+			tableRowOne.addNewTableCell().setText("Date");
+			
+			int cont=1;
+			for(SearchHelper search : searchs)
+			{
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(0).setText(Integer.toString(cont));
+				tableRow.getCell(1).setText(search.getEngines());
+				tableRow.getCell(2).setText(search.getTerms());
+				tableRow.getCell(3).setText(Integer.toString(search.getResults()));
+				tableRow.getCell(4).setText(Integer.toString(search.getPrimaryStudies()));
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+				tableRow.getCell(5).setText(df.format(search.getDate()));
+				cont++
+			}
+		}
+		
+		return document;
+	}
+	
+	XWPFDocument addSection5Word(List<CriterionStudyHelper> criterions, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.addBreak(BreakType.PAGE);
+		runTitleSection.setText("5. Study Selection");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTotalQuestions = section.createRun();
+		runTotalQuestions.setText("Total: " + criterions.size());
+		runTotalQuestions.setFontSize(12);
+		runTotalQuestions.addBreak();
+		
+		if(criterions.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("#");
+			tableRowOne.addNewTableCell().setText("Criterion");
+			tableRowOne.addNewTableCell().setText("Description");
+			tableRowOne.addNewTableCell().setText("Studies");
+			tableRowOne.addNewTableCell().setText("Frecuency");
+			
+			int cont=1;
+			for(CriterionStudyHelper criterion : criterions)
+			{
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(0).setText(Integer.toString(cont));
+				tableRow.getCell(1).setText(criterion.getName());
+				tableRow.getCell(2).setText(criterion.getDescription());
+				tableRow.getCell(3).setText(Integer.toString(criterion.getStudies()));
+				tableRow.getCell(4).setText(Double.toString(criterion.getFrecuency()));
+				cont++
+			}
+		}
+		
+		return document;
+	}
+	
+	XWPFDocument addSection6Word(List<PrimaryStudyHelper> primaryStudies, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.addBreak(BreakType.PAGE);
+		runTitleSection.setText("6. Primary Studies");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		XWPFRun runTotalQuestions = section.createRun();
+		runTotalQuestions.setText("Total: " + primaryStudies.size());
+		runTotalQuestions.setFontSize(12);
+		runTotalQuestions.addBreak();
+		
+		if(primaryStudies.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("#");
+			tableRowOne.addNewTableCell().setText("Title");
+			tableRowOne.addNewTableCell().setText("Type");
+			tableRowOne.addNewTableCell().setText("Year");
+			tableRowOne.addNewTableCell().setText("Publisher");
+			tableRowOne.addNewTableCell().setText("Citation Key");
+			
+			int cont=1;
+			Iterator it = null;
+			String key = ""
+			for(PrimaryStudyHelper study : primaryStudies)
+			{
+				// Insertamos cabeceras para los atributos especificos en la primera
+				// vuelta del bucle
+				if(cont == 1)
+				{
+					it = study.getSpecAttributes().keySet().iterator();
+					while(it.hasNext())
+					{
+						key = (String)it.next();
+						tableRowOne.addNewTableCell().setText(key);
+					}
+				}				
+				
+				int indexColum = 0
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(indexColum).setText(Integer.toString(cont)); indexColum++;
+				tableRow.getCell(indexColum).setText(study.getTitle()); indexColum++;
+				tableRow.getCell(indexColum).setText(study.getType()); indexColum++;
+				tableRow.getCell(indexColum).setText(Integer.toString(study.getYear())); indexColum++;
+				tableRow.getCell(indexColum).setText(study.getPublisher()); indexColum++;
+				tableRow.getCell(indexColum).setText(study.getCitationKey()); indexColum++;
+				
+				// Insertamos los valores de los atributos específicos
+				it = study.getSpecAttributes().keySet().iterator();
+				while(it.hasNext())
+				{
+					key = (String) it.next();
+					
+					tableRow.getCell(indexColum).setText(study.getSpecAttributes().get(key)); 
+					indexColum++;
+				}
+				
+				cont++
+			}
+		}
+		
+		return document;
+	}
+	
+	XWPFDocument addSection7Word(Map<String, AnnualTrend> annualTrends, XWPFDocument document)
+	{
+		XWPFParagraph section = document.createParagraph();
+		section.setAlignment(ParagraphAlignment.LEFT);
+		
+		XWPFRun runTitleSection = section.createRun();
+		runTitleSection.addBreak(BreakType.PAGE);
+		runTitleSection.setText("7. Annual Trends");
+		runTitleSection.setBold(true);
+		runTitleSection.setFontSize(18);
+		runTitleSection.addBreak();
+		
+		if(annualTrends.size() > 0)
+		{
+			XWPFTable table = document.createTable();
+			XWPFTableRow tableRowOne = table.getRow(0);
+			tableRowOne.getCell(0).setText("Year");
+			tableRowOne.addNewTableCell().setText("Books");
+			tableRowOne.addNewTableCell().setText("Conference Proceedings");
+			tableRowOne.addNewTableCell().setText("Generics");
+			tableRowOne.addNewTableCell().setText("Journals");
+			tableRowOne.addNewTableCell().setText("Others");
+			
+			for(Map.Entry<String, AnnualTrend> mapAnTrend : annualTrends.entrySet())
+			{
+				String year = mapAnTrend.getKey()
+				AnnualTrend anTrend = mapAnTrend.getValue()
+				
+				XWPFTableRow tableRow = table.createRow();
+				tableRow.getCell(0).setText(year);
+				tableRow.getCell(1).setText(Integer.toString(anTrend.getTotalBooks()));
+				tableRow.getCell(2).setText(Integer.toString(anTrend.getTotalConferences()));
+				tableRow.getCell(3).setText(Integer.toString(anTrend.getTotalGenerics()));
+				tableRow.getCell(4).setText(Integer.toString(anTrend.getTotalJournals()));
+				tableRow.getCell(5).setText(Integer.toString(anTrend.getTotalOthers()));
+			}
+		}
+		
+		return document;
+	}
 	
 	File exportToExcel(Slr slrInstance, String fileTemplate, String folderTmp)
 	{

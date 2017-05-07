@@ -369,7 +369,8 @@
 										</g:if>
 										<p> </p>
 										<g:link title="Exportar a Excel" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToExcel" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-excel-o"></i></g:link>
-										<g:link title="Exportar a PDF" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-pdf-o"></i></g:link>
+										<!--<g:link title="Exportar a PDF" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToPdf" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-pdf-o"></i></g:link>-->
+										<g:link title="Exportar a Word" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToWord" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-word-o"></i></g:link>
 										<g:link title="Exportar a Bibtex" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="exportToBibTex" params="[guid: "${slrInstance.guid}"]"><i class="fa fa-file-code-o"></i></g:link>
 										<g:link title="Gráficos" type="button" class="btn btn-outline btn-success btn-circle" controller="slr" action="graphs" params="[guid: "${slrInstance.guid}"]"><i class="glyphicon glyphicon-stats"></i></g:link>
                             		</td>

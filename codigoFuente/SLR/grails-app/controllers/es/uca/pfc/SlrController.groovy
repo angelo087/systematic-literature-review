@@ -653,6 +653,31 @@ class SlrController {
 		}
 	}
 	
+	def exportToWord()
+	{
+		def slrInstance = Slr.findByGuidLike(params.guid.toString())
+		
+		if(slrInstance == null)
+		{
+			redirect(controller: 'slr', action: 'myList')
+		}
+		else
+		{
+			def folderTmp = grailsAttributes.getApplicationContext().getResource("tmp").getFile().toString() + "/"
+			def fileLogoUCA = grailsAttributes.getApplicationContext().getResource("templates/logoUCA.PNG").getFile().toString() + "/"
+			def file = exportService.exportToWord(slrInstance, folderTmp, fileLogoUCA)
+			
+			if (file.exists()) {
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "filename=${file.name}")
+				response.outputStream << file.bytes
+				if(!file.delete())
+					println "No se ha borrado el fichero " + file.name
+				return
+			 }
+		}
+	}
+	
 	def exportToPdf()
 	{
 		def slrInstance = Slr.findByGuidLike(params.guid.toString())

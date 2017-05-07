@@ -23,22 +23,24 @@
 
 <body>
 
-<div class="container">
-    <div class="row">
-    <div class="error-template">
-	    <h1>Systematic Literature Review</h1>
-	    <h2>Opps, Error 500</h2>
-	    <div class="error-details" style="padding-top: 20px;">
-			Se ha producido un error. Inténtelo de nuevo más tarde o <br/> contacte con el administrador si el problema persiste.
-	    </div>
-	    <div class="error-actions" style="padding-top: 20px;">
-	    	<g:link class="btn btn-primary" controller="index" action="index">
-	    		<i class="fa fa-home"></i> Home
-	    	</g:link>
+<center>
+	<div class="container">
+	    <div class="row">
+		    <div class="error-template">
+			    <h1>Systematic Literature Review</h1>
+			    <h2>Opps, Error 500</h2>
+			    <div class="error-details" style="padding-top: 20px;">
+					Se ha producido un error. Inténtelo de nuevo más tarde o <br/> contacte con el administrador si el problema persiste.
+			    </div>
+			    <div class="error-actions" style="padding-top: 20px;">
+			    	<g:link class="btn btn-primary" controller="index" action="index">
+			    		<i class="fa fa-home"></i> Home
+			    	</g:link>
+			    </div>
+			</div>
 	    </div>
 	</div>
-    </div>
-</div>
+</center>
 
 </body>
 
