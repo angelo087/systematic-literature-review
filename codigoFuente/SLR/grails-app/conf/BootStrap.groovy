@@ -101,10 +101,16 @@ class BootStrap {
 		def engine05 = EngineSearch.findByName('OTHER') ?: new EngineSearch(name: 'OTHER', display_name: 'Other engines', image: 'other.png', text: 'OTHER').save(failOnError: true)
 		
 		log.info "Creamos las credenciales para Mendeley..."
-		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: new MendeleyApi(clientId: '1044', clientSecret: 'H959MWw9Jrs3vlnH', 
-			redirectUri: 'http://45.76.94.16:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
-			//redirectUri: 'http://localhost:8080/SLR/indexMendeley/', totalHilos: 3, totalTries: 2).save(failOnError: true)
-			
+		def mendeleyApi = MendeleyApi.findByClientId('1044') ?: 
+			new MendeleyApi(clientId: '1044', clientSecret: 'N1krjxVLCiflzZTt', 
+							redirectUri: 'http://45.76.94.16:8080/SLR/indexMendeley/', 
+							totalHilos: 3, totalTries: 2).save(failOnError: true)
+		
+		/*def mendeleyApi = MendeleyApi.findByClientId('4347') ?:
+			new MendeleyApi(clientId: '4347', clientSecret: 'XJZuvpCKISNcnLBo',
+						redirectUri: 'http://localhost:8080/SLR/indexMendeley/',
+						totalHilos: 3, totalTries: 2).save(failOnError: true)
+		*/				
 		log.info "Creamos Usuarios de prueba..."
 				
 		def profile01 = new UserProfile(
