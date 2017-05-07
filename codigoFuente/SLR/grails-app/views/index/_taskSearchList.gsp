@@ -15,9 +15,12 @@
 		<div class="col-lg-4" align="right">
 			<label><g:link controller="slr" action="searchs" params="[guid: "${taskSearch.guidSlr}"]">${taskSearch.titleSlr}</g:link></label>
 			<p>Comienzo: ${formatDate(format: 'dd/MMM/yyyy HH:mm', date: taskSearch.submitDate)}</p>
-			<g:if test="${taskSearch.hasErrors || taskSearch.percentage == 100}">
+			<g:if test="${taskSearch.percentage == 100}">
 			Fin: ${formatDate(format: 'dd/MMM/yyyy HH:mm', date: taskSearch.endDate)}
 			</g:if>
+			<g:elseif test="${taskSearch.hasErrors}">
+				Code: ${'#'+ taskSearch.id}
+			</g:elseif>
 		</div>
 		<div class="col-lg-8">
 			Estado: ${taskSearch.state}
