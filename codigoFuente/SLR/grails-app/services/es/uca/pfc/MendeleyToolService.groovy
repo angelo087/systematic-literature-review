@@ -68,40 +68,44 @@ class MendeleyToolService {
 	{
 		println "insertSearchsBackground"
 		
-		increaseProgressBar(0, guidTaskSearch)
+		increaseProgressBar(0, guidTaskSearch, null, null)
 		boolean isSuccess = true
 		def userInstance = User.get(springSecurityService.currentUser.id)
 		String emailMend = userInstance.userMendeley.email_mend
 		String passMend = decodePasswordMendeley(userInstance.userMendeley.pass_mend)
 		
-		List<background.pfc.commons.Reference> referencesMend = new ArrayList<background.pfc.commons.Reference>()
-		
 		runAsync {
 			try
 			{
 				// Obtenemos referencias para mendeley
-				increaseProgressBar(25, guidTaskSearch, null)
-				referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
+				increaseProgressBar(25, guidTaskSearch, null, null)
+				List<background.pfc.commons.Reference> referencesMend = createSearchInMendeley(emailMend, passMend, nameSlr, terminos,
 					operators, components, minYear, maxYear, maxTotal, engines)
 								
 				// Creamos busqueda para el SLR
-				increaseProgressBar(50, guidTaskSearch, null)
+				increaseProgressBar(50, guidTaskSearch, null, referencesMend)
 				Search searchInstance = createSearchForSlr(terminos, operators, components,
 															minYear, maxYear, maxTotal, engines)
 				
 				// Insertamos las referencias en la busqueda
-				increaseProgressBar(75, guidTaskSearch, null)
+				increaseProgressBar(75, guidTaskSearch, null, null)
 				createSearchFromMendeley(emailMend, searchInstance, guidSlr, referencesMend)
 				
 				// Finalizamos proceso
-				increaseProgressBar(100, guidTaskSearch, null)
+				increaseProgressBar(100, guidTaskSearch, null, null)
 			}
 			catch(Exception ex)
 			{
 				isSuccess = false
 				println "ERROR => " + ex.getMessage()
-				deleteAllDocumentImported(referencesMend, emailMend)
-				increaseProgressBar(-100, guidTaskSearch, ex.getMessage())
+				StringWriter errors = new StringWriter();
+				ex.printStackTrace(new PrintWriter(errors));
+				String strError = errors.toString()
+				//println "====================================="
+				//println strError
+				//println "====================================="
+				//deleteAllDocumentImported(guidTaskSearch, emailMend)
+				increaseProgressBar(-100, guidTaskSearch, strError, null)
 			}
 			sendSearchNotification(emailMend, guidSlr, isSuccess)
 			sendSearchLogger(emailMend, guidSlr, isSuccess)
@@ -110,7 +114,8 @@ class MendeleyToolService {
 		return isSuccess;
 	}
 	
-	void increaseProgressBar(int percen, String guidTaskSearch, String strException)
+	void increaseProgressBar(int percen, String guidTaskSearch, String strException, 
+		List<background.pfc.commons.Reference> referencesImported)
 	{
 		def taskSearchInstance = TaskSearch.findByGuidLike(guidTaskSearch)
 		
@@ -155,6 +160,18 @@ class MendeleyToolService {
 			{
 				taskSearchInstance.strException = strException
 			}
+			
+			if(referencesImported != null && referencesImported.size() > 0)
+			{
+				for(background.pfc.commons.Reference ref : referencesImported)
+				{
+					if (ref.getIdMendeley() != null)
+					{
+						taskSearchInstance.addToReferences(ref.getIdMendeley())
+					}
+				}
+			}
+			
 			taskSearchInstance.save(failOnError: true, flush: true)
 		}
 	}
@@ -477,6 +494,8 @@ class MendeleyToolService {
 
 		//try
 		//{
+		String guidStaticData = UUID.randomUUID().toString();
+		
 			BackgroundSearchMendeley backgroundMendeley = new BackgroundSearchMendeley(
 				mendeleyApi.clientId,
 				mendeleyApi.clientSecret,
@@ -492,7 +511,9 @@ class MendeleyToolService {
 				Integer.parseInt(maxYear),
 				termsMendeley,
 				apiKeysEngine,
-				mendeleyApi.totalHilos, mendeleyApi.totalTries)
+				mendeleyApi.totalHilos, mendeleyApi.totalTries,
+				guidStaticData
+			)
 			
 			backgroundMendeley.startSearchs()
 			
@@ -1271,7 +1292,7 @@ class MendeleyToolService {
 		return isDeleted;
 	}
 	
-	void deleteAllDocumentImported(List<background.pfc.commons.Reference> references, String emailMend)
+	void deleteAllDocumentImported(String guidTaskSearch, String emailMend)
 	{
 		log.info 'Se procede a borrar documentos importados...'
 		User userInstance = User.findByUsernameIlike(emailMend)
@@ -1290,13 +1311,19 @@ class MendeleyToolService {
 			FolderService folderService = new FolderService(mendeleyService);
 			DocumentService documentService = new DocumentService(mendeleyService);
 			
-			for(background.pfc.commons.Reference reference : references)
+			def taskSearchInstance = TaskSearch.findByGuidLike(guidTaskSearch)
+			
+			if (taskSearchInstance != null && taskSearchInstance.references.size() > 0)
 			{
-				try
+				for(String reference : taskSearchInstance.references)
 				{
-					documentService.deleteDocument(reference.getIdMendeley())
+					try
+					{
+						documentService.deleteDocument(reference)
+						println reference + " se ha borrado."
+					}
+					catch(Exception) { println reference + " NO se ha borrado." }
 				}
-				catch(Exception) { }
 			}
 		}
 		catch(Exception ex)

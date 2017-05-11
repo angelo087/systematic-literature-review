@@ -2,6 +2,8 @@ package es.uca.pfc
 
 class TaskSearch {
 	
+	static hasMany = [references: String]
+	
 	int percentage = 0
 	String state = "Buscando referencias..."
 	Date submitDate = new Date()
