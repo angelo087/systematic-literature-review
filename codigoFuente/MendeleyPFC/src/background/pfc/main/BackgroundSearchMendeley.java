@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import mendeley.pfc.schemas.Folder;
 import mendeley.pfc.services.FolderService;
 import mendeley.pfc.services.MendeleyService;
+import background.pfc.commons.PoolReferences;
 import background.pfc.commons.Reference;
 import background.pfc.commons.SearchTermParam;
 import background.pfc.engine.EngineSearch;
@@ -42,11 +43,12 @@ public class BackgroundSearchMendeley {
 	private int total_hilos;
 	private int total_tries;
 	private List<Reference> references = new ArrayList<Reference>();
+	private String guidStaticData = "";
 	
 	public BackgroundSearchMendeley(String ci, String cs, String at, String rt, String ru, String email, String pass,
 			Map<TypeEngineSearch, Boolean> optionsEngine, String nameSLR, int tammax, List<String> tags, 
-			int start_year, int end_year, List<SearchTermParam> searchsTerms, 
-			Map<TypeEngineSearch,String> apiKeysEngine, int total_hilos, int total_tries) throws Exception {
+			int start_year, int end_year, List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,
+			String> apiKeysEngine, int total_hilos, int total_tries, String guidStaticData) throws Exception {
 
 		this.mendeleyService = new MendeleyService(ci,cs,ru,email,pass);
 		this.clientId = ci;
@@ -62,6 +64,7 @@ public class BackgroundSearchMendeley {
 		this.apiKeysEngine = apiKeysEngine;
 		this.total_hilos = total_hilos;
 		this.total_tries = total_tries;
+		this.guidStaticData = guidStaticData;
 		
 		FolderService folderService = new FolderService(mendeleyService);
 		
@@ -85,7 +88,7 @@ public class BackgroundSearchMendeley {
 		{
 			tACM = new Thread(new EngineSearchACM(clientId, clientSecret, redirectUri, mendeleyService, 
 					nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-					total_hilos, total_tries));
+					total_hilos, total_tries, guidStaticData));
 			tACM.start();
 		}
 		
@@ -93,7 +96,7 @@ public class BackgroundSearchMendeley {
 		{
 			tIEEE = new Thread(new EngineSearchIEEE(clientId, clientSecret, redirectUri, mendeleyService, 
 					nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-					total_hilos, total_tries));
+					total_hilos, total_tries, guidStaticData));
 			tIEEE.start();
 		}
 		
@@ -101,7 +104,7 @@ public class BackgroundSearchMendeley {
 		{
 			tSCIENCE = new Thread(new EngineSearchSCIENCE(clientId, clientSecret, redirectUri, mendeleyService, 
 					nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-					total_hilos, total_tries));
+					total_hilos, total_tries, guidStaticData));
 			tSCIENCE.start();
 		}
 		
@@ -119,7 +122,12 @@ public class BackgroundSearchMendeley {
 		org.apache.commons.logging.LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
 		Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
 		Logger.getLogger("org.apache.commons.httpclient").setLevel(java.util.logging.Level.OFF);
-				
+		
+		// Añadimos la busqueda al pool de referencias a buscar
+		PoolReferences.addStaticData(guidStaticData);
+		
+		System.out.println("STATICS DATAS TOTAL => " + PoolReferences.staticDatas.size());
+		
 		if(hasEnginesForSearch())
 		{
 			EngineSearch engineSearch = null;
@@ -133,30 +141,34 @@ public class BackgroundSearchMendeley {
 						case ACM:
 							engineSearch = new EngineSearchACM(clientId, clientSecret, redirectUri, mendeleyService, 
 									nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-									total_hilos, total_tries);
+									total_hilos, total_tries, guidStaticData);
 							break;
 						case IEEE:
 							engineSearch = new EngineSearchIEEE(clientId, clientSecret, redirectUri, mendeleyService, 
 									nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-									total_hilos, total_tries);
+									total_hilos, total_tries, guidStaticData);
 							break;
 						case SCIENCE:
 							engineSearch = new EngineSearchSCIENCE(clientId, clientSecret, redirectUri, mendeleyService, 
 									nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-									total_hilos, total_tries);
+									total_hilos, total_tries, guidStaticData);
 							break;
 						case SPRINGER:
 							engineSearch = new EngineSearchSPRINGER(clientId, clientSecret, redirectUri, mendeleyService, 
 									nameSLR, tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, 
-									total_hilos, total_tries);
+									total_hilos, total_tries, guidStaticData);
 							break;
 						default:
 							break;
 					}
 					engineSearch.startSearch();
-					references.addAll(EngineSearch.referencesEngineSearch);
+					//references.addAll(EngineSearch.referencesEngineSearch);
+					references.addAll(PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch());
 				} // fin if
 			} //fin for
+			
+			// Eliminamos la busqueda del pool de referencias
+			PoolReferences.removeStaticData(guidStaticData);
 			
 			System.out.println("PROCESO BUSQUEDA FINALIZADO.");
 		} // fin if

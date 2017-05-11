@@ -25,6 +25,7 @@ import background.pfc.enums.TypeEngineSearch;
 import background.pfc.enums.TypeReferenceId;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+
 import background.pfc.engine.EngineSearch;
 
 /**
@@ -58,10 +59,10 @@ public class EngineSearchSCIENCE extends EngineSearch {
 	public EngineSearchSCIENCE(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year,  int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries, String guidStaticData) throws Exception {
 		
 		super(TypeEngineSearch.SCIENCE, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
-				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
+				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries, guidStaticData);
 		
 		this.web = "http://api.elsevier.com/content/search/scidir";
 		this.idEngine = getIdSubFolder();

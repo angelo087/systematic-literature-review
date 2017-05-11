@@ -66,10 +66,10 @@ public class EngineSearchACM extends EngineSearch {
 	public EngineSearchACM(String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries, String guidStaticData) throws Exception {
 		
 		super(TypeEngineSearch.ACM, clientId, clientSecret, redirectUri, mendeleyService, nameSLR, tammax, tags, 
-				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
+				start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries, guidStaticData);
 		
 		this.web = "http://dl.acm.org/results.cfm?query=@@query@@&within=owners.owner=HOSTED&filtered=@@filtered@@&start=@@start@@";
 		this.idEngine = getIdSubFolder();

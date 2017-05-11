@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import background.pfc.commons.SearchTermParam;
 import background.pfc.enums.ComponentSearch;
@@ -19,8 +20,8 @@ public class BackgroundSearchMendeleyTest {
 		TInicio = System.currentTimeMillis();
 
 		String 	client_id = "1044", 
-				client_secret = "5qQ6zm5iYpvUehj4", 
-				redirect_url = "http://localhost:8095/SLR/indexMendeley/",
+				client_secret = "N1krjxVLCiflzZTt", 
+				redirect_url = "http://45.76.94.16:8080/SLR/indexMendeley/",
 				access_token  = "asdsadasd",
 				refresh_token = "asdasdaaaaaaa";
 		
@@ -44,7 +45,7 @@ public class BackgroundSearchMendeleyTest {
 		
 		Map<TypeEngineSearch, Boolean> optionsEngine = new HashMap<TypeEngineSearch, Boolean>();
 		optionsEngine.put(TypeEngineSearch.ACM, true);
-		optionsEngine.put(TypeEngineSearch.IEEE, false);
+		optionsEngine.put(TypeEngineSearch.IEEE, true);
 		optionsEngine.put(TypeEngineSearch.SCIENCE, false);
 		optionsEngine.put(TypeEngineSearch.SPRINGER, false);
 		
@@ -52,11 +53,14 @@ public class BackgroundSearchMendeleyTest {
 		apiKeysEngine.put(TypeEngineSearch.SCIENCE, "80aa542193705ce36ebfe094078b9aa3");
 		apiKeysEngine.put(TypeEngineSearch.SPRINGER, "c8c8ee4b2c20f0046806762317d0d6e2");
 		
+		String guidStaticData = UUID.randomUUID().toString();
+		
 		try
 		{
+			System.out.println("GUID STATIC DATA => " + guidStaticData);
 			BackgroundSearchMendeley backgroundSearch = new BackgroundSearchMendeley(client_id, client_secret, access_token, 
 					refresh_token, redirect_url, email, password, optionsEngine, nameSLR, 
-					tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries);
+					tammax, tags, start_year, end_year, searchsTerms, apiKeysEngine, total_hilos, total_tries, guidStaticData);
 			backgroundSearch.startSearchs();
 			System.out.println("Total encontrados: " + backgroundSearch.getTotalReferences());
 		}

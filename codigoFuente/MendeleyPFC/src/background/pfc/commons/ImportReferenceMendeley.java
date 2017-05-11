@@ -43,6 +43,8 @@ public class ImportReferenceMendeley implements Runnable {
 	private CatalogService catalogService;
 	/** documentService. */
 	private DocumentService documentService;
+	/** guidStaticData.*/
+	private String guidStaticData;
 	
 	/**
 	 * Constructor de la clase ImportReferenceMendeley
@@ -56,7 +58,8 @@ public class ImportReferenceMendeley implements Runnable {
 	 */
 	public ImportReferenceMendeley(String name, TypeEngineSearch typeEngine,
 			String codeReference, String nameSLR, TypeReferenceId typeReferenceId, 
-			CatalogService catalogService, DocumentService documentService) {
+			CatalogService catalogService, DocumentService documentService,
+			String guidStaticData) {
 		
 		this.name = name;
 		this.typeEngine = typeEngine;
@@ -65,6 +68,7 @@ public class ImportReferenceMendeley implements Runnable {
 		this.nameSLR = nameSLR;
 		this.catalogService = catalogService;
 		this.documentService = documentService;
+		this.guidStaticData = guidStaticData;
 	}
 
 	/**
@@ -163,6 +167,14 @@ public class ImportReferenceMendeley implements Runnable {
 		this.documentService = documentService;
 	}
 
+	public String getGuidStaticData() {
+		return guidStaticData;
+	}
+
+	public void setGuidStaticData(String guidStaticData) {
+		this.guidStaticData = guidStaticData;
+	}
+
 	/**
 	 * M�todo que realiza el proceso paralelo para importar la referencia.
 	 */
@@ -181,12 +193,14 @@ public class ImportReferenceMendeley implements Runnable {
 		
 		if(ok)
 		{
-			EngineSearch.increaseContMax(typeEngine);
+			//EngineSearch.increaseContMax(typeEngine);
+			PoolReferences.increaseContMax(guidStaticData);
 			System.out.println(this.name + " ha insertado referencia con " + this.typeReferenceId.getKey() + " = " + this.codeReference);
 		}
 		
 		// Decrementamos el contador de hilos
-		EngineSearch.decreaseContHilos(typeEngine);
+		//EngineSearch.decreaseContHilos(typeEngine);
+		PoolReferences.decreaseContHilos(guidStaticData);
 	}
 	
 	/**
@@ -234,7 +248,8 @@ public class ImportReferenceMendeley implements Runnable {
 			if(docResult != null && docResult.getId() != null)
 			{
 				Reference reference = new Reference(codeReference, docResult.getId(), "", typeEngine);
-				ok = EngineSearch.addReferenceToEngineSearch(reference);
+				//ok = EngineSearch.addReferenceToEngineSearch(reference);
+				ok = PoolReferences.addReferenceToEngineSearch(guidStaticData, reference);
 			}
 		}
 		

@@ -18,6 +18,7 @@ import mendeley.pfc.services.MendeleyService;
 import org.apache.http.HttpException;
 
 import background.pfc.commons.ImportReferenceMendeley;
+import background.pfc.commons.PoolReferences;
 import background.pfc.commons.Reference;
 import background.pfc.commons.ReferenceToImport;
 import background.pfc.commons.SearchTermParam;
@@ -66,12 +67,8 @@ public abstract class EngineSearch implements Runnable {
 	protected List<ReferenceToImport> idsDocuments = new ArrayList<ReferenceToImport>();
 	/** apiKeysEngine.*/
 	protected Map<TypeEngineSearch,String> apiKeysEngine = new HashMap<TypeEngineSearch, String>();
-	/** referencesEngineSearch.*/
-	public static List<Reference> referencesEngineSearch = new ArrayList<Reference>();
-	/** contMax.*/
-	public static int contMax	= 0;
-	/** contHilos.*/
-	public static int contHilos = 0;
+	
+	private String guidStaticData = "";
 	
 	/**
 	 * M�todo de la clase EngineSearch.
@@ -97,7 +94,7 @@ public abstract class EngineSearch implements Runnable {
 			String clientId, String clientSecret, String redirectUri, MendeleyService mendeleyService,
 			String nameSLR, int tammax, List<String> tags, int start_year, int end_year, 
 			List<SearchTermParam> searchsTerms, Map<TypeEngineSearch,String> apiKeysEngine,
-			int total_hilos, int total_tries) throws Exception {
+			int total_hilos, int total_tries, String guidStaticData) throws Exception {
 		
 		this.engine = engine;
 		this.clientId = clientId;
@@ -110,6 +107,7 @@ public abstract class EngineSearch implements Runnable {
 		this.strTags = "";
 		this.apiKeysEngine = apiKeysEngine;
 		this.total_hilos = total_hilos;
+		this.guidStaticData = guidStaticData;
 		TOTAL_TRIES = total_tries;
 		
 		for(String t : tags)
@@ -208,7 +206,7 @@ public abstract class EngineSearch implements Runnable {
 				// Mientras que haya referencias a importar y no sobrepase el tamaño fijado
 				while(!exit)
 				{
-					while(contMax < TAM_MAX && index < idsDocuments.size() && (referencesEngineSearch.size() + contHilos <= TAM_MAX))
+					while(PoolReferences.getStaticData(guidStaticData).getContMax() < TAM_MAX && index < idsDocuments.size() && (PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch().size() + PoolReferences.getStaticData(guidStaticData).getContHilos() <= TAM_MAX))
 					{						
 						int posThread = getDisponibleThread(threads);
 						if(posThread != -1)
@@ -219,7 +217,7 @@ public abstract class EngineSearch implements Runnable {
 							{
 								importReference = new ImportReferenceMendeley(engine.getKey()+"-Hilo-"+(posThread+1), 
 										engine, idsDocuments.get(index).getId(), nameSLR, idsDocuments.get(index).getTypeReferenceId(),
-										catalogService, documentService);
+										catalogService, documentService, guidStaticData);
 							}
 							else
 							{
@@ -243,7 +241,7 @@ public abstract class EngineSearch implements Runnable {
 						Thread.sleep(5000);
 					}
 					
-					if(!(index < idsDocuments.size()) || referencesEngineSearch.size() >= TAM_MAX)
+					if(!(index < idsDocuments.size()) || PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch().size() >= TAM_MAX)
 					{
 						exit = true;
 					}
@@ -284,37 +282,53 @@ public abstract class EngineSearch implements Runnable {
 		if (this instanceof EngineSearchACM)
 		{
 			// ACM
-			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.ACM);
+			setIdMendeleyFolderEngine(PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch(), TypeEngineSearch.ACM);
 		}
 		
 		if (this instanceof EngineSearchIEEE)
 		{
 			// IEEE
-			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.IEEE);
+			setIdMendeleyFolderEngine(PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch(), TypeEngineSearch.IEEE);
 		}
 		
 		if (this instanceof EngineSearchSCIENCE)
 		{
 			// SCIENCE
-			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.SCIENCE);
+			setIdMendeleyFolderEngine(PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch(), TypeEngineSearch.SCIENCE);
 		}
 		
 		if (this instanceof EngineSearchSPRINGER)
 		{
 			// SPRINGER
-			setIdMendeleyFolderEngine(referencesEngineSearch, TypeEngineSearch.SPRINGER);
+			setIdMendeleyFolderEngine(PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch(), TypeEngineSearch.SPRINGER);
 		}
 	}
 	
-	private void moveReferencesToFolder() throws MendeleyException, HttpException, IOException
+	private void moveReferencesToFolder() throws MendeleyException, HttpException, IOException, InterruptedException
 	{
 		//List<Reference> references = getReferencesByEngineSearch();
 		
 		FolderService folderService = new FolderService(mendeleyService);
 		
-		for(Reference reference : referencesEngineSearch)
+		for(Reference reference : PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch())
 		{
-			folderService.addDocument(reference.getIdFolderEngine(), reference.getIdMendeley());
+			int intentos = 5;
+			while(intentos != 0)
+			{
+				try
+				{
+					folderService.addDocument(reference.getIdFolderEngine(), reference.getIdMendeley());
+					System.out.println(reference.getIdMendeley() + " ubicado correctamente.");
+					intentos=0;
+				}
+				catch(Exception ex)
+				{
+					intentos--;
+					System.out.println(reference.getIdMendeley() + " tiene que ubicarse de nuevo (" + intentos + " intentos )");
+					System.out.println(reference.getIdMendeley() + " => " + ex.getMessage());
+					Thread.sleep(5000);
+				}
+			}
 		}
 	}
 	
@@ -371,10 +385,10 @@ public abstract class EngineSearch implements Runnable {
 		
 		try
 		{
-			synchronized (referencesEngineSearch) {
-				referencesEngineSearch.add(reference);
+			/*synchronized (PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch()) {
+				PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch().add(reference);
 				ok = true;
-			}
+			}*/
 		}
 		catch(Exception ex) { ok = false; }
 		
@@ -383,9 +397,12 @@ public abstract class EngineSearch implements Runnable {
 	
 	private void resetParamsOfEngineSearch()
 	{
-		EngineSearch.referencesEngineSearch = new ArrayList<Reference>();
+		/*EngineSearch.referencesEngineSearch = new ArrayList<Reference>();
 		EngineSearch.contMax	= 0;
-		EngineSearch.contHilos = 0;
+		EngineSearch.contHilos = 0;*/
+		PoolReferences.getStaticData(guidStaticData).setReferencesEngineSearch(new ArrayList<Reference>());
+		PoolReferences.getStaticData(guidStaticData).setContHilos(0);
+		PoolReferences.getStaticData(guidStaticData).setContMax(0);
 	}
 	
 	/**
@@ -394,9 +411,9 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private void increaseContHilos()
 	{
-		if (contHilos < total_hilos)
+		if (PoolReferences.getStaticData(guidStaticData).getContHilos() < total_hilos)
 		{
-			contHilos++;
+			PoolReferences.increaseContHilos(guidStaticData);
 		}
 	}
 	
@@ -405,23 +422,23 @@ public abstract class EngineSearch implements Runnable {
 	 * 
 	 * @param typeEngine TypeEngineSearch
 	 */
-	public static void decreaseContHilos(TypeEngineSearch typeEngine)
+	/*public static void decreaseContHilos(TypeEngineSearch typeEngine)
 	{
-		if (contHilos != 0)
+		if (PoolReferences.getStaticData(guidStaticData).getContHilos() != 0)
 		{
-			contHilos--;
+			PoolReferences.decreaseContHilos(guidStaticData);
 		}
-	}
+	}*/
 	
 	/**
 	 * Método que incrementa el contador de referencias.
 	 * 
 	 * @param typeEngine Motor de búsqueda
 	 */
-	public static void increaseContMax(TypeEngineSearch typeEngine)
+	/*public static void increaseContMax(TypeEngineSearch typeEngine)
 	{
-		contMax++;
-	}
+		PoolReferences.increaseContMax(guidStaticData);
+	}*/
 	
 	/**
 	 * Método privado que obtiene el contador de hilos según el motor
@@ -430,7 +447,7 @@ public abstract class EngineSearch implements Runnable {
 	 * @return Número de hilos que el motor de búsqueda está usando en ese momento.
 	 */
 	private int getContHilos() {
-		return contHilos;
+		return PoolReferences.getStaticData(guidStaticData).getContHilos();
 	}
 
 	/**
@@ -440,7 +457,7 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private int getContMax() 
 	{
-		return contMax;
+		return PoolReferences.getStaticData(guidStaticData).getContMax();
 	}
 
 	/**
@@ -450,7 +467,7 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	private List<Reference> getReferences()
 	{
-		return referencesEngineSearch;
+		return PoolReferences.getStaticData(guidStaticData).getReferencesEngineSearch();
 	}
 	
 	/**
@@ -785,5 +802,13 @@ public abstract class EngineSearch implements Runnable {
 	 */
 	public void setMendeleyService(MendeleyService mendeleyService) {
 		this.mendeleyService = mendeleyService;
+	}
+
+	public String getGuidStaticData() {
+		return guidStaticData;
+	}
+
+	public void setGuidStaticData(String guidStaticData) {
+		this.guidStaticData = guidStaticData;
 	}
 }
