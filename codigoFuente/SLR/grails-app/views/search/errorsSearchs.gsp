@@ -34,9 +34,10 @@
       				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       				<h4 class="modal-title" id="myModalLabel">Title</h4>
 			    </div>
-	    		<div class="modal-body">
-			    	Texto
-			    </div>
+		    		<div class="modal-body" style="height: 250px; overflow-y: auto;">
+				    	Texto
+				    </div>
+
 			    <div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
 				</div>
@@ -80,7 +81,7 @@
                             		<td>${taskInstance.id}</td>
                             		<td>${formatDate(format: 'dd/MMM/yyyy HH:mm', date: taskInstance.submitDate)}</td>
                             		<td>${taskInstance.username}</td>
-                            		<td><a href="#" onclick="showException('${taskInstance.strException}', '${taskInstance.id.toString()}');">Mostrar error</a></td>
+                            		<td><button onclick="showException('${taskInstance.strException}', '${taskInstance.id.toString()}');">Mostrar error</button></td>
                             	</tr>
                             </g:each>
                         </tbody>

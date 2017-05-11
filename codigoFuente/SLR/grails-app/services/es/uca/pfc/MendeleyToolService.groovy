@@ -100,7 +100,10 @@ class MendeleyToolService {
 				println "ERROR => " + ex.getMessage()
 				StringWriter errors = new StringWriter();
 				ex.printStackTrace(new PrintWriter(errors));
-				String strError = errors.toString()
+				String strError = errors.toString().replaceAll("[\n\r]","")
+										.replaceAll("\r","")
+										.replaceAll("\'","")
+										.replaceAll("\"","").trim()
 				//println "====================================="
 				//println strError
 				//println "====================================="
