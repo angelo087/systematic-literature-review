@@ -130,7 +130,7 @@
 				    </div>
 				    <div class="modal-footer">
 						<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-						<g:submitButton name="create" class="btn btn-primary" value="Crear Slr"/>
+						<g:submitButton name="create" class="btn btn-primary" value="Crear Slr" onclick="closeModalWithMessage('myModal','Creando SLR...');" />
 					</div>
 				</g:form>
 		    </div>
@@ -257,7 +257,8 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
-						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí"/>
+						<!--<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí"/>-->
+						<g:submitButton id="boton" name="boton" class="btn btn-primary" value="Sí" onclick="closeModalWithMessage('myModalDrop','Eliminando SLR...');" />
 					</div>
 				</g:form>
 			</div>
@@ -279,7 +280,6 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal" type="button">No</button>
-					<!--<button class="btn btn-default" data-dismiss="modal" type="button" onclick="closeModalWithMessage('myModalSynchro','Sincronizando con Mendeley...');">Si</button> -->
 					<g:link type="button" class="btn btn-primary" controller="slr" action="syncronizeListSlrMendeley" onclick="closeModalWithMessage('myModalSynchro','Sincronizando con Mendeley...');">Si</g:link>
 				</div>
 			</div>
