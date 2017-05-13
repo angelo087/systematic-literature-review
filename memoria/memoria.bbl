@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[Bok, 2016]{scrum2016}
+Bok, S.~M. (2016).
+\newblock {Scrum Manager - Guía de formación}.
+\newblock
+  \url{http://www.scrummanager.net/bok/index.php?title=Scrum_Manager_BoK}.
+
 \bibitem[CCOO, 2010]{paslaboral}
 CCOO (2010).
 \newblock {Tablas salariales 2010 IV Convenio Colectivo}.
@@ -10,5 +16,12 @@ CCOO (2010).
 Hevner, A.~R., March, S.~T., Park, J., and Ram, S. (2004).
 \newblock {Design Science in Information Systems Research}.
 \newblock {\em MIS Quarterly}, 28(1):75--105.
+
+\bibitem[Kitchenham, 2007]{kitchenham2007}
+Kitchenham, B. (2007).
+\newblock {Guidelines for performing Systematic Literature Reviews in Software
+  Engineering}.
+\newblock
+  \url{https://www.elsevier.com/__data/promis_misc/525444systematicreviewsguide.pdf}.
 
 \end{thebibliography}

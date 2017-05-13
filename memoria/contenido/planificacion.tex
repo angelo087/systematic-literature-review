@@ -10,15 +10,174 @@
 En esta sección se describen todos los aspectos relativos a la gestión del proyecto: metodología, organización, costes, planificación, riesgos y aseguramiento de la calidad.
 
 \section{Metodología de desarrollo}
-Definición del proceso de desarrollo, ciclo de vida y metodología empleada durante la elaboración del proyecto. Las fases y/o iteraciones que proponga el método empleado deberán quedar recogidas en la planificación que se detalle más adelante.
+La metodología de desarrollo empleada es la metodología de desarrollo ágil Scrum (Ver \ref{fig:scrum}), ya que el proyecto puede tener un cambio constante de requisitos y además se pretende mostrar un incremento ejecutable cada cierto tiempo, por lo que el trabajo se irá dividiendo en hitos o \textbf{sprints}.\\
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{scrum.png}
+  \caption{Diagrama del ciclo iterativo scrum}
+  \label{fig:scrum}
+\end{figure}
+
+El marco técnico de scrum, \cite{scrum2016} está formado por un conjunto de prácticas y reglas que dan respuesta a los siguientes principios de desarrollo ágil:
+\begin{itemize}
+	\item Gestión evolutiva del producto, en lugar de la tradicional o predictiva.
+	\item Calidad del resultado basado en el \textbf{conocimiento tácito de las personas}, antes que en el explícito de los procesos y la tecnología empleada.
+	\item Estrategia de \textbf{desarrollo incremental} a través de iteraciones (sprints).
+\end{itemize}
+
+Con la visión general del proyecto, y a partir de ella se especifica y da detalle a las funcionalidades que se desean obtener en primer lugar. Cada ciclo de desarrollo o iteración (\textbf{sprint}) finaliza con la entrega de una parte operativa del producto (\textbf{incremento}). La duración de cada sprint ha sido entre una semana y dos meses.\\
+
+Para diseñar el modelo de datos y la documentación se empleará UML (Lenguaje Unificado de Modelado) y un paradigma de programación OO (Orientado a Objetos). Además se buscará usar una arquitectura MVC (Modelo Vista Controlador) y tener cada parte lo más independiente posible del resto. Esta elección podrá permitir además una mejor integración entre todos los componentes y una mayor facilidad de mantenimiento y ampliación en el futuro.
 
 \section{Planificación del proyecto}
-Estimación temporal y definición del calendario básico (hitos principales e iteraciones). Desarrollo de la planificación detallada, utilizando un diagrama de Gantt. Los diagramas de Gantt que se vean correctamente (girados y divididos si hace falta).\\
+En primer lugar, se realiza una planificación inicial y una investigación sobre las directrices que marca Barbara Kitchenham para crear una revisión sistemática de la literatura sobre un área determinada. Dentro de esta planificación inicial se comprueba que es necesario realizar un sistema de gestión para las distintas revisiones sistemáticas de un usuario, así como un sistema de búsquedas de referencias bibliográficas que pueda sincronizar toda la información con el gestor de referencias Mendeley, y, finalmente, su posterior clasificación según los criterios indicados por el usuario y la exportación de conclusiones finales.\\
 
-Se debe incluir una comparación cuantitativa del tiempo y el esfuerzo realmente invertido frente al estimado y planificado. Estos datos pueden recogerse del sistema de gestión de tareas empleado para el seguimiento del proyecto.
+Una vez realizada la planificación inicial y analizado todos los objetivos principales del proyecto se decide realizar el desarrollo del proyecto en dos subproyectos. El primero de ellos, será la aplicación web, donde el usuario podrá acceder a todas las opciones para las creaciones de las revisiones sistemáticas de la literatura. Por otro lado, el segundo de ellos consistirá en la creación de una librería JAR donde incluirá todo el proceso de búsquedas de referencias bibliográficas en segundo plano y de manera paralela a cualquier otra búsqueda que se realice. Esta librería, deberá ser incluida en el primer subproyecto, por lo que necesitará de un periodo de tiempo para integrar ambas aplicaciones.\\
+
+Con toda esta información, se opta por dividir el roceso en ocho hitos tal y como podemos ver en la tabla \ref{table:hitos}. El tiempo se indica en horas. Cada uno de estos hitos, tendrá asociados varias subtareas o subobjetivos que deberán realizarse para dar por bueno el hito principal. El hito 0 corresponderá a la adquisición de conocimientos mientras que el hito 7 es asignado a la redacción de la memoria.\\
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{6cm}|p{2.5cm}|p{2.5cm}|}
+			\hline
+			\textbf{Sprint} & \textbf{Descripción} & \textbf{Estimado} & \textbf{Real}\\
+			\hline
+			Hito 0 & Propuesta inicial del proyecto & 7 & 5\\
+			\hline
+			Hito 1 & Investigación y adquisición de conocimientos & 50 & 63\\
+			\hline
+			Hito 2 & Desarrollo Aplicación Web & 110 & 160\\
+			\hline
+			Hito 3 & Desarrollo Aplicación Mendeley-REST en Java & 60 & 100\\
+			\hline
+			Hito 4 & Integración de aplicaciones & 30 & 26\\
+			\hline
+			Hito 5 & Pruebas del sistema y rendimiento & 10 & 5\\
+			\hline
+			Hito 6 & Despliegue de la aplicación & 20 & 25\\
+			\hline
+			Hito 7 & Redacción de memoria & 180 & 280\\
+			\hline
+		\end{tabular}
+		\caption{Tiempo estimado frente a tiempo real de cada Sprint}
+		\label{tabla:hitos}
+	\end{center}
+\end{table}
+
+Para mostrar el desarrollo detallado de toda la aplicación y desarrollo del software se muestran en las figuras \ref{fig:gantt01}, \ref{fig:gantt02}, \ref{fig:gantt03}, \ref{fig:gantt04} y \ref{fig:gantt05} unos diagramas de Gantt ordenados cronológicamente haciendo referencia a cada uno de los hitos que hemos explicado anteriormente. Cabe indicar, que el hito de mayor duración es el último, que corresponde a la redacción de la documentación de este proyecto, ya que se ha ido redactando a medida que se ha ido completando cada una de las fases del proyecto.\\
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm, height=20cm]{gant01.png}
+		\caption{Diagrama de Gantt con la propuesta inicial y la adquisición de conocimientos.}
+		\label{fig:gantt01}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm, height=20cm]{gant02.png}
+		\caption{Diagrama de Gantt con el Desarrollo de la Aplicación Web.}
+		\label{fig:gantt02}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm, height=20cm]{gant03.png}
+		\caption{Diagrama de Gantt con el Desarrollo de la Aplicación Web (II).}
+		\label{fig:gantt03}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm, height=20cm]{gant04.png}
+		\caption{Diagrama de Gantt con el Desarroll de la Aplicación Mendeley-REST en Java.}
+		\label{fig:gantt04}
+	\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm, height=20cm]{gant05.png}
+		\caption{Diagrama de Gantt con la Integración de Aplicaciones, Despliegue y Redacción de la memoria.}
+		\label{fig:gantt05}
+	\end{center}
+\end{figure}
+
+%Estimación temporal y definición del calendario básico (hitos principales e iteraciones). Desarrollo de la planificación detallada, utilizando un diagrama de Gantt. Los diagramas de Gantt que se vean correctamente (girados y divididos si hace falta).\\
+
+%Se debe incluir una comparación cuantitativa del tiempo y el esfuerzo realmente invertido frente al estimado y planificado. Estos datos pueden recogerse del sistema de gestión de tareas empleado para el seguimiento del proyecto.
+
+
 
 \section{Organización}
-Relación de las personas (roles) involucradas en el proyecto y de cómo se estructuran las relaciones entre las mismas para ejecutar el proyecto. Relación de los recursos inventariables utilizados en el proyecto: equipamiento informático (hardware y software), herramientas empleadas, etc. \\
+En este apartado recogemos las personas o roles que se encuentran involucrados en el proyecto así como una relación de los recursos inventariables utilizados en el proyecto: equipamiento informático, herramientas empleadas, etc.
+
+\subsection{Roles}
+En los proyectos que siguen una metodología ágil por SCRUM podemos encontrarnos con tres tipos de roles \cite{scrum2016}:
+
+\begin{itemize}
+	\item \textbf{Dueño del producto.} Es el representante del cliente, el cuál conoce el entorno de negocio del cliente, las necesidades y el objetivo que se persigue con el sistema que se construye. Tiene la visión del producto, así como las necesidades concretas del proyecto, para poder priorizar eficientemente el trabajo. El tutor de este proyecto es el más claro ejemplo de representante, así como la UCA ejerce de cliente.
+	\item \textbf{Equipo de desarrollo.} Grupo o grupos de trabajo que desarrollan el producto. Todos conocen y comprenden la visión del proprietario del producto. Además, aportan y colaboran con el proprietario en el desarrolo de la pila del producto. En este proyecto el equipo está compuesto únicamente por el autor.
+	\item \textbf{Scrum master.} Es el responsable del cumplimiento de las reglas de un marco de scrum técnico, asegurando que se entienden en la organización, y se trabaja confirme a ellas. Además, proporciona la asesoría y formación necesaria al proprietario del producto y al equipo. En el proyecto estará representado por el autor, por lo que éste representará tanto al equipo de desarrollo como al scrum master.
+\end{itemize}
+
+\subsection{Recursos}
+En este apartado se van a listar todos los recursos inventariables de hardware y software, así como las herramientas utilizadas y los lenguajes de programación.\\
+
+En primer lugar se listan los recursos de hardware.\\
+
+\begin{itemize}
+	\item Equipo donde se ha realizado el proyecto: Toshiba Satellite L750/L755, Intel  \textregistered Core \texttrademark  i5-2410M CPU @ 2.30GHz x 2, 4GB RAM
+	\item Servidor donde se ha desplegado el proyecto: 1 vCore CPU, 2048MB RAM, 40 GB SSD Storage, 2000 GB Bandwitch
+\end{itemize}
+
+A continuación se listan los recursos de software
+\begin{itemize}
+	\item Equipo donde se ha realizado el proyecto:
+	
+	\begin{itemize}
+		\item SO: Windows 7 64 bits
+		\item API Externa: Google Charts y Mendeley
+	\end{itemize}
+	
+	\item Servidor donde se ha desplegado el proyecto:
+	
+	\begin{itemize}
+		\item SO: Ubuntu 16.04 7 64 bits
+		\item Contenedor Web: Tomcat 7 64 bits
+		\item Base de Datos: MySql
+	\end{itemize}
+\end{itemize}
+
+A continuación se listan las herramientas empleadas.\\
+\begin{itemize}
+	\item IDE: Grails Tool Suite
+	\item Control de versiones: Subversion
+	\item Forja: Assembla
+	\item SGBD: Mysql
+	\item Diseño de diagramas: DIA
+	\item Diseño de Mockups: Balsamiq Mockups
+	\item Navegadores empleados: Firefox y Google Chrome
+	\item Memoria y presentación: \LaTeX
+	\item Procesador de texto: Microsoft Word 2010
+	\item Gestión Hojas de cálculo: Microsoft Excel 2010
+	\item Vision de documentos: Adobe Acrobat Reader
+\end{itemize}
+
+Para finalizar, se listan los lenguajes de programación utilizados:\\
+\begin{itemize}
+	\item Groovy
+	\item Java
+	\item JavaScript
+	\item Ajax
+	\item JQuery
+	\item CSS3
+	\item Bootstrap
+	\item HTML
+\end{itemize}
 
 \section{Costes}
 Estudio y presupuesto de los costes de los recursos (humanos y materiales) descritos anteriormente, necesarios para el proyecto.

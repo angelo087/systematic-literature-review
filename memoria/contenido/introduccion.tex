@@ -10,17 +10,145 @@
 A continuación, se describe la motivación del presente proyecto y su alcance. También se incluye un glosario de términos y la organización del resto de la presente documentación.
 
 \section{Motivación}
-Qué motivación nos ha llevado a su desarrollo. Contexto y ámbito en el que se desarrolla el proyecto.
+Es algo muy común en el ámbito educativo, que tanto estudiantes pre-doctorales como para cualquier persona ya doctorada se dedique en algún momento de su carrera a realizar una investigación sobre una determinada área. Para la realización de la misma, estas personas necesitarán realizar una búsqueda exahustiva de información o recursos y comprobar que existan, o no, evidencias de dicho conocimiento. Es decir, deben ser capaces de resumir la evidencia existente acerca de un tema o identificar, si se da el caso, de que haya un vacío de conocimiento sobre esa investigación.\\
+
+Este estudio del arte sobre algún tema específico puede ayudarnos entre otras cosas:
+
+\begin{itemize}
+\item Resumir la evidencia existente acerca de una determinada área de investigación o tema de estudio.
+\item Identificar los vacíos en una investigación para sugerir más áreas o recursos de investigación.
+\item Creación de nuevas áreas o actividades de investigación.
+\end{itemize}
+
+Una \textbf{revisión sistemática de la literatura} (\textit{Systematic Literature Review}) es un medio para evaluar e interpretar la investigación disponible relativa a una determinada área de interés. Por tanto, una persona que desea realizar un estudio sobre un determinado tema, deberá buscar referencias bibliográficas por medio de artículos, aportes vía internet u otro tipos de documentos y saber interpretar dichos resultados para llegar a una conclusión sobre este estudio.\\
+
+La mayor parte de la investigación comienza con una revisión sistemática de la literatura, por contra, éstas carecen de valor científico si no se trata de una revisión exhaustiva y justa. Éste es el motivo principal para el desarrollo de revisiones sistemáticas. Una revisión sistemática sintetiza de una manera eficaz e idónea el estudio del arte de un determinado tema. Sin embargo, hay que seguir una estrategia de búsqueda que deberá permitir la integridad de la búsqueda que se evaluará. Concretamente, los investigadores deberán hacer un esfuerzo por identificar e investigar cada uno de los recursos que encuentre y presentar un informe que lo sustente.\\
+
+Barbara Kitchenham propuso una guía \cite{kitchenham2007} o conjunto de normas para promover estos estudios de la literatura en Ingeniería del Software. Está dirigida principalmente a investigadores de ingeniería del software, incluyendo a los doctorados. Este documento no cubre ningún proceso estadístico para resumir los resultados cuantitativos en los diferentes estudios (meta-análisis), ni explicar las diferentes implicaciones que podrían obtenerse acorde a los resultados encontrados, pero sí las directrices correctas para facilitar el estudio y que están siendo tan empleadas en otras disciplinas como la medicina y las ciencias sociales.\\
+
+Para estudiar la literatura de un tópico a evaluar, es necesario de una metodología confiable, rigurosa y extendida en la comunidad investigadora. Y este proyecto de fin de carrera se encargará de ayudar al investigador a encontrar las referencias bibliográficas que le ayude a facilitar el estudio y la exportación de los informes para determinar las conclusiones finales del estudio siguiendo la línea indicada por Kitchenham.\\
+
 
 \section{Alcance} 
-Esta sección debe describir a qué elementos organizativos de la organización Cliente afecta el desarrollo del nuevo sistema. También debe describir los principales objetivos que se esperan alcanzar cuando el sistema a desarrollar esté en producción.
+Un \textbf{SLR} (\textit{Systematic Literature Review}) no es más que una metodología rigurosa para identificar, analizar e interpretar de una forma no sesgada todas las evidencias referentes a una pregunta de investigación.\\
+
+Este proyecto se plantea para \textbf{facilitar al investigador en el proceso de búsqueda de referencias bibliográficas en diferentes motores de búsquedas especializados} que proporciona internet \textbf{y ayudar al investigador a exportar los resultados obtenidos} con el fin de poder elaborar un informe con las conclusiones del estudio. \\
+
+Para la creación de este PFC, se ha realizado una aplicación web donde el usuario puede realizar este proceso de búsqueda a través de varios motores de búsquedas específicos con el ámbito universitario e investigador de una sóla vez, evitando que el usuario tenga que repetir el mismo proceso en cada uno de los sitios. Estos motores de búsquedas implican una serie de reglas o unos formatos de búsqueda concretos, y la aplicación se encargará de esta tarea tediosa para el investigador.\\
+
+La literatura encontrada en cada uno de estos medios universitarios será almacenada en un gestor de referencias que los estudiantes de la Universidad de Cádiz pueden manejar denominado \textbf{Mendeley}.
+La aplicación web conectará con este gestor y almacenará todas las referencias que han sido encontradas y creará un conjunto de carpetas y documentos donde el investigador podrá saber en todo momento en qué motor de búsqueda ha sido encontrada la referencia, la revisión sistemática a la que pertenece, así como todo el detalle disponible de cada una de las referencias.\\
+
+Una vez que hemos obtenido toda la literatura a estudiar en cada uno de estos medios unversitarios, el usuario tendrá la difícil tarea de indicar si las referencias bibliográficas encontradas siguen los criterios necesarios para incluirlos en el proceso de estudio. Por medio de esta aplicación, el usuario podrá diferenciar cuáles cumplen los requisitos para ser incluidos a través de unos criterios previamente definidos por el usuario, así como incluir otra información que Mendeley por defecto no ha podido encontrar.\\
+
+Por último, y una vez realizado el estudio del arte, podemos obtener un informe con las valoraciones y criterios propuestos por el investigador de un simple vistazo por medio de la exportación de documentos en diferentes formatos de salida o gráficos que ilustre el estudio realizado, así como las conclusiones finales obtenidas.\\
+
+A continuación se enumeran y describen los principales objetivos que se esperan alcanzar cuando el sistema a desarrollar esté en producción.
+
+\subsection{Objetivos}
+El objetivo principal de este proyecto, será ayudar al usuario a seguir la mayor parte de las directrices de Barbara Kitchenham, ya que el estudio del arte de una área de investigación predeterminada no puede ser automatizado. Sin embargo, podemos ayudar al usuario a quitarle tiempo de búsqueda de recursos a través de un buscador de referencias en motores de búsquedas, que en posteriores capítulos describiremos, y ayudar al usuario a determinar las conclusiones finales por medio de la exportación de la información a través de gráficos o ficheros en diferentes formatos.\\
+
+Todo este proceso será desarrollado a través de una aplicación web donde el usuario podrá crear revisiones sistemáticas de la literatura, realizar búsquedas, clasificar los documentos y poder exportar la información a través de varios medios. Podemos ver más detalles de estos objetivos en tablas \ref{table:obj01}, \ref{table:obj02}, \ref{table:obj03} y \ref{table:obj04}.
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{13cm}|}
+			\hline
+			\textbf{OBJ-01} & Creación de una aplicación web para realizar Revisiones Sistemáticas de la Literatura.\\
+			\hline
+			\textbf{Descripción} & Se debe diseñar una aplicación web donde el usuario podrá crear revisiones sistemáticas de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-01: Creación de una aplicación web para realizar Revisiones Sistemáticas de la Literatura.}
+		\label{tabla:obj01}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{13cm}|}
+			\hline
+			\textbf{OBJ-02} & Realizar Búsquedas de Referencias Bibliográficas.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder realizar varias búsquedas de referencias bibliográficas con la información predefinida por el usuario y almacenando dichos recursos en un sistema de gestión de referencias (Mendeley) para su futuro estudio.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-02: Realizar Búsquedas de Referencias Bibliográficas.}
+		\label{tabla:obj02}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{13cm}|}
+			\hline
+			\textbf{OBJ-03} & Clasificar las referencias bibliográficas.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder ayudar al usuario a clasificar las referencias bibliográficas encontradas en las búsquedas de cada una de las revisiones sistemáticas de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-03: Clasificar las referencias bibliográficas.}
+		\label{tabla:obj03}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{13cm}|}
+			\hline
+			\textbf{OBJ-04} & Exportar información de los SLR y conclusiones finales.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder ayudar al usuario a realizar un informe con las conclusiones finales del SLR a través de gráficos que reflejen la situación del mismo o diferentes ficheros de texto.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-04: Exportar información de los SLR y conclusiones finales.}
+		\label{tabla:obj04}
+	\end{center}
+\end{table}
 
 \section{Glosario de Términos} 
-Esta sección debe contener una lista ordenada alfabéticamente de los principales términos, acrónimos y abreviaturas específicos del dominio del problema, especialmente de los que se considere que su significado deba ser aclarado. Cada término, acrónimo o abreviatura deberá acompañarse de su definición.
+Esta sección contiene una lista de los acrónimos específicos y principales términos del dominio del sistema.\\
+
+\subsection{Acrónimos}
+\textbf{HTML}	HyperText Markup Language\\\\
+\textbf{HTTP}	HyperText Transfer Protocol\\\\
+\textbf{MVC}	Modelo Vista Controlador
+\textbf{OO}	Orientado a Objetos
+\textbf{PFC}	Proyecto Fin de Carrera\\\\
+\textbf{RSL}	Revisiones Sistemáticas de la Literatura\\\\
+\textbf{SLR}	Systematic Literature Review\\\\
+\textbf{UCA}	Universidad de Cádiz\\\\
+\textbf{UML}	Lenguaje Unificado de Modelado\\\\
+
+\subsection{Términos}
+\textbf{Grails}	Framework para aplicaciones web libre desarrollado sobre el lenguaje de programación Groovy.\\\\
+\textbf{Groovy}	Lenguaje de programación orientado a objetos implementado sobre la plataforma Java.\\\\
+\textbf{Mendeley}	Aplicación web y de escritorio, proprietaria y gratuita. Permite gestionar y compartir referencias bibliográficas y documentos de investigación, encontrar referencias y documentos y colaborar en línea.\\\\
+\textbf{Metadato}	Dato que describe otro dato. Por lo general, un grupo de metadatos se refiere a un grupo de datos que describen el contenido de una referencia bibliográfica.\\\\
 
 \section{Organización del documento}
-Descripción de los contenidos de la presente memoria, así como del software entregado en soporte informático.
+A continuación se describe de manera resumida el contenido de los capítulos en los que se encuentra dividido este PFC:
 
+\begin{itemize}
+	\item En el \autoref{chap:chap01} se ha realizado un recorrido introductorio sobre el contexto donde nos moveremos así como la motivación al respecto, haciendo hincapié en los objetivos que se pretende satisfacer.
+	\item En el \autoref{chap:chap02} se incluye la planificación del proyecto, plazos, entregables, recursos utilizados, así como la metodología de ingeniería de software empleada.
+	\item En el Capítulo 3 ...
+	\item En el Capítulo 4 ...
+	\item En el Capítulo 5 ...
+	\item En el Capítulo 6 ...
+	\item En el Capítulo 7 ...
+	\item En el Capítulo 8 ...
+	\item En el Capítulo 9 ...
+	\item En el Capítulo 10 ...
+	\item En el Capítulo 11 ...
+\end{itemize}
 
+Respecto al software entregado en soporte informático, se distribuye en los siguientes directorios:
 
-
+\begin{itemize}
+	\item \textbf{codigoFuente}	Código fuente de todos los archivos creados para desarrollar el sistema.
+	\item \textbf{instalación}	Instrucciones necesarias para la instalación del sistema.
+	\item \textbf{memoria}	Archivos tex y pdf de la memoria del proyecto.
+	\item \textbf{presentación}	Archivos tex y pdf de la presentación del proyecto.
+	\item \textbf{recursos}	Archivos de diagramas, imágenes y otros archivos de interés.
+\end{itemize}
