@@ -225,7 +225,13 @@ class SlrController {
 			
 			def slrBreadCrumb = (slrInstance.title.toString().length() > maxStrTitle ? slrInstance.title.toString().substring(0,maxStrTitle)+"..." : slrInstance.title)
 			
-			[slrInstance: slrInstance, searchListInstance: slrInstance.searchs, slrBreadCrumb: slrBreadCrumb]
+			def isCreating = false
+			if(params.isCreating != null)
+			{
+				isCreating = params.isCreating
+			}
+			
+			[slrInstance: slrInstance, searchListInstance: slrInstance.searchs, slrBreadCrumb: slrBreadCrumb, isCreating: isCreating]
 		}
 	}
 	

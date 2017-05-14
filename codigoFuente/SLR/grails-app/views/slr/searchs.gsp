@@ -20,10 +20,20 @@
 		document.getElementById("guidSearch").value = id.toString();
 		document.getElementById('divError').style.display = "none";
 	}
+	function showMessages()
+	{
+		if (${isCreating})
+		{
+			document.getElementById('divSearchCreating').style.display = "";
+			setTimeout(function(){
+				document.getElementById('divSearchCreating').style.display = "none";
+			}, 20000);
+		}
+	}
 	</script>
 </head>
 
-<body>
+<body onload="showMessages();">
 
 	<%-- Ventana modal para eliminar slr --%>
     <div class="modal fade" id="myModalDrop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -71,6 +81,10 @@
             </div>
                         
             <div class="row">
+            	<div id="divSearchCreating" class="alert alert-info alert-dismissible" role="alert" style="display: none;">
+            		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            		<strong><i class="fa fa-search fa-fw"></i> Creando Búsqueda</strong> Puede ver el progreso de la búsqueda <g:link controller="index" action="taskSearchs">aquí</g:link>.
+            	</div>
                 <div class="col-lg-12">
                   	<div style="margin-top: 5px; margin-bottom: 20px;">
                   		<g:link controller="search" action="create" class="btn btn-success" params="[guidSlr:"${slrInstance.guid}"]">Crear búsqueda</g:link>

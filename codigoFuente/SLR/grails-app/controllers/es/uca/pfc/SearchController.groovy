@@ -152,7 +152,7 @@ class SearchController {
 				
 				mendeleyToolService.insertSearchsBackground(guidTask, slrInstance.title, slrInstance.guid, okTerminos, okOperators, okComponents, minYear, maxYear, maxTotal, engines)
 				
-				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr])
+				redirect(controller: 'slr', action: 'searchs', params: [guid: guidSlr, isCreating: true])
 			}
 		}
 	}
