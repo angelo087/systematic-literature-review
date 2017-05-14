@@ -104,10 +104,8 @@ class MendeleyToolService {
 										.replaceAll("\r","")
 										.replaceAll("\'","")
 										.replaceAll("\"","").trim()
-				//println "====================================="
-				//println strError
-				//println "====================================="
-				//deleteAllDocumentImported(guidTaskSearch, emailMend)
+				
+				deleteAllDocumentImported(guidTaskSearch, emailMend)
 				increaseProgressBar(-100, guidTaskSearch, strError, null)
 			}
 			sendSearchNotification(emailMend, guidSlr, isSuccess)
