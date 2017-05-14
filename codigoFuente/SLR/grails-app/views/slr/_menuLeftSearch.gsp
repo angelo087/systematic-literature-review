@@ -15,12 +15,12 @@
 			</g:each>
 		</div>
 	</g:if>
-	<div id="critery_search" style="margin-top: 20px;">
+	<%--<div id="critery_search" style="margin-top: 20px;">
 		<b>Años</b>
 		<div style="margin-bottom: 35px; margin-top: 35px;">
 	   		<input type="hidden" class="range-slider" value="${minYear},${maxYear}" />
    		</div>
-	</div>
+	</div> --%>
 	
 	<!-- Atributos especificos  -->
 	<g:if test="${specificAttributesMapInstance.size() > 0}">
