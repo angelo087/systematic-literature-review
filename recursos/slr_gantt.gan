@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="SLR Gantt" company="" webLink="http://" view-date="2017-02-01" view-index="0" gantt-divider-location="473" resource-divider-location="300" version="2.8.4" locale="es_ES">
+    <description/>
+    <view zooming-state="default:8" id="gantt-chart">
+        <field id="tpd3" name="Nombre" width="337" order="0"/>
+        <field id="tpd4" name="Fecha de inicio" width="69" order="1"/>
+        <field id="tpd5" name="Fecha de fin" width="63" order="2"/>
+        <timeline><![CDATA[1]]></timeline>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nombre" width="210" order="0"/>
+        <field id="1" name="Función" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="Propuesta inicial del proyecto" color="#8cb6ce" meeting="false" start="2015-10-26" duration="5" complete="0" expand="true">
+            <depend id="1" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="1" name="Investigación y adquisición de conocimientos" color="#000000" meeting="false" start="2015-11-02" duration="63" complete="0" expand="false">
+            <depend id="2" type="2" difference="0" hardness="Strong"/>
+            <task id="54" name="Lectura Investigación RSL Iván Ruiz (Tutor)" color="#8cb6ce" meeting="false" start="2015-11-02" duration="3" complete="0" expand="true"/>
+            <task id="55" name="Lectura Investigación SLR" meeting="false" start="2015-11-02" duration="3" complete="0" expand="true"/>
+            <task id="53" name="Lectura guía Barbara Kitchenham" meeting="false" start="2015-11-02" duration="6" complete="0" expand="true"/>
+            <task id="14" name="Redacción propuesta oficial PFC" meeting="false" start="2015-11-02" duration="6" complete="0" expand="true"/>
+            <task id="67" name="Mendeley" meeting="false" start="2015-11-09" duration="10" complete="0" expand="true">
+                <depend id="9" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="9" name="Investigar Framework MVC a utilizar" color="#8cb6ce" meeting="false" start="2015-11-23" duration="6" complete="0" expand="true">
+                <depend id="10" type="2" difference="0" hardness="Strong"/>
+                <depend id="11" type="2" difference="0" hardness="Strong"/>
+                <depend id="12" type="2" difference="0" hardness="Strong"/>
+                <depend id="13" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="10" name="Leer tutoriales Framework" color="#8cb6ce" meeting="false" start="2015-12-01" duration="34" complete="0" expand="true"/>
+            <task id="11" name="Empleo Metodología Ágil y Patrón MVC" color="#8cb6ce" meeting="false" start="2015-12-01" duration="34" complete="0" expand="true"/>
+            <task id="12" name="Groovy on Grails" color="#8cb6ce" meeting="false" start="2015-12-01" duration="34" complete="0" expand="true"/>
+            <task id="13" name="HTML, CSS, Bootstrap, Ajax, JQuery" color="#8cb6ce" meeting="false" start="2015-12-01" duration="34" complete="0" expand="true"/>
+            <task id="57" name="Mendeley - API" color="#8cb6ce" meeting="false" start="2016-01-20" duration="6" complete="0" expand="true"/>
+        </task>
+        <task id="2" name="Desarrollo Aplicación Web" color="#000000" meeting="false" start="2016-02-01" duration="160" complete="0" expand="false">
+            <depend id="3" type="2" difference="0" hardness="Strong"/>
+            <depend id="83" type="2" difference="0" hardness="Strong"/>
+            <task id="58" name="Requisitos Principales" color="#8cb6ce" meeting="false" start="2016-02-01" duration="10" complete="0" expand="true">
+                <depend id="60" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="59" name="Modelo conceptual" meeting="false" start="2016-02-01" duration="10" complete="0" expand="true">
+                <depend id="60" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="60" name="Prototipo de vistas" color="#8cb6ce" meeting="false" start="2016-02-15" duration="5" complete="0" expand="true">
+                <depend id="15" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="15" name="Página Home y Menú" color="#8cb6ce" meeting="false" start="2016-02-22" duration="4" complete="0" expand="true">
+                <depend id="17" type="2" difference="0" hardness="Strong"/>
+                <depend id="18" type="2" difference="0" hardness="Strong"/>
+                <depend id="19" type="2" difference="0" hardness="Strong"/>
+                <depend id="20" type="2" difference="0" hardness="Strong"/>
+                <depend id="21" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="17" name="Creación de SLR (MVC)" color="#8cb6ce" meeting="false" start="2016-02-26" duration="12" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="19" name="Creación de criterios clasificación de estudios (MVC)" color="#8cb6ce" meeting="false" start="2016-02-26" duration="12" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="20" name="Creación atributos específicos (MVC)" color="#8cb6ce" meeting="false" start="2016-02-26" duration="12" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="21" name="Creación Preguntas de Investigación (MVC)" color="#8cb6ce" meeting="false" start="2016-02-26" duration="12" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="18" name="Creación de búsquedas (MVC)" color="#8cb6ce" meeting="false" start="2016-02-26" duration="12" complete="0" expand="true">
+                <depend id="16" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="16" name="Securización y Gestión de Usuarios" color="#8cb6ce" meeting="false" start="2016-03-15" duration="6" complete="0" expand="true">
+                <depend id="25" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="25" name="Login y Registro de Usuarios" color="#8cb6ce" meeting="false" start="2016-03-23" duration="3" complete="0" expand="true"/>
+            <task id="52" name="Creación Servicios" meeting="false" start="2016-03-25" duration="1" complete="0" expand="true"/>
+            <task id="23" name="Configuración motores de búsquedas" meeting="false" start="2016-03-28" duration="24" complete="0" expand="true">
+                <depend id="22" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="22" name="Creación de parámetros de búsquedas" color="#8cb6ce" meeting="false" start="2016-04-29" duration="12" complete="0" expand="true"/>
+            <task id="26" name="Logger de Usuarios" color="#8cb6ce" meeting="false" start="2016-05-17" duration="3" complete="0" expand="true"/>
+            <task id="27" name="Exportación de ficheros (PDF, Doc, Excel y Bib)" color="#8cb6ce" meeting="false" start="2016-05-20" duration="7" complete="0" expand="true"/>
+            <task id="29" name="Gráficos de SLR" meeting="false" start="2016-06-01" duration="8" complete="0" expand="true"/>
+            <task id="39" name="Definir recursos y rutas" meeting="false" start="2016-06-13" duration="4" complete="0" expand="true"/>
+            <task id="40" name="Páginas de error personalizadas" color="#8cb6ce" meeting="false" start="2016-06-17" duration="1" complete="0" expand="true"/>
+            <task id="28" name="Creación de búsquedas en segundo plano" meeting="false" start="2016-06-20" duration="47" complete="0" expand="true">
+                <depend id="41" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="41" name="Barras de carga para mostrar búsquedas (MVC)" color="#8cb6ce" meeting="false" start="2016-08-24" duration="5" complete="0" expand="true">
+                <depend id="42" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="42" name="Gestión errores de búsquedas (MVC)" color="#8cb6ce" meeting="false" start="2016-08-31" duration="2" complete="0" expand="true"/>
+            <task id="45" name="Configuración Base de Datos" meeting="false" start="2016-09-06" duration="4" complete="0" expand="true"/>
+        </task>
+        <task id="3" name="Desarrollo Aplicación Mendeley-REST en Java" color="#000000" meeting="false" start="2016-09-20" duration="100" complete="0" expand="false">
+            <depend id="83" type="2" difference="0" hardness="Strong"/>
+            <task id="32" name="Documents Mendeley" meeting="false" start="2016-09-20" duration="8" complete="0" expand="true">
+                <depend id="36" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="31" name="Folders Mendeley" meeting="false" start="2016-09-20" duration="8" complete="0" expand="true">
+                <depend id="36" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="33" name="Profiles Mendeley" meeting="false" start="2016-09-20" duration="8" complete="0" expand="true">
+                <depend id="36" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="35" name="Servicios Mendeley" meeting="false" start="2016-09-20" duration="8" complete="0" expand="true">
+                <depend id="36" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="36" name="Conexión OATUH 2.0" color="#8cb6ce" meeting="false" start="2016-09-30" duration="15" complete="0" expand="true"/>
+            <task id="30" name="Creación Motores de Búsquedas" meeting="false" start="2016-10-24" duration="31" complete="0" expand="true">
+                <depend id="37" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="37" name="Creación por hilos y búsquedas en paralelo" color="#8cb6ce" meeting="false" start="2016-12-06" duration="44" complete="0" expand="true"/>
+            <task id="34" name="Estructura MAVEN" meeting="false" start="2017-02-06" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="83" name="Integración Aplicaciones" color="#000000" meeting="false" start="2017-02-10" duration="26" complete="0" expand="false">
+            <depend id="4" type="2" difference="0" hardness="Strong"/>
+            <depend id="5" type="2" difference="0" hardness="Strong"/>
+            <task id="84" name="Configuración API Mendeley" meeting="false" start="2017-02-10" duration="24" complete="0" expand="true">
+                <depend id="87" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="86" name="Autenticación Oauth2" meeting="false" start="2017-02-10" duration="24" complete="0" expand="true">
+                <depend id="87" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="90" name="Sincronización Mendeley" meeting="false" start="2017-02-10" duration="24" complete="0" expand="true">
+                <depend id="87" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="87" name="Pruebas" color="#8cb6ce" meeting="false" start="2017-03-16" duration="2" complete="0" expand="true"/>
+        </task>
+        <task id="4" name="Pruebas del Sistema y Rendimiento" color="#8cb6ce" meeting="false" start="2017-03-20" duration="5" complete="0" expand="true"/>
+        <task id="5" name="Despliegue" color="#000000" meeting="false" start="2017-03-27" duration="25" complete="0" expand="false">
+            <task id="49" name="Investigación requisitos servidor" meeting="false" start="2017-03-27" duration="10" complete="0" expand="true">
+                <depend id="46" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="46" name="Creación servidor" color="#8cb6ce" meeting="false" start="2017-04-10" duration="10" complete="0" expand="true">
+                <depend id="139" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="47" name="Instalación Ubuntu" meeting="false" start="2017-04-10" duration="10" complete="0" expand="true">
+                <depend id="139" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="50" name="Instalación Tomcat 7" meeting="false" start="2017-04-10" duration="10" complete="0" expand="true">
+                <depend id="139" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="48" name="Creación Base de datos MySQL" meeting="false" start="2017-04-10" duration="10" complete="0" expand="true">
+                <depend id="139" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="51" name="Configuración servidor" meeting="false" start="2017-04-10" duration="10" complete="0" expand="true">
+                <depend id="139" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="139" name="Pruebas conexión Aplicación-Servidor" color="#8cb6ce" meeting="false" start="2017-04-24" duration="5" complete="0" expand="true"/>
+        </task>
+        <task id="6" name="Redacción Memoria" meeting="false" start="2016-04-15" duration="282" complete="0" expand="true"/>
+    </tasks>
+    <resources/>
+    <allocations/>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+</project>
