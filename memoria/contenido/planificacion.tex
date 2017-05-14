@@ -34,7 +34,7 @@ En primer lugar, se realiza una planificación inicial y una investigación sobr
 
 Una vez realizada la planificación inicial y analizado todos los objetivos principales del proyecto se decide realizar el desarrollo del proyecto en dos subproyectos. El primero de ellos, será la aplicación web, donde el usuario podrá acceder a todas las opciones para las creaciones de las revisiones sistemáticas de la literatura. Por otro lado, el segundo de ellos consistirá en la creación de una librería JAR donde incluirá todo el proceso de búsquedas de referencias bibliográficas en segundo plano y de manera paralela a cualquier otra búsqueda que se realice. Esta librería, deberá ser incluida en el primer subproyecto, por lo que necesitará de un periodo de tiempo para integrar ambas aplicaciones.\\
 
-Con toda esta información, se opta por dividir el roceso en ocho hitos tal y como podemos ver en la tabla \ref{table:hitos}. El tiempo se indica en horas. Cada uno de estos hitos, tendrá asociados varias subtareas o subobjetivos que deberán realizarse para dar por bueno el hito principal. El hito 0 corresponderá a la adquisición de conocimientos mientras que el hito 7 es asignado a la redacción de la memoria.\\
+Con toda esta información, se opta por dividir el roceso en ocho hitos tal y como podemos ver en la tabla \ref{table:hitos}. El tiempo se indica en dias. Cada uno de estos hitos, tendrá asociados varias subtareas o subobjetivos que deberán realizarse para dar por bueno el hito principal. El hito 0 corresponderá a la adquisición de conocimientos mientras que el hito 7 es asignado a la redacción de la memoria.\\
 
 \begin{table}[!hbt]
 	\begin{center}
@@ -60,11 +60,11 @@ Con toda esta información, se opta por dividir el roceso en ocho hitos tal y co
 			\hline
 		\end{tabular}
 		\caption{Tiempo estimado frente a tiempo real de cada Sprint}
-		\label{tabla:hitos}
+		\label{table:hitos}
 	\end{center}
 \end{table}
 
-Para mostrar el desarrollo detallado de toda la aplicación y desarrollo del software se muestran en las figuras \ref{fig:gantt01}, \ref{fig:gantt02}, \ref{fig:gantt03}, \ref{fig:gantt04} y \ref{fig:gantt05} unos diagramas de Gantt ordenados cronológicamente haciendo referencia a cada uno de los hitos que hemos explicado anteriormente. Cabe indicar, que el hito de mayor duración es el último, que corresponde a la redacción de la documentación de este proyecto, ya que se ha ido redactando a medida que se ha ido completando cada una de las fases del proyecto.\\
+Para mostrar el desarrollo detallado de toda la aplicación y desarrollo del software se muestran en las figuras \ref{fig:gantt01}, \ref{fig:gantt02}, \ref{fig:gantt03}, \ref{fig:gantt04} y \ref{fig:gantt05} unos diagramas de Gantt ordenados cronológicamente haciendo referencia a cada uno de los hitos que hemos explicado anteriormente. Los diagramas han sido realizados con la herramienta GanttProject \cite{gantt15}. Cabe indicar, que el hito de mayor duración es el último, que corresponde a la redacción de la documentación de este proyecto, ya que se ha ido redactando a medida que se ha ido completando cada una de las fases del proyecto.\\
 
 \begin{figure}[h!]
 	\begin{center}
@@ -180,14 +180,83 @@ Para finalizar, se listan los lenguajes de programación utilizados:\\
 \end{itemize}
 
 \section{Costes}
-Estudio y presupuesto de los costes de los recursos (humanos y materiales) descritos anteriormente, necesarios para el proyecto.
+Para poder realizar una estimación de los costes del proyecto debemos tener en cuenta tanto los recursos humanos como los recursos en material empleados. Los costes indirectos como papel, bolígrafo, electricidad o conexión a Internet son los que denominaremos ``Costes indirectos``. El porcentaje de su valor puede oscilar entre el 10\% y el 20\% del gasto del personal, tomaremos el gasto medio de dicho intervalo, es decir, un 15\%.\\
 
-Para el cálculo de costes de personal pueden consultarse las tablas salariales de la UCA para el personal técnico de apoyo contratado laboral \cite{paslaboral}, o bien otras más ajustadas a la realidad. El cálculo del coste del personal del proyecto debe hacerse en personas-mes, y luego hacer la correspondencia al coste monetario.\\
+De los recursos hardware debemos tener en cuenta tanto el equipo empleado para el desarrollo. Normalmente, los ordenadores suelen tener un periodo de amortización entre los 2 y 4 años. Al igual que antes, tomaremos la media de este periodo, 3 años. Si el equipo costó 750 euros, se amortizan unos 250 euros al año y como el tiempo de desarrollo del proyecto es de entre 2 y 3 años a tiempo parcial, tomaremos 2,5 años como periodo medio y el coste final será de 625 euros. El coste del servidor son de unos 10 euros al mes, sólamente ha estado desplegado en el servidor alrededor de 3 meses, por lo que su gasto alcanza los 30 euros.\\
+
+Con respecto a los recursos del software, no tendrá ningún gasto, puesto que el sistema operativo Windows 7 viene incluido en los gastos del equipo con el que se ha desarrollado el proyecto, así como los paquetes informáticos (hojas de cálculo y editor de texto). Además, el servidor tiene instalado Ubuntu y tampoco supone ningún gasto económico puesto que viene en el gasto mensual del servidor.\\
+
+Para el cálculo de costes de personal se ha consultado las tablas salariales de la UCA para el personal técnico de apoyo contratado laboral \cite{paslaboral}. El coste es de unos 20.298,30 euros anuales, lo equivale a 1.353,22 euros mensuales. Como el tiempo dedicado en este tiempo ha sido lo correspondiente a media jornada, tomaremos como un gasto mensual de 676.61 euros. De esta manera, el coste anual será de unos 8119.32 euros y alcanzaremos unos gastos anuales de 20298 euros.\\
+
+En la tabla \ref{table:costes} desglosamos los costes mensuales y totales del proyecto:
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{2cm}|p{6cm}|p{2.5cm}|p{2.5cm}|}
+			\hline
+			\textbf{Unidades} & \textbf{Descripción} & \textbf{Coste Unitario} & \textbf{Coste total}\\
+			\hline
+			1 & Ingeniero Técnico Informático & 8119.32 \euro/año & 20298 \euro\\
+			\hline
+			1 & Ordenador personal & 286.67 \euro/año & 625 \euro\\
+			\hline
+			1 & Alquiler Host & 10 \euro/mes & 30 \euro\\
+			\hline
+			1 & Costes indirectos & 1217 \euro/año & 3044 \euro\\
+			\hline
+			\multicolumn{3}{|c|}{\textbf{Total}} & 23967 \euro\\
+			\hline
+		\end{tabular}
+		\caption{Costes del desarrollo}
+		\label{table:costes}
+	\end{center}
+\end{table}
+
+%Estudio y presupuesto de los costes de los recursos (humanos y materiales) descritos anteriormente, necesarios para el proyecto.
+
+%Para el cálculo de costes de personal pueden consultarse las tablas salariales de la UCA para el personal técnico de apoyo contratado laboral \cite{paslaboral}, o bien otras más ajustadas a la realidad. El cálculo del coste del personal del proyecto debe hacerse en personas-mes, y luego hacer la correspondencia al coste monetario.\\
 
 \section{Riesgos}
-Enumeración de los riesgos del proyecto, indicando su posible impacto (efecto que la ocurrencia del citado riesgo tendría en el desarrollo del proyecto) y la probabilidad de ocurrencia. Una vez los riesgos son identificados y priorizados, hay que definir los planes necesarios para reducir los efectos del riesgo una vez se haya materializado o disminuir que este ocurra.\\
+En esta sección vamos a describir los posibles riesgos del proyecto ordenados de mayor a menor prioridad, indicando su posible impacto (efecto que la ocurrencia del citado riesgo tendría en el desarrollo del proyecto) y la probabilidad de ocurrencia. Además, indicamos el plan necesario para reducir los efectos del riesgo una vez se haya materializado o disminuir que este ocurra. Esta información viene recogida en la tabla \ref{table:riesgos}.
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3.5cm}|p{1.5cm}|p{2cm}|p{6cm}|}
+			\hline
+			\textbf{Riesgo} & \textbf{Prob.} & \textbf{Magnitud} & \textbf{Plan a realizar}\\
+			\hline
+			Tiempo infraestimado para el desarrollo de las tareas & 30\% & 5-8 semanas & Se comunica al tutor del proyecto del posible retraso, modificando la planificación temporal del proyecto o bien el plazo de entrega para poder finalizarlo.\\
+			\hline
+			Desarrollo de métodos y funciones software incorrectos & 30\% & 3-4 semanas & Se comprueba la calidad del código y su validez, para así evitar el denominado \textbf{DRY} (\textit{Don't Repeat yourself}) y estudiar su re-utilización una vez corregido.\\
+			\hline
+			Cambios en API de Mendeley & 30\% & 3 semanas & Comunicar al tutor del proyecto del posible retraso y realizar una rápida investigación de los cambios producidos en la API de Mendeley, así como el desarrollo de la nueva implementación de la misma.\\
+			\hline
+			Cambios en API de motores de búsquedas de referencias bibliográficas & 30\% & 3 semanas & Comunicar al tutor del proyecto del posible retraso y realizar una rápida investigación de los cambios producidos en los motores de búsquedas, como el desarrollo de la nueva implementación de los mismos.\\
+			\hline
+			Elección incorrecta en las herramientas empleadas de desarrollo & 15\% & 2-3 semanas & Comunicar al tutor del proyecto del posible retraso y realizar una rápida investigación de las nuevas herramientas a emplear, así como de la búsqueda y lectura de documentación.\\
+			\hline
+			Paro del proyecto & 20\% & 1-2 semanas & Revisar la planificación y ajustarla, así como añadir horas extras una vez que se retome el desarrollo.\\
+			\hline
+			Problemas en los tests & 30\% & 1-2 semanas & Se analizan los tests y se planteará la nueva revisión de éstos y, en el caso correspondiente, crear unos nuevos.\\
+			\hline
+		\end{tabular}
+		\caption{Lista de riesgos del proyecto}
+		\label{table:riesgos}
+	\end{center}
+\end{table}
+
+%Enumeración de los riesgos del proyecto, indicando su posible impacto (efecto que la ocurrencia del citado riesgo tendría en el desarrollo del proyecto) y la probabilidad de ocurrencia. Una vez los riesgos son identificados y priorizados, hay que definir los planes necesarios para reducir los efectos del riesgo una vez se haya materializado o disminuir que este ocurra.\\
 
 \section{Aseguramiento de calidad}
-En esta sección se incluirán las actividades y tareas relacionadas con el aseguramiento de calidad a realizar durante el desarrollo del software. Se incluirán los estándares, prácticas y normas aplicables durante el desarrollo del software.\\
+Para asegurar el cumplimiento de la calidad de este se contempla los siguientes aspectos:\\
 
-También, deberán recogerse los diferentes tipos de revisiones, verificaciones y validaciones que se van a llevar a cabo, los criterios para la aceptación o rechazo de cada producto y los procedimientos para implementar acciones correctoras o preventivas.
+\begin{itemize}
+	\item Realización de controles o pruebas para asegurar su calidad.
+	\item Tomar medidas de actuación relacionadas con el control de calidad.
+\end{itemize}
+
+Se realizará un análisis para cada uno de los hitos o tareas, con lo que es necesario un plan de verificación y validación dentro de los mismos para poder asegurar la calidad del producto y el correcto funcionamiento de los mismos. Estas comprobaciones se realizarán a lo largo del proyecto y así comprobar que todo está correcto y se cumple los requisitos establecidos.\\
+
+%En esta sección se incluirán las actividades y tareas relacionadas con el aseguramiento de calidad a realizar durante el desarrollo del software. Se incluirán los estándares, prácticas y normas aplicables durante el desarrollo del software.\\
+
+%También, deberán recogerse los diferentes tipos de revisiones, verificaciones y validaciones que se van a llevar a cabo, los criterios para la aceptación o rechazo de cada producto y los procedimientos para implementar acciones correctoras o preventivas.
