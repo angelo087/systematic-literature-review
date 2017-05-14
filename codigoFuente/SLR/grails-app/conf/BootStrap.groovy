@@ -165,25 +165,6 @@ class BootStrap {
 		}
 		user02.save(failOnError: true)
 		
-		/*log.info "Creamos las Estudios..."
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 1', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 2', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 3', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 4', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 5', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 6', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 7', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 8', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))
-		user01.userProfile.addToEducations(new Education(degree: 'Degree 9', institution: 'Institution 1', website: 'website 1', start_date: new Date(), end_date: new Date()))	
-
-		user01.save(failOnError: true)
-		user02.save(failOnError: true)
-		*/
-		log.info "Creamos FAQ's"
-		def faq01 = new FAQ(enunciado: '¿Esto es una pregunta 1?', respuesta: 'Efectivamente, esto es una respuesta 1').save(failOnError: true)
-		def faq02 = new FAQ(enunciado: '¿Esto es una pregunta 2?', respuesta: 'Efectivamente, esto es una respuesta 2').save(failOnError: true)
-		def faq03 = new FAQ(enunciado: '¿Esto es una pregunta 3?', respuesta: 'Efectivamente, esto es una respuesta 3').save(failOnError: true)
-		
 		log.info "FIN BOOTSRAP"
     }
     def destroy = {

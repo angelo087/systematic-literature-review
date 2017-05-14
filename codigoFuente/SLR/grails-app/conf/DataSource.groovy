@@ -98,7 +98,7 @@ environments {
 			dbCreate = "update"
 			driverClassName = "com.mysql.jdbc.Driver"
 			dialect = "es.uca.pfc.bbdd.ImprovedMySQLDialect"
-			url = "jdbc:mysql://localhost:3306/pfcslr?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+			url = "jdbc:mysql://localhost:3306/pfcslr?autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8"
 			username = "root"
 			password = "mysql"
 		}
