@@ -53,7 +53,7 @@ class RegisterController {
 		}
 		
 		if(!error.equals("")) {
-			log.info "Validacion incorrecta en el registro de usuarios"
+			log.info "Validacion incorrecta en el registro de usuarios => " + (emailMend != null ? emailMend : '')
 			flash.message = error
 			redirect(controller: 'register', action: 'index', params: [emailMend: emailMend])
 		}
