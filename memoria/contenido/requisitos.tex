@@ -9,48 +9,279 @@
 
 En esta sección se detalla la situación actual de la organización y las necesidades de la misma, que originan el desarrollo o mejora de un sistema informático. Luego se presentan los objetivos y el catálogo de requisitos del nuevo sistema. Finalmente se describen las diferentes alternativas tecnológicas y el análisis de la brecha entre los requisitos planteados y la solución base seleccionada, si aplica.
 
-\section{Situación actual} 
-Esta sección debe contener información sobre la situación actual de la organización para la que se va a desarrollar el sistema software.
+%\section{Situación actual} 
+%Esta sección debe contener información sobre la situación actual de la organización para la que se va a desarrollar el sistema software.
 
-\subsection{Procesos de Negocio}
-Esta sección debe contener información sobre los modelos de procesos de negocio actuales, que suelen ser la base de los modelos de procesos de negocio a implantar.
+%\subsection{Procesos de Negocio}
+%Esta sección debe contener información sobre los modelos de procesos de negocio actuales, que suelen ser la base de los modelos de procesos de negocio a implantar.
 
-\subsection{Entorno Tecnológico}
-Esta sección debe contener información general sobre el entorno tecnológico en la organización del cliente antes del comienzo del desarrollo del sistema software, incluyendo hardware, redes, software, etc.
+%\subsection{Entorno Tecnológico}
+%Esta sección debe contener información general sobre el entorno tecnológico en la organización del cliente antes del comienzo del desarrollo del sistema software, incluyendo hardware, redes, software, etc.
 
-\subsection{Fortalezas y Debilidades}
-Esta sección debe contener información sobre los aspectos positivos y negativos del negocio actual de la organización para la que se va a desarrollar el sistema software.
+%\subsection{Fortalezas y Debilidades}
+%Esta sección debe contener información sobre los aspectos positivos y negativos del negocio actual de la organización para la que se va a desarrollar el sistema software.
 
 \section{Necesidades de Negocio}
-Esta sección debe contener información sobre los objetivos de negocio de clientes y usuarios, incluyendo los modelos de procesos de negocio a implantar.
+%Esta sección debe contener información sobre los objetivos de negocio de clientes y usuarios, incluyendo los modelos de procesos de negocio a implantar.
+Este apartado contendrá información sobre los objetivos de negocio tanto del cliente como de los usuarios, incluyendo los models de procesos de negocio a implantar.
 
 \subsection{Objetivos de Negocio}
-Esta sección debe contener los objetivos de negocio que se esperan alcanzar cuando el sistema software a desarrollar esté en producción.
+%Esta sección debe contener los objetivos de negocio que se esperan alcanzar cuando el sistema software a desarrollar esté en producción.
+El objetivo principal es la realización de una aplicación web con la que un usuario pueda automatizar, en la mayor parte posible, todas las etapas de creación de revisiones sistemáticas de la literatura.\\
+
+Una vez que el cliente tome la decisión de realizar una determinada investigación, deberá de realizar la búsqueda de la literatura que precisa para extraer conclusiones al final del mismo. Por ello, necesita un sistema con el que realizar varias búsquedas sobre varios motores de referencias específicos a la vez con las que posteriormente, el cliente estudiará, clasificará y exportará dicha información para obtener las conclusiones finales.\\
 
 \subsection{Procesos de Negocio}
-Esta sección, debe contener los modelos de procesos de negocio a implantar, que normalmente son los modelos de procesos de negocio actuales con ciertas mejoras.
+%Esta sección, debe contener los modelos de procesos de negocio a implantar, que normalmente son los modelos de procesos de negocio actuales con ciertas mejoras.
+Este punto queda fuera del ámbito del proyecto, ya que no se implantará ningún modelo de proceso de negocio en esta aplicación. La forma de emplear este producto queda a decisión del cliente o investigador.
 
 \section{Objetivos del Sistema}
-Esta sección debe contener la especificación de los objetivos o requisitos generales del sistema.
+Tal y como hemos descrito, el objetivo final de este proyecto es ayudar al investigador a automatizar algunas de las fases de las revisiones sistemáticas de la literatura.\\
+
+Para ello, el autor de una revisión sistemática, deberá seguir todas y cada una de las fases y la aplicación web ofrecerá todas las herramientas posibles para extraer la literatura deseada, así como la clasificación de qué estudios son válidos y cuáles no y, por último, la exportación de los datos en varios formatos de ficheros o la visualización de gráficas que ayuden a determinar las conclusiones finales del estudio.\\
 
 \section{Catálogo de Requisitos}
-Esta sección debe contener la descripción del conjunto de requisitos específicos del sistema a desarrollar para satisfacer las necesidades de negocio del cliente.
+%Esta sección debe contener la descripción del conjunto de requisitos específicos del sistema a desarrollar para satisfacer las necesidades de negocio del cliente.
+A continuación vamos a detallar el conjunto de requisitos específicos del sistema a desarrollar y con el que se pretende satisfacer las necesidades del cliente.
 
 \subsection{Requisitos funcionales}
-Descripción completa de la funcionalidad que ofrece el sistema. 
+%Descripción completa de la funcionalidad que ofrece el sistema. 
+Los requisitos funcionales que ofrece el sistema estarán separados en dos grupos, dependiendo de si estamos hablando de un cliente que además, tenga permisos de administrador (Rol Administrador) o no (Rol Usuario).
+
+\begin{itemize}
+	\item \textbf{Rol Usuario}
+		\begin{itemize}
+			\item Creación de revisiones sistemáticas de la literatura
+			\item Realizar búsquedas de referencias bibliográficas para los SLR.
+			\item Clasificar las referencias bibliográficas por medio de criterios de clasificación aportados por el usuario.
+			\item Obtener información de las referencias bibliográficas, así como la posibilidad de insertar nuevos campos o metadatos sobre los mismo.
+			\item Exportar la información obtenida del estudio de la investigación a través de varios formatos de salida.
+			\item Visualizar gráficos con la información obtenida de todas las búsquedas.
+	\end{itemize}
+	\item \textbf{Rol Administrador}
+	
+	\begin{itemize}
+		\item Todas las tareas del Rol Usuario.
+		\item Gestión de usuarios del sistema.
+		\item Gestión de errores en procesos de búsquedas.
+		\item Gestión de motores de búsquedas de referencias bibliográficas.
+		\item Gestión API REST de Mendeley con la aplicación.
+	\end{itemize}
+\end{itemize}
 
 \subsection{Requisitos no funcionales}
-Descripción de otros requisitos (relacionados con la calidad del software) que el sistema deberá satisfacer: portabilidad, seguridad, estándares de obligado cumplimiento, accesibilidad, usabilidad, etc.
+%Descripción de otros requisitos (relacionados con la calidad del software) que el sistema deberá satisfacer: portabilidad, seguridad, estándares de obligado cumplimiento, accesibilidad, usabilidad, etc.
+Descripción de otros requisitos que el sistema deberá satisfacer:
+
+\begin{itemize}
+	\item Todos los módulos de la aplicación web deberán estar disponibles para su instalación por parte de la UCA. Para ello, se ha decidido subir todo la aplicación en un repositorio al que puedan acceder.
+	\item La aplicación deberá tener un alto grado de accesibilidad y usabilidad, ya que se espera que en el futuro haya personas que puedan acceder y modificar o mejorar cualquier componente del sistema.
+	\item El sistema deberá ser seguro, las revisiones sistemáticas de cada usuario tienen acceso restringido a cualquier otro a no ser que tenga permisos para hacerlo.
+	\item El sistema deberá ser portable en cualquiera de los navegadores web.
+	\item El proceso de búsqueda de referencias deberá ser lo más transparente posible al usuario.
+\end{itemize}
 
 \subsection{Reglas de negocio}
-En el desarrollo del sistema, hay que tener en cuenta las denominadas reglas de negocio, es decir, el conjunto de restricciones, normas o políticas de la organización que deben ser respetadas por el sistema, las cuales suelen ser cambiantes.
+%En el desarrollo del sistema, hay que tener en cuenta las denominadas reglas de negocio, es decir, el conjunto de restricciones, normas o políticas de la organización que deben ser respetadas por el sistema, las cuales suelen ser cambiantes.
+Para el desarrollo del sistema, se ha indicado las siguientes reglas de negocio:
+
+\begin{itemize}
+	\item La aplicación web deberá ser desarrollado bajo un framework que permita utilizar el patrón \textbf{MVC} (\textit{Model View Controller}) para permitir la implementación de módulos independientes en el sistema si se desea.
+	\item El usuario debe estar registrado en Mendeley. De esta manera, el usuario dispondrá de un gestor de referencias donde la aplicación web insertará toda la documentación que la aplicación web encuentre.
+	\item La aplicación debe permitir la posibilidad de insertar un nuevo motor de búsqueda, para ello se explicará más adelante como un usuario administrador del sistema puede descargar el código de la aplicación e insertarlo.
+\end{itemize}
 
 \subsection{Requisitos de información}
-En esta sección se describen los requisitos de gestión de información (datos) que el sistema debe gestionar.
+%En esta sección se describen los requisitos de gestión de información (datos) que el sistema debe gestionar.
+Describimos a continuación los requisitos de gestión de información (datos) que el sistema debe gestionar.
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-01} & Información de usuarios.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-01 \ref{table:obj01}\\
+			\hline
+			\textbf{Requisitos asociados} & -\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Email Mendeley \\ Password Mendeley \\ Rol} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de los usuarios para hacer login con Mendeley.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-01: Requisitos de información de los usuarios.}
+		\label{table:irq01}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-02} & Información de revisiones sistemáticas de la literatura.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-01 \ref{table:obj01}\\
+			\hline
+			\textbf{Requisitos asociados} & -\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Título \\ Justificación} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de las revisiones sistemáticas de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-02: Requisitos de información de las revisiones sistemáticas de la literatura.}
+		\label{table:irq02}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-03} & Información de las búsquedas de referencias bibliográficas de un SLR.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-02 \ref{table:obj02}\\
+			\hline
+			\textbf{Requisitos asociados} & -\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Términos búsqueda \\ Motores Búsquedas \\ Total referencias a buscar \\ Rango años} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de las búsquedas de referencias bibliográficas de un SLR.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-03: Requisitos de información de las búsquedas de referencias bibliográficas de un SLR.}
+		\label{table:irq03}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-04} & Información de las referencias bibliográficas de un SLR.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-01 \ref{table:obj01} y OBJ-02 \ref{table:obj02}\\
+			\hline
+			\textbf{Requisitos asociados} & IRQ-03 \ref{table:irq03}\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Título \\ Autores \\ Publicación \\ Año publicación \\ Idioma \\ Abstract \\ Palabras clave \\ enlaces de referencia \\ Páginas \\ Volumen \\ Criterio} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de las referencias bibliográficas de un SLR.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-04: Requisitos de información de las referencias bibliográficas de un SLR.}
+		\label{table:irq04}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-05} & Información de criterios de clasificación de un SLR.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-01 \ref{table:obj01}, OBJ-02 \ref{table:obj02} y OBJ-03 \ref{table:obj03}\\
+			\hline
+			\textbf{Requisitos asociados} & IRQ-03 \ref{table:irq03} y IRQ-04 \ref{table:irq04} \\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Nombre \\ Total referencias} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de los criterios de clasificación de una revisión sistemática de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-05: Requisitos de información de los criterios de clasificación de un SLR.}
+		\label{table:irq05}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-06} & Información de preguntas de investigación de un SLR.\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-01 \ref{table:obj01}\\
+			\hline
+			\textbf{Requisitos asociados} & IRQ-02 \ref{table:irq02}\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Enunciado} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de las preguntas de investigación asociadas a una revisión sistemática de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-06: Requisitos de información de las preguntas de investigación de un SLR.}
+		\label{table:irq06}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-07} & Información de metadatos específicos de una referencia en un SLR\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-02 \ref{table:obj02} y OBJ-03 \ref{table:obj03}\\
+			\hline
+			\textbf{Requisitos asociados} & IRQ-03 \ref{table:irq03} y IRQ-04 \ref{table:irq04}\\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Identificador \\ Nombre \\ Tipo Campo \\ Valor defecto} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información de los metadatos específicos de una referencia en un SLR.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-07: Requisitos de información de los metadatos específicos de una referencia en un SLR.}
+		\label{table:irq07}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{5cm}|p{10cm}|}
+			\hline
+			\textbf{IRQ-08} & Información de información a exportar de un SLR\\
+			\hline
+			\textbf{Objetivos asociados} & OBJ-02 \ref{table:obj02} y OBJ-04 \ref{table:obj04}\\
+			\hline
+			\textbf{Requisitos asociados} & IRQ-02 \ref{table:irq02}, IRQ-03 \ref{table:irq03}, IRQ-04 \ref{table:irq04}, IRQ-05 \ref{table:irq05}, IRQ-06 \ref{table:irq05} y IRQ-07 \ref{table:irq07} \\
+			\hline
+			\textbf{Datos específicos} & \shortstack[l]{Datos SLR \\ Datos Búsquedas \\ Datos referencias} \\
+			\hline
+			\textbf{Estabilidad} & Alta\\
+			\hline
+			\textbf{Comentarios} & Información a exportar de un SLR.\\
+			\hline
+		\end{tabular}
+		\caption{IRQ-08: Requisitos de información de los datos a exportar de un SLR.}
+		\label{table:irq08}
+	\end{center}
+\end{table}
 
 \section{Alternativas de Solución}
-En esta sección, se debe ofrecer un estudio del arte de las diferentes alternativas tecnológicas que permitan satisfacer los requerimientos del sistema, para luego seleccionar (si procede) la herramienta o conjunto de herramientas que utilizaremos como base para el software a desarrollar.
+%En esta sección, se debe ofrecer un estudio del arte de las diferentes alternativas tecnológicas que permitan satisfacer los requerimientos del sistema, para luego seleccionar (si procede) la herramienta o conjunto de herramientas que utilizaremos como base para el software a desarrollar.
+Para el desarrollo de esta aplicación, se pensó en la posibilidad de crear un \textbf{DSL} textual (\textbf{Domain Specific Language}) donde el usuario por línea de comandos escribiera las instrucciones para conectar con el motor de búsqueda de referencias y descargar las referencias encontradas. En la UCA se trabaja con Eclipse como IDE de desarrollo, pero era un entorno complejo para desarrollar DSL debido a la poca documentación que existe en la actualidad. Además, la creación de un SLR sería llevada mejor a cabo si el usuario puede ver en todo momento la realización del mismo así como todos los pasos y directrices necesarios para el proceso.\\
+
+Finalmente, se tomó la decisión de realizar una aplicación web con el que los investigadores tendrán un fácil acceso y de manera visual obtener las conclusiones finales y, además, de un fácil desarrollo y mantenimiento gracias al framework \textit{Groovy on Grails} que nos permite aplicar el patrón \textit{MVC} y realizar un mejor mantenimiento de la aplicación.
 
 \section{Solución Propuesta}
-Si se ha optado por utilizar un software de base, debemos identificar y medir las diferencias entre lo que proporciona este software y los requisitos definidos para el proyecto.\\
-El resultado de este análisis permitirá identificar cuáles de éstos requisitos ya están solventados total o parcialmente por el sistema base y cuales tendremos que diseñar e implementar la propuesta de solución.
+%Si se ha optado por utilizar un software de base, debemos identificar y medir las diferencias entre lo que proporciona este software y los requisitos definidos para el proyecto.\\
+%El resultado de este análisis permitirá identificar cuáles de éstos requisitos ya están solventados total o parcialmente por el sistema base y cuales tendremos que diseñar e implementar la propuesta de solución.
+El desarrollo propuesto será la realización de un sistema web, donde el usuario podrá conectar a través de su cuenta de Mendeley y crear las revisiones sistemáticas de la literatura que considere necesario.\\
+
+La aplicación al ser en un entorno web, se desarrolla con un IDE denominado \textit{Grails Tool Suite} donde por medio de los lenguajes \textit{Groovy} y \textit{Java} podemos aplicar el patrón MVC y desarrollar una aplicación fácil de mantener y modularizada.\\
+
+Mendeley ofrece un gestor de referencias al usuario por medio de una API REST con la que desde una aplicación, como este proyecto de fin de carrera, pueda conectarse y obtener la información necesaria para realizar los estudios de la literatura y permitir la sincronización de datos entre ambas.\\

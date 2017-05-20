@@ -13,6 +13,7 @@
 \usepackage{./estilo/paquetes}
 \usepackage{./estilo/colores}
 \usepackage{./estilo/comandos}
+%\usepackage{makecell}
 
 % Ruta al directorio de imágenes
 \graphicspath{{./img/}} 
@@ -85,22 +86,27 @@
 
 % DESARROLLO
 \part{Desarrollo}
-\null\vfill
-\noindent En esta parte se debe describir el desarrollo del proyecto siguiendo la metodología empleada. Sus capítulos no deben ser una descripción exhaustiva de todos los documentos, diagramas, código fuente y, en general, entregables generados, sino más bien una explicación resumida del desarrollo, estructurada según las etapas principales del proceso de ingeniería. Deben seleccionarse aquellos diagramas, fragmentos de código y secciones de los entregables que sean más significativos para dicha explicación. La totalidad de los entregables resultado del proyecto se ubicarán en los anexos y/o en el material en CD/DVD que acompañe al proyecto.
+%\null\vfill
+%\noindent En esta parte se debe describir el desarrollo del proyecto siguiendo la metodología empleada. Sus capítulos no deben ser una descripción exhaustiva de todos los documentos, diagramas, código fuente y, en general, entregables generados, sino más bien una explicación resumida del desarrollo, estructurada según las etapas principales del proceso de ingeniería. Deben seleccionarse aquellos diagramas, fragmentos de código y secciones de los entregables que sean más significativos para dicha explicación. La totalidad de los entregables resultado del proyecto se ubicarán en los anexos y/o en el material en CD/DVD que acompañe al proyecto.
 
 \chapter{Requisitos del Sistema}
+\label{chap:chap03}
 \input{./contenido/requisitos}
 
 \chapter{Análisis del Sistema}
+\label{chap:chap04}
 \input{./contenido/analisis}
 
 \chapter{Diseño del Sistema}
+\label{chap:chap05}
 \input{./contenido/diseno}
 
 \chapter{Construcción del Sistema}
+\label{chap:chap06}
 \input{./contenido/implementacion}
 
 \chapter{Pruebas del Sistema}
+\label{chap:chap07}
 \input{./contenido/pruebas}
 
 % EPILOGO
@@ -110,15 +116,19 @@
 \vfill
 
 \chapter{Manual de implantación y explotación}
+\label{chap:chap08}
 \input{./contenido/manual_instexp}
 
 \chapter{Manual de usuario}
+\label{chap:chap09}
 \input{./contenido/manual_usuario}
 
 \chapter{Manual del desarrollador}
+\label{chap:chap10}
 \input{./contenido/manual_desarrollador}
 
 \chapter{Conclusiones}
+\label{chap:chap11}
 \input{./contenido/conclusiones}
 
 \chapter*{\bibname}
