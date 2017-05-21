@@ -34,49 +34,48 @@
 \BOOKMARK [1][-]{section.4.2}{Modelo de Casos de Uso}{chapter.4}% 34
 \BOOKMARK [2][-]{subsection.4.2.1}{Actores}{section.4.2}% 35
 \BOOKMARK [2][-]{subsection.4.2.2}{Diagramas y especificaci\363n de casos de uso}{section.4.2}% 36
-\BOOKMARK [1][-]{section.4.3}{Modelo de Comportamiento}{chapter.4}% 37
-\BOOKMARK [1][-]{section.4.4}{Modelo de Interfaz de Usuario}{chapter.4}% 38
-\BOOKMARK [0][-]{chapter.5}{Dise\361o del Sistema}{part.2}% 39
-\BOOKMARK [1][-]{section.5.1}{Arquitectura del Sistema}{chapter.5}% 40
-\BOOKMARK [2][-]{subsection.5.1.1}{Arquitectura F\355sica}{section.5.1}% 41
-\BOOKMARK [2][-]{subsection.5.1.2}{Arquitectura L\363gica}{section.5.1}% 42
-\BOOKMARK [1][-]{section.5.2}{Parametrizaci\363n del software base}{chapter.5}% 43
-\BOOKMARK [1][-]{section.5.3}{Dise\361o F\355sico de Datos}{chapter.5}% 44
-\BOOKMARK [1][-]{section.5.4}{Dise\361o detallado de Componentes}{chapter.5}% 45
-\BOOKMARK [1][-]{section.5.5}{Dise\361o detallado de la Interfaz de Usuario}{chapter.5}% 46
-\BOOKMARK [0][-]{chapter.6}{Construcci\363n del Sistema}{part.2}% 47
-\BOOKMARK [1][-]{section.6.1}{Entorno de Construcci\363n}{chapter.6}% 48
-\BOOKMARK [1][-]{section.6.2}{C\363digo Fuente}{chapter.6}% 49
-\BOOKMARK [1][-]{section.6.3}{Scripts de Base de datos}{chapter.6}% 50
-\BOOKMARK [0][-]{chapter.7}{Pruebas del Sistema}{part.2}% 51
-\BOOKMARK [1][-]{section.7.1}{Estrategia}{chapter.7}% 52
-\BOOKMARK [1][-]{section.7.2}{Entorno de Pruebas}{chapter.7}% 53
-\BOOKMARK [1][-]{section.7.3}{Roles}{chapter.7}% 54
-\BOOKMARK [1][-]{section.7.4}{Niveles de Pruebas}{chapter.7}% 55
-\BOOKMARK [2][-]{subsection.7.4.1}{Pruebas Unitarias}{section.7.4}% 56
-\BOOKMARK [2][-]{subsection.7.4.2}{Pruebas de Integraci\363n}{section.7.4}% 57
-\BOOKMARK [2][-]{subsection.7.4.3}{Pruebas de Sistema}{section.7.4}% 58
-\BOOKMARK [2][-]{subsection.7.4.4}{Pruebas de Aceptaci\363n}{section.7.4}% 59
-\BOOKMARK [-1][-]{part.3}{III Ep\355logo}{}% 60
-\BOOKMARK [0][-]{chapter.8}{Manual de implantaci\363n y explotaci\363n}{part.3}% 61
-\BOOKMARK [1][-]{section.8.1}{Introducci\363n}{chapter.8}% 62
-\BOOKMARK [1][-]{section.8.2}{Requisitos previos}{chapter.8}% 63
-\BOOKMARK [1][-]{section.8.3}{Inventario de componentes}{chapter.8}% 64
-\BOOKMARK [1][-]{section.8.4}{Procedimientos de instalaci\363n}{chapter.8}% 65
-\BOOKMARK [1][-]{section.8.5}{Pruebas de implantaci\363n}{chapter.8}% 66
-\BOOKMARK [1][-]{section.8.6}{Procedimientos de operaci\363n y nivel de servicio}{chapter.8}% 67
-\BOOKMARK [0][-]{chapter.9}{Manual de usuario}{part.3}% 68
-\BOOKMARK [1][-]{section.9.1}{Introducci\363n}{chapter.9}% 69
-\BOOKMARK [1][-]{section.9.2}{Instalaci\363n}{chapter.9}% 70
-\BOOKMARK [1][-]{section.9.3}{Uso del sistema}{chapter.9}% 71
-\BOOKMARK [0][-]{chapter.10}{Manual del desarrollador}{part.3}% 72
-\BOOKMARK [1][-]{section.10.1}{Introducci\363n}{chapter.10}% 73
-\BOOKMARK [1][-]{section.10.2}{Preparaci\363n del entorno de trabajo}{chapter.10}% 74
-\BOOKMARK [1][-]{section.10.3}{Consideraciones generales sobre el desarrollo}{chapter.10}% 75
-\BOOKMARK [1][-]{section.10.4}{Instrucciones para construcci\363n y despliegue}{chapter.10}% 76
-\BOOKMARK [0][-]{chapter.11}{Conclusiones}{part.3}% 77
-\BOOKMARK [1][-]{section.11.1}{Objetivos alcanzados}{chapter.11}% 78
-\BOOKMARK [1][-]{section.11.2}{Lecciones aprendidas}{chapter.11}% 79
-\BOOKMARK [1][-]{section.11.3}{Trabajo futuro}{chapter.11}% 80
-\BOOKMARK [0][-]{chapter*.9}{Bibliograf\355a}{part.3}% 81
-\BOOKMARK [0][-]{section*.10}{Informaci\363n sobre Licencia}{part.3}% 82
+\BOOKMARK [1][-]{section.4.3}{Modelo de Interfaz de Usuario}{chapter.4}% 37
+\BOOKMARK [0][-]{chapter.5}{Dise\361o del Sistema}{part.2}% 38
+\BOOKMARK [1][-]{section.5.1}{Arquitectura del Sistema}{chapter.5}% 39
+\BOOKMARK [2][-]{subsection.5.1.1}{Arquitectura F\355sica}{section.5.1}% 40
+\BOOKMARK [2][-]{subsection.5.1.2}{Arquitectura L\363gica}{section.5.1}% 41
+\BOOKMARK [1][-]{section.5.2}{Parametrizaci\363n del software base}{chapter.5}% 42
+\BOOKMARK [1][-]{section.5.3}{Dise\361o F\355sico de Datos}{chapter.5}% 43
+\BOOKMARK [1][-]{section.5.4}{Dise\361o detallado de Componentes}{chapter.5}% 44
+\BOOKMARK [1][-]{section.5.5}{Dise\361o detallado de la Interfaz de Usuario}{chapter.5}% 45
+\BOOKMARK [0][-]{chapter.6}{Construcci\363n del Sistema}{part.2}% 46
+\BOOKMARK [1][-]{section.6.1}{Entorno de Construcci\363n}{chapter.6}% 47
+\BOOKMARK [1][-]{section.6.2}{C\363digo Fuente}{chapter.6}% 48
+\BOOKMARK [1][-]{section.6.3}{Scripts de Base de datos}{chapter.6}% 49
+\BOOKMARK [0][-]{chapter.7}{Pruebas del Sistema}{part.2}% 50
+\BOOKMARK [1][-]{section.7.1}{Estrategia}{chapter.7}% 51
+\BOOKMARK [1][-]{section.7.2}{Entorno de Pruebas}{chapter.7}% 52
+\BOOKMARK [1][-]{section.7.3}{Roles}{chapter.7}% 53
+\BOOKMARK [1][-]{section.7.4}{Niveles de Pruebas}{chapter.7}% 54
+\BOOKMARK [2][-]{subsection.7.4.1}{Pruebas Unitarias}{section.7.4}% 55
+\BOOKMARK [2][-]{subsection.7.4.2}{Pruebas de Integraci\363n}{section.7.4}% 56
+\BOOKMARK [2][-]{subsection.7.4.3}{Pruebas de Sistema}{section.7.4}% 57
+\BOOKMARK [2][-]{subsection.7.4.4}{Pruebas de Aceptaci\363n}{section.7.4}% 58
+\BOOKMARK [-1][-]{part.3}{III Ep\355logo}{}% 59
+\BOOKMARK [0][-]{chapter.8}{Manual de implantaci\363n y explotaci\363n}{part.3}% 60
+\BOOKMARK [1][-]{section.8.1}{Introducci\363n}{chapter.8}% 61
+\BOOKMARK [1][-]{section.8.2}{Requisitos previos}{chapter.8}% 62
+\BOOKMARK [1][-]{section.8.3}{Inventario de componentes}{chapter.8}% 63
+\BOOKMARK [1][-]{section.8.4}{Procedimientos de instalaci\363n}{chapter.8}% 64
+\BOOKMARK [1][-]{section.8.5}{Pruebas de implantaci\363n}{chapter.8}% 65
+\BOOKMARK [1][-]{section.8.6}{Procedimientos de operaci\363n y nivel de servicio}{chapter.8}% 66
+\BOOKMARK [0][-]{chapter.9}{Manual de usuario}{part.3}% 67
+\BOOKMARK [1][-]{section.9.1}{Introducci\363n}{chapter.9}% 68
+\BOOKMARK [1][-]{section.9.2}{Instalaci\363n}{chapter.9}% 69
+\BOOKMARK [1][-]{section.9.3}{Uso del sistema}{chapter.9}% 70
+\BOOKMARK [0][-]{chapter.10}{Manual del desarrollador}{part.3}% 71
+\BOOKMARK [1][-]{section.10.1}{Introducci\363n}{chapter.10}% 72
+\BOOKMARK [1][-]{section.10.2}{Preparaci\363n del entorno de trabajo}{chapter.10}% 73
+\BOOKMARK [1][-]{section.10.3}{Consideraciones generales sobre el desarrollo}{chapter.10}% 74
+\BOOKMARK [1][-]{section.10.4}{Instrucciones para construcci\363n y despliegue}{chapter.10}% 75
+\BOOKMARK [0][-]{chapter.11}{Conclusiones}{part.3}% 76
+\BOOKMARK [1][-]{section.11.1}{Objetivos alcanzados}{chapter.11}% 77
+\BOOKMARK [1][-]{section.11.2}{Lecciones aprendidas}{chapter.11}% 78
+\BOOKMARK [1][-]{section.11.3}{Trabajo futuro}{chapter.11}% 79
+\BOOKMARK [0][-]{chapter*.9}{Bibliograf\355a}{part.3}% 80
+\BOOKMARK [0][-]{section*.10}{Informaci\363n sobre Licencia}{part.3}% 81

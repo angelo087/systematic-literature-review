@@ -18,6 +18,31 @@
 \contentsline {table}{\numberline {3.7}{\ignorespaces IRQ-07: Requisitos de informaci\IeC {\'o}n de los metadatos espec\IeC {\'\i }ficos de una referencia en un SLR.}}{27}{table.3.7}
 \contentsline {table}{\numberline {3.8}{\ignorespaces IRQ-08: Requisitos de informaci\IeC {\'o}n de los datos a exportar de un SLR.}}{28}{table.3.8}
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces CU-01 Registar en sistema}}{34}{table.4.1}
+\contentsline {table}{\numberline {4.2}{\ignorespaces CU-02 Realizar login}}{35}{table.4.2}
+\contentsline {table}{\numberline {4.3}{\ignorespaces CU-03 Cambiar rol}}{35}{table.4.3}
+\contentsline {table}{\numberline {4.4}{\ignorespaces CU-04 Listar usuarios}}{36}{table.4.4}
+\contentsline {table}{\numberline {4.5}{\ignorespaces CU-05 Crear SLR}}{36}{table.4.5}
+\contentsline {table}{\numberline {4.6}{\ignorespaces CU-06 Modificar SLR}}{37}{table.4.6}
+\contentsline {table}{\numberline {4.7}{\ignorespaces CU-07 Borrar SLR}}{38}{table.4.7}
+\contentsline {table}{\numberline {4.8}{\ignorespaces CU-08 Exportar SLR}}{38}{table.4.8}
+\contentsline {table}{\numberline {4.9}{\ignorespaces CU-09 Crear Pregunta de investigaci\IeC {\'o}n}}{39}{table.4.9}
+\contentsline {table}{\numberline {4.10}{\ignorespaces CU-10 Modificar pregunta de investigaci\IeC {\'o}n}}{40}{table.4.10}
+\contentsline {table}{\numberline {4.11}{\ignorespaces CU-11 Borrar pregunta investigaci\IeC {\'o}n}}{41}{table.4.11}
+\contentsline {table}{\numberline {4.12}{\ignorespaces CU-12 Crear criterio de clasificaci\IeC {\'o}n}}{41}{table.4.12}
+\contentsline {table}{\numberline {4.13}{\ignorespaces CU-13 Modificar criterio de clasificaci\IeC {\'o}n}}{42}{table.4.13}
+\contentsline {table}{\numberline {4.14}{\ignorespaces CU-14 Borrar criterio de clasificaci\IeC {\'o}n}}{42}{table.4.14}
+\contentsline {table}{\numberline {4.15}{\ignorespaces CU-15 Crear atributo espec\IeC {\'\i }fico}}{43}{table.4.15}
+\contentsline {table}{\numberline {4.16}{\ignorespaces CU-16 Modificar atributo de especificaci\IeC {\'o}n}}{43}{table.4.16}
+\contentsline {table}{\numberline {4.17}{\ignorespaces CU-17 Eliminar atributo de especificaci\IeC {\'o}n}}{43}{table.4.17}
+\contentsline {table}{\numberline {4.18}{\ignorespaces CU-18 Crear b\IeC {\'u}squedas de referencias}}{44}{table.4.18}
+\contentsline {table}{\numberline {4.19}{\ignorespaces CU-19 Listar referencias}}{45}{table.4.19}
+\contentsline {table}{\numberline {4.20}{\ignorespaces CU-20 Modificar referencias}}{45}{table.4.20}
+\contentsline {table}{\numberline {4.21}{\ignorespaces CU-21 Eliminar referencias}}{45}{table.4.21}
+\contentsline {table}{\numberline {4.22}{\ignorespaces CU-22 Listar B\IeC {\'u}squedas}}{46}{table.4.22}
+\contentsline {table}{\numberline {4.23}{\ignorespaces CU-23 Sincronizar Perfil}}{46}{table.4.23}
+\contentsline {table}{\numberline {4.24}{\ignorespaces CU-24 Sincronizar SLR}}{47}{table.4.24}
+\contentsline {table}{\numberline {4.25}{\ignorespaces CU-24 Sincronizar Referencias}}{47}{table.4.25}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
