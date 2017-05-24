@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.5.11)  21 MAY 2017 19:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.5.11)  24 MAY 2017 18:55
 entering extended mode
 **./memoria.tex
 (memoria.tex
@@ -2921,7 +2921,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 12.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 12.
- <./img/class-diagram.png, id=807, 2494.31876pt x 3647.6275pt>
+ <./img/class-diagram.png, id=815, 2494.31876pt x 3647.6275pt>
 File: ./img/class-diagram.png Graphic file (type png)
  <use ./img/class-diagram.png>
 Package pdftex.def Info: ./img/class-diagram.png used on input line 17.
@@ -2966,43 +2966,43 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 39.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 39.
-<./img/cu-sistema.png, id=816, 667.49374pt x 419.5675pt>
+<./img/cu-sistema.png, id=824, 667.49374pt x 419.5675pt>
 File: ./img/cu-sistema.png Graphic file (type png)
  <use ./img/cu-sistema.png>
 Package pdftex.def Info: ./img/cu-sistema.png used on input line 44.
 (pdftex.def)             Requested size: 333.74606pt x 209.78323pt.
 
-<./img/cu-gestusuarios.png, id=817, 459.7175pt x 276.03125pt>
+<./img/cu-gestusuarios.png, id=825, 459.7175pt x 276.03125pt>
 File: ./img/cu-gestusuarios.png Graphic file (type png)
  <use ./img/cu-gestusuarios.png>
 Package pdftex.def Info: ./img/cu-gestusuarios.png used on input line 52.
 (pdftex.def)             Requested size: 275.83263pt x 165.62001pt.
 
-<./img/cu-gestslr.png, id=818, 679.53876pt x 430.60875pt>
+<./img/cu-gestslr.png, id=826, 679.53876pt x 430.60875pt>
 File: ./img/cu-gestslr.png Graphic file (type png)
  <use ./img/cu-gestslr.png>
 Package pdftex.def Info: ./img/cu-gestslr.png used on input line 60.
 (pdftex.def)             Requested size: 373.74748pt x 236.83553pt.
 
-<./img/cu-gestpreginv.png, id=819, 376.40625pt x 272.01625pt>
+<./img/cu-gestpreginv.png, id=827, 376.40625pt x 272.01625pt>
 File: ./img/cu-gestpreginv.png Graphic file (type png)
  <use ./img/cu-gestpreginv.png>
 Package pdftex.def Info: ./img/cu-gestpreginv.png used on input line 68.
 (pdftex.def)             Requested size: 207.02406pt x 149.60939pt.
 
-<./img/cu-gestcrit.png, id=820, 360.34625pt x 265.99374pt>
+<./img/cu-gestcrit.png, id=828, 360.34625pt x 265.99374pt>
 File: ./img/cu-gestcrit.png Graphic file (type png)
  <use ./img/cu-gestcrit.png>
 Package pdftex.def Info: ./img/cu-gestcrit.png used on input line 76.
 (pdftex.def)             Requested size: 198.19104pt x 146.297pt.
 
-<./img/cu-gestatesp.png, id=821, 351.3125pt x 262.9825pt>
+<./img/cu-gestatesp.png, id=829, 351.3125pt x 262.9825pt>
 File: ./img/cu-gestatesp.png Graphic file (type png)
  <use ./img/cu-gestatesp.png>
 Package pdftex.def Info: ./img/cu-gestatesp.png used on input line 84.
 (pdftex.def)             Requested size: 193.22246pt x 144.64081pt.
 
-<./img/cu-gestbusquedas.png, id=822, 679.53876pt x 283.0575pt>
+<./img/cu-gestbusquedas.png, id=830, 679.53876pt x 283.0575pt>
 File: ./img/cu-gestbusquedas.png Graphic file (type png)
  <use ./img/cu-gestbusquedas.png>
 Package pdftex.def Info: ./img/cu-gestbusquedas.png used on input line 92.
@@ -3134,42 +3134,11 @@ Package babel Info: Redefining spanish shorthand "!
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 98.
  [33 <./img/cu-gestcrit.png> <./img/cu-gestatesp.png> <./img/cu-gestbusquedas.png>]
-<./img/cu-sincromend.png, id=845, 394.47375pt x 277.035pt>
+<./img/cu-sincromend.png, id=853, 394.47375pt x 277.035pt>
 File: ./img/cu-sincromend.png Graphic file (type png)
  <use ./img/cu-sincromend.png>
 Package pdftex.def Info: ./img/cu-sincromend.png used on input line 102.
 (pdftex.def)             Requested size: 216.96123pt x 152.3697pt.
-
-
-LaTeX Warning: Reference `table:09' on page 34 undefined on input line 292.
-
-
-LaTeX Warning: Reference `table:10' on page 34 undefined on input line 292.
-
-
-LaTeX Warning: Reference `table:11' on page 34 undefined on input line 292.
-
-
-LaTeX Warning: Reference `table:12' on page 34 undefined on input line 293.
-
-
-LaTeX Warning: Reference `table:13' on page 34 undefined on input line 293.
-
-
-LaTeX Warning: Reference `table:14' on page 34 undefined on input line 293.
-
-
-LaTeX Warning: Reference `table:15' on page 34 undefined on input line 294.
-
-
-LaTeX Warning: Reference `table:16' on page 34 undefined on input line 294.
-
-
-LaTeX Warning: Reference `table:17' on page 34 undefined on input line 294.
-
-
-LaTeX Warning: Reference `table:18' on page 34 undefined on input line 295.
-
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 909.
 Package babel Info: Redefining spanish shorthand >>
@@ -3194,7 +3163,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 909.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 909.
-[34 <./img/cu-sincromend.png>]
+ [34 <./img/cu-sincromend.png>]
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 909.
 Package babel Info: Redefining spanish shorthand >>
@@ -3219,7 +3188,8 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 909.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 909.
- [35]
+
+[35]
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 909.
 Package babel Info: Redefining spanish shorthand >>
@@ -3537,55 +3507,55 @@ Underfull \hbox (badness 10000) in paragraph at lines 913--914
 
  []
 
-<./img/mock01.png, id=982, 747.79375pt x 509.905pt>
+<./img/mock01.png, id=1008, 747.79375pt x 509.905pt>
 File: ./img/mock01.png Graphic file (type png)
  <use ./img/mock01.png>
 Package pdftex.def Info: ./img/mock01.png used on input line 917.
 (pdftex.def)             Requested size: 224.33984pt x 152.97267pt.
 
-<./img/mock02.png, id=983, 785.93625pt x 751.80875pt>
+<./img/mock02.png, id=1009, 785.93625pt x 751.80875pt>
 File: ./img/mock02.png Graphic file (type png)
  <use ./img/mock02.png>
 Package pdftex.def Info: ./img/mock02.png used on input line 925.
 (pdftex.def)             Requested size: 235.78268pt x 225.54436pt.
 
-<./img/mock03.png, id=984, 785.93625pt x 751.80875pt>
+<./img/mock03.png, id=1010, 785.93625pt x 751.80875pt>
 File: ./img/mock03.png Graphic file (type png)
  <use ./img/mock03.png>
 Package pdftex.def Info: ./img/mock03.png used on input line 933.
 (pdftex.def)             Requested size: 235.78268pt x 225.54436pt.
 
-<./img/mock04.png, id=985, 785.93625pt x 751.80875pt>
+<./img/mock04.png, id=1011, 785.93625pt x 751.80875pt>
 File: ./img/mock04.png Graphic file (type png)
  <use ./img/mock04.png>
 Package pdftex.def Info: ./img/mock04.png used on input line 941.
 (pdftex.def)             Requested size: 235.78268pt x 225.54436pt.
 
-<./img/mock05.png, id=986, 785.93625pt x 751.80875pt>
+<./img/mock05.png, id=1012, 785.93625pt x 751.80875pt>
 File: ./img/mock05.png Graphic file (type png)
  <use ./img/mock05.png>
 Package pdftex.def Info: ./img/mock05.png used on input line 949.
 (pdftex.def)             Requested size: 235.78268pt x 225.54436pt.
 
-<./img/mock06.png, id=987, 785.93625pt x 650.43pt>
+<./img/mock06.png, id=1013, 785.93625pt x 650.43pt>
 File: ./img/mock06.png Graphic file (type png)
  <use ./img/mock06.png>
 Package pdftex.def Info: ./img/mock06.png used on input line 957.
 (pdftex.def)             Requested size: 235.78268pt x 195.1305pt.
 
-<./img/mock07.png, id=988, 902.37125pt x 795.97375pt>
+<./img/mock07.png, id=1014, 902.37125pt x 795.97375pt>
 File: ./img/mock07.png Graphic file (type png)
  <use ./img/mock07.png>
 Package pdftex.def Info: ./img/mock07.png used on input line 965.
 (pdftex.def)             Requested size: 270.71346pt x 238.79396pt.
 
-<./img/mock08.png, id=989, 902.37125pt x 1047.915pt>
+<./img/mock08.png, id=1015, 902.37125pt x 1047.915pt>
 File: ./img/mock08.png Graphic file (type png)
  <use ./img/mock08.png>
 Package pdftex.def Info: ./img/mock08.png used on input line 973.
 (pdftex.def)             Requested size: 270.71346pt x 314.37692pt.
 
-<./img/mock09.png, id=990, 902.37125pt x 804.00375pt>
+<./img/mock09.png, id=1016, 902.37125pt x 804.00375pt>
 File: ./img/mock09.png Graphic file (type png)
  <use ./img/mock09.png>
 Package pdftex.def Info: ./img/mock09.png used on input line 981.
@@ -3642,7 +3612,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 102.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 102.
-[49 <./img/mock03.png> <./img/mock04.png>]
+ [49 <./img/mock03.png> <./img/mock04.png>]
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 102.
 Package babel Info: Redefining spanish shorthand >>
@@ -4858,10 +4828,6 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 154.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 154.
 Package rerunfilecheck Info: File `memoria.out' has not changed.
 (rerunfilecheck)             Checksum: 24C6DA863C5A46ED3A7A727394DD64C3;5665.
-
-
-LaTeX Warning: There were undefined references.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 154.
  )
 (\end occurred inside a group at level 1)
@@ -4869,10 +4835,10 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 154.
 ### semi simple group (level 1) entered at line 142 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 19464 strings out of 493328
- 346428 string characters out of 3139121
- 503838 words of memory out of 3000000
- 22240 multiletter control sequences out of 15000+200000
+ 19454 strings out of 493328
+ 346328 string characters out of 3139121
+ 504510 words of memory out of 3000000
+ 22230 multiletter control sequences out of 15000+200000
  19280 words of font info for 48 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,14n,56p,826b,666s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -4888,9 +4854,9 @@ onts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk> <C:\Users\angelo\AppData\Local\Mi
 600\ecbx1440.pk> <C:\Users\angelo\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1440.pk><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/eurosym/feymr10
 .pfb>
-Output written on memoria.pdf (87 pages, 2391979 bytes).
+Output written on memoria.pdf (87 pages, 2396838 bytes).
 PDF statistics:
- 1707 PDF objects out of 1728 (max. 8388607)
+ 1733 PDF objects out of 2073 (max. 8388607)
  295 named destinations out of 1000 (max. 500000)
  791 words of extra memory for PDF output out of 10000 (max. 10000000)
 
