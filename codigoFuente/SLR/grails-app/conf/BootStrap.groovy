@@ -102,22 +102,23 @@ class BootStrap {
 		
 		log.info "Creamos las credenciales para Mendeley..."
 		// Server Vultr
-		/*def mendeleyApi = MendeleyApi.findByClientId('1044') ?: 
-			new MendeleyApi(clientId: '1044', clientSecret: 'N1krjxVLCiflzZTt', 
+		/*def mendeleyApi = MendeleyApi.findByName('SLR_VULTR') ?: 
+			new MendeleyApi(name: 'SLR_VULTR', clientId: '1044', clientSecret: 'N1krjxVLCiflzZTt', 
 							redirectUri: 'http://45.76.94.16:8080/SLR/indexMendeley/', 
 							totalHilos: 3, totalTries: 2).save(failOnError: true)*/
 		
 		// Localhost
-		/*def mendeleyApi = MendeleyApi.findByClientId('4347') ?:
-			new MendeleyApi(clientId: '4347', clientSecret: 'XJZuvpCKISNcnLBo',
+		/*def mendeleyApi = MendeleyApi.findByName('SLR_LOCAL') ?:
+			new MendeleyApi(name: 'SLR_LOCAL', clientId: '4347', clientSecret: 'XJZuvpCKISNcnLBo',
 						redirectUri: 'http://localhost:8080/SLR/indexMendeley/',
 						totalHilos: 3, totalTries: 2).save(failOnError: true)
 		*/
 		// Server UCA
-		def mendeleyApi = MendeleyApi.findByClientId('4382') ?:
-			new MendeleyApi(clientId: '4382', clientSecret: 'z5UpXugjrevgcE17',
-					redirectUri: 'http://slr.uca.es:8080/SLR/indexMendeley/',
+		def mendeleyApi = MendeleyApi.findByName('SLR_UCA') ?:
+			new MendeleyApi(name: 'SLR_UCA', clientId: '4382', clientSecret: 'z5UpXugjrevgcE17',
+					redirectUri: 'http://slr.uca.es/indexMendeley/',
 					totalHilos: 3, totalTries: 2).save(failOnError: true)
+					
 		log.info "Creamos Usuarios de prueba..."
 		
 		/*def profile01 = new UserProfile(

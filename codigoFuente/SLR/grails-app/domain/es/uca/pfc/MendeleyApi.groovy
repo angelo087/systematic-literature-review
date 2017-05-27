@@ -2,6 +2,7 @@ package es.uca.pfc
 
 class MendeleyApi {
 
+	String name;
 	String clientId;
 	String clientSecret;
 	String redirectUri;
