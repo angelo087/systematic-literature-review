@@ -6,6 +6,11 @@ Bok, S.~M. (2016).
 \newblock
   \url{http://www.scrummanager.net/bok/index.php?title=Scrum_Manager_BoK}.
 
+\bibitem[Bootstrap, 2016]{boot2016}
+Bootstrap (2016).
+\newblock {Bootstrap Framework}.
+\newblock \url{http://getbootstrap.com/}.
+
 \bibitem[Brito, 2009]{brito2009}
 Brito, N. (2009).
 \newblock {Manual de desarrollo web con GRAILS}.

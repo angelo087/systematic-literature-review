@@ -25,14 +25,14 @@ Los componentes que compondrán la arquitectura física de esta aplicación se p
 
 \begin{itemize}
 	\item \textbf{Navegador del cliente}. Un navegador estándar HTML capaz de soportar  CSS, Javascript + Document Object Model, XML y XSLT. Este servirá como dispositivo de interfaz de usuario. Toda la interacción entre los usuarios y el sistema se realiza a través del navegador.
-	\item \textbf{Servidor web}. El navegador del cliente accederá al sistema a través del servidor Web (Tomcat), el cual acepta las peticiones del cliente y ejecuta, tosi es necesario, los scripts del lado del servidor necesarios. El resultado, una página HTML formateada, será enviada al cliente.
+	\item \textbf{Servidor web}. El navegador del cliente accederá al sistema a través del servidor Web (Tomcat), el cual acepta las peticiones del cliente y ejecuta, si es necesario, los scripts del lado del servidor necesarios. El resultado, una página HTML formateada, será enviada al cliente.
 	\item \textbf{Conexión HTTP}. Es el protocolo más común actualmente entre el cliente y el servidor.
 	\item \textbf{Servidor de Aplicaciones}. Es el principal motor para ejecutar la lógica del negocio del lado del servidor.
 	\item \textbf{Servidor de Base de datos}. Es la parte del sistema que mantiene el estado actual del negocio.
 	\item \textbf{Servicio Web}. En este caso, Mendeley actuará de gestor de referencias del cuál podremos obtener la información de las revisiones sistemáticas (carpetas), ficheros (referencias) e información del perfil del usuario.
 \end{itemize}
 
-\begin{figure}[!hp]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.3]{arquitectura-fisica.png}
 		\caption{Arquitectura física del sistema (I).}
@@ -40,7 +40,7 @@ Los componentes que compondrán la arquitectura física de esta aplicación se p
 	\end{center}
 \end{figure}
 
-\begin{figure}[!hp]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.9]{arquitectura-fisica2.png}
 		\caption{Arquitectura del sistema (II).}
@@ -86,7 +86,7 @@ La arquitectura lógica de la aplicación web se va a regir en todo momento seg�
 
 Para el desarrollo de la aplicación, se ha decidido seguir la arquitectura del framework \textbf{Grails} (ver figura \ref{fig:arquitectura-grails}) que acopla correctamente el patrón MVC \cite{brito2009}.
 
-\begin{figure}[!hp]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.7]{arquitectura-grails.png}
 		\caption{Arquitectura Grails.}
@@ -168,7 +168,7 @@ Una vez que se ha logado en el sistema, podemos obtener un listado de aplicacion
 	\item \textbf{Client Secret}. Código privado del cliente que debe ser generado a través del botón \textit{Generate secret}.
 \end{itemize}
 
-\begin{figure}[!hp]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.4]{mendeley-registerApp.png}
 		\caption{Registrar aplicación en Mendeley.}
@@ -178,7 +178,7 @@ Una vez que se ha logado en el sistema, podemos obtener un listado de aplicacion
 
 Una vez que hemos realizado la configuración en Mendeley, debemos insertar la información obtenida en nuestra aplicación. Para ello, Grails dispone de un fichero situado en \textit{conf/Bootstrap.groovy} donde por medio de una clase de dominio realizada denominada \textit{MendeleyApi} podemos parametrizar esta configuración tal y como podemos ver reflejado en la figura \ref{fig:bootstrap-mend}.
 
-\begin{figure}[!hp]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.6]{bootstrap-mend.png}
 		\caption{Registrar aplicación en Mendeley.}
@@ -188,10 +188,370 @@ Una vez que hemos realizado la configuración en Mendeley, debemos insertar la i
 
 Si la aplicación se encuentra desplegada sobre el servidor, y siempre siendo administrador, podemos modificar esta configuración a través de un menú que dispone un usuario con este rol.
 
+\newpage
+
 %5.3
 \section{Diseño Físico de Datos}
-En esta sección se define la estructura física de datos que utilizará el sistema, a partir del modelo de conceptual de clases, de manera que teniendo presente los requisitos establecidos para el sistema de información y las particularidades del entorno tecnológico, se consiga un acceso eficiente de los datos.
-La estructura física se compone de tablas, índices, procedimientos almacenados, secuencias y otros elementos dependientes del SGBD a utilizar.
+%En esta sección se define la estructura física de datos que utilizará el sistema, a partir del modelo de conceptual de clases, de manera que teniendo presente los requisitos establecidos para el sistema de información y las particularidades del entorno tecnológico, se consiga un acceso eficiente de los datos.
+%La estructura física se compone de tablas, índices, procedimientos almacenados, secuencias y otros elementos dependientes del SGBD a utilizar.
+El almacenamiento de los datos físicos se va a realizar sobre el SGBD MySQL. La estructura física de datos que utilizará el sistema se define a partir del modelo conceptual de clases, de manera que teniendo presente los requisitos establecidos para el sistema de información y las particularidades del entorno tecnológico, se consiga un acceso eficiente de los datos.\\
+Podemos ver en la figura \ref{fig:database} todas las tablas empleadas en la base de datos, así como una descripción de las más importantes (Tablas \ref{table:db-user}, \ref{table:db-usermendeley}, \ref{table:db-userprofile}, \ref{table:db-criterion}, \ref{table:db-specattribute}, \ref{table:db-slr}, \ref{table:db-search}, \ref{table:db-searchtermparam}, \ref{table:db-searchoperator}, \ref{table:db-searchcomponent}, \ref{table:db-engine}, \ref{table:db-reference}).
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[angle=90,origin=c,width=\linewidth,height=15cm]{database.png}
+		\caption{Estructura física aplicación SLR.}
+		\label{fig:database}
+	\end{center}
+\end{figure}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{user:} tabla de usuarios registrados en la aplicación.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			user\_mendeley\_id & Identificador de la tabla user\_mendeley  & BIGINT & No & No\\
+			\hline
+			user\_profile\_id & Identificador de la tabla user\_profile  & BIGINT & No & No\\
+			\hline
+			username & Nombre usuario.  & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla user}
+		\label{table:db-user}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{user\_mendeley:} tabla de información de acceso a mendeley de los usuarios.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			access\_token & Token acceso de mendeley vía Oauth2  & VARCHAR & Si & No\\
+			\hline
+			token\_type & Tipo de token vía Oauth2  & VARCHAR & Sí & No\\
+			\hline
+			email\_mend & Email de acceso a mendeley & VARCHAR & No & No\\
+			\hline
+			pass\_mend & Password de acceso a mendeley cifrado. & VARCHAR & No & No\\
+			\hline
+			refresh\_token & token actualizado vía oauth2 & VARCHAR & No & No\\
+			\hline
+			expires\_in & Tiempo máximo de duración del token vía OAuth2 & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla user\_mendeley}
+		\label{table:db-usermendeley}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{user\_profile:} tabla de información de los usuarios registrados en mendeley.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			academic\_status & Estado académico  & VARCHAR & Si & No\\
+			\hline
+			biography & Biografía  & VARCHAR & Sí & No\\
+			\hline
+			created & Fecha creación en mendeley & VARCHAR & No & No\\
+			\hline
+			discipline & Disciplina a la que pertenece. & VARCHAR & No & No\\
+			\hline
+			display\_name & Nombre completo & VARCHAR & No & No\\
+			\hline
+			fecha\_registro & Fecha registro en la aplicación web & VARCHAR & No & No\\
+			\hline
+			first\_name & Nombre & VARCHAR & No & No\\
+			\hline
+			guid & Identificador único global & VARCHAR & No & No\\
+			\hline
+			idmend & Identificador de mendeley & VARCHAR & No & No\\
+			\hline
+			is\_online & Estado de conexión en la aplicación & BIT & No & No\\
+			\hline
+			last\_name & Apellidos & VARCHAR & No & No\\
+			\hline
+			link & Link perfil Mendeley & VARCHAR & No & No\\
+			\hline
+			url\_photo & Imagen perfil Mendeley & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla user\_profile}
+		\label{table:db-userprofile}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{criterion:} criterios de clasificación de las referencias bibliográficas.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			description & Descripción & LONGTEXT & No & No\\
+			\hline
+			name & Nombre & VARCHAR & No & No\\
+			\hline
+			submit\_date & Fecha creación & DATETIME & No & No\\
+			\hline
+			slr\_id & Identificador de la tabla slr. & BIGINT & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla criterion}
+		\label{table:db-criterion}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{specific\_attribute:} atributos específicos de las referencias bibliográficas de un SLR.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			name & Nombre & VARCHAR & No & No\\
+			\hline
+			submit\_date & Fecha creación & DATETIME & No & No\\
+			\hline
+			slr\_id & Identificador de la tabla slr. & BIGINT & No & No\\
+			\hline
+			tipo & Tipo de atributo. & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla specific attribute}
+		\label{table:db-specattribute}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{slr:} tabla de revisiones sistemáticas de la literatura.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			guid & Identificador único global  & VARCHAR & Si & No\\
+			\hline
+			idmend & Identificador de la carpeta de Mendeley  & VARCHAR & Sí & No\\
+			\hline
+			justification & Justificación de un SLR & LONGTEXT & No & No\\
+			\hline
+			last\_modified & Última fecha de modificación. & VARCHAR & No & No\\
+			\hline
+			num\_visits & Número visitas & INT & No & No\\
+			\hline
+			state & Fase de la revisión en la que se encuentra & VARCHAR & No & No\\
+			\hline
+			submit\_date & Fecha creación & DATETIME & No & No\\
+			\hline
+			title & Título & VARCHAR & No & No\\
+			\hline
+			total\_references & Total referencias & INT & No & No\\
+			\hline
+			user\_profile\_id & Identificador de la tabla user\_profile & BIT & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla slr}
+		\label{table:db-slr}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{search:} tabla de búsquedas de las revisiones sistemáticas de la literatura.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			end\_year & Año máximo & VARCHAR & No & No\\
+			\hline
+			fecha & Fecha creación & DATETIME & No & No\\
+			\hline
+			guid & Identificador único global & VARCHAR & No & No\\
+			\hline
+			max\_total & Número máximo de referencias a encontrar. & INT & No & No\\
+			\hline
+			slr\_id & Identificador de la tabla SLR & INT & No & No\\
+			\hline
+			start\_year & Año mínimo & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla search}
+		\label{table:db-search}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{search\_term\_param:} tabla de términos de búsquedas.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			component\_id & Identificador de la tabla componente & BIGINT & No & No\\
+			\hline
+			operator\_id & Identificador de la tabla operator & BIGINT & No & No\\
+			\hline
+			search\_id & Identificador de la tabla búsqueda & BIGINT & No & No\\
+			\hline
+			terminos & Términos de búsqueda. & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla search\_term\_param}
+		\label{table:db-searchtermparam}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{search\_operator:} tabla de operadores en una búsqueda.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			name & Nombre & VARCHAR & No & No\\
+			\hline
+			value & Valor & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla search\_operator}
+		\label{table:db-searchoperator}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{search\_component:} tabla de los componentes en una búsqueda.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			name & Nombre & VARCHAR & No & No\\
+			\hline
+			value & Valor & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla search\_component}
+		\label{table:db-searchcomponent}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{engine\_search:} tabla de los motores de búsquedas para las referencias.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			api\_key & Api Key & VARCHAR & No & No\\
+			\hline
+			display\_name & Nombre completo & VARCHAR & No & No\\
+			\hline
+			image & Imagen logo & VARCHAR & No & No\\
+			\hline
+			name & Nombre & VARCHAR & No & No\\
+			\hline
+			status & Estado & BIT & No & No\\
+			\hline
+			url & Link página búqueda & VARCHAR & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla engine}
+		\label{table:db-engine}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|p{2cm}|}
+			\hline
+			\multicolumn{5}{|l|}{\textbf{reference:} tabla de las referencias bibliográficas.} \\
+			\hline
+			\hline
+			\textbf{Atributo} & \textbf{Descripción} & \textbf{Tipo dato} & \textbf{Nulo} & \textbf{Clave}\\
+			\hline
+			id & Identificador  & BIGINT & No & Si\\
+			\hline
+			citation\_key & Citation Key & VARCHAR & No & No\\
+			\hline
+			bibtex & Bibtex & LONGTEXT & No & No\\
+			\hline
+			created & Fecha creación & DATETIME & No & No\\
+			\hline
+			criterion\_id & Identificador de la tabla criterio & BIGINT & No & No\\
+			\hline
+			doc\_abstract & Abstract & LONGTEXT & No & No\\
+			\hline
+			doi & Identificador DOI & VARCHAR & No & No\\
+			\hline
+			engine\_id & Identificador de la tabla engine. & BIGINT & No & No\\
+			\hline
+			idmend & Identificador en Mendeley & VARCHAR & No & No\\
+			\hline
+			isbn & ISBN & VARCHAR & No & No\\
+			\hline
+			language\_id & Identificador de la tabla Language & BIGINT & No & No\\
+			\hline
+			title & Título referencia & LONGTEXT & No & No\\
+			\hline
+			type\_document\_id & Identificador de la tabla type\_document & BIGINT & No & No\\
+			\hline
+		\end{tabular}
+		\caption{Tabla reference}
+		\label{table:db-reference}
+	\end{center}
+\end{table}
 
 %5.4
 \section{Diseño detallado de Componentes}
@@ -199,5 +559,110 @@ Para cada uno de los módulos funcionales del sistema debemos realizar un diagra
 
 %5.5
 \section{Diseño detallado de la Interfaz de Usuario} 
-En esta sección se detallarán las interfaces entre el sistema y el usuario, incluyendo un prototipo de alta fidelidad con el diseño de la IU. Se definirá el comportamiento de las diferentes pantallas, indicando qué ocurre en los distintos componentes visuales de la interfaz cuando aparecen y qué acciones se disparan cuando el usuario trabaja con ellas.
+%En esta sección se detallarán las interfaces entre el sistema y el usuario, incluyendo un prototipo de alta fidelidad con el diseño de la IU. Se definirá el comportamiento de las diferentes pantallas, indicando qué ocurre en los distintos componentes visuales de la interfaz cuando aparecen y qué acciones se disparan cuando el usuario trabaja con ellas.
 
+Para el desarrollo de las interfaces se ha empleado \textit{Bootstrap}\cite{boot2016}. Este framework dispone de un conjunto de plantillas con HTML, CSS y JS que permite el fácil desarrollo de cada una de las vistas. En las figuras \ref{fig:interfaz01}, \ref{fig:interfaz02}, \ref{fig:interfaz03}, \ref{fig:interfaz04}, \ref{fig:interfaz05}, \ref{fig:interfaz06}, \ref{fig:interfaz07}, \ref{fig:interfaz08}, \ref{fig:interfaz09}, \ref{fig:interfaz10}, \ref{fig:interfaz11}, \ref{fig:interfaz12}, \ref{fig:interfaz13} podemos ver algunas de las interfaces que un usuario puede ver en el sistema.
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.5]{interfaz01.png}
+		\caption{Interfaz Login Sistema}
+		\label{fig:interfaz01}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz08.png}
+		\caption{Interfaz Menu principal.}
+		\label{fig:interfaz02}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz07.png}
+		\caption{Interfaz Lista SLR.}
+		\label{fig:interfaz03}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz11.png}
+		\caption{Interfaz Lista Criterios.}
+		\label{fig:interfaz04}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz12.png}
+		\caption{Interfaz Lista Atributos específicos}
+		\label{fig:interfaz05}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz10.png}
+		\caption{Interfaz Crear búsqueda}
+		\label{fig:interfaz06}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz02.png}
+		\caption{Interfaz progreso de búsquedas}
+		\label{fig:interfaz07}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz03.png}
+		\caption{Interfaz Lista búsquedas}
+		\label{fig:interfaz08}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.5]{interfaz09.png}
+		\caption{Interfaz notificación búsqueda}
+		\label{fig:interfaz09}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz04.png}
+		\caption{Interfaz Lista Referencias}
+		\label{fig:interfaz10}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz05.png}
+		\caption{Interfaz Referencia}
+		\label{fig:interfaz11}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz13.png}
+		\caption{Interfaz gráficos SLR (I)}
+		\label{fig:interfaz12}
+	\end{center}
+\end{figure}
+
+\begin{figure}[!hpt]
+	\begin{center} 
+		\includegraphics[scale=0.4]{interfaz14.png}
+		\caption{Interfaz gráficos SLR (II)}
+		\label{fig:interfaz13}
+	\end{center}
+\end{figure}
