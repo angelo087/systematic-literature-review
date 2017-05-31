@@ -23,22 +23,81 @@ En esta sección se detalla la situación actual de la organización y las neces
 
 \section{Necesidades de Negocio}
 %Esta sección debe contener información sobre los objetivos de negocio de clientes y usuarios, incluyendo los modelos de procesos de negocio a implantar.
-Este apartado contendrá información sobre los objetivos de negocio tanto del cliente como de los usuarios, incluyendo los models de procesos de negocio a implantar.
+%Este apartado contendrá información sobre los objetivos de negocio de los usuarios.
 
-\subsection{Objetivos de Negocio}
+%\subsection{Objetivos de Negocio}
 %Esta sección debe contener los objetivos de negocio que se esperan alcanzar cuando el sistema software a desarrollar esté en producción.
-El objetivo principal es la realización de una aplicación web con la que un usuario pueda automatizar, en la mayor parte posible, todas las etapas de creación de revisiones sistemáticas de la literatura.\\
+Los miembros del grupo de investigación SPI-FM (\url{http://tic195.uca.es/}) desean agilizar la realización de las revisiones sistemáticas de literatura. Por tanto, el objetivo principal es la realización de una aplicación web con la que un usuario pueda automatizar, en la mayor parte posible, todas las etapas de creación de revisiones sistemáticas de la literatura.\\
 
 Una vez que el cliente tome la decisión de realizar una determinada investigación, deberá de realizar la búsqueda de la literatura que precisa para extraer conclusiones al final del mismo. Por ello, necesita un sistema con el que realizar varias búsquedas sobre varios motores de referencias específicos a la vez con las que posteriormente, el cliente estudiará, clasificará y exportará dicha información para obtener las conclusiones finales.\\
 
-\subsection{Procesos de Negocio}
+%\subsection{Procesos de Negocio}
 %Esta sección, debe contener los modelos de procesos de negocio a implantar, que normalmente son los modelos de procesos de negocio actuales con ciertas mejoras.
-Este punto queda fuera del ámbito del proyecto, ya que no se implantará ningún modelo de proceso de negocio en esta aplicación. La forma de emplear este producto queda a decisión del cliente o investigador.
 
 \section{Objetivos del Sistema}
-Tal y como hemos descrito, el objetivo final de este proyecto es ayudar al investigador a automatizar algunas de las fases de las revisiones sistemáticas de la literatura.\\
+%Tal y como hemos descrito, el objetivo final de este proyecto es ayudar al investigador a automatizar algunas de las fases de las revisiones sistemáticas de la literatura.\\
 
-Para ello, el autor de una revisión sistemática, deberá seguir todas y cada una de las fases y la aplicación web ofrecerá todas las herramientas posibles para extraer la literatura deseada, así como la clasificación de qué estudios son válidos y cuáles no y, por último, la exportación de los datos en varios formatos de ficheros o la visualización de gráficas que ayuden a determinar las conclusiones finales del estudio.\\
+%Para ello, el autor de una revisión sistemática, deberá seguir todas y cada una de las fases y la aplicación web ofrecerá todas las herramientas posibles para extraer la literatura deseada, así como la clasificación de qué estudios son válidos y cuáles no y, por último, la exportación de los datos en varios formatos de ficheros o la visualización de gráficas que ayuden a determinar las conclusiones finales del estudio.\\
+
+El objetivo principal de este proyecto, será ayudar al usuario a seguir la mayor parte de las directrices de Barbara Kitchenham, ya que el estudio del arte de una área de investigación predeterminada no puede ser automatizado. Sin embargo, podemos ayudar al usuario a quitarle tiempo de búsqueda de recursos a través de un buscador de referencias en motores de búsquedas, que en posteriores capítulos describiremos, y ayudar al usuario a determinar las conclusiones finales por medio de la exportación de la información a través de gráficos o ficheros en diferentes formatos.\\
+
+Todo este proceso será desarrollado a través de una aplicación web donde el usuario podrá crear revisiones sistemáticas de la literatura, realizar búsquedas, clasificar los documentos y poder exportar la información a través de varios medios. Podemos ver más detalles de estos objetivos en tablas \ref{table:obj01}, \ref{table:obj02}, \ref{table:obj03} y \ref{table:obj04}.
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{12cm}|}
+			\hline
+			\textbf{OBJ-01} & Creación de una aplicación web para realizar Revisiones Sistemáticas de la Literatura.\\
+			\hline
+			\textbf{Descripción} & Se debe diseñar una aplicación web donde el usuario podrá crear revisiones sistemáticas de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-01: Creación de una aplicación web para realizar Revisiones Sistemáticas de la Literatura.}
+		\label{table:obj01}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{12cm}|}
+			\hline
+			\textbf{OBJ-02} & Realizar Búsquedas de Referencias Bibliográficas.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder realizar varias búsquedas de referencias bibliográficas con la información predefinida por el usuario y almacenando dichos recursos en un sistema de gestión de referencias (Mendeley) para su futuro estudio.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-02: Realizar Búsquedas de Referencias Bibliográficas.}
+		\label{table:obj02}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{12cm}|}
+			\hline
+			\textbf{OBJ-03} & Clasificar las referencias bibliográficas.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder ayudar al usuario a clasificar las referencias bibliográficas encontradas en las búsquedas de cada una de las revisiones sistemáticas de la literatura.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-03: Clasificar las referencias bibliográficas.}
+		\label{table:obj03}
+	\end{center}
+\end{table}
+
+\begin{table}[!hbt]
+	\begin{center}
+		\begin{tabular}{|p{3cm}|p{12cm}|}
+			\hline
+			\textbf{OBJ-04} & Exportar información de los SLR y conclusiones finales.\\
+			\hline
+			\textbf{Descripción} & La aplicación web deberá poder ayudar al usuario a realizar un informe con las conclusiones finales del SLR a través de gráficos que reflejen la situación del mismo o diferentes ficheros de texto.\\
+			\hline
+		\end{tabular}
+		\caption{OBJ-04: Exportar información de los SLR y conclusiones finales.}
+		\label{table:obj04}
+	\end{center}
+\end{table}
 
 \section{Catálogo de Requisitos}
 %Esta sección debe contener la descripción del conjunto de requisitos específicos del sistema a desarrollar para satisfacer las necesidades de negocio del cliente.
@@ -86,7 +145,7 @@ Descripción de otros requisitos que el sistema deberá satisfacer:
 Para el desarrollo del sistema, se ha indicado las siguientes reglas de negocio:
 
 \begin{itemize}
-	\item La aplicación web deberá ser desarrollado bajo un framework que permita utilizar el patrón \textbf{MVC} (\textit{Model View Controller}) para permitir la implementación de módulos independientes en el sistema si se desea.
+	%\item La aplicación web deberá ser desarrollado bajo un framework que permita utilizar el patrón \textbf{MVC} (\textit{Model View Controller}) para permitir la implementación de módulos independientes en el sistema si se desea.
 	\item El usuario debe estar registrado en Mendeley. De esta manera, el usuario dispondrá de un gestor de referencias donde la aplicación web insertará toda la documentación que la aplicación web encuentre.
 	\item La aplicación debe permitir la posibilidad de insertar un nuevo motor de búsqueda, para ello se explicará más adelante como un usuario administrador del sistema puede descargar el código de la aplicación e insertarlo.
 \end{itemize}
@@ -253,7 +312,7 @@ Describimos a los requisitos de gestión de información (datos) que el sistema 
 	\begin{center}
 		\begin{tabular}{|p{5cm}|p{10cm}|}
 			\hline
-			\textbf{IRQ-08} & Información de información a exportar de un SLR\\
+			\textbf{IRQ-08} & Información de datos a exportar de un SLR\\
 			\hline
 			\textbf{Objetivos asociados} & OBJ-02 \ref{table:obj02} y OBJ-04 \ref{table:obj04}\\
 			\hline
@@ -273,7 +332,7 @@ Describimos a los requisitos de gestión de información (datos) que el sistema 
 
 \section{Alternativas de Solución}
 %En esta sección, se debe ofrecer un estudio del arte de las diferentes alternativas tecnológicas que permitan satisfacer los requerimientos del sistema, para luego seleccionar (si procede) la herramienta o conjunto de herramientas que utilizaremos como base para el software a desarrollar.
-Para el desarrollo de esta aplicación, se pensó en la posibilidad de crear un \textbf{DSL} textual (\textbf{Domain Specific Language}) donde el usuario por línea de comandos escribiera las instrucciones para conectar con el motor de búsqueda de referencias y descargar las referencias encontradas. En la UCA se trabaja con Eclipse como IDE de desarrollo, pero era un entorno complejo para desarrollar DSL debido a la poca documentación que existe en la actualidad. Además, la creación de un SLR sería llevada mejor a cabo si el usuario puede ver en todo momento la realización del mismo así como todos los pasos y directrices necesarios para el proceso.\\
+Para el desarrollo de esta aplicación, se pensó en la posibilidad de crear un \textbf{DSL} textual (\textbf{Domain Specific Language}) donde el usuario por línea de comandos escribiera las instrucciones para conectar con el motor de búsqueda de referencias y descargar las referencias encontradas. Se comenzó a trabajar con Eclipse como IDE de desarrollo, pero era un entorno complejo para desarrollar DSL debido a la poca documentación que existe en la actualidad. Además, la creación de un SLR sería llevada mejor a cabo si el usuario puede ver en todo momento la realización del mismo así como todos los pasos y directrices necesarios para el proceso.\\
 
 Finalmente, se tomó la decisión de realizar una aplicación web con el que los investigadores tendrán un fácil acceso y de manera visual obtener las conclusiones finales y, además, de un fácil desarrollo y mantenimiento gracias al framework \textit{Groovy on Grails} que nos permite aplicar el patrón \textit{MVC} y realizar un mejor mantenimiento de la aplicación.
 

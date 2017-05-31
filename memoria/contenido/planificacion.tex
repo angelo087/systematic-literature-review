@@ -10,7 +10,7 @@
 En esta sección se describen todos los aspectos relativos a la gestión del proyecto: metodología, organización, costes, planificación, riesgos y aseguramiento de la calidad.
 
 \section{Metodología de desarrollo}
-La metodología de desarrollo empleada es la metodología de desarrollo ágil Scrum (Ver \ref{fig:scrum}), ya que el proyecto puede tener un cambio constante de requisitos y además se pretende mostrar un incremento ejecutable cada cierto tiempo, por lo que el trabajo se irá dividiendo en hitos o \textbf{sprints}.\\
+En este proyecto se utiliza un modelo de ciclo de vida basado en un desarrollo iterativo e incremental, empleando varias de las directrices de la metodología ágil Scrum (Ver \ref{fig:scrum}), ya que el proyecto puede tener un cambio constante de requisitos y además se pretende mostrar un incremento ejecutable cada cierto tiempo, por lo que el trabajo se irá dividiendo en hitos o \textbf{sprints}.\\
 
 \begin{figure}[h!]
   \includegraphics[width=\linewidth]{scrum.png}
@@ -34,29 +34,33 @@ En primer lugar, se realiza una planificación inicial y una investigación sobr
 
 Una vez realizada la planificación inicial y analizado todos los objetivos principales del proyecto se decide realizar el desarrollo del proyecto en dos subproyectos. El primero de ellos, será la aplicación web, donde el usuario podrá acceder a todas las opciones para las creaciones de las revisiones sistemáticas de la literatura. Por otro lado, el segundo de ellos consistirá en la creación de una librería JAR donde incluirá todo el proceso de búsquedas de referencias bibliográficas en segundo plano y de manera paralela a cualquier otra búsqueda que se realice. Esta librería, deberá ser incluida en el primer subproyecto, por lo que necesitará de un periodo de tiempo para integrar ambas aplicaciones.\\
 
-Con toda esta información, se opta por dividir el roceso en ocho hitos tal y como podemos ver en la tabla \ref{table:hitos}. El tiempo se indica en dias. Cada uno de estos hitos, tendrá asociados varias subtareas o subobjetivos que deberán realizarse para dar por bueno el hito principal. El hito 0 corresponderá a la adquisición de conocimientos mientras que el hito 7 es asignado a la redacción de la memoria.\\
+Con toda esta información, se opta por dividir el proceso en ocho hitos tal y como podemos ver en la tabla \ref{table:hitos}. El tiempo se indica en dias. Debido a que la dedicación de la elaboración de este proyecto ha sido a media jornada, se añade una columna con el porcentaje de dedicación en cada uno de los springs. Cada uno de estos hitos, tendrá asociados varias subtareas o subobjetivos que deberán realizarse para dar por bueno el hito principal. El hito 0 corresponderá a la adquisición de conocimientos mientras que el hito 7 es asignado a la redacción de la memoria.\\
 
 \begin{table}[!hbt]
 	\begin{center}
-		\begin{tabular}{|p{2cm}|p{6cm}|p{2.5cm}|p{2.5cm}|}
+		\begin{tabular}{|p{2cm}|p{5cm}|p{2.5cm}|p{2cm}|p{1.5cm}|}
 			\hline
-			\textbf{Sprint} & \textbf{Descripción} & \textbf{Estimado} & \textbf{Real}\\
+			\textbf{Sprint} & \textbf{Descripción} & \textbf{Estimado} & \textbf{Real} & \textbf{\% Dedicación}\\
 			\hline
-			Hito 0 & Propuesta inicial del proyecto & 7 & 5\\
+			Hito 0 & Propuesta inicial del proyecto & 7 & 5 & 100\%\\
 			\hline
-			Hito 1 & Investigación y adquisición de conocimientos & 50 & 63\\
+			Hito 1 & Investigación y adquisición de conocimientos & 50 & 63 & 50\%\\
 			\hline
-			Hito 2 & Desarrollo Aplicación Web & 110 & 160\\
+			Hito 2 & Desarrollo Aplicación Web & 110 & 160 & 50\%\\
 			\hline
-			Hito 3 & Desarrollo Aplicación Mendeley-REST en Java & 60 & 100\\
+			Hito 3 & Desarrollo Aplicación Mendeley-REST en Java & 60 & 100 & 50\%\\
 			\hline
-			Hito 4 & Integración de aplicaciones & 30 & 26\\
+			Hito 4 & Integración de aplicaciones & 30 & 26 & 50\%\\
 			\hline
-			Hito 5 & Pruebas del sistema y rendimiento & 10 & 5\\
+			Hito 5 & Pruebas del sistema y rendimiento & 10 & 5 & 50\%\\
 			\hline
-			Hito 6 & Despliegue de la aplicación & 20 & 25\\
+			Hito 6 & Despliegue de la aplicación & 20 & 25 & 50\%\\
 			\hline
-			Hito 7 & Redacción de memoria & 180 & 280\\
+			Hito 7 & Redacción de memoria & 180 & 280 & 50\%\\
+			\hline
+			\multicolumn{2}{|l|}{\textbf{Media}} & 180 & 280 & 50\%\\
+			\hline
+			\multicolumn{2}{|l|}{\textbf{Desviación}} & 180 & 280 & 50\%\\
 			\hline
 		\end{tabular}
 		\caption{Tiempo estimado frente a tiempo real de cada Sprint}
@@ -180,9 +184,9 @@ Para finalizar, se listan los lenguajes de programación utilizados:\\
 \end{itemize}
 
 \section{Costes}
-Para poder realizar una estimación de los costes del proyecto debemos tener en cuenta tanto los recursos humanos como los recursos en material empleados. Los costes indirectos como papel, bolígrafo, electricidad o conexión a Internet son los que denominaremos ``Costes indirectos``. El porcentaje de su valor puede oscilar entre el 10\% y el 20\% del gasto del personal, tomaremos el gasto medio de dicho intervalo, es decir, un 15\%.\\
+Para poder realizar una estimación de los costes del proyecto debemos tener en cuenta tanto los recursos humanos como los recursos en material empleados. Los costes indirectos como electricidad o conexión a Internet son los que denominaremos ``Costes indirectos``. El porcentaje de su valor podemos optar por un 10\% del gasto del personal tal como se indica en el artículo 83 de la LOU y que la Universidad de Cádiz emplea para la realización de trabajos externos. Podemos ver dicha información en: \url{http://www.uca.es/vrteit/portal.do?IDM=55&NM=2}.\\
 
-De los recursos hardware debemos tener en cuenta tanto el equipo empleado para el desarrollo. Normalmente, los ordenadores suelen tener un periodo de amortización entre los 2 y 4 años. Al igual que antes, tomaremos la media de este periodo, 3 años. Si el equipo costó 750 euros, se amortizan unos 250 euros al año y como el tiempo de desarrollo del proyecto es de entre 2 y 3 años a tiempo parcial, tomaremos 2,5 años como periodo medio y el coste final será de 625 euros. El coste del servidor son de unos 10 euros al mes, sólamente ha estado desplegado en el servidor alrededor de 3 meses, por lo que su gasto alcanza los 30 euros.\\
+De los recursos hardware debemos tener en cuenta tanto el equipo empleado para el desarrollo como el servidor donde se desplegará la aplicación web. Normalmente, los ordenadores suelen tener un periodo de amortización entre los 2 y 4 años. Al igual que antes, tomaremos la media de este periodo, 3 años. Si el equipo costó 750 euros, se amortizan unos 250 euros al año y como el tiempo de desarrollo del proyecto es de entre 2 y 3 años a tiempo parcial, tomaremos 2,5 años como periodo medio y el coste final será de 625 euros. El coste del servidor son de unos 10 euros al mes, sólamente ha estado desplegado en el servidor alrededor de 3 meses, por lo que su gasto alcanza los 30 euros.\\
 
 Con respecto a los recursos del software, no tendrá ningún gasto, puesto que el sistema operativo Windows 7 viene incluido en los gastos del equipo con el que se ha desarrollado el proyecto, así como los paquetes informáticos (hojas de cálculo y editor de texto). Además, el servidor tiene instalado Ubuntu y tampoco supone ningún gasto económico puesto que viene en el gasto mensual del servidor.\\
 

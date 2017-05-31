@@ -10,11 +10,11 @@
 Esta sección cubre el análisis del sistema de información a desarrollar, haciendo uso del lenguaje de modelado UML.
 
 \section{Modelo Conceptual}
-A partir de los requisitos de información, se desarrollará un diagrama conceptual de clases UML. En ella identificaremos las clases, atributos y relaciones entre ellas tal y como podemos ver en la figura \ref{fig:digclases}.
+A partir de los requisitos de información, se desarrollará un diagrama conceptual de clases UML. En él identificaremos las clases, atributos y relaciones entre ellas más significativas tal y como podemos ver en la figura \ref{fig:digclases}.
 
 \begin{figure}[!hpt]
 	\begin{center} 
-		\includegraphics[width=\linewidth]{class-diagram.png}
+		\includegraphics[width=\linewidth]{diagrama-conceptual.png}
 		\caption{Diagrama conceptual de clases UML.}
 		\label{fig:digclases}
 	\end{center}
@@ -37,9 +37,9 @@ Los diferentes roles que con el sistema pueden interactuar son los siguientes:
 %En este apartado se describirán los diferentes roles que juegan los usuarios que interactúan con el sistema. Los actores pueden ser roles de personas físicas, sistemas externos o incluso el tiempo (eventos temporales).
 
 \subsection{Diagramas y especificación de casos de uso}
-En esta sección se mostrarán los diagramas de casos de uso de la aplicación web (\ref{fig:cu01}, \ref{fig:cu02}, \ref{fig:cu03}, \ref{fig:cu04}, \ref{fig:cu05}, \ref{fig:cu06}, \ref{fig:cu07}, \ref{fig:cu08}), así como la especificación de los mismos mediante escenarios de casos de uso tal y como describimos en las tablas correspondientes a cada caso de uso.
+En esta sección se mostrarán los diagramas de casos de uso de la aplicación web (\ref{fig:cu01}, \ref{fig:cu02}, \ref{fig:cu03}, \ref{fig:cu04}, \ref{fig:cu05}, \ref{fig:cu06}, \ref{fig:cu07}, \ref{fig:cu08}), así como la especificación de los mismos por medio de tablas descriptivas.
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.5]{cu-sistema.png}
 		\caption{Diagrama casos de usos del sistema.}
@@ -47,7 +47,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center} 
 		\includegraphics[scale=0.6]{cu-gestusuarios.png}
 		\caption{Diagrama casos de usos de la gestión de usuarios.}
@@ -55,7 +55,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-gestslr.png}
 		\caption{Diagrama casos de usos de la gestión de revisiones sistemáticas.}
@@ -63,7 +63,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-gestpreginv.png}
 		\caption{Diagrama casos de usos de la gestión de preguntas de investigación.}
@@ -71,7 +71,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-gestcrit.png}
 		\caption{Diagrama casos de usos de la gestión de criterios de clasificación.}
@@ -79,7 +79,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-gestatesp.png}
 		\caption{Diagrama casos de usos de la gestión de atributos específicos.}
@@ -87,7 +87,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 	\end{center}
 \end{figure}
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-gestbusquedas.png}
 		\caption{Diagrama casos de usos de la gestión de búsquedas de referencias bibliográficas.}
@@ -97,7 +97,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 
 \newpage
 
-\begin{figure}[hp!]
+\begin{figure}[!hpt]
 	\begin{center}
 		\includegraphics[scale=0.55]{cu-sincromend.png}
 		\caption{Diagrama casos de usos de la sincronización con Mendeley.}
@@ -289,9 +289,9 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 			\hline
 			\textbf{Escenario principal} & 
 				\begin{enumerate}
-					\item El usuario realiza operaciones sobre las preguntas de investigación: \ref{table:cu09}, \ref{table:cu10}, \ref{table:cu11}.
-					\item El usuario realiza operaciones sobre los criterios de clasificación: \ref{table:cu12}, \ref{table:cu13}, \ref{table:cu14}, .
-					\item El usuario realiza operaciones sobre los atributos específicos: \ref{table:cu15}, \ref{table:cu16}, \ref{table:cu17}.
+					\item El usuario realiza operaciones sobre las preguntas de investigación. Ver tablas \ref{table:cu09}, \ref{table:cu10}, \ref{table:cu11}.
+					\item El usuario realiza operaciones sobre los criterios de clasificación. Ver tablas \ref{table:cu12}, \ref{table:cu13}, \ref{table:cu14}, .
+					\item El usuario realiza operaciones sobre los atributos específicos. Ver tablas \ref{table:cu15}, \ref{table:cu16}, \ref{table:cu17}.
 					\item El usuario realiza operaciones sobre las búsquedas de referencias \ref{table:cu18}
 				\end{enumerate}
 			\\
@@ -321,7 +321,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 			\textbf{Escenario principal} & 
 				\begin{enumerate}
 					\item El usuario elige la opción Borrar SLR.
-					\item El sistema muestra una ventana donde pregunta al cliente si confirma el borrado de la revisión sistemática de la literatura.
+					\item El sistema muestra una ventana donde pregunta al usuario si confirma el borrado de la revisión sistemática de la literatura.
 					\item El usuario confirma el borrado del SLR.
 					\item El sistema elimina el SLR del sistema mostrando un mensaje de confirmación del borrado.
 				\end{enumerate}
@@ -910,7 +910,7 @@ En esta sección se mostrarán los diagramas de casos de uso de la aplicación w
 \newpage
 
 \section{Modelo de Interfaz de Usuario}
-En esta sección se incluye un prototipo de baja fidelidad (\textit{mockup}) de la interfaz de usuario del sistema. Se han realizado \textit{mockups} medio de \textit{Balsamiq} \cite{mybalsamiq}. En las figuras \ref{fig:mock01}, \ref{fig:mock02}, \ref{fig:mock03}, \ref{fig:mock04}, \ref{fig:mock05}, \ref{fig:mock06}, \ref{fig:mock07}, \ref{fig:mock08} y \ref{fig:mock09} podemos ver algunas de estas interfaces del usuario.\\
+En esta sección se incluye un prototipo de baja fidelidad (\textit{mockup}) de la interfaz de usuario del sistema. Se han realizado \textit{mockups} por medio de \textit{Balsamiq} \cite{mybalsamiq}. En las figuras \ref{fig:mock01}, \ref{fig:mock02}, \ref{fig:mock03}, \ref{fig:mock04}, \ref{fig:mock05}, \ref{fig:mock06}, \ref{fig:mock07}, \ref{fig:mock08} y \ref{fig:mock09} podemos ver algunas de estas interfaces del usuario.\\
 
 \begin{figure}[!hp]
 	\begin{center} 
