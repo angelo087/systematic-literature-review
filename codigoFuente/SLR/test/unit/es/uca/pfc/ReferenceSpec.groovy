@@ -13,8 +13,49 @@ class ReferenceSpec extends Specification {
     }
 
     def cleanup() {
+		Reference.withNewSession {
+			Reference.findAll().each { it.delete(flush: true) }
+		}
     }
 
-    void "test something"() {
+    void "test create reference"() {
+		given: 
+			Reference reference = Stub()	
+		when:
+			reference.save()
+		then:
+			!reference.errors.hasFieldErrors("idmend")
+			!reference.errors.hasFieldErrors("title")
+			!reference.errors.hasFieldErrors("search")
+			!reference.errors.hasFieldErrors("criterion")
+			!reference.errors.hasFieldErrors("engine")
+			!reference.errors.hasFieldErrors("citation_key")
     }
+	
+	void "test update reference"() {
+		given:
+			Reference reference = Stub()
+			reference.save()
+		when:
+			reference.title >> "other title"
+			reference.save()
+		then:
+			!reference.errors.hasFieldErrors("idmend")
+			!reference.errors.hasFieldErrors("title")
+			!reference.errors.hasFieldErrors("search")
+			!reference.errors.hasFieldErrors("criterion")
+			!reference.errors.hasFieldErrors("engine")
+			!reference.errors.hasFieldErrors("citation_key")
+			reference.title == "other title"
+	}
+	
+	void "test delete reference"() {
+		given:
+			Reference reference = Stub()
+			reference.save(flush: true)
+		when:
+			reference.delete()
+		then:
+			Reference.list().size() == 0
+	}
 }

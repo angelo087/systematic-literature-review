@@ -13,8 +13,51 @@ class SearchSpec extends Specification {
     }
 
     def cleanup() {
+		Search.withNewSession {
+			Search.findAll().each { it.delete(flush: true) }
+		}
     }
 
-    void "test something"() {
+    void "test create search"() {
+		given: 
+			Search search = Stub()	
+		when:
+			search.save()
+		then:
+			!search.errors.hasFieldErrors("slr")
+			!search.errors.hasFieldErrors("references")
+			!search.errors.hasFieldErrors("engines")
+			!search.errors.hasFieldErrors("termParams")
+			!search.errors.hasFieldErrors("startYear")
+			!search.errors.hasFieldErrors("endYear")
+			!search.errors.hasFieldErrors("maxTotal")
     }
+	
+	void "test update search"() {
+		given:
+			Search search = Stub()
+			search.save()
+		when:
+			SearchTermParam termParam = Stub()
+			search.termParams >> termParam
+			search.save()
+		then:
+			!search.errors.hasFieldErrors("slr")
+			!search.errors.hasFieldErrors("references")
+			!search.errors.hasFieldErrors("engines")
+			!search.errors.hasFieldErrors("termParams")
+			!search.errors.hasFieldErrors("startYear")
+			!search.errors.hasFieldErrors("endYear")
+			!search.errors.hasFieldErrors("maxTotal")
+	}
+	
+	void "test delete search"() {
+		given:
+			Search search = Stub()
+			search.save(flush: true)
+		when:
+			search.delete()
+		then:
+			Search.list().size() == 0
+	}
 }
