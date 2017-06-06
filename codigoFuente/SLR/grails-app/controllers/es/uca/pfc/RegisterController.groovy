@@ -61,13 +61,6 @@ class RegisterController {
 		{
 			User userInstance = mendeleyToolService.getUserFromMendeley(emailMend, passMend)
 			
-			if (!userInstance.validate())
-			{
-				userInstance.errors.each {
-					println "error => " + it
-				}
-			}
-		
 			if(userInstance == null || !userInstance.validate())
 			{
 				flash.message = "Error: Ha habido problemas para hacer login. Inténtelo más tarde."
