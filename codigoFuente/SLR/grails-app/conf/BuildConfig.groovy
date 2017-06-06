@@ -6,7 +6,7 @@ grails.project.work.dir = "target/work"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
-grails.project.war.file = "target/SLR.war"
+grails.project.war.file = "target/ROOT.war"
 
 grails.server.port.http=8080
 
@@ -67,6 +67,8 @@ grails.project.dependency.resolution = {
 		runtime 'org.apache.poi:poi-ooxml-schemas:3.14'
 		runtime 'org.apache.xmlbeans:xmlbeans:2.6.0'
 		runtime 'org.apache.poi:ooxml-schemas:1.1'
+		
+		compile "cglib:cglib:2.2" // libreria para Spock
     }
 
     plugins {

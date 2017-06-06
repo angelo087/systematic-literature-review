@@ -112,6 +112,7 @@ environments {
 			maxWait = 10000
 			maxAge = 10 * 60000
 			timeBetweenEvictionRunsMillis = 5000
+			numTestsPerEvictionRun = 3
 			minEvictableIdleTimeMillis = 60000
 			validationQuery = "SELECT 1"
 			validationQueryTimeout = 3
