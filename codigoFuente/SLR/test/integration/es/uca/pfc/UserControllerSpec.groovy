@@ -3,6 +3,9 @@ package es.uca.pfc
 
 
 import grails.test.mixin.TestFor
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler
 import spock.lang.*
 
 /**
@@ -14,6 +17,15 @@ class UserControllerSpec extends Specification {
 	User user
 	User admin
 	User superAdmin
+	
+	def logoutUser() {
+		if(controller.springSecurityService != null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth != null){
+				new SecurityContextLogoutHandler().logout(request, response, auth);
+			}
+		}
+	}
 	
     def setup() {
 		// Create roles
@@ -90,8 +102,8 @@ class UserControllerSpec extends Specification {
 		user = User.findByUsername('user@uca.es') ?: new User(
 			username: 'user@uca.es',
 			password: 'userpassword',
-			userProfile: profileAdmin,
-			userMendeley: mendProfileAdmin).save(failOnError: true)
+			userProfile: profileUser,
+			userMendeley: mendProfileUser).save(failOnError: true)
 		
 		if (!user.authorities.contains(userRole)) {
 			UserRole.create user, userRole
@@ -99,6 +111,7 @@ class UserControllerSpec extends Specification {
     }
 
     def cleanup() {
+		logoutUser()
     }
 	
 	void "test user list by super administrator"() {
